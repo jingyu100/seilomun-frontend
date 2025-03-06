@@ -81,7 +81,7 @@ function App() {
                            <li className="icon-Btn alarm-icon">
                               <a href="" className="myAlarm myIcon">
                                  <div>
-                                    <img src="/image/icon/icon-bell.png" alt="alarm" style={{
+                                    <img src="./image/icon/icon-bell.png" alt="alarm" style={{
                                        width: '35px',
                                        height: '35px'
                                     }} />
@@ -171,7 +171,7 @@ function App() {
                            height: '24px'
                         }}>
                            <span>
-                              <img src='/image/icon/icon_nav.svg' alt="kategorie" style={{
+                              <img src='./image/icon/icon_nav.svg' alt="kategorie" style={{
                                  marginRight: '8px'
                               }}/>
                            </span>
