@@ -8,7 +8,6 @@ import SideMenuBtn from './components/sideBtn/SideMenuBtn.jsx';
 import Header from "./components/Header.jsx";
 
 
-
 function App() {
   return (
    <div>
