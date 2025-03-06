@@ -1,15 +1,4 @@
-@font-face {
-   font-family: 'paybooc-Bold';
-   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
-   font-weight: normal;
-   font-style: normal;
-}
-@font-face {
-   font-family: 'paybooc';
-   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Medium.woff') format('woff');
-   font-weight: normal;
-   font-style: normal;
-}
+
 
 /* ---------- 웹 홈페이지 css틀 ---------- */
 * {
@@ -62,7 +51,6 @@ header {
 }
 
 .head-menu {
-   margin: 10px auto 0px;
    width: 1200px;
 }
 
@@ -436,6 +424,7 @@ header {
 
 .footer {
    position: relative;
+   bottom: 0;
    display: block;
    width: 100%;
    height: auto;
@@ -449,7 +438,7 @@ header {
 }
 
 .footer .footerUI {
-   width: auto;
+   /*width: auto;*/
    height: auto;
    color: #333;
    line-height: 20px;
@@ -461,7 +450,7 @@ header {
    align-items: center;
    justify-content: center;
    justify-content: space-between;
-   padding: 6px;
+   padding: 0 6px 6px 6px;
    padding-right: 50px;
 }
 
