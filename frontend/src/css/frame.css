@@ -1,0 +1,498 @@
+@font-face {
+   font-family: 'paybooc-Bold';
+   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+@font-face {
+   font-family: 'paybooc';
+   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Medium.woff') format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+/* ---------- 웹 홈페이지 css틀 ---------- */
+* {
+   margin: 0;
+   padding: 0;
+}
+
+ul, li {
+   list-style: none;
+}
+
+a {
+   display: block;
+   text-decoration: none;
+}
+
+a:visited {
+   color: #333
+}
+
+header {
+   position: fixed;
+   width: 100%;
+   max-width: 100%;
+   margin: 0 auto;
+   z-index: 999;
+   top: 0;
+   background-color: #fff;
+   box-shadow: 0 0.7px 0 0 #b1b1b1;
+}
+
+.head-area {
+   position: relative;
+   z-index: 30;
+   min-width: 990px;
+   background: #000082 url(https://shopv.pstatic.net/web/r/20250206173735/_next/static/img/bg/header/gnb/bg_gheader.jpg) no-repeat 100% 0;
+   -webkit-appearance: none;
+}
+
+.head-area button {
+   border: none;
+   background-color: transparent;
+   cursor: pointer;
+   -webkit-appearance: none;
+}
+
+.head-area svg {
+   display: inline-block;
+   vertical-align: top;
+}
+
+.head-menu {
+   margin: 10px auto 0px;
+   width: 1200px;
+}
+
+.head-top-menu {
+   box-sizing: border-box;
+   display: flex;
+   flex-flow: wrap;
+   width: 100%;
+}
+
+.head-top-half {
+   flex-basis: 50%;
+   flex-grow: 0;
+   max-width: 50%;
+}
+
+.head-top-right {
+   display: flex;
+   justify-content: flex-end;
+}
+
+.head-mid {
+   padding: 10px 34px 8px;
+   font-family: 'paybooc-Bold';
+}
+
+.head-mid-menu {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.search-ui {
+   display: inline-block;
+   position: relative;
+   height: 42px;
+   margin: 0px 0px 0px 24px; /* 상 우 하 좌 */
+   vertical-align: top;
+   z-index: 100;
+}
+
+.search-ui {
+   width: 600px;
+   min-width: 600px;
+   max-width: 600px;
+}
+
+.search-inner {
+   width: 500px;
+   border-radius: 15px;
+   border: 1.5px solid;
+   background-color: #ffffff;
+   box-sizing: border-box;
+}
+
+.search-inner > div {
+   display: flex;
+   padding: 0 78px 0 17px;
+   position: relative;
+   padding-right: 40px;
+}
+
+.search-input {
+   border: none;
+   caret-color: #121212;
+   color: #121212;
+   font-size: 15px;
+   font-weight: 500;
+   line-height: 18px;
+   outline: medium none;
+   padding: 11px 0;
+   width: 100%;
+}
+
+.search-inputBtn {
+   position: absolute;
+   top: 0;
+   right: 3px;
+   height: 100%;
+   padding: 0 8px;
+}
+
+.search-icon circle {
+   stroke-width: 1.8;
+}
+
+.search-inner, .search-inputBtn svg {
+   color: #7346f3;
+}
+
+.icon-menu {
+   display: block;
+   float: right;
+   margin-top: 0;
+   margin-right: -16px;
+   font-size: 12px;
+   flex-basis: 20%;
+   max-width: 20%;
+}
+
+.icon-menuInner {
+   display: table-cell;
+   position: relative;
+   vertical-align: top;
+}
+
+.head-mid-menu .icon-Btn {
+   display: inline-block;
+   position: relative;
+   vertical-align: top;
+   text-align: center;
+}
+
+.icon-menuInner .icon-Btn a div > img {
+   /* width: 30;
+   height: 30; */
+}
+
+.myIcon { 
+   display: flex;
+   flex-direction: column;
+   height: unset;
+   padding-right: 20px;
+}
+
+.headIconCount {
+   background-color: #346aff;
+   border-radius: 50%;
+   width: 20px;
+   height: 20px;
+   display: -ms-inline-flexbox;
+   display: inline-flex;
+   -ms-flex-align: center;
+   align-items: center;
+   -ms-flex-pack: center;
+   justify-content: center;
+   overflow: hidden;
+   top: 4px;
+   right: 0;
+}
+
+.head-area .headIconCount {
+   position: absolute;
+   width: 19px;
+   height: 19px;
+   top: 3px;
+   left: 15px;
+   margin: -5px 0 0 4px;
+   color: #fff;
+   text-align: center;
+   line-height: 19px;
+   letter-spacing: 0px;
+   font: bold 10px Tahoma;
+}
+
+.myBag .headIconCount {
+   position: absolute;
+   width: 19px;
+   height: 19px;
+   top: 3px;
+   right: 5px;
+   margin: -5px 0 0 4px;
+   color: #fff;
+   text-align: center;
+   line-height: 19px;
+   letter-spacing: -1px;
+   font: bold 10px Tahoma;
+}
+
+.icon-menu .icon-menuInner li .alarm-frame {
+   display: none;
+   position: fixed;
+   width: auto;
+   z-index: 10;
+}
+
+.icon-menu .icon-menuInner li:hover .alarm-frame {
+   display: block;
+   background-color: #fff;
+   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+.alarm-contents .alarm-inner > li {
+   display: block;
+   padding: 15px 20px 15px 15px;
+   text-align: left;
+}
+
+.alarm-contents .alarm-inner > li div {
+   display: flex;
+}
+
+.head-bottom {
+   display: flex;
+   position: relative;
+   height: 30px;
+   overflow: hidden;
+   padding: 8px 34px 8px;
+}
+
+.kategorie {
+   flex-basis: 20%;
+   -webkit-box-flex: 0;
+   flex-grow: 0;
+   max-width: 20%;
+}
+
+.kategorie-frame:hover {
+   border-radius: 5px;
+   background-color: #e9d8ff;
+}
+
+.menu-inner {
+   display: flex;
+   flex-basis: 80%;
+   -webkit-box-flex: 0;
+   flex-grow: 0;
+   max-width: 80%;
+   gap: 60px;
+}
+
+.menu-font-st {
+   color: #000;
+   font-size: 16px;
+   font-weight: 600;
+   padding: 4px;
+   padding-bottom: 8px;
+   height: 24px;
+}
+
+.menu-under:hover {
+   color: #774eff;
+   border-bottom: 2px solid #774eff;
+}
+
+
+
+/* ---------- 여긴 리액트 넘어갈 시 삭제할 부분 ---------- */
+.head-top-menu .head-top-half > div > ul > li {
+   color: #333;
+   line-height: 12px;
+   font-family: 'paybooc';
+   font-size: 11px;
+   font-weight: 500;
+   margin-left: 5px;
+   margin-right: 5px;
+   --dm-inline-color: #1599ff;
+}
+
+.title-logo > h1 a div img {
+   color: transparent;
+   margin-right: 0px;
+   margin-top: -2px;
+   cursor: pointer;
+   --dm-inline-color: transparent;
+}
+/* ---------- 여긴 리액트 넘어갈 시 삭제할 부분 ---------- */
+
+
+
+/* ---------- 사이드 메뉴 버튼 부분 ---------- */
+.sideMenu {
+   position: fixed;
+   right: 52px;
+   bottom: 30px;
+   width: 20px;
+   z-index: 50;
+
+}
+
+.sideMenu .sideMenuBtn {
+   position: relative;
+   display: inline-block;
+   width: 49px;
+   height: 49px;
+   margin-bottom: 10px;
+   background-color: #f5f5f5;
+   border-radius: 50%;
+   box-shadow: 0 0 0 1px #dadcdf, 0 4px 8px 0 rgba(0, 0, 0, .15);
+   transform: .2s;
+   -webkit-transform: .2;
+   justify-items: center;
+   align-items: center;
+}
+
+.sideMenu .sideMenuBtn:hover {
+   background-color: #eeeeee;
+   box-shadow: 0 0 0 1.5px #d4d9dc, 0 4px 8px 0 rgba(0, 0, 0, .15);
+}
+
+.sideMenu .sideMenuBtn:active {
+   background-color: #b9b8b8;
+   box-shadow: 0 0 0 2px #e6edf1, 0 4px 8px 0 rgba(0, 0, 0, .15);
+}
+
+.sideMenu .up {
+   margin-bottom: 20px;
+}
+
+.sideMenu .sideMenuBtn .iconCount {
+   background-color: #346aff;
+   border-radius: 50%;
+   width: 20px;
+   height: 20px;
+   display: -ms-inline-flexbox;
+   display: inline-flex;
+   -ms-flex-align: center;
+   align-items: center;
+   -ms-flex-pack: center;
+   justify-content: center;
+   overflow: hidden;
+}
+
+.iconCount {
+   position: absolute;
+   width: 19px;
+   height: 19px;
+   top: 0px;
+   right: -2px;
+   margin: -5px 0 0 4px;
+   color: #fff;
+   text-align: center;
+   line-height: 19px;
+   letter-spacing: 0px;
+   font: bold 10px Tahoma;
+}
+
+.sideBtnIcon {
+   display: inline-block;
+   height: 27px;
+   width: 27px;
+   padding: 11px;
+}
+
+.sideMenu .sideMenuBtn #chatIcon {
+   width: 32px;
+   height: 32px;
+   padding: 8px;
+}
+/* ---------- 사이드 메뉴 버튼 부분 ---------- */
+
+
+
+/* ---------- 사이드 메뉴 모듈 부분 ---------- */
+.viewModule {
+   position: absolute;
+   right: 30px;
+   background-color: #fff;
+   /* background-color: var(--color_setting_bg); 다크 모드일 때 */
+   width: 320px;
+   height: 430px;
+   border-radius: 8px;
+   -webkit-box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
+   box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
+   z-index: 500;
+   overflow-y: auto;
+}
+
+.sideAlarmModule {
+   bottom: 135px;
+}
+/* ---------- 사이드 메뉴 모듈 부분 ---------- */
+
+
+
+/* ---------- 하단 부분 ---------- */
+.footerCommon {
+   border-bottom: 1px solid #e2e2e2;
+}
+
+.footer {
+   position: relative;
+   display: block;
+   width: 100%;
+   height: auto;
+   min-width: 100%;
+   max-width: 100%;
+   margin: 10px auto 0px;
+   background-color: #fafafa;
+   border-top: 1px solid #e2e2e2;
+   font-size: 12px;
+   color: #5e636d;
+}
+
+.footer .footerUI {
+   width: auto;
+   height: auto;
+   color: #333;
+   line-height: 20px;
+   padding: 0 30px;
+}
+
+.footer .footerUI .footerHead {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   justify-content: space-between;
+   padding: 6px;
+   padding-right: 50px;
+}
+
+.footer .footerUI .footerHead ul {
+   display: flex;
+}
+
+.footer .footerUI .footerHead .footerHead_left li {
+   margin: 0 5px;
+}
+
+.footer .footerUI .footerHead .footerHead_right li > a > img {
+   display: inline-block;
+   height: 30px;
+   width: 30px;
+   padding: 0 4px;
+}
+
+.footer .footerUI .footerMid {
+   display: flex;
+   padding: 18px 6px 18px;
+}
+
+.footer .footerUI .footerMid > div {
+   width: 50%;
+   margin: 0 5px;
+}
+
+.footerBold {
+   font-size: 19px;
+   font-weight: 800;
+   padding-bottom: 12px;
+}
+/* ---------- 하단 부분 ---------- */
