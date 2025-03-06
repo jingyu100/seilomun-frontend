@@ -4,7 +4,7 @@ import ProductsAlarm from "./ProductsAlarm.jsx";
 const Header = () => {
     return(<div className="head-area">
         <header>
-            <div className="head-menu HFM">
+            <div className="head-menu sideMargin" >
 
                 <div className="head-top-menu">
                     <div className="head-top-half">

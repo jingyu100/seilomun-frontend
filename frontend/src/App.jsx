@@ -13,26 +13,20 @@ function App() {
   return (
    <div>
       {/* -------- 헤더 영역 -------- */}
-      <div>
+      <div className="header">
          <Header/>
       </div>
 
 
       {/* -------- 바디 영역 -------- */}
-      <div style={{
-            width: '100%', height: '100%', position: 'relative', zIndex: '20대'
-         }}>
-         <div style={{
-            height: '1200px'
-         }} >
+      <div className= "body sideMargin">
             <SideMenuBtn />
-         </div>
       </div>
 
       {/* -------- 풋터(하단) 영역 -------- */}
-      <footer>
+      <div className="footer">
          <FooterUI />
-      </footer>
+      </div>
    </div>
   );
 }

@@ -14,11 +14,12 @@
 html, body {
     margin: 0;
     width: 100%;
-    background-color:rgb(246,246,246);
+    background-color:white;
 }
 
-.HFM {
-    width: 1200px;
-    margin: 10px auto 0px;
+#root {
+
 }
+
+
 

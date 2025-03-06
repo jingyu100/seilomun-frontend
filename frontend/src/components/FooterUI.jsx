@@ -1,7 +1,7 @@
 function FooterUI () {
     return (
-        <div className="footer">
-            <div className="footerUI footerCommon HFM">
+        <div className="footerContainer">
+            <div className="footerUI footerCommon sideMargin">
                 <div className="footerHead footerCommon">
                     <ul className="footerHead_left">
                         <li>

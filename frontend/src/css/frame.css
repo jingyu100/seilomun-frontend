@@ -1,5 +1,3 @@
-
-
 /* ---------- 웹 홈페이지 css틀 ---------- */
 * {
    margin: 0;
@@ -19,6 +17,12 @@ a:visited {
    color: #333
 }
 
+.sideMargin {
+   margin: 0 auto;
+}
+
+
+/* ---------- 헤더 부분 ---------- */
 header {
    position: fixed;
    width: 100%;
@@ -27,15 +31,7 @@ header {
    z-index: 999;
    top: 0;
    background-color: #fff;
-   box-shadow: 0 0.7px 0 0 #b1b1b1;
-}
-
-.head-area {
-   position: relative;
-   z-index: 30;
-   min-width: 990px;
-   background: #000082 url(https://shopv.pstatic.net/web/r/20250206173735/_next/static/img/bg/header/gnb/bg_gheader.jpg) no-repeat 100% 0;
-   -webkit-appearance: none;
+   border-bottom: 1px solid gray;
 }
 
 .head-area button {
@@ -286,7 +282,7 @@ header {
    color: #774eff;
    border-bottom: 2px solid #774eff;
 }
-
+/* ---------- 헤더 부분 ---------- */
 
 
 /* ---------- 여긴 리액트 넘어갈 시 삭제할 부분 ---------- */
@@ -309,6 +305,14 @@ header {
    --dm-inline-color: transparent;
 }
 /* ---------- 여긴 리액트 넘어갈 시 삭제할 부분 ---------- */
+
+
+
+/* ---------- 바디 부분 ---------- */
+.body {
+   height: 2000px;
+}
+/* ---------- 바디 부분 ---------- */
 
 
 
@@ -418,13 +422,11 @@ header {
 
 
 /* ---------- 하단 부분 ---------- */
-.footerCommon {
-   border-bottom: 1px solid #e2e2e2;
-}
 
-.footer {
+.footerContainer {
    position: relative;
    bottom: 0;
+   left: 0;
    display: block;
    width: 100%;
    height: auto;
@@ -438,7 +440,7 @@ header {
 }
 
 .footer .footerUI {
-   /*width: auto;*/
+   width: 1200px;
    height: auto;
    color: #333;
    line-height: 20px;
@@ -450,8 +452,9 @@ header {
    align-items: center;
    justify-content: center;
    justify-content: space-between;
-   padding: 0 6px 6px 6px;
+   padding: 6px;
    padding-right: 50px;
+   border-bottom: 1px solid #e2e2e2;
 }
 
 .footer .footerUI .footerHead ul {
