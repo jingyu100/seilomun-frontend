@@ -1,33 +1,70 @@
+/* 전체 필터 컨테이너 */
 .filter-container {
-    width: 200px;
+    width: 200px; /* 필터 영역 너비 */
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
+/* 필터 섹션 (위치, 카테고리) */
 .filter-section {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-h3 {
+/* 필터 제목 스타일 (위치, 카테고리) */
+.filter-section h3 {
     font-size: 16px;
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
-p {
+/* 위치 선택 - 서울특별시 */
+.filter-section p {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
+/* 라디오 버튼 스타일 */
 .filter-item {
-    display: block;
-    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
+/* 라디오 버튼 기본 스타일 */
+.filter-item input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: black; /* 체크 시 색상 */
+}
+
+/* 카테고리 리스트 스타일 */
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* 카테고리 항목 스타일 */
+.category-item {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* "더보기" 버튼 스타일 */
 .more-btn {
     border: none;
     background: none;
-    color: blue;
+    color: black;
     cursor: pointer;
     font-size: 14px;
     padding: 5px;
+    text-decoration: none;
+    width: fit-content;
 }

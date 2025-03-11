@@ -12,7 +12,7 @@ import Filter from "./components/Filter.jsx";
 
 function App() {
     return (
-        <div id="frame">
+        <div>
             <div className="header">
                 <Header />
             </div>
