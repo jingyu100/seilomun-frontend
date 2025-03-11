@@ -1,4 +1,4 @@
-function FooterUI () {
+function Footer () {
     return (
         <div className="footerContainer">
             <div className="footerUI footerCommon sideMargin">
@@ -74,4 +74,4 @@ function FooterUI () {
     )
 };
 
-export default FooterUI;
+export default Footer;

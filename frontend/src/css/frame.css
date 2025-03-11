@@ -17,6 +17,10 @@ a:visited {
    color: #333
 }
 
+.frame {
+
+}
+
 .sideMargin {
    margin: 0 auto;
 }
@@ -26,12 +30,14 @@ a:visited {
 header {
    position: fixed;
    width: 100%;
+   height: auto;
    max-width: 100%;
    margin: 0 auto;
    z-index: 999;
    top: 0;
    background-color: #fff;
    border-bottom: 1px solid gray;
+
 }
 
 .head-area button {
@@ -48,6 +54,7 @@ header {
 
 .head-menu {
    width: 1200px;
+   height: var(--head-menu-height);
 }
 
 .head-top-menu {
@@ -311,6 +318,7 @@ header {
 /* ---------- 바디 부분 ---------- */
 .body {
    height: 2000px;
+   padding-top: var(--head-menu-height);
 }
 /* ---------- 바디 부분 ---------- */
 
