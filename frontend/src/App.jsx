@@ -1,31 +1,19 @@
-// import logo from './logo.svg';
+import {BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
-import './css/frame.css';
-import Footer from './components/Footer.jsx'
-import AlarmContents from './components/AlarmContents.jsx';
-import ProductsAlarm from './components/ProductsAlarm.jsx';
-import SideMenuBtn from './components/sideBtn/SideMenuBtn.jsx';
-import Header from "./components/Header.jsx";
-import Filter from "./components/Filter.jsx";
-
-
+import Home from "./pages/Home.jsx";
+import New from "./pages/New.jsx"
+import Login from "./pages/Login.jsx";
 
 function App() {
     return (
-        <div>
-            <div className="header">
-                <Header />
-            </div>
+        <Router>
+            <Routes>
+                <Route path={"/login"} element={<Login />} />
+                <Route path={"/"} element={<Home />} />
+                <Route path={"/new"} element={<New />} />
 
-            <div className="body sideMargin">
-                <Filter />
-                <SideMenuBtn />
-            </div>
-
-            <div className="footer">
-                <Footer />
-            </div>
-        </div>
+            </Routes>
+        </Router>
     );
 }
 
