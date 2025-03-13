@@ -3,6 +3,7 @@ import '../css/frame.css';
 import Footer from '../components/Footer.jsx'
 import SideMenuBtn from '../components/sideBtn/SideMenuBtn.jsx';
 import Header from "../components/Header.jsx";
+import ProductList from "../components/ProductList.jsx";
 
 
 const Home = () => {
