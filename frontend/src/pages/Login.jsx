@@ -38,7 +38,8 @@ function Login() {
                       <input type="checkbox" /> 아이디 저장
                     </label>
                     <div className="links">
-                      <a href="#">아이디 찾기</a> | <a href="#">비밀번호 재설정</a> |
+                      <a href="#">아이디 찾기</a> | 
+                      <a href="#">비밀번호 재설정</a> |
                       <a href="#">회원가입</a>
                     </div>
                   </div>
@@ -50,9 +51,9 @@ function Login() {
                 <div className="social-login">
                   <p>간편하게 로그인</p>
                   <div className="social-icons">
-                    <button className="google">G</button>
-                    <button className="naver">N</button>
-                    <button className="kakao">K</button>
+                    <button className="google" onClick={() => window.open = "www.google.com"}>G</button>
+                    <button className="naver" onClick={() => window.open = "www.naver.com"}>N</button>
+                    <button className="kakao" onClick={() => window.open = "www.kakao.com"}>K</button>
                   </div>
                 </div>
               </div>
