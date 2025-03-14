@@ -318,7 +318,6 @@ header {
 
 /* ---------- 바디 부분 ---------- */
 .body {
-   height: 2000px;
    min-height: 100vh;
    padding-top: var(--head-menu-height);
 }
