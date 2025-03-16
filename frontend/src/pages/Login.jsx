@@ -51,9 +51,9 @@ function Login() {
                 <div className="social-login">
                   <p>간편하게 로그인</p>
                   <div className="social-icons">
-                    <button className="google" onClick={() => window.open = "www.google.com"}>G</button>
-                    <button className="naver" onClick={() => window.open = "www.naver.com"}>N</button>
-                    <button className="kakao" onClick={() => window.open = "www.kakao.com"}>K</button>
+                    <button className="google" onClick={() => window.open("https://www.google.com", "_blank")}>G</button>
+                    <button className="naver" onClick={() => window.open("https://www.naver.com", "_blank")}>N</button>
+                    <button className="kakao" onClick={() => window.open("https://www.kakao.com", "_blank")}>K</button>
                   </div>
                 </div>
               </div>
