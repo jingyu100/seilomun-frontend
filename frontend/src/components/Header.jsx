@@ -17,7 +17,7 @@ const Header = () => {
                               <a href="">내 정보</a>
                            </li> */}
                                 <li className="login">
-                                    <a href="">로그인</a>
+                                    <a href="Login">로그인</a>
                                 </li>
                                 <li className="join" >
                                     <a href="">회원가입</a>
