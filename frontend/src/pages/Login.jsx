@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";  // ✅ useNavigate 추가
+import { useNavigate } from "react-router-dom";  
 import Header from "../components/Header.jsx";
 import Footer from '../components/Footer.jsx';
 import "../css/Login.css";
@@ -8,7 +8,7 @@ import phoneIcon from "../image/icon/mobile-phone.png";
 
 function Login() {
   const [showPhoneAuth, setShowPhoneAuth] = useState(false);
-  const navigate = useNavigate();  // ✅ 페이지 이동을 위한 useNavigate 훅 사용
+  const navigate = useNavigate();  
 
   return (
     <div>
@@ -36,7 +36,7 @@ function Login() {
               <div className="phone-auth-container">
                 <button 
                   className="phone-auth-button"
-                  onClick={() => navigate("/register")}  // ✅ Register 페이지로 이동
+                  onClick={() => navigate("/register")}  
                 >
                   <img src={phoneIcon} alt="휴대폰 인증 아이콘" className="phone-auth-icon" />
                   <span>휴대폰 인증</span>
