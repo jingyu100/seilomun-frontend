@@ -1,0 +1,210 @@
+/* 전체 레이아웃 */
+.register-Container {
+    width: 800px;
+    height: 1500px;
+    margin: 10px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+/* 회원가입 타이틀 */
+.register-title {
+    text-align: center;
+    font-size: 1.6em;
+}
+
+/* 타이틑 아래 선*/
+.separator {
+    width: 780px;
+    border-bottom: 2px solid black;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* 아이디 */
+.form-group {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+}
+
+#id-label {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-left: 30px;
+}
+
+.required {
+    color: orange;
+    font-size: 1.2em;
+}
+
+.input-container {
+    display: flex;
+    align-items: center; 
+    gap: 30px; 
+}
+
+#id-input {
+    flex: 1; 
+    padding: 12px;
+    border: 2.0px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    color: black;
+    min-width: 500px; 
+    margin-left: 30px;
+}
+
+#id-input:focus {
+    border: 2.0px solid #ccc !important; 
+    outline: none; 
+}
+
+
+#id-input::placeholder {
+    color: #ccc;
+}
+
+#id-check-btn {
+    width: 160px;
+    height: 45px;
+    padding: 12px;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 패스워드,확인*/
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 730px;
+    gap: 30px; 
+    font-size: 1.0em;
+    font-weight: bold;
+    margin-left: 28px;
+    margin-top: 5px;
+}
+
+.label-group {
+    display: flex;
+    width: 100%;
+    gap: 290px;
+    font-size: 1.0em;
+    font-weight: bold; 
+    margin-bottom: 5px;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.required {
+    color: orange; /* 별표 색상 */
+    font-size: 1.2em;
+}
+
+.input-group {
+    display: flex;
+    flex: 1;
+}
+
+#password-input, #password-confirm-input {
+    width: 600px;
+    padding: 12px;
+    border: 2.0px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    color: black;
+    background-color: white; 
+    outline: none; 
+}
+
+#password-input:focus, #password-confirm-input:focus {
+    border: 1.5px solid #ccc !important; 
+}
+
+#password-info {
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+    width: 100%;
+    margin-left: 30px;
+}
+
+/* 닉네임 입력 */
+
+#nickname-label {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    margin-left: 30px;
+}
+
+.nick-label-group {
+    display: flex;
+    width: 100%;
+    gap: 290px;
+    font-size: 1.0em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 30px;
+}
+
+.required {
+    color: orange;
+    font-size: 1.2em;
+}
+
+.input-nick {
+    display: flex;
+    align-items: center; 
+    gap: 30px; 
+}
+
+#nickname-input {
+    flex: 1; 
+    padding: 12px;
+    border: 2.0px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    color: black;
+    min-width: 500px; 
+    margin-left: 30px;
+}
+
+#nickname-input:focus {
+    border: 2.0px solid #ccc !important; 
+    outline: none; 
+}
+
+
+#nickname-input::placeholder {
+    color: #ccc;
+}
+
+#nickname-check-btn{
+    width: 160px;
+    height: 45px;
+    padding: 12px;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+#nickname-info {
+    font-size: 14px;
+    color: black;
+    margin-top: 5px;
+    width: 100%;
+    margin-left: 30px;
+}
