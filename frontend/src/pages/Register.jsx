@@ -64,7 +64,7 @@ function Register() {
             <select id="email-select" onChange={(e) => setEmailDomain(e.target.value)}>
               <option value="">직접 입력</option>
               <option value="naver.com">naver.com</option>
-              <option value="daum.net">da~um.net</option>
+              <option value="daum.net">daum.net</option>
               <option value="kakao.com">kakao.com</option>
               <option value="gmail.com">gmail.com</option>
             </select>
