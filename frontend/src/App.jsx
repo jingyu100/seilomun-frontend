@@ -4,6 +4,7 @@ import Home from "./pages/Home.jsx";
 import New from "./pages/New.jsx"
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register";
+import Selogin from "./pages/Selogin.jsx"
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path={"/"} element={<Home />} />
                 <Route path={"/new"} element={<New />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/selogin" element={<Selogin />} />
 
             </Routes>
         </Router>
