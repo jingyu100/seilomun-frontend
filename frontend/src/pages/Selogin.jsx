@@ -3,9 +3,8 @@ import "../css/Selogin.css";
 import logo from "../image/logo/spLogo.png";
 
 function Selogin() {
-    const [state, setState] = useState(false);
+  
     return (
-      <div>
         <div className="Selogin-container">
 
           {/* 좌측 영역 */}
@@ -41,7 +40,6 @@ function Selogin() {
 
               </div>
           </div>
-        </div>
         </div>
     );
 }
