@@ -13,11 +13,11 @@ const Sail = () => {
       </div>
 
       <div className="body sideMargin">
-        <div className="inner">
+        <div className="sail-inner">
           <Filter />
           <div className="main-container">
-            <div className="event-container">
-              <div className="event-item">이벤트 내용</div>
+            <div className="sail-event-container">
+              <div className="sail-event-item">이벤트 내용</div>
             </div>
             <ProductList />
             <SideMenuBtn />
