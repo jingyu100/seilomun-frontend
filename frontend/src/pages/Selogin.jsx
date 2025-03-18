@@ -5,7 +5,9 @@ import logo from "../image/logo/spLogo.png";
 function Selogin() {
     const [state, setState] = useState(false);
     return (
-        <div className="login-container">
+      <div>
+        <div className="Selogin-container">
+
           {/* 좌측 영역 */}
           <div className="login-left">
             <img src={logo} alt="로고" className="logo" />
@@ -39,6 +41,7 @@ function Selogin() {
 
               </div>
           </div>
+        </div>
         </div>
     );
 }
