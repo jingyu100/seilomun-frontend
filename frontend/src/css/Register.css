@@ -1,8 +1,9 @@
 /* 전체 레이아웃 */
+
 .register-Container {
     width: 800px;
     height: 1300px;
-    margin: 10px auto;
+    margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -49,7 +50,7 @@
 
 #id-input {
     flex: 1; 
-    padding: 12px;
+    padding: 15px;
     border: 2.0px solid #ccc;
     border-radius: 10px;
     font-size: 14px;
@@ -171,7 +172,8 @@
     border-radius: 10px;
     font-size: 14px;
     color: black;
-    min-width: 500px; 
+    min-width: 500px;
+    min-height: 25px; 
     margin-left: 30px;
 }
 
@@ -234,7 +236,8 @@
     border-radius: 10px;
     font-size: 14px;
     color: black;
-    min-width: 500px; 
+    min-width: 500px;
+    min-height: 25px; 
     margin-left: 30px;
     margin-bottom: 30px;
 }
@@ -285,7 +288,8 @@
 }
 
 #email-input {
-    width: 250px; 
+    width: 250px;
+    height: 25px; 
 }
 #email-input::placeholder {
     color: #ccc;
@@ -293,10 +297,12 @@
 
 #email-domain {
     width: 180px; 
+    height: 25px;
 }
 
 #email-select {
     width: 190px;
+    height:  50px;
     background-color: white;
 }
 
