@@ -13,7 +13,7 @@ const New = () => {
       </div>
 
       <div className="body sideMargin">
-        <div className="inner">
+        <div className="sail-inner">
           <Filter />
           <div className="main-container">
             <ProductList />

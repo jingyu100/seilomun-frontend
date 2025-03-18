@@ -1,14 +1,14 @@
-.inner {
+.sail-inner {
   display: flex;
 }
 
-.event-container {
+.sali-event-container {
   margin: 50px;
   display: flex;
   justify-content: center;
 }
 
-.event-item {
+.sail-event-item {
   display: flex;
   width: 800px;
   height: 500px;
