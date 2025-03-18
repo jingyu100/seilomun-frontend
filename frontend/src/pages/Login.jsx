@@ -30,7 +30,7 @@ function Login() {
             <h4>환경 보호와 연결된다는 점</h4>
           </div>
 
-          {/* 우측 로그인 영역 */}
+          {/* 우측영역 */}
           <div className="login-right">
             {showPhoneAuth ? (
               <div className="phone-auth-container">
@@ -53,9 +53,9 @@ function Login() {
                       <input type="checkbox" /> 아이디 저장
                     </label>
                     <div className="links">
-                      <a href="#">아이디 찾기</a> | 
-                      <a href="#">비밀번호 재설정</a> |
-                      <a href="" onClick={(e) => { e.preventDefault(); setShowPhoneAuth(true); }}>회원가입</a>
+                      <p href="#">아이디 찾기</p> | 
+                      <p href="#">비밀번호 재설정</p> |
+                      <p href="" onClick={(e) => { e.preventDefault(); setShowPhoneAuth(true); }}>회원가입</p>
                     </div>
                   </div>
                   <button type="submit" className="login-btn">로그인</button>

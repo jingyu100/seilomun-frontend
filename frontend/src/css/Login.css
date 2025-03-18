@@ -104,10 +104,6 @@ label {
   text-decoration: none;
 }
 
-.links a:hover {
-  text-decoration: underline;
-}
-
 .login-btn {
   background: #ffffff;
   color: black;
