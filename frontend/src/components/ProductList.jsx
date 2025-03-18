@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/ProductList.css";
+import { useState } from "react";
 
 const products = [
   {
@@ -122,8 +123,96 @@ const products = [
     image: "/image/product1.jpg",
     date: "2024년 11월 13일까지",
   },
-
-  // 추가 상품들...
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
+  {
+    id: 13,
+    name: "발효훈연소시지 1팩 (50g*4개) 2종",
+    price: "3,000원",
+    regularPrice: "5,000원",
+    address: "대구광역시 북구 복현동",
+    discount: "40%",
+    image: "/image/product1.jpg",
+    date: "2024년 11월 13일까지",
+  },
 ];
 
 const ProductCard = ({ product }) => {
@@ -145,11 +234,19 @@ const ProductCard = ({ product }) => {
 };
 
 const ProductList = () => {
+  // 화면에 표시할 상품 개수 (기본: 12개)
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  // "더보기" 버튼 클릭 시 6개씩 추가 표시
+  const handleLoadMore = () => {
+    setVisibleCount((prevCount) => prevCount + 8);
+  };
+
   return (
     <div className="product-list">
       <div className="product-header">
         <div className="product-number-container">
-          <h1 className="product-number">총 {products.length}개 상품 </h1>
+          <h1 className="product-number">총 {products.length}개 상품</h1>
         </div>
         <div className="product-filter-container">
           <select className="product-filter">
@@ -162,9 +259,20 @@ const ProductList = () => {
           </select>
         </div>
       </div>
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+
+      {/* 상품 리스트 */}
+      <div className="product-list-container">
+        {products.slice(0, visibleCount).map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      {/* 상품이 12개 이상일 때만 "더보기" 버튼 표시 */}
+      {products.length > 12 && visibleCount < products.length && (
+        <button className="product-list-moreBtn" onClick={handleLoadMore}>
+          더보기
+        </button>
+      )}
     </div>
   );
 };
