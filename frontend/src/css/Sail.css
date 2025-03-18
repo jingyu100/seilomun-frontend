@@ -1,0 +1,19 @@
+.inner {
+  display: flex;
+}
+
+.event-container {
+  margin: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.event-item {
+  display: flex;
+  width: 800px;
+  height: 500px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 10px;
+}
