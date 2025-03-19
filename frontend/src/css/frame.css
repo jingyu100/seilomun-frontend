@@ -402,21 +402,27 @@ header {
 
 /* ---------- 사이드 메뉴 모듈 부분 ---------- */
 .viewModule {
-  position: absolute;
+  position: relative;
   right: 30px;
   background-color: #fff;
   /* background-color: var(--color_setting_bg); 다크 모드일 때 */
-  width: 320px;
+  width: 350px;
   height: 430px;
   border-radius: 8px;
-  -webkit-box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
+  box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
   z-index: 500;
   overflow-y: auto;
 }
 
 .sideAlarmModule {
+  position: absolute;
   bottom: 135px;
+}
+
+.sideCartModule {
+  position: absolute;
+  bottom: 70px;
 }
 /* ---------- 사이드 메뉴 모듈 부분 ---------- */
 

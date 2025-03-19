@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import AlarmViewModule from "./AlarmViewModule";
+import SideAlarmBtn from './SideAlarmBtn';
+import SideCartBtn from './SideCartBtn';
 
 function SideMenuBtn () {
    const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
@@ -25,41 +27,10 @@ function SideMenuBtn () {
             <img src="/image/icon/icon-up-arrow.png" alt="up"
                className="sideBtnIcon" />
          </a>
-
-         <a href="" role="button" className="sideMenuBtn" onClick={(e) => {
-            e.preventDefault();
-            toggleAlarmModal();
-         }}>
-            <em className="iconCount" id="alarm-cnt">0</em>
-            <img src="/image/icon/icon-bell.png" alt="alarm"
-               className="sideBtnIcon"
-            />
-         </a>
-         {isAlarmModalOpen && 
-            <div className="modal-overlay">
-               <div className="modal-content">
-                  <AlarmViewModule />
-               </div>
-            </div>
-         }
          
+         <SideAlarmBtn />
 
-         <a href="" role="button" className="sideMenuBtn" onClick={(e) => {
-            e.preventDefault();
-            toggleChatModal();
-         }}>
-            <em className="iconCount" id="shopping-bag-cnt">0</em>
-            <img src="/image/icon/icon-shopping-bag.png" alt="shopping-bag"
-               className="sideBtnIcon"
-            />
-         </a>
-         {isChatModalOpen && 
-            <div className="modal-overlay">
-               <div className="modal-content">
-
-               </div>
-            </div>
-         }
+         <SideCartBtn />
 
          <a href="" role="button" className="sideMenuBtn" onClick={(e) => {
             e.preventDefault();

@@ -1,0 +1,62 @@
+.viewModule {
+    background-color: #f4f4f4;
+    min-width: 90%;
+    max-width: auto;
+}
+
+.viewModule .moduleFrame1 {
+    justify-content: center;
+    justify-items: center;
+}
+
+.viewModule .moduleFrame2 {
+    background-color: #fff
+}
+
+.viewModule .moduleFrame3 {
+
+}
+
+.sideModuleTitle {
+    text-align: center;
+    padding: 10px 0 15px;
+}
+
+.order-area {
+    padding: 17px 7px 40px;
+}
+
+.order-area .order-inner {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.order-area .order-totalsummary {
+    display: flex;
+    font-size: 13px;
+    font-weight: 600;
+    align-items: center;
+}
+
+.order-area .order-totalsummary .order-subsummary {
+    display: flex;
+    align-items: center;
+}
+
+.order-area .order-totalsummary .order-subsummary > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 5px;
+}
+
+.cartBuy {
+    position: absolute;
+    bottom: 0;
+    padding: 30px 50px 30px 50px;
+}
+
+.cartBuyBtn {
+    color: #fff;
+    background-color: #000;
+}
