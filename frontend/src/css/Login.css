@@ -10,7 +10,7 @@
 /* 왼쪽 영역 */
 .login-left {
   flex: 1;
-  background: #ffffff;
+  background: #fcfcfc;
   padding: 40px;
   text-align: center; 
   position: relative; 
@@ -44,7 +44,7 @@ h4 {
 .login-right {
   flex: 1;
   padding: 90px;
-  background: white;
+  background: #fcfcfc;
   display: flex;
   flex-direction: column;
   align-items: center;

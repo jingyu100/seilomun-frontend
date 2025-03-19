@@ -1,8 +1,12 @@
+.body.sideMargin {
+  background-color: #FCFCFC;;
+}
 /* 로그인 컨테이너  */
 .Selogin-container {
     display: flex;
     width: 1200px; 
     height: 600px; 
+    background-color: #FCFCFC;
     margin-top: 30px;
     overflow: hidden;
     position: absolute;
@@ -14,7 +18,7 @@
   /* 왼쪽 영역 */
   .login-left {
     flex: 1;
-    background: #ffffff;
+    background-color: #FCFCFC;
     padding: 40px;
     text-align: center; 
     position: relative; 
@@ -34,6 +38,7 @@
   .logo {
     width: 400px;
     margin-bottom: 20px;
+    margin-right: 60px;
   }
   
   h2 {
@@ -49,7 +54,7 @@
   .login-right {
     flex: 1;
     padding: 90px;
-    background: white;
+    background-color: #FCFCFC;
     display: flex;
     flex-direction: column;
     align-items: center;
