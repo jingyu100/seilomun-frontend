@@ -40,7 +40,7 @@ function Login() {
             </div>
           </div>
           <button type="submit" className="login-btn">
-            로그인
+            로그인1
           </button>
           <hr class="divider"></hr>
         </form>
