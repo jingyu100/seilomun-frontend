@@ -1,6 +1,6 @@
 .viewModule {
-    background-color: #ffeeee;
-    min-width: 100%;
+    background-color: #f4f4f4;
+    min-width: 90%;
     max-width: auto;
 }
 
@@ -19,56 +19,35 @@
 
 .sideModuleTitle {
     text-align: center;
-    padding: 13px 0 13px;
-    border-bottom: 1.5px solid #e2e2e2;
+    padding: 10px 0 15px;
 }
 
 .order-area {
-    width: auto;
     padding: 17px 7px 40px;
 }
 
 .order-area .order-inner {
     padding: 10px;
     border-radius: 10px;
-    border: 1.5px solid #e2e2e2;
-}
-
-.order-area .order-inner .sideCartTop {
-    border-bottom: 1px solid #e2e2e2;
-    padding: 2px 0 10px;
-}
-
-.order-area .order-inner .cartModuleMain {
-    border-bottom: 1px solid #e2e2e2;
-    padding: 8px 0 8px;
 }
 
 .order-area .order-totalsummary {
     display: flex;
     font-size: 13px;
     font-weight: 600;
-    padding: 8px 0 0;
+    align-items: center;
 }
 
 .order-area .order-totalsummary .order-subsummary {
     display: flex;
     align-items: center;
-    padding-right: 3px;
 }
 
-.order-area .order-totalsummary .order-subsummary > div, .order-totalpay {
+.order-area .order-totalsummary .order-subsummary > div {
     display: flex;
     flex-direction: column;
     text-align: center;
-    padding: 0 9px;
-}
-
-.order-area .order-totalsummary .order-totalpay {
-    width: auto;
-    max-width: auto;
-    padding-left: 10px;
-    border-left: 1.5px solid #e2e2e2;
+    padding: 0 5px;
 }
 
 .cartBuy {
