@@ -406,11 +406,11 @@ header {
   right: 30px;
   background-color: #fff;
   /* background-color: var(--color_setting_bg); 다크 모드일 때 */
-  width: 350px;
+  width: 450px;
   height: 430px;
   border-radius: 8px;
   -webkit-box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
-  box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
+  box-shadow: 0 0 0 1px #e3e5e8, 0px 3px 5px 0 rgba(0, 0, 0, .3);
   z-index: 500;
   overflow-y: auto;
 }
