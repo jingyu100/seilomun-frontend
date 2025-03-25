@@ -5,7 +5,7 @@ import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
 import ProductList from "../components/ProductList.jsx";
 import "../css/New.css";
 
-const New = () => {
+const NewPage = () => {
   return (
     <div className="New">
       <div className="header">
@@ -29,4 +29,4 @@ const New = () => {
   );
 };
 
-export default New;
+export default NewPage;

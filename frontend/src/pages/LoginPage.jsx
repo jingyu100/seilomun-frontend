@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";  
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header.jsx";
-import Footer from '../components/Footer.jsx';
+import Footer from "../components/Footer.jsx";
 import "../css/Login.css";
 import logo from "../image/logo/spLogo.png";
-import phoneIcon from "../image/icon/mobile-phone.png"; 
+import phoneIcon from "../image/icon/mobile-phone.png";
 
-function Login() {
+function LoginPage() {
   const [showPhoneAuth, setShowPhoneAuth] = useState(false);
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -34,11 +34,15 @@ function Login() {
           <div className="login-right">
             {showPhoneAuth ? (
               <div className="phone-auth-container">
-                <button 
+                <button
                   className="phone-auth-button"
-                  onClick={() => navigate("/register")}  
+                  onClick={() => navigate("/register")}
                 >
-                  <img src={phoneIcon} alt="휴대폰 인증 아이콘" className="phone-auth-icon" />
+                  <img
+                    src={phoneIcon}
+                    alt="휴대폰 인증 아이콘"
+                    className="phone-auth-icon"
+                  />
                   <span>휴대폰 인증</span>
                 </button>
               </div>
@@ -53,20 +57,44 @@ function Login() {
                       <input type="checkbox" /> 아이디 저장
                     </label>
                     <div className="links">
-                      <p href="#">아이디 찾기</p> | 
-                      <p href="#">비밀번호 재설정</p> |
-                      <p href="" onClick={(e) => { e.preventDefault(); setShowPhoneAuth(true); }}>회원가입</p>
+                      <p href="#">아이디 찾기</p> |<p href="#">비밀번호 재설정</p> |
+                      <p
+                        href=""
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowPhoneAuth(true);
+                        }}
+                      >
+                        회원가입
+                      </p>
                     </div>
                   </div>
-                  <button type="submit" className="login-btn">로그인</button>
+                  <button type="submit" className="login-btn">
+                    로그인
+                  </button>
                   <hr className="divider"></hr>
                 </form>
                 <div className="social-login">
                   <p>간편하게 로그인</p>
                   <div className="social-icons">
-                    <button className="google" onClick={() => window.open("https://www.google.com", "_blank")}>G</button>
-                    <button className="naver" onClick={() => window.open("https://www.naver.com", "_blank")}>N</button>
-                    <button className="kakao" onClick={() => window.open("https://www.kakao.com", "_blank")}>K</button>
+                    <button
+                      className="google"
+                      onClick={() => window.open("https://www.google.com", "_blank")}
+                    >
+                      G
+                    </button>
+                    <button
+                      className="naver"
+                      onClick={() => window.open("https://www.naver.com", "_blank")}
+                    >
+                      N
+                    </button>
+                    <button
+                      className="kakao"
+                      onClick={() => window.open("https://www.kakao.com", "_blank")}
+                    >
+                      K
+                    </button>
                   </div>
                 </div>
               </div>
@@ -82,4 +110,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

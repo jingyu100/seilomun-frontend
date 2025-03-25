@@ -5,7 +5,7 @@ import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
 import ProductList from "../components/ProductList.jsx";
 import "../css/Sail.css";
 
-const Sail = () => {
+const SailPage = () => {
   return (
     <div className="Sail">
       <div className="header">
@@ -32,4 +32,4 @@ const Sail = () => {
   );
 };
 
-export default Sail;
+export default SailPage;
