@@ -22,7 +22,7 @@ function CartViewModule () {
             <div className='order-area'>
                 <div className='order-inner moduleFrame2'>
                     <div className='sideCartTable moduleFrame2'>
-                        <div className="">
+                        <div className="sideCartTop">
                             총 
                             <span className=''
                                 style={{fontWeight: '800'}}>
@@ -48,7 +48,7 @@ function CartViewModule () {
                             </span>
                             <div>
                                 총 배송비
-                                <span></span>
+                                <span>-</span>
                             </div>
                             <span>
                                 <svg style={{width: "11", height: "11"}} viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,12 +57,12 @@ function CartViewModule () {
                             </span>
                             <div>
                                 할인 금액
-                                <span></span>
+                                <span>-</span>
                             </div>
                         </div>
-                        <div>
+                        <div className='order-totalpay'>
                             주문 금액
-                            <span></span>
+                            <span>-</span>
                         </div>
                     </div>
                 </div>
