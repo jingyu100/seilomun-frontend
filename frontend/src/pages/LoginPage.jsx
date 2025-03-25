@@ -20,7 +20,7 @@ function LoginPage() {
         <div className="login-container">
           {/* 좌측 영역 */}
           <div className="login-left">
-            <img src={logo} alt="로고" className="logo" />
+            <img src={logo} alt="로고" className="selogo" />
             <h2>"환경을 살리는 알뜰 쇼핑 플랫폼"</h2>
             <br />
             <h2>세일로문에 가입하실 방법을</h2>
