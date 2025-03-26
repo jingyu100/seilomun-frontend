@@ -6,18 +6,8 @@ import Header from "../components/Header.jsx";
 
 const WishListPage = () => {
   return (
-    <div>
-      <div className="header">
-        <Header />
-      </div>
-
-      <div className="body sideMargin">
-        <SideMenuBtn />
-      </div>
-
-      <div className="footer">
-        <Footer />
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <h1 className="text-4xl font-bold text-blue-500">Tailwind CSS 적용 테스트</h1>
     </div>
   );
 };
