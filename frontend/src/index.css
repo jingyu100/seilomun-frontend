@@ -1,26 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
-    font-family: 'paybooc-Bold';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "paybooc-Bold";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 @font-face {
-    font-family: 'paybooc';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Medium.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "paybooc";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Medium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
-html, body {
-    margin: 0;
-    width: 100%;
-    background-color:white;
+html,
+body {
+  margin: 0;
+  width: 100%;
+  background-color: white;
 }
 
 #root {
-    --head-menu-height: 118px;
-    background-color: #FCFCFC;
+  --head-menu-height: 118px;
+  background-color: #fcfcfc;
 }
-
-
-
