@@ -3,10 +3,9 @@ import logo from "../image/logo/spLogo.png";
 
 function Business_numberPage() {
   return (
-    <div className="body sideMargin">
       <div className="business-container">
         <div className="logo-section">
-          <img src={logo} alt="로고" className="selogo" />
+          <img src={logo} alt="로고" className="selogo3" />
           <h1 className="join-title">회원가입</h1>
         </div>
 
@@ -21,9 +20,11 @@ function Business_numberPage() {
             <input type="text" placeholder="성명 입력" />
           </div>
 
-          <div className="date-select">
+          <div className="input-group">
           <label>개업일자<span className="required">*</span></label>
-            <select>
+
+          <div className="data-group">
+            <select className="date-select"> 
               <option>선택</option>
               {[...Array(50)].map((_, i) => (
                 <option key={i}>{1975 + i}</option>
@@ -31,7 +32,7 @@ function Business_numberPage() {
             </select>
             <span>년</span>
 
-            <select>
+            <select className="date-select">
               <option>선택</option>
               {[...Array(12)].map((_, i) => (
                 <option key={i + 1}>{i + 1}</option>
@@ -39,19 +40,19 @@ function Business_numberPage() {
             </select>
             <span>월</span>
 
-            <select>
+            <select className="date-select">
               <option>선택</option>
               {[...Array(31)].map((_, i) => (
                 <option key={i + 1}>{i + 1}</option>
               ))}
             </select>
             <span>일</span>
+            </div>
+            </div>
           </div>
 
           <button className="verify-btn">사업자번호 인증</button>
         </div>
-      </div>
-    </div>
   );
 }
 

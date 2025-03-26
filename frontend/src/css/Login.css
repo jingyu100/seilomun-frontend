@@ -2,7 +2,6 @@
 .login-container {
   display: flex;
   width: 100%;
-  max-width: 1200px;
   margin: 10px;
   overflow: hidden;
 }
@@ -26,9 +25,10 @@
   background-color: #ccc;
 }
 
-.selogo {
-  width: 240px;
+.selogo1 {
+  width: 220px;
   margin-bottom: 20px;
+  margin-right: 80px;
 }
 
 h2 {
