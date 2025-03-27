@@ -16,18 +16,20 @@ function LoginPage() {
         <Header />
       </div>
 
-      <div className="body sideMargin">
+      <div className="login-area">
         <div className="login-container">
           {/* 좌측 영역 */}
           <div className="login-left">
             <img src={logo} alt="로고" className="selogo1" />
-            <h2>"환경을 살리는 알뜰 쇼핑 플랫폼"</h2>
-            <br />
-            <h2>세일로문에 가입하실 방법을</h2>
-            <h2>선택해주세요</h2>
-            <br />
-            <h4>유통기한 임박 상품 구매가</h4>
-            <h4>환경 보호와 연결된다는 점</h4>
+            <div className="login-text">  
+              <h2>"환경을 살리는 알뜰 쇼핑 플랫폼"</h2>
+              <br />
+              <h2>세일로문에 가입하실 방법을</h2>
+              <h2>선택해주세요</h2>
+              <br />
+              <h4>유통기한 임박 상품 구매가</h4>
+              <h4>환경 보호와 연결된다는 점</h4>
+            </div>  
           </div>
 
           {/* 우측영역 */}
@@ -102,11 +104,11 @@ function LoginPage() {
           </div>
         </div>
       </div>
-
       <div className="footer">
         <Footer />
       </div>
     </div>
+    
   );
 }
 
