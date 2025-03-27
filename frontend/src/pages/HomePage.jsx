@@ -3,8 +3,8 @@ import "../css/frame.css";
 import Footer from "../components/Footer.jsx";
 import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
 import Header from "../components/Header.jsx";
-import axios from "axios";
-import {useState, useEffect} from "react";
+// import axios from "axios";
+// import {useState, useEffect} from "react";
 
 // export const List = () => {
 //     const [product, setProduct] = useState(null);  // 배열 대신 객체로 상태 선언
@@ -54,20 +54,17 @@ import {useState, useEffect} from "react";
 //     );
 // };
 
-
-
 const HomePage = () => {
-    const [shopList,setShopList]=useState([]);
+  // const [shopList,setShopList]=useState([]);
   return (
     <div>
       <div className="header">
         <Header />
-
       </div>
 
       <div className="body sideMargin">
         <SideMenuBtn />
-          <List/>
+        <List />
       </div>
 
       <div className="footer">
@@ -76,7 +73,5 @@ const HomePage = () => {
     </div>
   );
 };
-
-
 
 export default HomePage;
