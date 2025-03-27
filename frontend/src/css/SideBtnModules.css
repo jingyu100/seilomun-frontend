@@ -7,6 +7,7 @@
 .viewModule .moduleFrame1 {
     justify-content: center;
     justify-items: center;
+    align-items: center;
 }
 
 .viewModule .moduleFrame2 {
@@ -37,6 +38,11 @@
 .order-area .order-inner .sideCartTop {
     border-bottom: 1px solid #e2e2e2;
     padding: 2px 0 10px;
+    font-weight: 500
+}
+
+.order-area .order-inner .sideCartTop .cartTopCnt {
+    padding-left: 3px;
 }
 
 .order-area .order-inner .cartModuleMain {
@@ -72,12 +78,20 @@
 }
 
 .cartBuy {
-    position: absolute;
+    display: flex;
+    position: relative;
+    padding: 15px 50px;
     bottom: 0;
-    padding: 30px 50px 30px 50px;
 }
 
 .cartBuyBtn {
+    display: inline-block;
     color: #fff;
     background-color: #000;
+    width: 220px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
 }

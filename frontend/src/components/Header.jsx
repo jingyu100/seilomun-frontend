@@ -84,7 +84,7 @@ const Header = () => {
                                         <li>알림 온 게 없습니다.</li>
 
                                         {/* <!-- 알림 온 게 있을 시 --> */}
-                                        <AlarmContents product={ProductsAlarm} />
+                                        <AlarmContents products={ProductsAlarm} /> 
                                        <li>
                                           <a href="">
                                              <div>
@@ -103,7 +103,7 @@ const Header = () => {
                                        <li>
                                           <a href="">
                                              <div>
-                                                <AlarmContents product={ProductsAlarm} />
+                                                <AlarmContents products={ProductsAlarm} /> 
                                              </div>
                                           </a>
                                        </li>

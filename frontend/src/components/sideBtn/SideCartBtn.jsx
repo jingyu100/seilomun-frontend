@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import CartViewModule from "./CartViewModule";
 
+
 const SideCartBtn = () => {
     const [isCartModal, setisCartModal] = useState(false);
     const modalRef = useRef(null);

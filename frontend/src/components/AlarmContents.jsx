@@ -1,24 +1,26 @@
-import ProductsAlarm from "./ProductsAlarm.jsx";
+import React from "react";
 
-const AlarmContents = ({product}) => {
-    const {name, thumbnail, url, state} = product;
-
+const AlarmContents = ({ products }) => {
     return (
-        <li>
-            <a href={url}>
-                <li>{state}</li>
-                <div>
-                    <img src={thumbnail} alt="" style={{
-                        width: '70px', height: '70px'
-                    }} />
-                    <p>
-                        <span>
-                            <span>{name}</span>
-                        </span>
-                    </p>
-                </div>
-            </a>
-        </li>
+        <ul>
+            {products.map((product) => (
+                <li key={product.id}>
+                    <a href={product.url || "#"}> {/* URL이 없을 경우 기본값 설정 */}
+                        <li>{product.state}</li>
+                        <div>
+                            <img src={product.image} alt={product.name} style={{
+                                width: '70px', height: '70px'
+                            }} />
+                            <p>
+                                <span>
+                                    <span>{product.name}</span>
+                                </span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            ))}
+        </ul>
     );
 };
 
