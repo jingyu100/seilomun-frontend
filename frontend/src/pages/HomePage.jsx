@@ -64,7 +64,7 @@ const HomePage = () => {
 
       <div className="body sideMargin">
         <SideMenuBtn />
-        <List />
+        {/* <List /> */}
       </div>
 
       <div className="footer">
