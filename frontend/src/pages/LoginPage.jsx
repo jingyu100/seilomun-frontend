@@ -87,9 +87,8 @@ function LoginPage() {
                     </button>
                     <button
                       className="naver"
-                      onClick={() => window.open("https://www.naver.com", "_blank")}
+                      onClick={() => { window.location.href = "/oauth2/authorization/naver"; }}
                     >
-                      N
                     </button>
                     <button
                       className="kakao"
