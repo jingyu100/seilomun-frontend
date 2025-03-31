@@ -1,3 +1,34 @@
+/* ---------- 사이드 메뉴 모듈 부분 ---------- */
+.viewModule {
+    position: relative;
+    right: 30px;
+    background-color: #fff;
+    /* background-color: var(--color_setting_bg); 다크 모드일 때 */
+    width: 450px;
+    height: 415px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
+    box-shadow: 0 0 0 1px #e3e5e8, 0px 3px 5px 0 rgba(0, 0, 0, .3);
+    z-index: 500;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .sideAlarmModule {
+    position: absolute;
+    bottom: 135px;
+  }
+  
+  .sideCartModule {
+    position: absolute;
+    bottom: 70px;
+  }
+  /* ---------- 사이드 메뉴 모듈 부분 ---------- */
+
+.displayFlex {
+    display: flex;
+}
+
 .viewModule {
     background-color: #ffeeee;
     min-width: 100%;
@@ -12,10 +43,6 @@
 
 .viewModule .moduleFrame2 {
     background-color: #fff
-}
-
-.viewModule .moduleFrame3 {
-
 }
 
 .sideModuleTitle {
@@ -50,15 +77,33 @@
     padding: 8px 0 8px;
 }
 
+.order-area .order-inner .cartModuleMain .productItem {
+    padding: 5px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem .productUrl .productInfo {
+    padding-left: 12px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem .productUrl .productInfo span {
+    gap: 5px;
+    margin-top: 2px;
+    font-size: 14.5px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem .productUrl .productImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 5px;
+}
+
 .order-area .order-totalsummary {
-    display: flex;
     font-size: 13px;
     font-weight: 600;
     padding: 8px 0 0;
 }
 
 .order-area .order-totalsummary .order-subsummary {
-    display: flex;
     align-items: center;
     padding-right: 3px;
 }
