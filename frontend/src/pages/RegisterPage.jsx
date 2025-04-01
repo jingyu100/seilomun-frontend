@@ -58,9 +58,24 @@ function RegisterPage() {
             <label id="name-label">
               이름<span class="required">*</span>
             </label>
+
             <div class="input-name">
               <input type="text" id="name-input" placeholder="이름을 입력해주세요" />
             </div>
+
+            <label id="gender-label">
+              성별<span class="required">*</span>
+            </label>
+
+            <div class="input-gender">
+              <label>
+                <input type="radio" name="gender" value="male" /> 남
+              </label>
+              <label>
+                <input type="radio" name="gender" value="female" /> 여
+              </label>
+            </div>
+        
 
             <label id="phone-label">
               전화번호<span className="required">*</span>

@@ -2,7 +2,7 @@
 
 .register-Container {
     width: 800px;
-    height: 1150px;
+    height: 1230px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -239,7 +239,6 @@
     min-width: 500px;
     min-height: 25px; 
     margin-left: 30px;
-    margin-bottom: 30px;
 }
 
 #name-input:focus {
@@ -251,6 +250,34 @@
 #name-input::placeholder {
     color: #ccc;
 }
+
+/* 성별 */
+
+#gender-label {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.input-gender {
+  font-size: 1.0em;  
+  margin-left: 35px;
+}
+
+.input-gender input[type="radio"] {
+    transform: scale(1.5); 
+    margin-right: 6px;     
+  }
+  
+  .input-gender label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* 버튼과 텍스트 사이 간격 */
+    margin-right: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  } 
 
 /* 전화번호 */
 
