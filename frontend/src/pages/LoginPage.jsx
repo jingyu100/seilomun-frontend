@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
@@ -9,6 +9,42 @@ import phoneIcon from "../image/icon/mobile-phone.png";
 function LoginPage() {
   const [showPhoneAuth, setShowPhoneAuth] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (code) {
+      fetch("http://localhost:80/login/oauth2/code/naver", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code }),
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("백엔드 응답:", data);
+          if (data.accessToken) {
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("refreshToken", data.refreshToken);
+            navigate("/"); // 로그인 성공 후 홈으로 이동
+          } else {
+            console.error("로그인 실패:", data);
+            navigate("/login?error=true");
+          }
+        })
+        .catch((error) => {
+          console.error("네트워크 오류:", error);
+          navigate("/login?error=true");
+        });
+    }
+  }, [navigate]);
+
+  const handleNaverLogin = () => {
+    window.location.href = "http://localhost:80/oauth2/authorization/naver";
+  };
 
   return (
     <div>
@@ -32,7 +68,7 @@ function LoginPage() {
             </div>  
           </div>
 
-          {/* 우측영역 */}
+          {/* 우측 영역 */}
           <div className="login-right">
             {showPhoneAuth ? (
               <div className="phone-auth-container">
@@ -59,8 +95,8 @@ function LoginPage() {
                       <input type="checkbox" /> 아이디 저장
                     </label>
                     <div className="links">
-                      <p href="#">아이디 찾기</p> |<p href="#">비밀번호 재설정</p> |
-                      <p
+                      <a href="#">아이디 찾기</a> |<a href="#">비밀번호 재설정</a> |
+                      <a
                         href=""
                         onClick={(e) => {
                           e.preventDefault();
@@ -68,13 +104,13 @@ function LoginPage() {
                         }}
                       >
                         회원가입
-                      </p>
+                      </a>
                     </div>
                   </div>
                   <button type="submit" className="login-btn">
                     로그인
                   </button>
-                  <hr className="divider"></hr>
+                  <hr className="divider" />
                 </form>
                 <div className="social-login">
                   <p>간편하게 로그인</p>
@@ -86,10 +122,11 @@ function LoginPage() {
                       G
                     </button>
                     <button
-                      className="naver"
-                      onClick={() => { window.location.href = "/oauth2/authorization/naver"; }}
-                    >
-                    </button>
+                          className="naver"
+                          onClick={() => window.open("http://localhost:80/oauth2/authorization/naver", "_blank")}
+                      >
+                      N
+                      </button>
                     <button
                       className="kakao"
                       onClick={() => window.open("https://www.kakao.com", "_blank")}
@@ -103,11 +140,11 @@ function LoginPage() {
           </div>
         </div>
       </div>
+
       <div className="footer">
         <Footer />
       </div>
     </div>
-    
   );
 }
 
