@@ -69,12 +69,15 @@ function RegisterPage() {
 
             <div class="input-gender">
               <label>
-                <input type="radio" name="gender" value="male" /> 남
+                <input type="radio" name="gender" value="male" />
+                <span>남</span>
               </label>
               <label>
-                <input type="radio" name="gender" value="female" /> 여
+                <input type="radio" name="gender" value="female" />
+                <span>여</span>
               </label>
             </div>
+
         
 
             <label id="phone-label">

@@ -1,7 +1,11 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/Business_number.css";
 import logo from "../image/logo/spLogo.png";
 
 function Business_numberPage() {
+  const navigate = useNavigate();
+
   return (
       <div className="business-container">
         <div className="logo-section">
@@ -51,7 +55,9 @@ function Business_numberPage() {
             </div>
           </div>
 
-          <button className="verify-btn">사업자번호 인증</button>
+          <button className="verify-btn" 
+          onClick={() => navigate("/SeRegister")}
+          >사업자번호 인증</button>
         </div>
   );
 }
