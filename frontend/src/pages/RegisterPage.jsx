@@ -62,28 +62,6 @@ function RegisterPage() {
               <input type="text" id="name-input" placeholder="이름을 입력해주세요" />
             </div>
 
-            <label id="email-label">
-              이메일<span className="required">*</span>
-            </label>
-            <div className="email-container">
-              <input type="text" id="email-input" placeholder="이메일 입력" />
-              <span>@</span>
-
-              {emailDomain === "" ? (
-                <input type="text" id="email-domain" placeholder="" />
-              ) : (
-                <input type="text" id="email-domain" value={emailDomain} readOnly />
-              )}
-
-              <select id="email-select" onChange={(e) => setEmailDomain(e.target.value)}>
-                <option value="">직접 입력</option>
-                <option value="naver.com">naver.com</option>
-                <option value="daum.net">daum.net</option>
-                <option value="kakao.com">kakao.com</option>
-                <option value="gmail.com">gmail.com</option>
-              </select>
-            </div>
-
             <label id="phone-label">
               전화번호<span className="required">*</span>
             </label>
@@ -99,8 +77,7 @@ function RegisterPage() {
               주소<span className="required">*</span>
             </label>
             <div className="address-group">
-              <input type="text" id="zipcode-input" placeholder="" />
-              <button id="housecode-btn">우편번호 찾기</button>
+              <button id="housecode-btn">주소 찾기</button>
             </div>
 
             <div className="address-input-group">

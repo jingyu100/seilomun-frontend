@@ -2,7 +2,7 @@
 
 .register-Container {
     width: 800px;
-    height: 1300px;
+    height: 1150px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -252,60 +252,6 @@
     color: #ccc;
 }
 
-/* 이메일 */
-
-.email-container {
-    display: flex;
-    align-items: center;
-    gap: 10px; 
-    margin-left: 30px;
-    margin-top: 10px;
-}
-
-#email-label {
-    font-size: 1.1em;
-    margin-left: 30px;
-}
-
-.required {
-    color: orange;
-    font-size: 1.2em;
-}
-
-.email-container input,
-.email-container select {
-    padding: 12px;
-    border: 2px solid #ccc; 
-    border-radius: 10px; 
-    font-size: 14px;
-    outline: none;
-}
-
-.email-container input:focus,
-.email-container select:focus {
-    border: 2px solid #ccc ; 
-    outline: none; 
-}
-
-#email-input {
-    width: 250px;
-    height: 25px; 
-}
-#email-input::placeholder {
-    color: #ccc;
-}
-
-#email-domain {
-    width: 180px; 
-    height: 25px;
-}
-
-#email-select {
-    width: 190px;
-    height:  50px;
-    background-color: white;
-}
-
 /* 전화번호 */
 
 .phone-input {
@@ -320,7 +266,6 @@
 #phone-label {
     font-size: 1.1em;
     margin-left: 30px;
-    margin-top: 30px;
 }
 
 .required {
@@ -366,16 +311,6 @@
     font-size: 1.2em;
 }
 
-#zipcode-input {
-    width: 150px; 
-    padding: 12px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    font-size: 18px;
-    border: 2px solid #ccc !important; 
-    outline: none; 
-}
-
 #housecode-btn {
     padding: 13px 16px;
     border: 2px solid black;
@@ -394,7 +329,7 @@
 }
 
 #address-input {
-    width: 400px; 
+    width: 330px; 
     padding: 14px 10px; 
     border: 2px solid #ccc;
     border-radius: 10px;
@@ -406,7 +341,7 @@
 }
 
 #address-detail {
-    width: 220px;
+    width: 270px;
     padding: 15px 13px;
     border: 2px solid #ccc;
     border-radius: 10px;
