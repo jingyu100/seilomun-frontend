@@ -54,6 +54,7 @@ header {
 .head-menu {
   width: 1200px;
   height: var(--head-menu-height);
+  padding-top: 8px;
 }
 
 .head-top-menu {
@@ -143,7 +144,8 @@ header {
 
 .search-inner,
 .search-inputBtn svg {
-  color: #7346f3;
+  /* color: #7346f3; */
+  color: #f8a092;
 }
 
 .icon-menu {
@@ -265,7 +267,8 @@ header {
 
 .kategorie-frame:hover {
   border-radius: 5px;
-  background-color: #e9d8ff;
+  /* background-color: #e9d8ff; */
+  background-color: #ffe7d8;
 }
 
 .menu-inner {
@@ -287,8 +290,10 @@ header {
 }
 
 .menu-under:hover {
-  color: #774eff;
-  border-bottom: 2px solid #774eff;
+  /* color: #774eff;
+  border-bottom: 2px solid #774eff; */
+  color: #f8a092;
+  border-bottom: 2px solid #f8a092;
 }
 /* ---------- 헤더 부분 ---------- */
 

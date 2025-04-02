@@ -33,7 +33,7 @@ const Header = () => {
                             <h2>
                                 <a href="">
                                     <div>
-                                        <img src="" alt="sampleLogo" style={{
+                                        <img src="../image/logo/mainLogo.png" alt="sampleLogo" style={{
                                             width: '200px', height: '90px'
                                         }} />
                                         {/* <!-- 프로젝트 로고 --> */}
@@ -52,7 +52,7 @@ const Header = () => {
                                                      fill="none" viewBox="0 0 24 24"
                                                      className="search-icon">
                                                     <circle
-                                                        cx="10.412" cy="10.412" r="8.482"
+                                                        cx="10.412" cy="10.412" r="7.482"
                                                         stroke="currentColor" stroke-linecap="round" stroke-width="1.5"
                                                     ></circle>
                                                     <path
@@ -70,7 +70,7 @@ const Header = () => {
                                 <li className="icon-Btn alarm-icon">
                                     <a href="" className="myAlarm myIcon">
                                         <div>
-                                            <img src="./image/icon/icon-bell.png" alt="alarm" style={{
+                                            <img src="../image/icon/icon-bell.png" alt="alarm" style={{
                                                 width: '35px',
                                                 height: '35px'
                                             }} />
