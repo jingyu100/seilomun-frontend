@@ -16,7 +16,7 @@ function LoginPage() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const response = await axios.post(
         "http://localhost/api/customer/login",
         {
           email: loginId,
@@ -26,7 +26,8 @@ function LoginPage() {
           withCredentials: true,
         }
       );
-
+      const nickname = response.data.data.nickName; // ✨ 닉네임 꺼내기
+      console.log("로그인 성공! 닉네임:", nickname);
       navigate("/");
     } catch (err) {
       console.error("로그인 실패 :", err);
