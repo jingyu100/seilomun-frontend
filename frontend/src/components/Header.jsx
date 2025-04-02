@@ -1,5 +1,6 @@
 import AlarmContents from "./AlarmContents.jsx";
 import ProductsAlarm from "./ProductsAlarm.jsx";
+import mainLogo from "../image/logo/mainLogo.png";
 
 const Header = () => {
     return(<div className="head-area">
@@ -31,10 +32,11 @@ const Header = () => {
                     <div className="head-mid-menu">
                         <div className="title-logo">
                             <h2>
-                                <a href="">
+                                <a href="Main">
                                     <div>
-                                        <img src="../image/logo/mainLogo.png" alt="sampleLogo" style={{
-                                            width: '200px', height: '90px'
+                                        <img src={mainLogo} alt="sampleLogo" style={{
+                                            position: "absolute", width: '190px', height: '70px', 
+                                            top: "18px", marginLeft: "110px"
                                         }} />
                                         {/* <!-- 프로젝트 로고 --> */}
                                     </div>
@@ -149,7 +151,8 @@ const Header = () => {
                 <div className="head-bottom">
                     <div className='kategorie'>
                         <div className='kategorie-frame' style={{
-                            width: '45%', maxWidth: 'auto', minWidth: 'auto', padding: '0 0px 3px 3px'
+                            width: '48%', maxWidth: 'auto', minWidth: 'auto', 
+                            padding: '0 0px 3px 3px'
                         }}>
                             <button className='menu-font-st' style={{
                                 color: '#000',
