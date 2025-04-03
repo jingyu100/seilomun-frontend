@@ -3,8 +3,10 @@ import "../css/frame.css";
 import Footer from "../components/Footer.jsx";
 import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
 import Header from "../components/Header.jsx";
+import MainBanner from "../components/MainPageBanner.jsx";
 import axios from "axios";
 import { useState, useEffect } from "react";
+
 
 export const List = () => {
   const [product, setProduct] = useState(null); // 배열 대신 객체로 상태 선언
@@ -63,6 +65,7 @@ const HomePage = () => {
       </div>
 
       <div className="body sideMargin">
+        <MainBanner />
         <SideMenuBtn />
         <List />
       </div>

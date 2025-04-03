@@ -107,6 +107,9 @@ function CartViewModule () {
                                     <img src={product.image} alt={product.name} className="productImage" />
                                     <div className="productInfo">
                                         <h3 style={{ fontSize: "15.5px" }}>{product.name}</h3>
+                                        <p className='' style={{
+                                            fontSize: "13px"
+                                        }}>{product.date}</p>
                                         <span className='displayFlex'>
                                             <p style={{ fontWeight: "600" }}>{product.price}</p>
                                             <p style={{ textDecoration: "line-through", color: "#959595" }}>
