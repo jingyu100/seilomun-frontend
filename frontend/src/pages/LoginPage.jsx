@@ -5,12 +5,14 @@ import Footer from "../components/Footer.jsx";
 import "../css/Login.css";
 import logo from "../image/logo/spLogo.png";
 import phoneIcon from "../image/icon/mobile-phone.png";
+import useLogin from "../Hooks/useLogin.js";
 import axios from "axios";
 
 function LoginPage() {
   const [showPhoneAuth, setShowPhoneAuth] = useState(false);
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const { setIsLoggedIn, setUser } = useLogin();
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -26,8 +28,12 @@ function LoginPage() {
           withCredentials: true,
         }
       );
-      const nickname = response.data.data.nickName; // ✨ 닉네임 꺼내기
+      const nickname = response.data.data.nickName;
+      const email = loginId;
+
+      setUser({ email, nickname });
       console.log("로그인 성공! 닉네임:", nickname);
+      setIsLoggedIn(true);
       navigate("/");
     } catch (err) {
       console.error("로그인 실패 :", err);
