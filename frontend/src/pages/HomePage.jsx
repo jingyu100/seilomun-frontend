@@ -17,16 +17,17 @@ export const List = () => {
 
     axios
       .get(url)
-        .then((res) => {
-            console.log(res.data); // 구조 확인
-            const product = res.data?.Products || res.data?.Products || res.data?.data?.Products;
-            if (product && typeof product === "object") {
-                setProduct(product);
-            } else {
-                setProduct(null);
-            }
-            setLoading(false);
-        })
+      .then((res) => {
+        console.log(res.data); // 구조 확인
+        const product =
+          res.data?.Products || res.data?.Products || res.data?.data?.Products;
+        if (product && typeof product === "object") {
+          setProduct(product);
+        } else {
+          setProduct(null);
+        }
+        setLoading(false);
+      })
       .catch((error) => {
         console.error("상품 목록을 가져오는 중 오류 발생:", error);
         setLoading(false);
