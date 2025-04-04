@@ -19,7 +19,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost/api/customer/login",
+        "http://localhost/api/customers/login",
         {
           email: loginId,
           password: loginPassword,
@@ -135,8 +135,11 @@ function LoginPage() {
                       N
                     </button>
                     <button
-                      className="kakao"
-                      onClick={() => window.open("https://www.kakao.com", "_blank")}
+                        className="kakao"
+                        onClick={() => {
+                          window.location.href =
+                              "http://localhost:80/oauth2/authorization/kakao"; // 현재 창에서 이동
+                        }}
                     >
                       K
                     </button>

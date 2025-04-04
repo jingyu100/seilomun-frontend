@@ -6,34 +6,18 @@ const NaverLoginCallback = () => {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
+        const accessToken = urlParams.get("accessToken");
+        const refreshToken = urlParams.get("refreshToken");
 
-        if (code) {
-            fetch("http://localhost:80/login/oauth2/code/naver", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ code }),
-                credentials: "include", // 쿠키 허용
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("백엔드 요청 데이터 : ",data);
-                    if (data.accessToken) {
-                        localStorage.setItem("accessToken", data.accessToken);
-                        localStorage.setItem("refreshToken", data.refreshToken);
-                        navigate("/"); // 로그인 성공 후 홈으로 이동
-                    } else {
-                        console.error("로그인 실패", data);
-                        navigate("/login?error=true");
-                    }
-                })
-                .catch(error => {
-                    console.error("네트워크 오류", error);
-                    navigate("/login?error=true");
-                });
+        if (accessToken && refreshToken) {
+            // JWT를 쿠키에 저장
+            document.cookie = `Authorization=${accessToken}; Path=/; HttpOnly; Secure; SameSite=Strict`;
+            document.cookie = `RefreshToken=${refreshToken}; Path=/; HttpOnly; Secure; SameSite=Strict`;
+
+            console.log("OAuth 로그인 성공! 쿠키에 토큰 저장 완료");
+            navigate("/"); // 로그인 성공 후 홈으로 이동
         } else {
+            console.error("OAuth 로그인 실패");
             navigate("/login?error=true");
         }
     }, [navigate]);
