@@ -24,6 +24,8 @@ const Header = () => {
 
       setIsLoggedIn(false);
       setUser(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("isLoggedIn");
       navigate("/login");
     } catch (err) {
       console.log("로그아웃 실패:", err);

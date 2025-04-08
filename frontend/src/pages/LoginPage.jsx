@@ -32,9 +32,12 @@ function LoginPage() {
       const email = loginId;
 
       setUser({ email, nickname });
+      setIsLoggedIn(true);
+      localStorage.setItem("user", JSON.stringify({ email, nickname }));
+      localStorage.setItem("isLoggedIn", "true");
 
       console.log("로그인 성공! 닉네임:", nickname);
-      setIsLoggedIn(true);
+
       navigate("/");
     } catch (err) {
       console.error("로그인 실패 :", err);

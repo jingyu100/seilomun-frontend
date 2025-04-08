@@ -11,6 +11,7 @@ import Business_numberPage from "./pages/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/SeRegisterPage.jsx";
 // import { useEffect } from "react";
 import NaverLoginCallback from "./pages/NaverLoginCallBack.jsx";
+import useLogin from "./Hooks/useLogin.js";
 
 function App() {
   // useEffect(() => {
@@ -23,6 +24,10 @@ function App() {
 
   //   return () => clearInterval(interval); // 안전한 종료 처리
   // }, []); // 최초 1회만 실행
+
+  const { isLoading } = useLogin();
+  if (isLoading) return null;
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
