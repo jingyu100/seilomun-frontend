@@ -9,8 +9,20 @@ import SailPage from "./pages/SailPage.jsx";
 import WishListPage from "./pages/WishListPage.jsx";
 import Business_numberPage from "./pages/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/SeRegisterPage.jsx";
+// import { useEffect } from "react";
+import NaverLoginCallback from "./pages/NaverLoginCallBack.jsx";
 
 function App() {
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch("http://localhost/api/auth/ping", {
+  //       method: "POST",
+  //       credentials: "include",
+  //     });
+  //   }, 60000); // 60초마다
+
+  //   return () => clearInterval(interval); // 안전한 종료 처리
+  // }, []); // 최초 1회만 실행
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -22,6 +34,7 @@ function App() {
       <Route path="/wish" element={<WishListPage />} />
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
+      <Route path="/oauth-success" element={<NaverLoginCallback />} />
     </Routes>
   );
 }

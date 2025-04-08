@@ -32,6 +32,7 @@ function LoginPage() {
       const email = loginId;
 
       setUser({ email, nickname });
+
       console.log("로그인 성공! 닉네임:", nickname);
       setIsLoggedIn(true);
       navigate("/");
@@ -135,11 +136,11 @@ function LoginPage() {
                       N
                     </button>
                     <button
-                        className="kakao"
-                        onClick={() => {
-                          window.location.href =
-                              "http://localhost:80/oauth2/authorization/kakao"; // 현재 창에서 이동
-                        }}
+                      className="kakao"
+                      onClick={() => {
+                        window.location.href =
+                          "http://localhosts:80/oauth2/authorization/kakao"; // 현재 창에서 이동
+                      }}
                     >
                       K
                     </button>

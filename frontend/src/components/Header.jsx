@@ -13,7 +13,7 @@ const Header = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost/logout",
+        "http://localhost/api/auth/logout",
         {
           username: user?.email,
         },
