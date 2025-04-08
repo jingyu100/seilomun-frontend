@@ -12,11 +12,14 @@ function LoginPage() {
   const [showPhoneAuth, setShowPhoneAuth] = useState(false);
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const { setIsLoggedIn, setUser } = useLogin();
+  const { setIsLoggedIn, setUser, isLoading } = useLogin();
   const navigate = useNavigate();
+
+  if (isLoading) return null;
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
         "http://localhost/api/customers/login",
@@ -37,7 +40,6 @@ function LoginPage() {
       localStorage.setItem("isLoggedIn", "true");
 
       console.log("로그인 성공! 닉네임:", nickname);
-
       navigate("/");
     } catch (err) {
       console.error("로그인 실패 :", err);
@@ -66,91 +68,88 @@ function LoginPage() {
           </div>
 
           <div className="login-right">
-            {showPhoneAuth ? (
-              <div className="phone-auth-container">
-                <button
-                  className="phone-auth-button"
-                  onClick={() => navigate("/register")}
-                >
-                  <img
-                    src={phoneIcon}
-                    alt="휴대폰 인증 아이콘"
-                    className="phone-auth-icon"
-                  />
-                  <span>휴대폰 인증</span>
-                </button>
-              </div>
-            ) : (
-              <div>
-                <div className="main-login">로그인</div>
-                <form className="login-form" onSubmit={handleLoginSubmit}>
-                  <input
-                    type="text"
-                    placeholder="아이디"
-                    onChange={(e) => {
-                      setLoginId(e.target.value);
-                    }}
-                  />
-                  <input
-                    type="password"
-                    placeholder="비밀번호"
-                    onChange={(e) => {
-                      setLoginPassword(e.target.value);
-                    }}
-                  />
-                  <div className="options">
-                    <label>
-                      <input type="checkbox" /> 아이디 저장
-                    </label>
-                    <div className="links">
-                      <a href="#">아이디 찾기</a> |<a href="#">비밀번호 재설정</a> |
-                      <a
-                        href=""
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setShowPhoneAuth(true);
+            {!isLoading &&
+              (showPhoneAuth ? (
+                <div className="phone-auth-container">
+                  <button
+                    className="phone-auth-button"
+                    onClick={() => navigate("/register")}
+                  >
+                    <img
+                      src={phoneIcon}
+                      alt="휴대폰 인증 아이콘"
+                      className="phone-auth-icon"
+                    />
+                    <span>휴대폰 인증</span>
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <div className="main-login">로그인</div>
+                  <form className="login-form" onSubmit={handleLoginSubmit}>
+                    <input
+                      type="text"
+                      placeholder="아이디"
+                      onChange={(e) => setLoginId(e.target.value)}
+                    />
+                    <input
+                      type="password"
+                      placeholder="비밀번호"
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                    />
+                    <div className="options">
+                      <label>
+                        <input type="checkbox" /> 아이디 저장
+                      </label>
+                      <div className="links">
+                        <a href="#">아이디 찾기</a> | <a href="#">비밀번호 재설정</a> |{" "}
+                        <a
+                          href=""
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setShowPhoneAuth(true);
+                          }}
+                        >
+                          회원가입
+                        </a>
+                      </div>
+                    </div>
+                    <button type="submit" className="login-btn">
+                      로그인
+                    </button>
+                    <hr className="divider" />
+                  </form>
+                  <div className="social-login">
+                    <p>간편하게 로그인</p>
+                    <div className="social-icons">
+                      <button
+                        className="google"
+                        onClick={() => window.open("https://www.google.com", "_blank")}
+                      >
+                        G
+                      </button>
+                      <button
+                        className="naver"
+                        onClick={() => {
+                          window.location.href =
+                            "http://localhost:80/oauth2/authorization/naver";
                         }}
                       >
-                        회원가입
-                      </a>
+                        N
+                      </button>
+                      <button
+                        className="kakao"
+                        onClick={() => {
+                          window.location.href =
+                            "http://localhosts:80/oauth2/authorization/kakao";
+                        }}
+                      >
+                        K
+                      </button>
                     </div>
                   </div>
-                  <button type="submit" className="login-btn">
-                    로그인
-                  </button>
-                  <hr className="divider" />
-                </form>
-                <div className="social-login">
-                  <p>간편하게 로그인</p>
-                  <div className="social-icons">
-                    <button
-                      className="google"
-                      onClick={() => window.open("https://www.google.com", "_blank")}
-                    >
-                      G
-                    </button>
-                    <button
-                      className="naver"
-                      onClick={() => {
-                        window.location.href =
-                          "http://localhost:80/oauth2/authorization/naver"; // 현재 창에서 이동
-                      }}
-                    >
-                      N
-                    </button>
-                    <button
-                      className="kakao"
-                      onClick={() => {
-                        window.location.href =
-                          "http://localhosts:80/oauth2/authorization/kakao"; // 현재 창에서 이동
-                      }}
-                    >
-                      K
-                    </button>
-                  </div>
                 </div>
-              </div>
-            )}
+              ))}
           </div>
         </div>
       </div>
