@@ -141,7 +141,7 @@ function LoginPage() {
                         className="kakao"
                         onClick={() => {
                           window.location.href =
-                            "http://localhosts:80/oauth2/authorization/kakao";
+                            "http://localhost:80/oauth2/authorization/kakao";
                         }}
                       >
                         K
