@@ -7,13 +7,12 @@ import MainBanner from "../components/MainPageBanner.jsx";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-
 export const List = () => {
   const [product, setProduct] = useState(null); // 배열 대신 객체로 상태 선언
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const url = "http://localhost/api/products/list/1/1";
+    const url = "http://localhost/api/1";
 
     axios
       .get(url)
