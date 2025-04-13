@@ -11,6 +11,7 @@ import Business_numberPage from "./pages/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/SeRegisterPage.jsx";
 // import { useEffect } from "react";
 import NaverLoginCallback from "./pages/NaverLoginCallBack.jsx";
+import Customer_modify from "./pages/Customer_modify.jsx"
 import useLogin from "./Hooks/useLogin.js";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
+      <Route path="/Customer_modify" element={<Customer_modify />}></Route>
     </Routes>
   );
 }

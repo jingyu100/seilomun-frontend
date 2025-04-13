@@ -4,6 +4,9 @@ import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 import "../css/Login.css";
 import logo from "../image/logo/spLogo.png";
+import googleLogo from "../image/logo/google.png"
+import naverLogo from "../image/logo/naver.png"
+import kakaoLogo from "../image/logo/kakao.png"
 import phoneIcon from "../image/icon/mobile-phone.png";
 import useLogin from "../Hooks/useLogin.js";
 import axios from "axios";
@@ -47,6 +50,7 @@ function LoginPage() {
   };
 
   return (
+
     <div>
       <div className="header">
         <Header />
@@ -122,30 +126,34 @@ function LoginPage() {
                   <div className="social-login">
                     <p>간편하게 로그인</p>
                     <div className="social-icons">
-                      <button
-                        className="google"
-                        onClick={() => window.open("https://www.google.com", "_blank")}
-                      >
-                        G
-                      </button>
+
+                    <button
+                      className="google"
+                      style={{
+                        backgroundImage: `url(${googleLogo})`
+                      }}
+                      onClick={() => window.open("https://www.google.com", "_blank")}
+                    >
+                    </button>
+
                       <button
                         className="naver"
-                        onClick={() => {
-                          window.location.href =
-                            "http://localhost:80/oauth2/authorization/naver";
+                        style={{
+                          backgroundImage: `url(${naverLogo})`
                         }}
+                          onClick={() => window.open("http://localhost:80/oauth2/authorization/naver")}
                       >
-                        N
                       </button>
+                      
                       <button
                         className="kakao"
-                        onClick={() => {
-                          window.location.href =
-                            "http://localhost:80/oauth2/authorization/kakao";
+                        style={{
+                          backgroundImage: `url(${kakaoLogo})`
                         }}
+                          onClick={() => window.open("http://localhost:80/oauth2/authorization/kakao")}
                       >
-                        K
                       </button>
+                      
                     </div>
                   </div>
                 </div>
