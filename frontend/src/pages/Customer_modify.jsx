@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
@@ -6,43 +6,62 @@ import "../css/Customer_modify.css";
 
 function Customer_modify() {
   const [profileImage, setProfileImage] = useState(null);
-  const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [birthdate, setBirthdate] = useState("");
 
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userIdFromStorage = storedUser?.id;
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:80/api/customers`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const data = res.data.data.customer;
+        console.log(data);
+        setUserId(data.id);
+        setName(data.name);
+        setNickname(data.nickname);
+        setPhone(data.phone);
+        setGender(data.gender); // ✅ 여기만 바뀜
+        setBirthdate(data.birthDate || "");
+      })
+      .catch((err) => {
+        console.error("유저 정보 불러오기 실패:", err);
+      });
+  }, [userIdFromStorage]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const userId = storedUser?.email;
-
-    if (!userId) {
+    if (!userIdFromStorage) {
       alert("로그인 정보가 유효하지 않습니다.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("userId", userId);
+    formData.append("userId", userIdFromStorage);
     formData.append("profileImage", profileImage);
-    formData.append("email", email);
     formData.append("name", name);
     formData.append("nickname", nickname);
     formData.append("phone", phone);
-    formData.append("gender", gender);
+    formData.append("gender", gender); // 그대로 전송
     formData.append("birthdate", birthdate);
 
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/users/update",
+        "http://localhost:80/api/users",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
 
@@ -74,14 +93,14 @@ function Customer_modify() {
             />
           </div>
 
-          {/* 이메일 */}
+          {/* 아이디 */}
           <div className="form-group">
-            <label htmlFor="email">이메일 (ID)</label>
+            <label htmlFor="userId">아이디</label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="userId"
+              value={userId}
+              readOnly
             />
           </div>
 
@@ -127,9 +146,9 @@ function Customer_modify() {
                   type="radio"
                   id="male"
                   name="gender"
-                  value="male"
-                  checked={gender === "male"}
-                  onChange={() => setGender("male")}
+                  value="M"
+                  checked={gender === "M"}
+                  onChange={() => setGender("M")}
                 />
                 남성
               </label>
@@ -139,23 +158,27 @@ function Customer_modify() {
                   type="radio"
                   id="female"
                   name="gender"
-                  value="female"
-                  checked={gender === "female"}
-                  onChange={() => setGender("female")}
+                  value="G"
+                  checked={gender === "G"}
+                  onChange={() => setGender("G")}
                 />
                 여성
               </label>
             </div>
           </div>
 
-          {/* 생년월일 */}
+          {/* 생일 */}
           <div className="form-group">
-            <label htmlFor="birthdate">생년월일</label>
+            <label htmlFor="birthdate">생일</label>
             <input
-              type="date"
+              type="text"
               id="birthdate"
               value={birthdate}
               onChange={(e) => setBirthdate(e.target.value)}
+              placeholder="MMDD"
+              pattern="^(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$"
+              title="MMDD 형식으로 입력 (예: 0517)"
+              required
             />
           </div>
 
