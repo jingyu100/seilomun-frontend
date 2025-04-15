@@ -9,26 +9,26 @@ import MainNewMatch from "../components/Main/MainNewMatch.jsx";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-
 export const List = () => {
   const [product, setProduct] = useState(null); // 배열 대신 객체로 상태 선언
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const url = "http://localhost/api/products/list/1/1";
+    const url = "http://localhost/api/1";
 
     axios
       .get(url)
-        .then((res) => {
-            console.log(res.data); // 구조 확인
-            const product = res.data?.Products || res.data?.Products || res.data?.data?.Products;
-            if (product && typeof product === "object") {
-                setProduct(product);
-            } else {
-                setProduct(null);
-            }
-            setLoading(false);
-        })
+      .then((res) => {
+        console.log(res.data); // 구조 확인
+        const product =
+          res.data?.Products || res.data?.Products || res.data?.data?.Products;
+        if (product && typeof product === "object") {
+          setProduct(product);
+        } else {
+          setProduct(null);
+        }
+        setLoading(false);
+      })
       .catch((error) => {
         console.error("상품 목록을 가져오는 중 오류 발생:", error);
         setLoading(false);

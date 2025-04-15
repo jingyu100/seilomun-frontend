@@ -108,16 +108,9 @@ function RegisterPage() {
             </div>
 
             <label id="birth-label">
-              생년월일<span className="required">*</span>
+              생일<span className="required">*</span>
             </label>
             <div className="birth-input">
-              <select id="birth-year">
-                <option>선택</option>
-                {[...Array(100)].map((_, i) => (
-                  <option key={i}>{2025 - i}</option>
-                ))}
-              </select>
-              <span className="date">년</span>
               <select id="birth-month">
                 <option>선택</option>
                 {[...Array(12)].map((_, i) => (
