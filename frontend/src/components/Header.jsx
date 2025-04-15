@@ -3,7 +3,8 @@ import ProductsAlarm from "./ProductsAlarm.jsx";
 import mainLogo from "../image/logo/mainLogo.png";
 
 const Header = () => {
-    return(<div className="head-area">
+    return(
+    <div className="head-area">
         <header>
             <div className="head-menu sideMargin" >
 

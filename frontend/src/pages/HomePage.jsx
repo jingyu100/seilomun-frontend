@@ -3,7 +3,9 @@ import "../css/frame.css";
 import Footer from "../components/Footer.jsx";
 import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
 import Header from "../components/Header.jsx";
-import MainBanner from "../components/MainPageBanner.jsx";
+import MainBanner from "../components/Main/MainPageBanner.jsx";
+import MainLastSP from "../components/Main/MainLastSP.jsx";
+import MainNewMatch from "../components/Main/MainNewMatch.jsx";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -64,10 +66,15 @@ const HomePage = () => {
         <Header />
       </div>
 
-      <div className="body sideMargin">
+
+      <div className="body">
         <MainBanner />
-        <SideMenuBtn />
-        <List />
+        <div className="sideMargin">
+          <SideMenuBtn />
+          <List />
+        </div>
+        <MainLastSP />
+        <MainNewMatch />
       </div>
 
       <div className="footer">
