@@ -46,7 +46,7 @@ const Header = () => {
                   {isLoggedIn ? (
                     <li className="logout">
                       <button onClick={handleLogout}>로그아웃</button>
-                      <button>내 정보</button>
+                      <button>{user?.nickname}님</button>
                     </li>
                   ) : (
                     <>
