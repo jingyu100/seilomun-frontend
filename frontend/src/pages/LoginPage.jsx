@@ -149,7 +149,9 @@ function LoginPage() {
                         style={{
                           backgroundImage: `url(${googleLogo})`,
                         }}
-                        onClick={() => window.open("https://www.google.com", "_blank")}
+                        onClick={() => 
+                          window.open("http://localhost:80/oauth2/authorization/google")
+                        }
                       ></button>
 
                       <button
