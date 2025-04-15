@@ -1,7 +1,7 @@
 /* 전체 레이아웃 */
 .modify-area {
     display: flex;
-    margin-top: 1500px;
+    margin-top: 145px;
     height: auto;
     width: auto;
     min-height: 100%;
