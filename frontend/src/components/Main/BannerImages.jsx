@@ -10,6 +10,9 @@ const Slider = () => {
     { src: "../image/banner/BannerSP1.jpg", link: "https://example.com/1" },
     { src: "../image/banner/BannerSP2.jfif", link: "https://example.com/2" },
     { src: "../image/banner/BannerSP3.jfif", link: "https://example.com/3" },
+    { src: "../image/banner/BannerSP1.jpg", link: "https://example.com/1" },
+    { src: "../image/banner/BannerSP2.jfif", link: "https://example.com/2" },
+    { src: "../image/banner/BannerSP3.jfif", link: "https://example.com/3" },
   ];
 
   return (
