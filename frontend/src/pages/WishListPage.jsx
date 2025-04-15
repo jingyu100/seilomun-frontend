@@ -4,8 +4,6 @@ import Footer from "../components/Footer.jsx";
 import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
 import Header from "../components/Header.jsx";
 import { useEffect } from "react";
-import WishListEmpty from "../components/WishListEmpty.jsx";
-import WishListFilled from "../components/WishListFilled.jsx";
 
 const WishListPage = () => {
   useEffect(() => {}, []);
@@ -18,7 +16,6 @@ const WishListPage = () => {
 
       <div className="body sideMargin">
         <SideMenuBtn />
-        {wishlist.length === 0 ? <WishListEmpty /> : <WishListFilled />}
       </div>
 
       <div className="footer">
