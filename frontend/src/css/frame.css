@@ -20,22 +20,15 @@ a:visited {
 }
 
 header {
-   position: fixed;
-   width: 100%;
-   max-width: 100%;
-   margin: 0 auto;
-   z-index: 999;
-   top: 0;
-   background-color: #fff;
-   box-shadow: 0 0.7px 0 0 #b1b1b1;
-}
-
-.head-area {
-   position: relative;
-   z-index: 30;
-   min-width: 990px;
-   background: #000082 url(https://shopv.pstatic.net/web/r/20250206173735/_next/static/img/bg/header/gnb/bg_gheader.jpg) no-repeat 100% 0;
-   -webkit-appearance: none;
+  position: fixed;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  z-index: 50;
+  top: 0;
+  background-color: #fff;
+  border-bottom: 1px solid gray;
 }
 
 .head-area button {

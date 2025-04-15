@@ -1,0 +1,143 @@
+/* ---------- 사이드 메뉴 모듈 부분 ---------- */
+.viewModule {
+    position: relative;
+    right: 30px;
+    background-color: #fff;
+    /* background-color: var(--color_setting_bg); 다크 모드일 때 */
+    width: 450px;
+    height: 415px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 0 0 1px #e3e5e8, 0px 4px 8px 0 rgba(0, 0, 0, .3);
+    box-shadow: 0 0 0 1px #e3e5e8, 0px 3px 5px 0 rgba(0, 0, 0, .3);
+    z-index: 500;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .sideAlarmModule {
+    position: absolute;
+    bottom: 135px;
+  }
+  
+  .sideCartModule {
+    position: absolute;
+    bottom: 70px;
+    z-index: 100;
+  }
+  /* ---------- 사이드 메뉴 모듈 부분 ---------- */
+
+.displayFlex {
+    display: flex;
+}
+
+.viewModule {
+    background-color: #ffeeee;
+    min-width: 100%;
+    max-width: auto;
+}
+
+.viewModule .moduleFrame1 {
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.viewModule .moduleFrame2 {
+    background-color: #fff
+}
+
+.sideModuleTitle {
+    text-align: center;
+    padding: 13px 0 13px;
+    border-bottom: 1.5px solid #e2e2e2;
+}
+
+.order-area {
+    width: auto;
+    padding: 17px 7px 40px;
+}
+
+.order-area .order-inner {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e2e2;
+}
+
+.order-area .order-inner .sideCartTop {
+    border-bottom: 1px solid #e2e2e2;
+    padding: 2px 0 10px;
+    font-weight: 500
+}
+
+.order-area .order-inner .sideCartTop .cartTopCnt {
+    padding-left: 3px;
+}
+
+.order-area .order-inner .cartModuleMain {
+    border-bottom: 1px solid #e2e2e2;
+    padding: 8px 0 8px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem {
+    padding: 5px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem .productUrl .productInfo {
+    padding-left: 12px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem .productUrl .productInfo span {
+    gap: 5px;
+    margin-top: 2px;
+    font-size: 14.5px;
+}
+
+.order-area .order-inner .cartModuleMain .productItem .productUrl .productImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 5px;
+}
+
+.order-area .order-totalsummary {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 0 0;
+}
+
+.order-area .order-totalsummary .order-subsummary {
+    align-items: center;
+    padding-right: 3px;
+}
+
+.order-area .order-totalsummary .order-subsummary > div, .order-totalpay {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 9px;
+}
+
+.order-area .order-totalsummary .order-totalpay {
+    width: auto;
+    max-width: auto;
+    padding-left: 10px;
+    border-left: 1.5px solid #e2e2e2;
+}
+
+.cartBuy {
+    display: flex;
+    position: relative;
+    padding: 15px 50px;
+    bottom: 0;
+}
+
+.cartBuyBtn {
+    display: inline-block;
+    color: #fff;
+    background-color: #f8a092;
+    width: 220px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}

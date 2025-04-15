@@ -1,0 +1,384 @@
+/* ---------- 이벤트 베너 ---------- */
+.mainBanner {
+    position: relative;
+    width: auto;
+    height: auto;
+    /* min-width: auto;
+    max-width: auto;
+    min-height: auto;
+    max-height: auto; */
+    padding-top: 20px;
+}
+
+.mainBanner .mainBannerInner {
+    position: relative;
+}
+
+.mainBanner .mainBannerInner .bannerLeftBtn {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -400px;
+    /* transform: rotate(180deg); */
+    cursor: pointer;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainBanner .mainBannerInner .bannerRightBtn {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    right: 50%;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-right: -400px;
+    cursor: pointer;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainBanner .mainBannerInner .bannerImages {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  width: auto;
+  height: auto;
+  /* overflow: hidden; */
+  scroll-behavior: smooth;
+}
+
+.mainBanner .mainBannerInner .bannerImages .swiper {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  gap: 20px;
+  will-change: transform;
+}
+
+.mainBanner .mainBannerInner .bannerImages .swiper .swiper-slide {
+  flex: 0 0 65%;
+  padding: 0 10px;
+}
+
+.mainBanner .mainBannerInner .bannerImages .swiper .swiper-slide a {
+  display: block;
+}
+
+.mainBanner .mainBannerInner .bannerImages .swiper .swiper-slide a img {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.infiniteSlide {
+  display: flex;
+  animation: scrollBanner 30s linear infinite;
+}
+
+@keyframes scrollBanner {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+
+
+/* .wrapper{
+    overflow: hidden;
+}
+.wrapper .slide_container {
+    width: 520%;
+  }
+  .wrapper .slide_container .slide_wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .wrapper .slide_container .slide {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+  .wrapper .slide_container .slide.original {
+    animation: 50s linear infinite normal none running infiniteAnimation1;
+  }
+  
+  .wrapper .slide_container .slide.clone {
+    animation: 50s linear infinite infiniteAnimation2;
+  }
+  
+  .wrapper .slide_container .slide.stop {
+    animation-play-state: paused;
+  }
+  
+  .wrapper .slide_container .slide li {
+    cursor: pointer;
+    z-index: 2;
+    transition: 0.3s;
+    transform: scale(1);
+    margin-left: 0.4%;
+    margin-right: 0.4%;
+  }
+  .slide li .item img{
+    width: 100%;
+  }
+  
+  .wrapper .slide_container .slide li:hover {
+    transform: scale(0.98);
+  }
+  
+  
+  @keyframes infiniteAnimation1 {
+    0% {
+      transform: translateX(0%);
+    }
+    50% {
+      transform: translateX(-100%);
+    }
+    50.1% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+  
+  @keyframes infiniteAnimation2 {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-200%);
+    }
+  } */
+/* ---------- 이벤트 베너 ---------- */
+
+
+/* ---------- 배너 밑 상품 리스트 공용 ---------- */
+.homepageUI {
+  display: grid;
+  margin: 0 18.5%;
+  padding: 40px 0 30px;
+}
+
+.homepageTitle {
+  display: flex;
+  flex-flow: wrap;
+}
+
+.homepageTitle .homepageTitleUI {
+  flex-basis: 50%;
+  flex-grow: 0;
+  max-width: 50%;
+}
+
+.homepageTitle .homepageTitleUI h1 {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+}
+
+.homepageTitle .allWatch {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 13px;
+}
+
+.homepageTitle .allWatch a {
+  display: flex;
+  align-items: center;
+}
+
+.titleResponsive_arrow {
+  padding: 0 3px 3px 0;
+}
+/* ---------- 배너 밑 상품 리스트 공용 ---------- */
+
+
+/* ---------- 임박특가 추천 ---------- */
+.homepageUI .LSP_ProductList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.homepageUI .LSP_ProductList .LSP_ProductList_Container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  gap: 28px;
+  padding: 16px 0;
+}
+
+.product_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.product_image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.product_text {
+  width: 200px;
+  margin: 10px 0;
+}
+
+.product_name {
+  width: 190px;
+  font-size: 15px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product_date {
+  font-size: 13px;
+  color: gray;
+  text-align: left;
+}
+
+.product_info {
+  display: flex;
+}
+
+.product_price {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.product_price_container {
+  display: flex;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+.product_discount {
+  color: red;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.product_regularprice {
+  color: #5e636d;
+  font-size: 12px;
+  text-decoration: line-through;
+}
+
+.product_address {
+  font-size: 14px;
+  text-align: left;
+}
+/* ---------- 임박특가 추천 ---------- */
+
+
+/* ---------- New 맞춤 추천 ---------- */
+.NM_ProductList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.NM_ProductList_Container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(210px, 1fr));
+  gap: 10px 90px;
+  padding: 16px 0;
+}
+
+.NM_product_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.NM_product_image {
+  width: 230px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.NM_product_text {
+  width: 230px;
+  margin: 10px 0;
+}
+
+.NM_product_name {
+  width: 230px;
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.NM_product_date {
+  font-size: 14px;
+  color: gray;
+  text-align: left;
+}
+
+.NM_product_info {
+  display: flex;
+}
+
+.NM_product_price {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.NM_product_price_container {
+  display: flex;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+.NM_product_discount {
+  color: red;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.NM_product_regularprice {
+  color: #5e636d;
+  font-size: 13px;
+  text-decoration: line-through;
+}
+
+.NM_product_address {
+  font-size: 16px;
+  text-align: left;
+}
+/* ---------- New 맞춤 추천 ---------- */
+
