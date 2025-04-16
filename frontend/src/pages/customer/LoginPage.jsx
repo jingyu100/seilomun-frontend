@@ -36,7 +36,6 @@ function LoginPage() {
       );
 
       try {
-        setIsLoggedIn(true); // ✅ 올바른 상태 변경 함수
         const response = await axios.get("http://localhost/api/customers/me", {
           withCredentials: true,
         });
