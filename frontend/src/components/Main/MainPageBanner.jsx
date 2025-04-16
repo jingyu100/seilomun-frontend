@@ -4,7 +4,7 @@ import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "../../css/Main.css";
+import "../../css/customer/Main.css";
 
 function MainBanner() {
   const prevRef = useRef(null);

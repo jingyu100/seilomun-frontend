@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import "../../css/Main.css";
+import "../../css/customer/Main.css";
 
 function MainLastSP() {
 

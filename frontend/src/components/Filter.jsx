@@ -1,5 +1,5 @@
 import {useState} from "react";
-import "../css/Filter.css"
+import "../css/customer/Filter.css";
 
 const Filter = () => {
     const locations = ["용산구", "한남동", "후암동", "이촌동", "한강로동", "이태원동", "이촌제1동"];

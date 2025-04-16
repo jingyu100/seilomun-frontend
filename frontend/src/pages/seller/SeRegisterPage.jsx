@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../css/SeRegister.css";
-import logo from "../image/logo/spLogo.png"
+import "../../css/seller/SeRegister.css";
+import logo from "../../image/logo/spLogo.png";
 
 function SeRegisterPage() {
 

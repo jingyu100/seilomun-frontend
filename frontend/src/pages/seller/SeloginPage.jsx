@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import "../css/Selogin.css";
-import logo from "../image/logo/spLogo.png";
+import "../../css/seller/Selogin.css"; 
+import logo from "../../image/logo/spLogo.png";
 
 function SeloginPage() {
   const navigate = useNavigate();

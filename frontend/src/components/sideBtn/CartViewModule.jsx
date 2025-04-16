@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/SideBtnModules.css';
+import "../../css/customer/SideBtnModules.css"; 
 import CartItem from "../CartItem.jsx";
 
 const ProductsAlarm = [    

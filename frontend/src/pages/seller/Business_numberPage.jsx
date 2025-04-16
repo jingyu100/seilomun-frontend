@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/Business_number.css";
-import logo from "../image/logo/spLogo.png";
+import "../../css/seller/Business_number.css"; 
+import logo from "../../image/logo/spLogo.png";
+
+
 
 function Business_numberPage() {
   const navigate = useNavigate();
