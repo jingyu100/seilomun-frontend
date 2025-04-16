@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header.jsx";
-import Footer from "../components/Footer.jsx";
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
 import "../css/Login.css";
 import logo from "../image/logo/spLogo.png";
 import googleLogo from "../image/logo/google.png";
 import naverLogo from "../image/logo/naver.png";
 import kakaoLogo from "../image/logo/kakao.png";
 import phoneIcon from "../image/icon/mobile-phone.png";
-import useLogin from "../Hooks/useLogin.js";
+import useLogin from "../../Hooks/useLogin.js";
 import axios from "axios";
 
 function LoginPage() {

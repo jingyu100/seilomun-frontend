@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import LoginPage from "./pages/LoginPage.jsx";
-import HomePage from "./pages/HomePage.jsx";
-import NewPage from "./pages/NewPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
-import SeloginPage from "./pages/SeloginPage.jsx";
-import SailPage from "./pages/SailPage.jsx";
-import WishListPage from "./pages/WishListPage.jsx";
-import Business_numberPage from "./pages/Business_numberPage.jsx";
-import SeRegisterPage from "./pages/SeRegisterPage.jsx";
+import LoginPage from "./pages/customer/LoginPage.jsx";
+import HomePage from "./pages/customer/HomePage.jsx";
+import NewPage from "./pages/customer/NewPage.jsx";
+import RegisterPage from "./pages/customer/RegisterPage.jsx";
+import SeloginPage from "./pages/customer/SeloginPage.jsx";
+import SailPage from "./pages/customer/SailPage.jsx";
+import WishListPage from "./pages/customer/WishListPage.jsx";
+import Business_numberPage from "./pages/customer/Business_numberPage.jsx";
+import SeRegisterPage from "./pages/customer/SeRegisterPage.jsx";
 // import { useEffect } from "react";
-import NaverLoginCallback from "./pages/NaverLoginCallBack.jsx";
-import Customer_modify from "./pages/Customer_modify.jsx"
+import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
+import Customer_modify from "./pages/customer/Customer_modify.jsx"
 import useLogin from "./Hooks/useLogin.js";
 
 function App() {
