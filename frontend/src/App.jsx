@@ -1,5 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
@@ -10,49 +9,24 @@ import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import Customer_modify from "./pages/customer/Customer_modify.jsx";
-import useLogin from "./Hooks/useLogin.js";
-import { setupAxiosInterceptor } from "./Hooks/setupAxiosInterceptor.js";
+// import useLogin from "./Hooks/useLogin.js";
 
 function App() {
-  const { isLoading, setUser, isLoggedIn, setIsLoggedIn } = useLogin();
-  const navigate = useNavigate();
+  // const { isLoading } = useLogin();
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch("http://localhost/api/auth/ping", {
+  //       method: "POST",
+  //       credentials: "include",
+  //     });
+  //   }, 60000); // 60초마다
+  //   return () => clearInterval(interval); // 안전한 종료 처리
+  // }, []); // 최초 1회만 실행
 
-  useEffect(() => {
-    const logoutHandler = () => {
-      setIsLoggedIn(false);
-      setUser(null);
-      localStorage.removeItem("user");
-      localStorage.removeItem("isLoggedIn");
-    };
-    setupAxiosInterceptor({
-      logoutHandler,
-      navigate,
-      getIsLoggedIn: () => isLoggedIn, // ✅ 현재 상태 확인 함수 전달
-    });
-  }, [navigate]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost/api/customers/me", { withCredentials: true })
-      .then((res) => {
-        const { email, username } = res.data.data;
-        setUser({ email, nickname: username });
-        setIsLoggedIn(true);
-        localStorage.setItem("user", JSON.stringify({ email, nickname: username }));
-        localStorage.setItem("isLoggedIn", "true");
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("isLoggedIn");
-      });
-  }, []);
-
-  if (isLoading) return null;
+  // if (isLoading) return null;
 
   return (
     <Routes>
