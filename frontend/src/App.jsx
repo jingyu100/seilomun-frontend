@@ -9,10 +9,12 @@ import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import Customer_modify from "./pages/customer/Customer_modify.jsx";
-// import useLogin from "./Hooks/useLogin.js";
+import { useNavigate } from "react-router-dom";
+import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
+import useLogin from "./Hooks/useLogin";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -27,6 +29,20 @@ function App() {
   // }, []); // 최초 1회만 실행
 
   // if (isLoading) return null;
+
+  const { setIsLoggedIn, setUser } = useLogin();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setupAxiosInterceptor({
+      logoutHandler: () => {
+        setIsLoggedIn(false);
+        setUser(null);
+        localStorage.clear();
+      },
+      navigate,
+    });
+  }, [navigate, setIsLoggedIn, setUser]);
 
   return (
     <Routes>
