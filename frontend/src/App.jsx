@@ -9,45 +9,24 @@ import SailPage from "./pages/SailPage.jsx";
 import WishListPage from "./pages/WishListPage.jsx";
 import Business_numberPage from "./pages/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/SeRegisterPage.jsx";
+// import { useEffect } from "react";
 import NaverLoginCallback from "./pages/NaverLoginCallBack.jsx";
-import Customer_modify from "./pages/Customer_modify.jsx";
+import Customer_modify from "./pages/Customer_modify.jsx"
 import useLogin from "./Hooks/useLogin.js";
-import { useEffect } from "react";
-import axios from "axios";
-import { setupAxiosInterceptor } from "./Hooks/setupAxiosInterceptor.js";
 
 function App() {
-  const { isLoading, setUser, setIsLoggedIn } = useLogin();
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch("http://localhost/api/auth/ping", {
+  //       method: "POST",
+  //       credentials: "include",
+  //     });
+  //   }, 60000); // 60초마다
 
-  useEffect(() => {
-    setupAxiosInterceptor({
-      logoutHandler: () => {
-        setIsLoggedIn(false);
-        setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("isLoggedIn");
-      },
-    });
-  }, []);
+  //   return () => clearInterval(interval); // 안전한 종료 처리
+  // }, []); // 최초 1회만 실행
 
-  useEffect(() => {
-    axios
-      .get("http://localhost/api/customers/me", { withCredentials: true })
-      .then((res) => {
-        const { email, username } = res.data.data;
-        setUser({ email, nickname: username });
-        setIsLoggedIn(true);
-        localStorage.setItem("user", JSON.stringify({ email, nickname: username }));
-        localStorage.setItem("isLoggedIn", "true");
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("isLoggedIn");
-      });
-  }, []);
-
+  const { isLoading } = useLogin();
   if (isLoading) return null;
 
   return (
@@ -62,7 +41,7 @@ function App() {
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
-      <Route path="/Customer_modify" element={<Customer_modify />} />
+      <Route path="/Customer_modify" element={<Customer_modify />}></Route>
     </Routes>
   );
 }
