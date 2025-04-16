@@ -24,11 +24,7 @@ function LoginPage() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("로그인 시작: setIsLoggingIn(true)");
-    setIsLoggingIn(true); // ✅ 올바른 상태 변경 함수
-
     try {
-      console.log("axios.post(/login) 요청 시작");
       await axios.post(
         "http://localhost/api/customers/login",
         {
@@ -41,7 +37,7 @@ function LoginPage() {
       );
 
       try {
-        console.log("axios.get(/me) 요청 시작");
+        setIsLoggingIn(true); // ✅ 올바른 상태 변경 함수
         const response = await axios.get("http://localhost/api/customers/me", {
           withCredentials: true,
         });
@@ -55,7 +51,6 @@ function LoginPage() {
 
         console.log("로그인 성공! 닉네임:", nickname);
         navigate("/");
-        console.log("로그인 종료: setIsLoggingIn(false)");
         setIsLoggingIn(false); // 로그인 시도 종료
       } catch (infoError) {
         console.warn("사용자 정보 조회 실패. 하지만 로그인은 성공:", infoError);
@@ -65,7 +60,6 @@ function LoginPage() {
     } catch (loginError) {
       console.error("로그인 실패:", loginError);
       alert("아이디 또는 비밀번호가 잘못되었습니다.");
-      console.log("로그인 종료: setIsLoggingIn(false)");
       setIsLoggingIn(false); // 로그인 시도 종료
     }
   };
