@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header.jsx"; 
-import Footer from "../../components/Footer.jsx"; 
+import Header from "../components/Header.jsx";
+import Footer from "../components/Footer.jsx";
 import "../../css/customer/Login.css";
-import logo from "../../image/logo/spLogo.png";        
-import googleLogo from "../../image/logo/google.png";  
-import naverLogo from "../../image/logo/naver.png";    
-import kakaoLogo from "../../image/logo/kakao.png";
-import phoneIcon from "../../image/icon/mobile-phone.png";
-import useLogin from "../../Hooks/useLogin.js";
+import logo from "../image/logo/spLogo.png";
+import googleLogo from "../image/logo/google.png";
+import naverLogo from "../image/logo/naver.png";
+import kakaoLogo from "../image/logo/kakao.png";
+import phoneIcon from "../image/icon/mobile-phone.png";
+import useLogin from "../Hooks/useLogin.js";
 import axios from "axios";
 
 function LoginPage() {
@@ -54,11 +54,10 @@ function LoginPage() {
         withCredentials: true,
       });
       const nickname = response.data.data.username;
-      const email = loginId;
 
-      setUser({ email, nickname });
+      setUser({ nickname });
       setIsLoggedIn(true);
-      localStorage.setItem("user", JSON.stringify({ email, nickname }));
+      localStorage.setItem("user", JSON.stringify({ nickname }));
       localStorage.setItem("isLoggedIn", "true");
 
       console.log("로그인 성공! 닉네임:", nickname);
@@ -149,7 +148,7 @@ function LoginPage() {
                         style={{
                           backgroundImage: `url(${googleLogo})`,
                         }}
-                        onClick={() => 
+                        onClick={() =>
                           window.open("http://localhost:80/oauth2/authorization/google")
                         }
                       ></button>

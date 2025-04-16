@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css"; 
+import "./App.css";
 import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
 import NewPage from "./pages/customer/NewPage.jsx";
@@ -9,24 +9,45 @@ import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
-import Customer_modify from "./pages/customer/Customer_modify.jsx"
+import Customer_modify from "./pages/customer/Customer_modify.jsx";
 import useLogin from "./Hooks/useLogin.js";
+import axios from "axios";
+import { setupAxiosInterceptor } from "./Hooks/setupAxiosInterceptor.js";
 
 function App() {
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     fetch("http://localhost/api/auth/ping", {
-  //       method: "POST",
-  //       credentials: "include",
-  //     });
-  //   }, 60000); // 60초마다
+  const { isLoading, setUser, setIsLoggedIn } = useLogin();
 
-  //   return () => clearInterval(interval); // 안전한 종료 처리
-  // }, []); // 최초 1회만 실행
+  useEffect(() => {
+    setupAxiosInterceptor({
+      logoutHandler: () => {
+        setIsLoggedIn(false);
+        setUser(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("isLoggedIn");
+      },
+    });
+  }, []);
 
-  const { isLoading } = useLogin();
+  useEffect(() => {
+    axios
+      .get("http://localhost/api/customers/me", { withCredentials: true })
+      .then((res) => {
+        const { email, username } = res.data.data;
+        setUser({ email, nickname: username });
+        setIsLoggedIn(true);
+        localStorage.setItem("user", JSON.stringify({ email, nickname: username }));
+        localStorage.setItem("isLoggedIn", "true");
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setUser(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("isLoggedIn");
+      });
+  }, []);
+
   if (isLoading) return null;
 
   return (
@@ -41,7 +62,7 @@ function App() {
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
-      <Route path="/Customer_modify" element={<Customer_modify />}></Route>
+      <Route path="/Customer_modify" element={<Customer_modify />} />
     </Routes>
   );
 }
