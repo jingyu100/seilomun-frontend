@@ -18,7 +18,7 @@ import Customer_modify from "./pages/customer/Customer_modify.jsx";
 // import useLogin from "./Hooks/useLogin.js";
 
 function App() {
-  const { setIsLoggedIn, setUser } = useLogin();
+  const { setIsLoggedIn, setUser, isLoggingIn } = useLogin();
   const navigate = useNavigate();
   // const { isLoading } = useLogin();
   // useEffect(() => {
@@ -41,8 +41,9 @@ function App() {
         localStorage.clear();
       },
       navigate,
+      isLoggingIn,
     });
-  }, [navigate, setIsLoggedIn, setUser]);
+  }, [navigate, setIsLoggedIn, setUser, isLoggingIn]);
 
   return (
     <Routes>

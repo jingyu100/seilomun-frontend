@@ -6,6 +6,7 @@ export const LoginProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -34,7 +35,16 @@ export const LoginProvider = ({ children }) => {
 
   return (
     <LoginContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, user, setUser, isLoading, setIsLoading }}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        user,
+        setUser,
+        isLoading,
+        setIsLoading,
+        isLoggingIn,
+        setIsLoggingIn,
+      }}
     >
       {children}
     </LoginContext.Provider>
