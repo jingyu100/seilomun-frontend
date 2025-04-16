@@ -24,7 +24,7 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost/api/customers/login",
         {
           email: loginId,
@@ -34,36 +34,28 @@ function LoginPage() {
           withCredentials: true,
         }
       );
-      console.log(response);
-      // const nickname = response.data.data.nickName;
-      // const email = loginId;
 
-      // setUser({ email, nickname });
-      // setIsLoggedIn(true);
-      // localStorage.setItem("user", JSON.stringify({ email, nickname }));
-      // localStorage.setItem("isLoggedIn", "true");
+      try {
+        const response = await axios.get("http://localhost/api/customers/me", {
+          withCredentials: true,
+        });
 
-      // console.log("로그인 성공! 닉네임:", nickname);
-      // navigate("/");
-    } catch (err) {
-      console.error("로그인 실패 :", err);
-    }
+        const nickname = response.data.data.username;
 
-    try {
-      const response = await axios.get("http://localhost/api/customers/me", {
-        withCredentials: true,
-      });
-      const nickname = response.data.data.username;
+        setUser({ nickname });
+        setIsLoggedIn(true);
+        localStorage.setItem("user", JSON.stringify({ nickname }));
+        localStorage.setItem("isLoggedIn", "true");
 
-      setUser({ nickname });
-      setIsLoggedIn(true);
-      localStorage.setItem("user", JSON.stringify({ nickname }));
-      localStorage.setItem("isLoggedIn", "true");
-
-      console.log("로그인 성공! 닉네임:", nickname);
-      navigate("/");
-    } catch (err) {
-      console.error("로그인 실패 :", err);
+        console.log("로그인 성공! 닉네임:", nickname);
+        navigate("/");
+      } catch (infoError) {
+        console.warn("사용자 정보 조회 실패. 하지만 로그인은 성공:", infoError);
+        alert("로그인은 되었지만 사용자 정보를 불러오지 못했습니다.");
+      }
+    } catch (loginError) {
+      console.error("로그인 실패:", loginError);
+      alert("아이디 또는 비밀번호가 잘못되었습니다.");
     }
   };
 

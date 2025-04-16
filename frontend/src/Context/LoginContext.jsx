@@ -19,6 +19,19 @@ export const LoginProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const isLoggedInFromStorage = localStorage.getItem("isLoggedIn");
+
+      if (isLoggedInFromStorage !== "true") {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  });
+
   return (
     <LoginContext.Provider
       value={{ isLoggedIn, setIsLoggedIn, user, setUser, isLoading, setIsLoading }}
