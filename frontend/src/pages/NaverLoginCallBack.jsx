@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useLogin from "../../Hooks/useLogin.js";
+import useLogin from "../Hooks/useLogin.js";
 
 const NaverLoginCallback = () => {
   const navigate = useNavigate();

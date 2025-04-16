@@ -1,8 +1,8 @@
 import "../App.css";
 import "../css/frame.css";
-import Footer from "../../components/Footer.jsx";
-import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import Header from "../../components/Header.jsx";
+import Footer from "../components/Footer.jsx";
+import SideMenuBtn from "../components/sideBtn/SideMenuBtn.jsx";
+import Header from "../components/Header.jsx";
 import { useEffect } from "react";
 
 const WishListPage = () => {
