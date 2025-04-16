@@ -1,4 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { setupAxiosInterceptor } from "./utils/AxiosInterceptor.js";
+import useLogin from "./Hooks/useLogin.js";
 import "./App.css";
 import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
@@ -15,6 +18,8 @@ import Customer_modify from "./pages/customer/Customer_modify.jsx";
 // import useLogin from "./Hooks/useLogin.js";
 
 function App() {
+  const { setIsLoggedIn, setUser } = useLogin();
+  const navigate = useNavigate();
   // const { isLoading } = useLogin();
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -27,6 +32,17 @@ function App() {
   // }, []); // 최초 1회만 실행
 
   // if (isLoading) return null;
+
+  useEffect(() => {
+    setupAxiosInterceptor({
+      logoutHandler: () => {
+        setIsLoggedIn(false);
+        setUser(null);
+        localStorage.clear();
+      },
+      navigate,
+    });
+  }, [navigate, setIsLoggedIn, setUser]);
 
   return (
     <Routes>
