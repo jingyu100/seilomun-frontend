@@ -54,11 +54,10 @@ function LoginPage() {
         withCredentials: true,
       });
       const nickname = response.data.data.username;
-      const email = loginId;
 
-      setUser({ email, nickname });
+      setUser({ nickname });
       setIsLoggedIn(true);
-      localStorage.setItem("user", JSON.stringify({ email, nickname }));
+      localStorage.setItem("user", JSON.stringify({ nickname }));
       localStorage.setItem("isLoggedIn", "true");
 
       console.log("로그인 성공! 닉네임:", nickname);
@@ -149,7 +148,7 @@ function LoginPage() {
                         style={{
                           backgroundImage: `url(${googleLogo})`,
                         }}
-                        onClick={() => 
+                        onClick={() =>
                           window.open("http://localhost:80/oauth2/authorization/google")
                         }
                       ></button>
