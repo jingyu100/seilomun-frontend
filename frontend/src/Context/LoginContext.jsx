@@ -44,6 +44,7 @@ export const LoginProvider = ({ children }) => {
         setIsLoading,
         isLoggingIn,
         setIsLoggingIn,
+        getIsLoggingIn: () => isLoggingIn,
       }}
     >
       {children}
