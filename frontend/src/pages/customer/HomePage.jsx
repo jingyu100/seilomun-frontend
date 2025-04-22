@@ -21,7 +21,6 @@ const HomePage = () => {
         <MainBanner />
         <div className="sideMargin">
           <SideMenuBtn />
-          <List />
         </div>
         <MainLastSP />
         <MainNewMatch />
