@@ -6,9 +6,6 @@ import Header from "../../components/Header.jsx";
 import MainBanner from "../../components/Main/MainPageBanner.jsx";
 import MainLastSP from "../../components/Main/MainLastSP.jsx";
 import MainNewMatch from "../../components/Main/MainNewMatch.jsx";
-import List from "../../components/List.jsx";
-import axios from "axios";
-import { useState, useEffect } from "react";
 
 const HomePage = () => {
   return (
