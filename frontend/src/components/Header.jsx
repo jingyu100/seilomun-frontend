@@ -52,8 +52,8 @@ const Header = () => {
                 <ul className="head-top-right">
                   {isLoggedIn ? (
                     <li className="logout">
-                      <button onClick={handleLogout}>로그아웃</button>
                       <button>{user?.nickname}님</button>
+                      <button onClick={handleLogout}>로그아웃</button>
                     </li>
                   ) : (
                     <>
@@ -282,7 +282,7 @@ const Header = () => {
                 </li>
                 <li className="">
                   <a href="/" className="menu-font-st menu-under">
-                    베스트
+                    NEW
                   </a>
                 </li>
                 <li className="">

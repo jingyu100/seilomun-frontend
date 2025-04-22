@@ -31,7 +31,8 @@
 }
 
 .viewModule {
-    background-color: #ffeeee;
+    /* background-color: #ffeeee; */
+    background-color: #ffffff;
     min-width: 100%;
     max-width: auto;
 }
