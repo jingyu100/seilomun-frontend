@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../../css/customer/Register.css";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -17,6 +19,68 @@ function RegisterPage() {
   const [addressDetail, setAddressDetail] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleRegister = async () => {
+    // 1. 기본 검증
+    if (
+      !email ||
+      !password ||
+      !passwordConfirm ||
+      !nickname ||
+      !name ||
+      !gender ||
+      !phonePart1 ||
+      !phonePart2 ||
+      !phonePart3 ||
+      !address ||
+      !addressDetail ||
+      !birthMonth ||
+      !birthDay
+    ) {
+      alert("모든 필수 입력란을 채워주세요.");
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+
+    // 2. 서버에 보낼 데이터 준비
+    const phone = `${phonePart1}-${phonePart2}-${phonePart3}`;
+    const birth = `${birthMonth}-${birthDay}`;
+
+    const requestData = {
+      email,
+      password,
+      username: nickname,
+      name,
+      gender,
+      phone,
+      address: `${address} ${addressDetail}`,
+      birth,
+    };
+
+    try {
+      // 3. 서버로 회원가입 요청 보내기
+      const response = await axios.post("http://localhost/api/customers", requestData, {
+        withCredentials: true,
+      });
+
+      // 4. 요청 성공 처리
+      if (response.status === 200) {
+        alert("회원가입이 완료되었습니다!");
+        navigate("/login");
+      } else {
+        alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error("회원가입 에러:", error);
+      alert("회원가입 도중 에러가 발생했습니다.");
+    }
+  };
 
   return (
     <div>
@@ -224,7 +288,9 @@ function RegisterPage() {
 
             {/* 회원가입 버튼 */}
             <div className="register-btn-container">
-              <button id="register-btn">회원가입</button>
+              <button id="register-btn" onClick={handleRegister}>
+                회원가입
+              </button>
             </div>
           </div>
         </div>
