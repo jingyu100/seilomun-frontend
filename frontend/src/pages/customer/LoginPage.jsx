@@ -25,10 +25,11 @@ function LoginPage() {
 
     try {
       await axios.post(
-        "http://localhost/api/customers/login",
+        "http://localhost/api/auth/login",
         {
           email: loginId,
           password: loginPassword,
+          userType: "CUSTOMER",
         },
         {
           withCredentials: true,

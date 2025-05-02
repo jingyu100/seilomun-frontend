@@ -49,18 +49,18 @@ function RegisterPage() {
     }
 
     // 2. 서버에 보낼 데이터 준비
-    const phone = `${phonePart1}-${phonePart2}-${phonePart3}`;
-    const birth = `${birthMonth}-${birthDay}`;
+    const phone = `${phonePart1}${phonePart2}${phonePart3}`;
+    const birth = `${birthMonth}${birthDay}`;
 
     const requestData = {
       email,
       password,
-      username: nickname,
+      nickname, // ✅ 수정됨
       name,
-      gender,
+      gender: gender === "male" ? "M" : "F",
       phone,
       address: `${address} ${addressDetail}`,
-      birth,
+      birthdate: birth, // ✅ 수정됨
     };
 
     try {
