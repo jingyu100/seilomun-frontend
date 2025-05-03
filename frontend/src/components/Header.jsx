@@ -4,17 +4,42 @@ import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Header = () => {
-
-    // return(
-    // <div className="head-area">
-    //     <header>
-    //         <div className="head-menu sideMargin" >
-
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
   const navigate = useNavigate();
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setSuggestions(["세일로문", "세탁기", "세트"]);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost/api/search/autocomplete?prefix=${searchTerm}`,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log("전체 응답", res); // 🔍 전체 응답 구조 확인
+        console.log("status", res.status); // HTTP status
+        console.log("data", res.data); // API response body
+        console.log("suggestions", res.data?.data?.suggestions); // 이게 undefined면 응답 형식 문제
+        setSuggestions(res.data?.data?.suggestions);
+      } catch (err) {
+        console.error("자동완성 실패", err);
+      }
+    };
+
+    const delayDebounce = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -97,7 +122,13 @@ const Header = () => {
                   <form className="search" method="get" action="">
                     <div className="search-inner">
                       <div>
-                        <input type="text" placeholder="" className="search-input" />
+                        <input
+                          type="text"
+                          placeholder="상품을 검색하세요"
+                          className="search-input"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                         <button type="button" className="search-inputBtn">
                           <svg
                             width="30"
@@ -125,6 +156,24 @@ const Header = () => {
                       </div>
                     </div>
                   </form>
+                  {suggestions.length > 0 && (
+                    <ul
+                      className="autocomplete-list"
+                      style={{
+                        background: "white",
+                        border: "1px solid #ccc",
+                        position: "absolute",
+                        zIndex: 10,
+                        width: "100%",
+                      }}
+                    >
+                      {suggestions.map((s, i) => (
+                        <li key={i} style={{ padding: "8px", cursor: "pointer" }}>
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
               <div className="icon-menu">
