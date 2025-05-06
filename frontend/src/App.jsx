@@ -4,6 +4,7 @@ import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
 import NewPage from "./pages/customer/NewPage.jsx";
 import RegisterPage from "./pages/customer/RegisterPage.jsx";
+import MyPage from "./pages/customer/MyPage.jsx"
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
 import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
@@ -50,6 +51,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/new" element={<NewPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/mypage" element={<MyPage />} />
       <Route path="/selogin" element={<SeloginPage />} />
       <Route path="/sail" element={<SailPage />} />
       <Route path="/wish" element={<WishListPage />} />
