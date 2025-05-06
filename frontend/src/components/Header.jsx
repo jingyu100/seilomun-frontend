@@ -12,10 +12,11 @@ const Header = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      setSuggestions(["세일로문", "세탁기", "세트"]);
+      setSuggestions([]);
       return;
     }
 
@@ -62,6 +63,61 @@ const Header = () => {
     } catch (err) {
       console.log("로그아웃 실패:", err);
     }
+  };
+
+  const handleSearchFocus = async () => {
+    console.log("🔍 검색창 포커스됨");
+    console.log("✅ 로그인 상태:", isLoggedIn);
+
+    if (isLoggedIn) {
+      try {
+        const res = await axios.get(
+          "http://localhost/api/search/history?page=0&size=10",
+          { withCredentials: true }
+        );
+        console.log("📦 검색 기록 응답 전체:", res.data);
+
+        const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
+        console.log("✅ 추출된 keywords:", keywords);
+
+        setSuggestions(keywords);
+      } catch (err) {
+        console.error("❌ 검색 기록 불러오기 실패:", err);
+        setSuggestions([]);
+      }
+    } else {
+      console.log("🙅‍♂️ 로그인되어 있지 않음 → 빈 추천어 표시");
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!searchTerm.trim()) {
+      console.log("❌ 빈 검색어. 저장 요청 안 보냄");
+      return;
+    }
+
+    console.log("🔍 검색 실행됨:", searchTerm);
+
+    if (isLoggedIn) {
+      try {
+        console.log("📤 검색 기록 저장 요청 전송 중...");
+        const res = await axios.post(
+          `http://localhost/api/search/history?keyword=${encodeURIComponent(searchTerm)}`,
+          {}, // ← body 없음
+          { withCredentials: true }
+        );
+        console.log("✅ 검색어 저장 성공:", res.data);
+      } catch (err) {
+        console.error("❌ 검색어 저장 실패:", err.response?.data || err.message);
+      }
+    } else {
+      console.log("🙅‍♂️ 로그인 안됨 → 저장 요청 스킵");
+    }
+
+    // 여기서 검색 결과 페이지 이동 로직 추가 가능
   };
 
   return (
@@ -119,7 +175,12 @@ const Header = () => {
               </div>
               <div className="search-ui product-search">
                 <div>
-                  <form className="search" method="get" action="">
+                  <form
+                    className="search"
+                    method="get"
+                    action=""
+                    onSubmit={handleSearchSubmit}
+                  >
                     <div className="search-inner">
                       <div>
                         <input
@@ -128,8 +189,17 @@ const Header = () => {
                           className="search-input"
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
+                          onFocus={() => {
+                            setIsFocused(true);
+                            handleSearchFocus();
+                          }}
+                          onBlur={() => {
+                            // 약간의 딜레이로 blur 직후 항목 클릭 가능하게
+                            setTimeout(() => setIsFocused(false), 200);
+                          }}
                         />
-                        <button type="button" className="search-inputBtn">
+
+                        <button type="submit" className="search-inputBtn">
                           <svg
                             width="30"
                             height="30"
@@ -156,7 +226,8 @@ const Header = () => {
                       </div>
                     </div>
                   </form>
-                  {suggestions.length > 0 && (
+
+                  {isFocused && suggestions.length > 0 && (
                     <ul
                       className="autocomplete-list"
                       style={{
@@ -169,7 +240,7 @@ const Header = () => {
                     >
                       {suggestions.map((s, i) => (
                         <li key={i} style={{ padding: "8px", cursor: "pointer" }}>
-                          {s}
+                          {typeof s === "string" ? s : s.keyword}
                         </li>
                       ))}
                     </ul>
