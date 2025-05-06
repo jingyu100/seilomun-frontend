@@ -1,12 +1,41 @@
 import { useNavigate } from "react-router-dom";
-import "../../css/seller/Selogin.css"; 
+import { useState } from "react";
+import axios from "axios";
+import "../../css/seller/Selogin.css";
 import logo from "../../image/logo/spLogo.png";
 
 function SeloginPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        "http://localhost/api/auth/login",
+        {
+          email,
+          password,
+          userType: "SELLER",
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      alert("판매자 로그인 성공!");
+      
+      // TODO: 로그인 후 이동할 페이지 설정
+      navigate("/selogin");
+    } catch (err) {
+      console.error("로그인 실패:", err.response?.data || err.message);
+      alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
+  };
 
   return (
-    
     <div className="selogin-area">
       <div className="Selogin-inarea">
         <div className="Selogin-container">
@@ -26,33 +55,44 @@ function SeloginPage() {
           {/* 우측영역 */}
           <div className="login-right selogin-right">
             <div>
-              <div className="main-login main-selogin">사업자 로그인</div>
-              <form className="login-form selogin-form">
-                <input type="text" placeholder="아이디" />
-                <input type="password" placeholder="비밀번호" />
+              <div className="main-login main-selogin">판매자 로그인</div>
+              <form className="login-form selogin-form" onSubmit={handleLogin}>
+                <input
+                  type="text"
+                  placeholder="아이디"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                  type="password"
+                  placeholder="비밀번호"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <div className="options">
                   <label>
                     <input type="checkbox" /> 아이디 저장
                   </label>
                   <div className="links selinks">
-                    <a href="#">아이디 찾기</a> |<a href="#">비밀번호 재설정</a>
+                    <a href="#">아이디 찾기</a> | <a href="#">비밀번호 재설정</a>
                   </div>
                 </div>
                 <button type="submit" className="login-btn selogin-btn">
                   로그인
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   className="register-btn seregister-btn"
-                  onClick={() => navigate("/Business_numberPage")}>
+                  onClick={() => navigate("/Business_numberPage")}
+                >
                   회원가입
                 </button>
               </form>
             </div>
           </div>
         </div>
-      </div>  
-    </div>  
+      </div>
+    </div>
   );
 }
 
