@@ -62,12 +62,6 @@
     margin-left: 30px;
 }
 
-#id-input2:focus {
-    border: 2.0px solid #ccc !important; 
-    outline: none; 
-}
-
-
 #id-input2::placeholder {
     color: #ccc;
 }
@@ -128,8 +122,8 @@
     outline: none; 
 }
 
-#password-input2:focus, #password-confirm-input2:focus {
-    border: 1.5px solid #ccc !important; 
+#password-input2::placeholder {
+    color: #ccc;
 }
 
 #password-info2 {
@@ -139,6 +133,10 @@
     width: 100%;
     margin-left: 30px;
     text-align: left;
+}
+
+#password-confirm-input2::placeholder {
+    color: #ccc;
 }
 
 /* 이름 */
@@ -186,7 +184,7 @@
 
 /* 매장 이름 */
 
-.input-shop2 {
+/* .input-shop2 {
     display: flex;
     flex-direction: column; 
     align-items: flex-start; 
@@ -226,7 +224,7 @@
 
 #shop-input2::placeholder {
     color: #ccc;
-}
+} */
 
 
 /* 전화번호 */
@@ -237,12 +235,13 @@
     gap: 10px; 
     margin-left: 30px;
     margin-top: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     gap: 20px;
 }
 
 #phone-label2 {
     font-size: 1.1em;
+    margin-top: 20px;
     margin-left: 30px;
 }
 
@@ -310,11 +309,15 @@
     padding: 14px 10px; 
     border: 2px solid #ccc;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 16px;
     outline: none; 
     margin-left: 30px;
     text-align: left; 
     direction: ltr; 
+}
+
+#address-input2::placeholder {
+    color: #ccc;
 }
 
 #address-detail2 {

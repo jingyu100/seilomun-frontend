@@ -60,7 +60,7 @@ function SeRegisterPage() {
       console.error("❌ 서버 응답 오류:", err.response?.data || err.message);
       alert(
         "회원가입 중 오류가 발생했습니다: " +
-          (err.response?.data?.message || "서버 오류")
+          (err.response?.data?.message || "회원가입 실패")
       );
     }
   };
@@ -89,10 +89,10 @@ function SeRegisterPage() {
 
         <div className="label-group2">
           <label id="password-label2">
-            패스워드<span className="required2">*</span>
+            비밀번호<span className="required2">*</span>
           </label>
           <label id="password-confirm-label2">
-            패스워드 확인<span className="required2">*</span>
+            비밀번호 확인<span className="required2">*</span>
           </label>
         </div>
 
@@ -102,16 +102,18 @@ function SeRegisterPage() {
             id="password-input2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력"
           />
           <input
             type="password"
             id="password-confirm-input2"
             value={passwordCheck}
             onChange={(e) => setPasswordCheck(e.target.value)}
+            placeholder="비밀번호 재입력"
           />
         </div>
         <p id="password-info2">
-          *패스워드는 대문자영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요
+          *비밀번호는 영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요
         </p>
 
         <label id="name-label2">

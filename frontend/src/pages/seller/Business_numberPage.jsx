@@ -45,7 +45,7 @@ function Business_numberPage() {
           </label>
           <input
             type="text"
-            placeholder="번호 입력"
+            placeholder="번호만 입력"
             value={bizNum}
             onChange={(e) => setBizNum(e.target.value)}
           />
