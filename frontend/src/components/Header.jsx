@@ -13,28 +13,68 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [popularKeywords, setPopularKeywords] = useState([]);
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setSuggestions([]);
-      return;
+    if (isLoggedIn && isFocused && searchTerm.trim() === "") {
+      const fetchHistoryAndPopular = async () => {
+        try {
+          const res = await axios.get(
+            "http://localhost/api/search/history?page=0&size=10",
+            {
+              withCredentials: true,
+            }
+          );
+          const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
+          setSuggestions(keywords);
+        } catch (err) {
+          console.error("❌ 검색 기록 불러오기 실패:", err);
+          setSuggestions([]);
+        }
+
+        try {
+          const res = await axios.get("http://localhost/api/search/popular?limit=10", {
+            withCredentials: true,
+          });
+          setPopularKeywords(res.data?.data?.popularKeywords || []);
+        } catch (err) {
+          console.error("❌ 인기 검색어 불러오기 실패:", err);
+        }
+      };
+
+      fetchHistoryAndPopular();
     }
+  }, [isLoggedIn, isFocused, searchTerm]);
+
+  useEffect(() => {
+    if (searchTerm.trim() === "") return; // ✅ 공백일 땐 suggestions 유지
+
+    // 🔥 입력 바뀌었으면 바로 이전 suggestions 잠깐 비우기 (UI 깜빡임 방지)
+    setSuggestions([]);
 
     const fetchSuggestions = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost/api/search/autocomplete?prefix=${searchTerm}`,
-          {
+        const [autoRes, fuzzyRes] = await Promise.all([
+          axios.get(`http://localhost/api/search/autocomplete?prefix=${searchTerm}`, {
             withCredentials: true,
-          }
-        );
-        console.log("전체 응답", res); // 🔍 전체 응답 구조 확인
-        console.log("status", res.status); // HTTP status
-        console.log("data", res.data); // API response body
-        console.log("suggestions", res.data?.data?.suggestions); // 이게 undefined면 응답 형식 문제
-        setSuggestions(res.data?.data?.suggestions);
+          }),
+          axios.get(`http://localhost/api/search/fuzzy?term=${searchTerm}`, {
+            withCredentials: true,
+          }),
+        ]);
+
+        const autoSuggestions = autoRes.data?.data?.suggestions || [];
+        const fuzzySuggestions = fuzzyRes.data?.data?.suggestions || [];
+
+        const normalize = (item) => (typeof item === "string" ? item : item.keyword);
+
+        const merged = [...autoSuggestions, ...fuzzySuggestions]
+          .map(normalize)
+          .filter((v, i, self) => self.indexOf(v) === i);
+
+        setSuggestions(merged);
       } catch (err) {
-        console.error("자동완성 실패", err);
+        console.error("자동완성 API 호출 실패", err);
       }
     };
 
@@ -65,59 +105,59 @@ const Header = () => {
     }
   };
 
-  const handleSearchFocus = async () => {
-    console.log("🔍 검색창 포커스됨");
-    console.log("✅ 로그인 상태:", isLoggedIn);
-
-    if (isLoggedIn) {
-      try {
-        const res = await axios.get(
-          "http://localhost/api/search/history?page=0&size=10",
-          { withCredentials: true }
-        );
-        console.log("📦 검색 기록 응답 전체:", res.data);
-
-        const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
-        console.log("✅ 추출된 keywords:", keywords);
-
-        setSuggestions(keywords);
-      } catch (err) {
-        console.error("❌ 검색 기록 불러오기 실패:", err);
-        setSuggestions([]);
-      }
-    } else {
-      console.log("🙅‍♂️ 로그인되어 있지 않음 → 빈 추천어 표시");
-      setSuggestions([]);
-    }
+  const handleSearchFocus = () => {
+    setIsFocused(true);
   };
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
-
-    if (!searchTerm.trim()) {
-      console.log("❌ 빈 검색어. 저장 요청 안 보냄");
-      return;
-    }
-
-    console.log("🔍 검색 실행됨:", searchTerm);
+    if (!searchTerm.trim()) return;
 
     if (isLoggedIn) {
       try {
-        console.log("📤 검색 기록 저장 요청 전송 중...");
-        const res = await axios.post(
+        await axios.post(
           `http://localhost/api/search/history?keyword=${encodeURIComponent(searchTerm)}`,
-          {}, // ← body 없음
+          {},
           { withCredentials: true }
         );
-        console.log("✅ 검색어 저장 성공:", res.data);
+        // 🔄 서버에서 최신 기록 다시 불러오기
+        const res = await axios.get(
+          "http://localhost/api/search/history?page=0&size=10",
+          { withCredentials: true }
+        );
+        const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
+        setSuggestions(keywords);
       } catch (err) {
-        console.error("❌ 검색어 저장 실패:", err.response?.data || err.message);
+        console.error("검색 실패:", err);
       }
-    } else {
-      console.log("🙅‍♂️ 로그인 안됨 → 저장 요청 스킵");
     }
+  };
 
-    // 여기서 검색 결과 페이지 이동 로직 추가 가능
+  const handleDeleteHistoryItem = async (keyword) => {
+    try {
+      await axios.delete(
+        `http://localhost/api/search/history?keyword=${encodeURIComponent(keyword)}`,
+        { withCredentials: true }
+      );
+      const res = await axios.get("http://localhost/api/search/history?page=0&size=10", {
+        withCredentials: true,
+      });
+      const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
+      setSuggestions(keywords);
+    } catch (err) {
+      console.error("삭제 실패:", err);
+    }
+  };
+
+  const handleClearAllHistory = async () => {
+    try {
+      await axios.delete("http://localhost/api/search/history/all", {
+        withCredentials: true,
+      });
+      setSuggestions([]); // 서버도 다 지웠으므로 프론트도 비움
+    } catch (err) {
+      console.error("전체 삭제 실패:", err);
+    }
   };
 
   return (
@@ -227,7 +267,102 @@ const Header = () => {
                     </div>
                   </form>
 
-                  {isFocused && suggestions.length > 0 && (
+                  {isLoggedIn && isFocused && searchTerm.trim() === "" && (
+                    <div
+                      className="history-popular-box"
+                      style={{
+                        background: "white",
+                        border: "1px solid #ccc",
+                        padding: "8px",
+                        marginTop: "4px",
+                        position: "absolute",
+                        width: "100%",
+                        zIndex: 9,
+                      }}
+                    >
+                      {/* 검색 기록 */}
+                      {suggestions.length > 0 && (
+                        <>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginBottom: "6px",
+                            }}
+                          >
+                            <strong>검색 기록</strong>
+                            <button onClick={handleClearAllHistory}>전체 삭제</button>
+                          </div>
+                          <ul
+                            style={{
+                              listStyle: "none",
+                              paddingLeft: 0,
+                              marginBottom: "12px",
+                            }}
+                          >
+                            {suggestions.map((item, i) => (
+                              <li
+                                key={i}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  padding: "4px 0",
+                                  borderBottom:
+                                    i !== suggestions.length - 1
+                                      ? "1px solid #eee"
+                                      : "none", // 마지막 항목은 선 제거
+                                }}
+                              >
+                                <span>
+                                  {typeof item === "string" ? item : item.keyword}
+                                </span>
+                                <button onClick={() => handleDeleteHistoryItem(item)}>
+                                  X
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+
+                      {/* 인기 검색어 */}
+                      {popularKeywords.length > 0 && (
+                        <>
+                          <hr
+                            style={{
+                              border: "none",
+                              borderTop: "2px solid #aaa", // ✅ 굵은 구분선
+                              margin: "8px 0",
+                            }}
+                          />
+                          <strong style={{ display: "block", marginBottom: "6px" }}>
+                            인기 검색어
+                          </strong>
+                          <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+                            {popularKeywords.map((item, i) => (
+                              <li
+                                key={i}
+                                style={{
+                                  padding: "4px 0",
+                                  cursor: "pointer",
+                                  borderBottom:
+                                    i !== popularKeywords.length - 1
+                                      ? "1px solid #eee"
+                                      : "none",
+                                }}
+                                onMouseDown={() => setSearchTerm(item.keyword)}
+                              >
+                                {item.keyword}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {/* 🔹 자동완성: 입력값 있을 때만 */}
+                  {isFocused && searchTerm.trim() !== "" && suggestions.length > 0 && (
                     <ul
                       className="autocomplete-list"
                       style={{
@@ -239,7 +374,13 @@ const Header = () => {
                       }}
                     >
                       {suggestions.map((s, i) => (
-                        <li key={i} style={{ padding: "8px", cursor: "pointer" }}>
+                        <li
+                          key={i}
+                          style={{ padding: "8px", cursor: "pointer" }}
+                          onMouseDown={() =>
+                            setSearchTerm(typeof s === "string" ? s : s.keyword)
+                          }
+                        >
                           {typeof s === "string" ? s : s.keyword}
                         </li>
                       ))}
