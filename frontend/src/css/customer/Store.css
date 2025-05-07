@@ -1,0 +1,99 @@
+.storeMargin {
+    width: auto;
+    margin: 0 10%;
+}
+
+.storeMain {
+    padding-top: var(--head-menu-height);
+}
+
+.storeBanner {
+    position: fixed;
+    width: 100% !important;
+    height: 300px;
+    overflow: hidden;
+}
+
+.storeImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 넘치는 부분 자르기 */
+    object-position: center; /* 중앙 기준으로 자르기 */
+}
+
+.storeUI {
+    padding-top: var(--head-menu-height);
+}
+
+.storeUI .storeInner {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+}
+
+.storeUI .storeInner .storeMargin .storeHead {
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 50px;
+}
+
+.storeHead .storeName {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.storeHead .storeName img {
+    width: 100%;
+    max-width: 220px;
+    height: 95px;
+    padding: 20px 0 15px;
+    aspect-ratio: 5 / 2; /* 가로:세로 비율 고정 */
+    object-fit: cover;
+    object-position: bottom;
+    overflow: hidden;
+}
+
+.storeUI .storeInner .storeMargin .storeHead .storeHead-inner {
+    position: relative;
+    display: flex;
+    flex-flow: wrap;
+}
+
+.storeUI .storeInner .storeMargin .storeHead .storeHead-inner 
+.storeHead-half {
+    flex-basis: 50%;
+    flex-grow: 0;
+    max-width: 50%;
+}
+
+.storeUI .storeInner .storeMargin .storeHead .storeHead-inner 
+.storeHead-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+}
+
+.storeRight-ui {
+    width: 120px;
+    border: 1px solid gray;
+    border-radius: 8px;
+    justify-items: center;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+.storeRight-ui:hover {
+    background-color: antiquewhite;
+    cursor: pointer;
+}
+
+
+
+/* ---------- 스토어 바디 부분 ---------- */
+.storeBody {
+    background-color: #fff;
+}
+/* ---------- 스토어 바디 부분 ---------- */

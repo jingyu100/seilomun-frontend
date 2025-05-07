@@ -8,6 +8,7 @@ import MyPage from "./pages/customer/MyPage.jsx"
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
 import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
+import StorePage from "./pages/customer/StorePage.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import { useEffect } from "react";
@@ -57,6 +58,7 @@ function App() {
       <Route path="/wish" element={<WishListPage />} />
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
+      <Route path="/Store" element={<StorePage />} />
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
       <Route path="/Customer_modify" element={<Customer_modify />} />
     </Routes>

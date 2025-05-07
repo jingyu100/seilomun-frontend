@@ -59,15 +59,16 @@
 
 .mainBanner .mainBannerInner .bannerImages .swiper {
   display: flex;
-  width: max-content;
-  height: 100%;
-  gap: 20px;
-  will-change: transform;
+  height: auto;
 }
 
 .mainBanner .mainBannerInner .bannerImages .swiper .swiper-slide {
   flex: 0 0 65%;
+  width: 75%;
+  max-width: 900px;
+  min-width: 300px;
   padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .mainBanner .mainBannerInner .bannerImages .swiper .swiper-slide a {
@@ -172,7 +173,7 @@
 /* ---------- 배너 밑 상품 리스트 공용 ---------- */
 .homepageUI {
   display: grid;
-  margin: 0 18.5%;
+  margin: 0 17%;
   padding: 40px 0 30px;
 }
 

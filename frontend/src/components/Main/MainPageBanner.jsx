@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+
+import React, { useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -6,7 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../../css/customer/Main.css";
 
-function MainBanner() {
+export default function MainBanner() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
@@ -64,15 +65,19 @@ function MainBanner() {
           <Swiper
             modules={[Navigation, Autoplay, Pagination]}
             loop={true}
-            autoplay={{ delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true }}
-            pagination={{ clickable: true }}
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
+            centeredSlides={true}
+            slidesPerView={"auto"}
+            loopedSlides={images.length}
+            autoplay={{ 
+              delay: 4500, 
+              disableOnInteraction: false 
             }}
+            pagination={{ clickable: true }}
             navigation={{
               prevEl: prevRef.current,
               nextEl: nextRef.current,
             }}
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
             onInit={(swiper) => {
               swiperRef.current = swiper;
               swiper.params.navigation.prevEl = prevRef.current;
@@ -81,6 +86,7 @@ function MainBanner() {
               swiper.navigation.update();
             }}
           >
+
             {images.map((image, index) => (
               <SwiperSlide key={index}>
                 <a href={image.link} target="_blank" rel="noopener noreferrer">
@@ -94,5 +100,3 @@ function MainBanner() {
     </div>
   );
 }
-
-export default MainBanner;
