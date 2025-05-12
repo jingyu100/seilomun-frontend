@@ -14,6 +14,7 @@ function SeRegisterPage() {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [storeName, setStoreName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [phone1, setPhone1] = useState("");
   const [phone2, setPhone2] = useState("");
   const [phone3, setPhone3] = useState("");
@@ -39,6 +40,7 @@ function SeRegisterPage() {
       businessNumber,
       password,
       storeName,
+      categoryId, 
       phone,
       addressDetail,
     };
@@ -46,7 +48,7 @@ function SeRegisterPage() {
     console.log("회원가입 요청 데이터:", payload);
 
     try {
-      const res = await axios.post("http://localhost/api/sellers", payload);
+      const res = await axios.post("http://localhost:8080/api/sellers", payload);
 
       const emailFromServer = res?.data?.data?.email;
 
@@ -57,7 +59,7 @@ function SeRegisterPage() {
         alert(res.data.message || "회원가입 실패");
       }
     } catch (err) {
-      console.error("❌ 서버 응답 오류:", err.response?.data || err.message);
+      console.error(" 서버 응답 오류:", err.response?.data || err.message);
       alert(
         "회원가입 중 오류가 발생했습니다: " +
           (err.response?.data?.message || "회원가입 실패")
@@ -154,6 +156,23 @@ function SeRegisterPage() {
             onChange={(e) => setPhone3(e.target.value)}
           />
         </div>
+
+        <label id="category1">
+          카테고리<span className="required2">*</span>
+        </label>
+        <select
+          name="category2"
+          id="category-select"
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          required
+        >
+          <option value="">선택</option>
+          <option value="1">편의점</option>
+          <option value="2">마트</option>
+          <option value="3">빵집</option>
+          <option value="4">식당</option>
+        </select>
 
         <label id="address-main-label2">
           주소<span className="required2">*</span>
