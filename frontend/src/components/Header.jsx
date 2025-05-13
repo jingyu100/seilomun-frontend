@@ -230,7 +230,6 @@ const Header = () => {
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           onFocus={() => {
-                            setIsFocused(true);
                             handleSearchFocus();
                           }}
                           onBlur={() => {
