@@ -2,8 +2,8 @@ ul, li {
     list-style: none;
 }
 
-.productDetail {
-    position: absolute;
+.productFlex {
+    display: flex;
 }
 
 /* ---------- 제품 페이지 헤드 부분 ---------- */
@@ -13,16 +13,11 @@ ul, li {
     flex-direction: column;
 }
 
-.productHead-inner {
-    display: flex;
-    /* flex-direction: row; */
-}
-
-.productHead-inner .productHead-right {
+.productHead-inner .productHead-left {
     max-height: unset;
 }
 
-.productHead-inner .productHead-right {
+.productHead-inner .productHead-left {
     float: left;
     position: relative;
     width: 510px;
@@ -31,7 +26,7 @@ ul, li {
     margin-left: auto;
 }
 
-.productHead-inner .productHead-right .productHead-image {
+.productHead-inner .productHead-left .productHead-image {
     position: relative;
     width: 100%;
 }
@@ -50,5 +45,107 @@ ul, li {
     width: 509px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.productTitle .productTitle-head {
+    max-width: 100%;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ededed;
+}
+
+.productTitle .productTitle-head .productName, .product-expiryDate, 
+.productDesc, .productPrice {
+    padding: 10px 0;
+}
+
+.productTitle .productTitle-head .productName > h2 {
+    font-weight: 900;
+}
+
+.productTitle .productTitle-head .product-expiryDate {
+    font-size: 14px;
+    color: gray;
+    margin: -10px 0 0px;
+}
+
+.productTitle .productTitle-head .productDesc > p {
+    font-size: 15px;
+}
+
+.productTitle-head .productPrice .price {
+    font-size: 15px;
+    color: gray;
+    gap: 19px;
+    align-items: center;
+}
+
+.productTitle-head .productPrice .productDiscount {
+    font-size: 21px;
+    font-weight: 1000;
+    color: #FF692E;
+    gap: 7px;
+    align-items: center;
+    padding: 10px 0 10px 22px;
+}
+
+.productTitle-head .productPrice .discountedPrice {
+    font-size: 18px;
+    font-weight: 600;
+    gap: 12px;
+    align-items: center;
+}
+
+.productQuantity, .productBuy {
+    padding: 15px 0;
+    border-bottom: 1px solid #ededed;
+}
+
+.productBuy .totalPrice-inner {
+    font-size: 24px;
+    font-weight: 1000;
+    margin-bottom: 13px;
+}
+
+.productBuy .productBuy-btns > * {
+    flex: 1 1 calc(50% - 10px);
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.productBuy .productBuy-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.productBuy .productBuy-btns .buyBtn {
+    float: left;
+    box-sizing: border-box;
+    align-items: center;
+    justify-items: center;
+    border: 1px solid #00d975;
+    padding: 9px 18px;
+    background: #00d975;
+}
+.productBuy .productBuy-btns .cartBtn {
+    margin-right: 0;
+    border: 1px solid #dcdcdc;
+    float: left;
+    box-sizing: border-box;
+    align-items: center;
+    justify-items: center;
+    background: #fff;
+    padding: 9px 18px;
+    font-size: 18px;
+}
+
+.btnStyle1 {
+    font-size: 16px;
+}
+
+.btnStyle2 {
+    font-weight: 1000;
 }
 /* ---------- 제품 페이지 헤드 부분 ---------- */
