@@ -173,7 +173,9 @@ const Header = () => {
                 <ul className="head-top-right">
                   {isLoggedIn ? (
                     <li className="logout">
-                      <button>{user?.nickname}님</button>
+                      <button onClick={() => navigate("/mypage")}>
+                        {user?.nickname}님
+                      </button>
                       <button onClick={handleLogout}>로그아웃</button>
                     </li>
                   ) : (
