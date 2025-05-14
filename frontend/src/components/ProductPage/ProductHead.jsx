@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
@@ -11,8 +11,14 @@ import ProductHeadTitle from "./ProductHeadTitle.jsx";
 export default function ProductHead() {
 
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    const images = [
+        "/images/product1.jpg",
+        "/images/product2.jpg",
+        "/images/product3.jpg"
+    ];
     
-    // const imageWidth = ;
+    const imageWidth = 510;
     // const currentIndex = ;
     
     const moveX = -imageWidth * currentIndex;
@@ -26,10 +32,10 @@ export default function ProductHead() {
       };
 
     return (
-        <div className="productHead-inner">
-            <div className="productHead-right">
+        <div className="productHead-inner productFlex">
+            <div className="productHead-left">
                 <div className="productHead-image">
-                    <ul className="productImg-slide"
+                    <ul className="productImg-slide productFlex"
                         style={{
                             transform: `translate3d(${moveX}px, 0px, 0px)`,
                             msTransitionDuration: "0ms",
