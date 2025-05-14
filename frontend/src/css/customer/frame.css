@@ -259,14 +259,14 @@ header {
   padding: 8px 80px 8px;
 }
 
-.kategorie {
+.category {
   flex-basis: 20%;
   -webkit-box-flex: 0;
   flex-grow: 0;
   max-width: 20%;
 }
 
-.kategorie-frame:hover {
+.category-frame:hover {
   border-radius: 5px;
   /* background-color: #e9d8ff; */
   background-color: #ffe7d8;

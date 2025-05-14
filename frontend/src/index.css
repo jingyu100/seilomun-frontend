@@ -26,5 +26,6 @@ body {
 
 #root {
   --head-menu-height: 143px;
+  --store-header-height: 210px;
   background-color: #fcfcfc;
 }

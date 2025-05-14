@@ -58,7 +58,7 @@ function App() {
       <Route path="/wish" element={<WishListPage />} />
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
-      <Route path="/Store" element={<StorePage />} />
+      <Route path="/Store/:sellerId" element={<StorePage />} />
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
       <Route path="/Customer_modify" element={<Customer_modify />} />
     </Routes>

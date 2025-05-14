@@ -1,0 +1,54 @@
+ul, li {
+    list-style: none;
+}
+
+.productDetail {
+    position: absolute;
+}
+
+/* ---------- 제품 페이지 헤드 부분 ---------- */
+.productDetail .productUI .productHead {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.productHead-inner {
+    display: flex;
+    /* flex-direction: row; */
+}
+
+.productHead-inner .productHead-right {
+    max-height: unset;
+}
+
+.productHead-inner .productHead-right {
+    float: left;
+    position: relative;
+    width: 510px;
+    max-height: 760px;
+    overflow: hidden;
+    margin-left: auto;
+}
+
+.productHead-inner .productHead-right .productHead-image {
+    position: relative;
+    width: 100%;
+}
+
+.swiper-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+}
+
+.productTitle {
+    float: right;
+    padding: 10px 20px 10px 20px;
+    width: 509px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+/* ---------- 제품 페이지 헤드 부분 ---------- */

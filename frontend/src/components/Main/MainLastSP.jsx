@@ -212,6 +212,7 @@ function MainLastSP() {
     },
   ];
 
+
   const ProductCard = ({ product }) => {
     return (
       <div className="product_card">

@@ -230,7 +230,6 @@ const Header = () => {
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           onFocus={() => {
-                            setIsFocused(true);
                             handleSearchFocus();
                           }}
                           onBlur={() => {
@@ -238,7 +237,6 @@ const Header = () => {
                             setTimeout(() => setIsFocused(false), 200);
                           }}
                         />
-
                         <button type="submit" className="search-inputBtn">
                           <svg
                             width="30"
@@ -486,9 +484,9 @@ const Header = () => {
           </div>
 
           <div className="head-bottom">
-            <div className="kategorie">
+            <div className="category">
               <div
-                className="kategorie-frame"
+                className="category-frame"
                 style={{
                   width: "48%",
                   maxWidth: "auto",
@@ -509,8 +507,8 @@ const Header = () => {
                 >
                   <span>
                     <img
-                      src="./image/icon/icon_nav.svg"
-                      alt="kategorie"
+                      src="../../image/icon/icon_nav.svg"
+                      alt="category"
                       style={{
                         marginRight: "8px",
                       }}

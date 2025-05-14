@@ -1,6 +1,6 @@
 .storeMargin {
     width: auto;
-    margin: 0 10%;
+    margin: 0 15%;
 }
 
 .storeMain {
@@ -10,7 +10,7 @@
 .storeBanner {
     position: fixed;
     width: 100% !important;
-    height: 300px;
+    height: 210px;
     overflow: hidden;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .storeUI {
-    padding-top: var(--head-menu-height);
+    padding-top: var(--store-header-height);
 }
 
 .storeUI .storeInner {
@@ -45,8 +45,9 @@
 
 .storeHead .storeName img {
     width: 100%;
-    max-width: 220px;
-    height: 95px;
+    max-width: 260px;
+    height: 100%;
+    max-height: 80px;
     padding: 20px 0 15px;
     aspect-ratio: 5 / 2; /* 가로:세로 비율 고정 */
     object-fit: cover;
@@ -86,7 +87,7 @@
 }
 
 .storeRight-ui:hover {
-    background-color: antiquewhite;
+    background-color: #fcccc5;
     cursor: pointer;
 }
 

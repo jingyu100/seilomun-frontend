@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/customer/Store.css";
+import StoreMenu from "./StoreMenu";
 
 export default function StoreBody() {
 
     return (
-        <div className="storeBody storeMargin">
+        <div className="storeBody">
             <div style={{
                 position: "relative",
                 justifyItems: "center",
@@ -26,7 +27,7 @@ export default function StoreBody() {
             </div>
             
             <div className=" ">
-
+                <StoreMenu />
             </div>
         </div>
     );
