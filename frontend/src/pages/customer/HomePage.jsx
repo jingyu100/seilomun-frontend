@@ -9,7 +9,7 @@ import MainNewMatch from "../../components/Main/MainNewMatch.jsx";
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="homePage">
       <div className="header">
         <Header />
       </div>

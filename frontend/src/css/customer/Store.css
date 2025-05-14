@@ -5,6 +5,7 @@
 
 .storeMain {
     padding-top: var(--head-menu-height);
+    position: absolute;
 }
 
 .storeBanner {

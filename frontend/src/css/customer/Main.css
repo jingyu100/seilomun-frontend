@@ -1,3 +1,7 @@
+.homePage {
+  position: absolute;
+}
+
 /* ---------- 이벤트 베너 ---------- */
 .mainBanner {
     position: relative;
