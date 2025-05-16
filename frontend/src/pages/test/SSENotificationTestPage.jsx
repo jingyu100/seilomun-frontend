@@ -8,6 +8,7 @@ const SSENotificationTestPage = () => {
     const [userId, setUserId] = useState('');
     const [apiUrl, setApiUrl] = useState('http://localhost:8080');
     const [logs, setLogs] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     // 로그 추가 함수
     const addLog = (message, type = 'info') => {
@@ -19,6 +20,12 @@ const SSENotificationTestPage = () => {
             timestamp
         }, ...prev.slice(0, 19)]);
     };
+
+    // 읽지 않은 알림 개수 계산
+    useEffect(() => {
+        const count = notifications.filter(notif => notif.isRead !== 'Y').length;
+        setUnreadCount(count);
+    }, [notifications]);
 
     // SSE 연결
     const connectSSE = () => {
@@ -124,6 +131,34 @@ const SSENotificationTestPage = () => {
         }
     };
 
+    // 모든 알림 읽음 처리
+    const markAllAsRead = async () => {
+        if (notifications.length === 0 || unreadCount === 0) return;
+
+        try {
+            // 백엔드에 모든 알림 읽음 처리 요청 (실제 구현 필요)
+            // const response = await fetch(`${apiUrl}/api/notifications/read-all`, {
+            //     method: 'PUT',
+            //     credentials: 'include',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     }
+            // });
+
+            // if (response.ok) {
+            // 프론트엔드에서만 모든 알림을 읽음 처리 (백엔드 연동은 주석 해제 후 사용)
+            setNotifications(prev =>
+                prev.map(notif => ({...notif, isRead: 'Y'}))
+            );
+            addLog('모든 알림 읽음 처리 성공', 'success');
+            // } else {
+            //     throw new Error(`HTTP ${response.status}`);
+            // }
+        } catch (error) {
+            addLog(`모든 알림 읽음 처리 실패: ${error.message}`, 'error');
+        }
+    };
+
     // 컴포넌트 언마운트 시 연결 정리
     useEffect(() => {
         return () => {
@@ -162,9 +197,31 @@ const SSENotificationTestPage = () => {
     return (
         <div style={{minHeight: '100vh', backgroundColor: '#f9fafb', padding: '1rem'}}>
             <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-                <h1 style={{fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '2rem'}}>
-                    SSE 알림 테스트
-                </h1>
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem'}}>
+                    <h1 style={{fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', display: 'flex', alignItems: 'center'}}>
+                        SSE 알림 테스트
+                        {/* 새로 추가: 상단 알림 뱃지 */}
+                        {notifications.length > 0 && (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginLeft: '0.75rem',
+                                backgroundColor: '#eff6ff',
+                                borderRadius: '0.5rem',
+                                padding: '0.25rem 0.75rem',
+                                border: '1px solid #bfdbfe'
+                            }}>
+                                <span style={{marginRight: '0.5rem'}}>🔔</span>
+                                <span style={{fontWeight: 'bold', color: '#1e40af'}}>전체: {notifications.length}개</span>
+                                {unreadCount > 0 && (
+                                    <span style={{marginLeft: '0.5rem', fontWeight: 'bold', color: '#ef4444'}}>
+                                        (읽지 않음: {unreadCount}개)
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                    </h1>
+                </div>
 
                 {/* 연결 설정 */}
                 <div style={{
@@ -259,8 +316,8 @@ const SSENotificationTestPage = () => {
                                     backgroundColor: getStatusColor()
                                 }}/>
                                 <span style={{color: getStatusColor()}}>
-                  {connectionStatus === 'connected' ? '🟢 연결됨' : connectionStatus === 'connecting' ? '🟡 연결 중...' : '⚪ 연결 안 됨'}
-                </span>
+                                    {connectionStatus === 'connected' ? '🟢 연결됨' : connectionStatus === 'connecting' ? '🟡 연결 중...' : '⚪ 연결 안 됨'}
+                                </span>
                             </div>
 
                             <div style={{display: 'flex', gap: '0.5rem'}}>
@@ -305,15 +362,68 @@ const SSENotificationTestPage = () => {
                         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                         padding: '1.5rem'
                     }}>
-                        <h2 style={{
-                            fontSize: '1.25rem',
-                            fontWeight: '600',
-                            marginBottom: '1rem',
+                        <div style={{
                             display: 'flex',
-                            alignItems: 'center'
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '1rem'
                         }}>
-                            🔔 알림 목록 ({notifications.length})
-                        </h2>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <h2 style={{fontSize: '1.25rem', fontWeight: '600', display: 'flex', alignItems: 'center'}}>
+                                    🔔 알림 목록
+                                </h2>
+                                {/* 새로 추가: 알림 카운터 */}
+                                <div style={{
+                                    marginLeft: '0.75rem',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}>
+                                    <div style={{
+                                        backgroundColor: '#dbeafe',
+                                        color: '#1e40af',
+                                        fontWeight: 'bold',
+                                        padding: '0.25rem 0.75rem',
+                                        borderRadius: '2rem',
+                                        fontSize: '0.875rem',
+                                        border: '1px solid #bfdbfe'
+                                    }}>
+                                        {notifications.length}
+                                    </div>
+                                    {unreadCount > 0 && (
+                                        <div style={{
+                                            backgroundColor: '#fee2e2',
+                                            color: '#b91c1c',
+                                            fontWeight: 'bold',
+                                            padding: '0.25rem 0.75rem',
+                                            borderRadius: '2rem',
+                                            fontSize: '0.875rem',
+                                            marginLeft: '0.5rem',
+                                            border: '1px solid #fecaca'
+                                        }}>
+                                            {unreadCount} 개 읽지 않음
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* 새로 추가: 모두 읽음 버튼 */}
+                            {unreadCount > 0 && (
+                                <button
+                                    onClick={markAllAsRead}
+                                    style={{
+                                        fontSize: '0.875rem',
+                                        padding: '0.375rem 0.75rem',
+                                        backgroundColor: '#eff6ff',
+                                        color: '#3b82f6',
+                                        border: '1px solid #bfdbfe',
+                                        borderRadius: '0.375rem',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    모두 읽음 처리
+                                </button>
+                            )}
+                        </div>
 
                         <div style={{maxHeight: '24rem', overflowY: 'auto'}}>
                             {notifications.length === 0 ? (
@@ -400,8 +510,8 @@ const SSENotificationTestPage = () => {
                                     <div key={log.id} style={{fontSize: '0.875rem', marginBottom: '0.5rem'}}>
                                         <span style={{color: '#9ca3af'}}>[{log.timestamp}]</span>
                                         <span style={{marginLeft: '0.5rem', color: getLogTypeColor(log.type)}}>
-                      {log.message}
-                    </span>
+                                            {log.message}
+                                        </span>
                                     </div>
                                 ))
                             )}
@@ -442,6 +552,7 @@ const SSENotificationTestPage = () => {
                         <li style={{marginBottom: '0.5rem'}}>"연결" 버튼을 클릭하여 SSE 연결을 시작합니다</li>
                         <li style={{marginBottom: '0.5rem'}}>판매자가 새 상품을 등록하면 실시간으로 알림을 받을 수 있습니다</li>
                         <li style={{marginBottom: '0.5rem'}}>알림을 클릭하여 읽음 처리할 수 있습니다</li>
+                        <li style={{marginBottom: '0.5rem'}}>"모두 읽음 처리" 버튼을 클릭하여 모든 알림을 한번에 읽음 처리할 수 있습니다</li>
                     </ol>
                 </div>
             </div>
