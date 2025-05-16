@@ -39,6 +39,7 @@ function SeloginPage() {
     <div className="selogin-area">
       <div className="Selogin-inarea">
         <div className="Selogin-container">
+          
           {/* 좌측 영역 */}
           <div className="login-left selogin-left">
             <img src={logo} alt="로고" className="selogo2" />

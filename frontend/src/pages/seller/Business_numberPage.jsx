@@ -38,6 +38,7 @@ function Business_numberPage() {
         <h1 className="join-title">회원가입</h1>
       </div>
 
+      {/* 사업자 등록번호 */}
       <div className="form-section">
         <div className="input-group">
           <label>
@@ -51,6 +52,7 @@ function Business_numberPage() {
           />
         </div>
 
+      {/* 대표자 성명 */}
         <div className="input-group">
           <label>
             대표자 성명<span className="required">*</span>
@@ -63,6 +65,7 @@ function Business_numberPage() {
           />
         </div>
 
+      {/* 개업일자 */}
         <div className="input-group">
           <label>
             개업일자<span className="required">*</span>
