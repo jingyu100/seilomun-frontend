@@ -1,0 +1,187 @@
+   /* 메인 레이아웃 */
+   .mypage-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  
+  /* 사이드바 */
+  .mypage-sidebar {
+    width: 200px;
+    font-size: 12px;
+    color: #111;
+  }
+  
+  .title-xl {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 24px;
+  }
+  
+  .title-lg {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 6px;
+  }
+  
+  .sidebar-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-section li {
+    font-size: 15px;
+    color: #777;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+  
+  .sidebar-section li:hover {
+    text-decoration: underline;
+  }
+  
+  /* 메인 콘텐츠 */
+  .mypage-main {
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 유저 정보 박스 */
+  .user-info-box {
+    background-color: #000;
+    color: #fff;
+    padding: 16px 28px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    margin-bottom: 0;
+  }
+  
+  .user-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .user-profile {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .user-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .info-link {
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  /* 포인트 박스 */
+  .point-box {
+    background-color: #fff;
+    padding: 25px 0;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.3;
+    border: 2px solid #ccc;
+    border-top: none;
+  }
+  
+  .highlight {
+    color: #ff0000;
+    font-weight: bold;
+  }
+  
+  .edit-button {
+    background: #fff;
+    color: #000;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* 리스트 */
+  .mypage-list-box {
+    margin-top: 100px;
+    display: flex;
+    gap: 60px;
+  }
+  
+  .list-section {
+    flex: 1;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+  }
+  
+  .section-header a {
+    font-size: 16px;
+    color: #777;
+    text-decoration: none;
+  }
+  
+  .record-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .record-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .status {
+    width: 100px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  
+  .status.blue {
+    color: #0066cc;
+    font-weight: bold;
+  }
+  
+  .status.red {
+    color: #ff4444;
+    font-weight: bold;
+  }
+  
+  .status.gray {
+    color: #999;
+  }
+  
+  .date {
+    width: 100px;
+    text-align: right;
+    font-size: 13px;
+    color: #666;
+  }
+  
