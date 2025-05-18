@@ -84,7 +84,7 @@
   
   .info-link {
     font-size: 18px;
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
     font-weight: bold;
   }

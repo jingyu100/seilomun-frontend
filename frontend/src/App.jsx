@@ -4,17 +4,18 @@ import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
 import NewPage from "./pages/customer/NewPage.jsx";
 import RegisterPage from "./pages/customer/RegisterPage.jsx";
-import MyPage from "./pages/customer/MyPage.jsx"
+import MyPage from "./pages/customer_mypage/MyPage.jsx"
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
 import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
 import StorePage from "./pages/customer/StorePage.jsx";
 import ProductPage from "./pages/customer/ProductPage.jsx";
+import Change_dataPage from "./pages/customer_mypage/Change_dataPage.jsx"
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import { useEffect } from "react";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
-import Customer_modify from "./pages/customer/Customer_modify.jsx";
+import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
 import { useNavigate } from "react-router-dom";
 import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
 import useLogin from "./Hooks/useLogin";
@@ -54,6 +55,7 @@ function App() {
       <Route path="/new" element={<NewPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/mypage" element={<MyPage />} />
+      <Route path="/Change_dataPage" element={<Change_dataPage />} />
       <Route path="/selogin" element={<SeloginPage />} />
       <Route path="/sail" element={<SailPage />} />
       <Route path="/wish" element={<WishListPage />} />

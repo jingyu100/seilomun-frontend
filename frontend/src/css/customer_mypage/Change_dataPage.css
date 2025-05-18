@@ -1,0 +1,121 @@
+   /* 메인 레이아웃 */
+   .mypage-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  
+  /* 사이드바 */
+  .mypage-sidebar {
+    width: 200px;
+    font-size: 12px;
+    color: #111;
+  }
+  
+  .title-xl {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 24px;
+  }
+  
+  .title-lg {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 6px;
+  }
+  
+  .sidebar-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-section li {
+    font-size: 15px;
+    color: #777;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+  
+  .sidebar-section li:hover {
+    text-decoration: underline;
+  }
+
+/* 오른쪽 메인 */
+
+.mypage-main {
+    flex: 1;
+    padding-left: 40px;
+  }
+  
+  .main-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .info-text {
+    font-size: 20px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  
+  .email {
+    color: #0066cc;
+    font-weight: 800;
+  }
+  
+  .info-table {
+    width: 80%;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+  }
+  
+  .info-table td {
+    padding: 12px;
+    border: 2px solid #ccc;
+  }
+  
+  /* 아이디, 비밀번호 */
+  .label-cell {
+    background-color: #E6FDFF;
+    color: #646464;
+    font-weight: bold;
+    width: 160px;
+  }
+  
+  .password-input {
+    width: 30%;
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    margin-left: 230px;
+  }
+  
+  .confirm-btn {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 14px 50px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .cancel-btn {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 14px 50px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  

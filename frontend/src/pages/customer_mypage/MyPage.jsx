@@ -1,17 +1,19 @@
-import "../../css/customer/MyPage.css";
+import "../../css/customer_mypage/MyPage.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
+import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import logo from "../../image/logo/spLogo.png";
 
 const MyPage = () => {
   return ( 
     <div>
+      
       <div className="header">
         <Header />
       </div>
 
     <div className="body"> 
-
+    <SideMenuBtn />
       <div className="mypage-container">
 
         <aside className="mypage-sidebar">
@@ -59,20 +61,20 @@ const MyPage = () => {
         </aside>
 
         <div className="mypage-main">
-          {/* 검은 배경 유저 정보 */}
+          {/* 유저 정보 */}
           <div className="user-info-box">
             <div className="user-left">
               <img src={logo} alt="프로필" className="user-profile" />
               <p><h3>홍길동 고객님 반갑습니다.</h3></p>
             </div>
             <div className="user-right">
-              <a href="#" className="info-link">회원정보변경 &gt;</a>
+              <a href="/Change_dataPage" className="info-link">회원정보변경 &gt;</a>
             </div>
           </div>
 
-          {/* 흰 배경 포인트 박스 */}
+          {/*포인트 박스 */}
           <div className="point-box">
-            세일로몬 포인트 <span href="#" className="highlight">12000</span> P &gt;
+            세일로문 포인트 <span href="#" className="highlight">12000</span> P &gt;
           </div>
 
           {/* 리스트 */}
