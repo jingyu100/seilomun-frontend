@@ -3,10 +3,11 @@ import "../../css/customer/frame.css";
 import Footer from "../../components/Footer.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import Header from "../../components/Header.jsx";
+import Payment from "../payment/Payment.jsx";
 
 const PaymentPage = () => {
   return (
-    <div className="homePage">
+    <div className="PaymentPage">
       <div className="header">
         <Header />
       </div>
@@ -15,6 +16,7 @@ const PaymentPage = () => {
         <div className="sideMargin">
           <SideMenuBtn />
         </div>
+        <Payment />
       </div>
 
       <div className="footer">
