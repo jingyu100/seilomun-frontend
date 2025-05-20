@@ -1,0 +1,76 @@
+.delivery-section {
+  width: 100%;
+  margin-bottom: 2rem;
+  font-size: 14px;
+  color: #111;
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.label {
+  min-width: 50px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.required {
+  color: orange;
+  margin-left: 4px;
+}
+
+.btn {
+  padding: 4px 12px;
+  margin-right: 8px;
+  border: 1px solid black;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.input.small {
+  width: 70px;
+  margin-right: 4px;
+}
+
+.dash {
+  margin: 0 4px;
+}
+
+.textarea {
+  width: 100%;
+  height: 40px;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+}

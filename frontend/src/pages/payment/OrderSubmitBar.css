@@ -1,0 +1,22 @@
+.payment-button-wrapper {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.payment-button {
+  width: 100%;
+  max-width: 520px;
+  padding: 12px 0;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-button:hover {
+  background-color: #f2f2f2;
+}

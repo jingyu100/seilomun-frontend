@@ -53,7 +53,7 @@ header {
 
 .head-menu {
   width: 1200px;
- /* height: var(--head-menu-height); */
+  /* height: var(--head-menu-height); */
   height: auto;
   padding-top: 8px;
 }
@@ -299,7 +299,7 @@ header {
 /* ---------- 헤더 부분 ---------- */
 
 /* ---------- 여긴 리액트 넘어갈 시 삭제할 부분 ---------- */
-.head-top-menu .head-top-half > div > ul > li, 
+.head-top-menu .head-top-half > div > ul > li,
 .head-top-menu .head-top-half > div > ul > .logout > button {
   color: #333;
   line-height: 12px;
@@ -406,8 +406,6 @@ header {
   padding: 8px;
 }
 /* ---------- 사이드 메뉴 버튼 부분 ---------- */
-
-
 
 /* ---------- 하단 부분 ---------- */
 

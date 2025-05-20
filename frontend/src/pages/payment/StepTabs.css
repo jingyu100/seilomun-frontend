@@ -1,0 +1,43 @@
+.step-tabs-wrapper {
+  width: 100%;
+  font-weight: bold;
+  font-size: 15px;
+  color: #374151; /* Tailwind text-gray-700 */
+}
+
+.tabs {
+  display: flex;
+  text-align: center;
+}
+
+/* 공통 탭 기본 */
+.tab {
+  flex: 1;
+  padding: 8px 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+/* 배송 탭: 검정색, 보통 굵기 */
+.delivery {
+  border-bottom: 3px solid #000000;
+}
+
+/* 포장 탭: 밝은 회색, 더 굵은 선 */
+.packing {
+  border-bottom: 2px solid #d1d5db; /* Tailwind 기준 gray-300 */
+}
+
+.payment-bar {
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 0;
+  margin-bottom: 8px;
+}

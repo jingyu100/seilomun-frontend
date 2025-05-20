@@ -1,10 +1,20 @@
+import React from "react";
 import StepTabs from "./StepTabs";
+import "./Payment.css"; // 클래식 CSS 연결
+import DeliverySection from "./DeliverySection";
+import OrderItemsSection from "./OrderItemsSection";
+import PaymentInfoSection from "./PaymentInfoSection";
+import OrderSubmitBar from "./OrderSubmitBar";
 
 const Payment = () => {
   return (
-    <div className="flex justify-center w-full min-h-screen bg-gray-50 py-8">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6">
+    <div className="payment-wrapper">
+      <div className="payment-container">
         <StepTabs />
+        <DeliverySection />
+        <OrderItemsSection />
+        <PaymentInfoSection />
+        <OrderSubmitBar />
       </div>
     </div>
   );
