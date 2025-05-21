@@ -1,11 +1,11 @@
 .storeMargin {
-    width: auto;
     margin: 0 15%;
 }
 
 .storeMain {
-    padding-top: var(--head-menu-height);
     position: absolute;
+    padding-top: var(--head-menu-height);
+    width: 100%;
 }
 
 .storeBanner {
@@ -28,7 +28,6 @@
 
 .storeUI .storeInner {
     position: relative;
-    width: 100%;
     background-color: #fff;
 }
 

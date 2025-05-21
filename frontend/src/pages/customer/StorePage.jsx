@@ -1,80 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import axios from "axios";
+import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import "../../css/customer/Store.css";
 import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import Footer from "../../components/Footer.jsx";
 import StoreHead from "../../components/Store/StoreHead.jsx";
 import StoreBody from "../../components/Store/StoreBody.jsx";
-import { storeData } from "../../components/ProductDummies.js"; // 더미 데이터 불러오기
 
 export default function StorePage() {
-    
-    const { sellerId } = useParams();
-    const [store, setStore] = useState(storeData[0]); // 기본 첫 번째 더미 사용
-    // 나중에 백엔드 데이터를 받을 때 주석 풀기
-    // const [store, setStore] = useState(null);
+    const { store } = useStoreInfo();
 
-    // 백엔드 연동 시 sellerId 기준으로 선택
-    useEffect(() => {
-        if (!sellerId) return;
+    const sellerRegisterDto = store?.sellerRegisterDto;
+    const sellerPhotoDto = store?.sellerPhotoDto;
+    const sellerInformationDto = store?.sellerInformationDto;
 
-        const fetchStore = async () => {
-            try {
-                // API에서 받은 sellerId로 매칭
-                const selectedStore = storeData.find(store => store.sellerRegisterDto.storeName === sellerId);
-                if (selectedStore) {
-                    setStore(selectedStore);
-                } else {
-                    console.error("가게 데이터를 찾을 수 없습니다.");
-                }
-            } catch (error) {
-                console.error("가게 데이터 가져오기 실패:", error);
-            }
-        };
+  return (
+    <div className="storeMain">
+      <div className="header">
+        <Header />
+      </div>
 
-        fetchStore();
-    }, [sellerId]);
+      <div className="storeBanner">
+        <img
+          src={sellerPhotoDto?.photoUrl || "/image/ㅋㅍㅁㄱ.jpg"}
+          alt="가게 메인 이미지"
+          className="storeImage"
+        />
+      </div>
 
-    if (!store) {
-        return <Navigate to="/404" replace />;
-    }
-
-    const { sellerRegisterDto, sellerInformationDto, sellerPhotoDto } = store;
-
-    return (
-        <div className="storeMain">
-            <div className="header">
-                <Header />
+      <div className="storeUI">
+        <SideMenuBtn />
+        <div className="storeInner">
+          <div className="storeMargin">
+            <div className="storeHead">
+               <StoreHead />
             </div>
 
-            <div className="storeBanner">
-                <img
-                    src={sellerPhotoDto?.photoUrl || "../../image/ㅋㅍㅁㄱ.jpg"}
-                    alt="가게 메인 이미지"
-                    className="storeImage"
-                />
+            <div className="storeBody">
+              <StoreBody />
             </div>
-
-            <div className="storeUI">
-                <SideMenuBtn />
-                <div className="storeInner">
-                    <div className="storeMargin">
-                        <div className="storeHead">
-                            <StoreHead />
-                        </div>
-
-                        <div className="storeBody">
-                            <StoreBody />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="footer">
-                <Footer />
-            </div>
+          </div>
         </div>
-    );
+      </div>
+
+      <div className="footer">
+        <Footer />
+      </div>
+    </div>
+  );
 }

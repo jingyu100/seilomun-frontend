@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
+import useProductInfo from "../../Hooks/useProductInfo.js";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -9,6 +10,13 @@ import "../../css/customer/Product.css";
 import ProductHeadTitle from "./ProductHeadTitle.jsx";
 
 export default function ProductHead() {
+
+    const { product } = useProductInfo();
+    
+    const productDto = product?.productDto;
+    const productPhoto = product?.productPhoto;
+    const productDocument = product?.productDocument;
+    
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -68,7 +76,16 @@ export default function ProductHead() {
             </div>
             
             <div className="productHead-right">
-                <ProductHeadTitle />
+                <ProductHeadTitle 
+                    name= {productDto?.name || "제품명 없음"}
+                    expiryDate= {productDto?.expiryDate || "유통기한 없음"}
+                    description= {productDto?.description || "제품 설명 없음"}
+                    originalPrice= {productDto?.originalPrice || "상품 가격 없음"}
+                    maxDiscountRate= {productDto?. maxDiscountRate || "최대 할인"}
+                    minDiscountRate= {productDto?. minDiscountRate || "최소 할인"}
+                    discountPrice= {productDto?.discountPrice || "할인 가격 없음"}
+
+                />
             </div>
         </div>
     )

@@ -19,16 +19,16 @@ export default function StoreMiniInfo({
         >
             <ul>
                 <p>매장 주소</p>
-                <li>{address || "정보 없음"}</li>
+                <li>{address}</li>
             </ul>
             <ul>
                 <p>전화번호</p>
-                <li>{phone || "정보 없음"}</li>
+                <li>{phone}</li>
             </ul>
             <div style={{ display: "flex", gap: "15px" }}>
                 <ul>
                     <p>최소 배달 주문 금액</p>
-                    <li>{minOrderAmount || "정보 없음"}</li>
+                    <li>{minOrderAmount}</li>
                 </ul>
                 <ul>
                     <p>배달비</p>

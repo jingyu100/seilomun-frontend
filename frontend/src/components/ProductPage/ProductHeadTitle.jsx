@@ -1,8 +1,18 @@
 import React, { useRef, useEffect } from "react";
 import "../../css/customer/Product.css";
 
-export default function ProductHeadTitle({}) {
+export default function ProductHeadTitle({
+    name,
+    expiryDate,
+    description,
+    originalPrice,
+    discountPrice,
+    maxDiscountRate,
+    minDiscountRate,
+}) {
 
+    const parsedOriginalPrice = parseInt(originalPrice) || 0;
+    const parsedDisPrice = parseInt(discountPrice) || 0;
 
     // const discountRate  = parseInt(currentDiscountRate) || 0;
     
@@ -11,13 +21,13 @@ export default function ProductHeadTitle({}) {
             <div className="productTitle-inner">
                 <div className="productTitle-head">
                     <div className="productName">
-                        <h2>하이진저 레몬 하이진저 레몬 하이진저 레몬 하이진저 레몬 하이진저 레몬</h2>
+                        <h2>{name}</h2>
                     </div>
                     <div className="product-expiryDate">
-                        <p>2025년 11월 13일까지</p>
+                        <p>{expiryDate}</p>
                     </div>
                     <div className="productDesc">
-                        <p>한 스푼만 넣으면 커피명가 진저 레몬에이드 완성!</p>
+                        <p>{description}</p>
                     </div>
                     <div className="productPrice">
                         <div className="price productFlex">
@@ -25,7 +35,7 @@ export default function ProductHeadTitle({}) {
                             <p style={{
                                 textDecoration: "line-through",
                                 fontSize: "18px",
-                            }}>30,000원</p>
+                            }}>{parsedOriginalPrice}원</p>
                         </div>             
                         <div className="productDiscount productFlex">
                             <img src="../../../image/icon/icon_dicountArrow.png" 
@@ -36,21 +46,21 @@ export default function ProductHeadTitle({}) {
                                     width: "33px"
                                 }}
                             />
-                            <p className="discountPercent">{/* {currentDiscountRate.toLocaleString()} */}20%</p>
+                            <p className="discountPercent">{minDiscountRate}%</p>
                         </div>
                         <div className="discountedPrice productFlex">
                             <p>할인가</p>
                             <p style={{
                                 fontSize: "25px",
                                 fontWeight: "1000",                                
-                            }}>20,000원</p>
+                            }}>{parsedDisPrice}원</p>
                         </div>                        
                     </div>
                 </div>
 
                 <div className="productQuantity productFlex">
                     <div className="productName">
-                        <p>하이진저 레몬</p>                            
+                        <p>{name}</p>                            
                     </div>
                     <div className="plust-minus productFlex">
 
@@ -61,7 +71,7 @@ export default function ProductHeadTitle({}) {
                     <div className="totalPrice-inner productFlex">
                         <span className="total">TOTAL</span>
                         <div className="totalPrice productFlex">
-                            <p>20,000원</p>
+                            <p>토탈 가격 원</p>
                             <span></span>
                         </div>
                     </div>

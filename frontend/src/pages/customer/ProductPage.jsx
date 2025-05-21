@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { useParams, Navigate } from "react-router-dom";
+import useStoreInfo from '../../Hooks/useStoreInfo.js';
+import useProductInfo from '../../Hooks/useProductInfo.js';
 import "../../css/customer/Store.css";
 import "../../css/customer/Product.css";
 import Header from "../../components/Header.jsx";
@@ -7,39 +9,18 @@ import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import Footer from "../../components/Footer.jsx";
 import StoreHead from "../../components/Store/StoreHead.jsx";
 import StoreBody from "../../components/Store/StoreBody.jsx";
-import { storeData } from "../../components/ProductDummies.js"; // 더미 데이터 불러오기
 import ProductHead from '../../components/ProductPage/ProductHead.jsx';
 
 
 export default function ProductPage() {
-    
-    const { sellerId } = useParams();
-    const [store, setStore] = useState(storeData[0]); // 기본 첫 번째 더미 사용
-    // 나중에 백엔드 데이터를 받을 때 주석 풀기
-    // const [store, setStore] = useState(null);
+    const { store } = useStoreInfo();
+    const { product } = useProductInfo();
 
-    // 백엔드 연동 시 sellerId 기준으로 선택
-    useEffect(() => {
-        if (!sellerId) return;
-
-        const fetchStore = async () => {
-            try {
-                // API에서 받은 sellerId로 매칭
-                const selectedStore = storeData.find(store => store.sellerRegisterDto.storeName === sellerId);
-                if (selectedStore) {
-                    setStore(selectedStore);
-                } else {
-                    console.error("가게 데이터를 찾을 수 없습니다.");
-                }
-            } catch (error) {
-                console.error("가게 데이터 가져오기 실패:", error);
-            }
-        };
-
-        fetchStore();
-    }, [sellerId]);
-
-    const { sellerRegisterDto, sellerInformationDto, sellerPhotoDto } = store;
+    const sellerPhotoDto = store?.sellerPhotoDto;
+    const sellerInformationDto = store?.sellerInformationDto;
+    const productDto = product?.productDto;
+    const productPhoto = product?.productPhoto;
+    const productDocument = product?.productDocument;
 
     return (
         <div className="storeMain">
@@ -64,22 +45,25 @@ export default function ProductPage() {
                                 borderBottom: "1px solid #ededed"
                             }}
                         >
-                            <StoreHead />
+                            {sellerInformationDto && (
+                                <StoreHead storeInfo={sellerInformationDto} />
+                            )}
                         </div>
 
                         <div className='productDetail'>
                             <div className='productUI'>
                                 <div className='productHead'>
-                                    <ProductHead />
+                                    <ProductHead 
+                                        
+                                    />
                                 </div>
 
-                                {/* 제품 추천 부분 */}
                                 <div className='productRec'>
-                                    
+                                    {/* 제품 추천 */}
                                 </div>
 
                                 <div className='productBody'>
-
+                                    {/* 제품 설명 */}
                                 </div>
                             </div>
                         </div>
@@ -91,5 +75,5 @@ export default function ProductPage() {
                 <Footer />
             </div>
         </div>
-    )
+    );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"
 import "../../css/customer/Store.css";
 import ProductFilter from "../ProductFilter";
 
@@ -17,15 +18,21 @@ export default function StoreMenu() {
         const fetchProducts = async () => {
             setLoading(true);
             setError(null);
+
             try {
-                const response = await fetch(
-                    `/api/products/search?keyword=${encodeURIComponent(keyword)}&filterType=${filterType}&sortType=${sortType}&page=${page}&size=${size}`
-                );
-                if (!response.ok) throw new Error("상품을 불러오는 데 실패했습니다.");
-                const data = await response.json();
-                setProducts(data.content || []);
+                const response = await axios.get("/api/products/search", {
+                    params: {
+                        keyword,
+                        filterType,
+                        sortType,
+                        page,
+                        size,
+                    },
+                });
+
+                setProducts(response.data.content || []);
             } catch (err) {
-                setError(err.message);
+                setError(err.response?.data?.message || "상품을 불러오는 데 실패했습니다.");
             } finally {
                 setLoading(false);
             }
@@ -33,7 +40,7 @@ export default function StoreMenu() {
 
         fetchProducts();
     }, [keyword, filterType, sortType, page, size]);
-
+    
     return (
         <div className="storeMenu" style={{ position: "relative", padding: "30px 0 25px" }}>
             <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "40px" }}>

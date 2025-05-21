@@ -16,7 +16,7 @@ import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import { useEffect } from "react";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
-import PaymentPage from "./pages/customer/PaymentPage.jsx";
+import Payment from "./pages/payment/Payment.jsx";
 import { useNavigate } from "react-router-dom";
 import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
 import useLogin from "./Hooks/useLogin";
@@ -62,11 +62,11 @@ function App() {
       <Route path="/wish" element={<WishListPage />} />
       <Route path="/Business_numberPage" element={<Business_numberPage />} />
       <Route path="/SeRegister" element={<SeRegisterPage />} />
-      <Route path="/Store/:sellerId" element={<StorePage />} />
-      <Route path="/Store/:sellerId/productId" element={<ProductPage />} />
+      <Route path="/api/sellers/:sellerId" element={<StorePage />} />
+      <Route path="/api/products/:id" element={<ProductPage />} />
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
       <Route path="/Customer_modify" element={<Customer_modify />} />
-      <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/payment" element={<Payment />} />
     </Routes>
   );
 }
