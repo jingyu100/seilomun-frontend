@@ -31,7 +31,7 @@ const PaymentInfoSection = () => {
 
       <div className="final-row">
         <span>최종결제금액</span>
-        <span>37,000원</span>
+        <span>43,000원</span>
       </div>
     </div>
   );
