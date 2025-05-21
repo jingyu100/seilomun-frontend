@@ -79,7 +79,7 @@ function Customer_modify() {
         <Header />
       </div>
 
-      <div className="body">
+      <div className="body-container">
       <SideMenuBtn />
 
       <div className="mypage-container">

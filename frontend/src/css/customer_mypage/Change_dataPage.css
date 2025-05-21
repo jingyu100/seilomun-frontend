@@ -1,4 +1,9 @@
-   /* 메인 레이아웃 */
+  /* 전체 페이지 설정 */
+  .body-container {
+    padding-top: var(--head-menu-height);
+  }
+
+  /* 메인 레이아웃 */
    .mypage-container {
     display: flex;
     max-width: 1200px;

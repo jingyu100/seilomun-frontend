@@ -12,7 +12,7 @@ const Change_dataPage = () => {
         <Header />
       </div>
 
-      <div className="body">
+      <div className="body-container2">
         <SideMenuBtn />
 
         <div className="mypage-container">
