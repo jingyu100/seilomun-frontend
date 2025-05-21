@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
-import "../../css/customer/Customer_modify.css"; 
+import "../../css/customer_mypage/Customer_modify.css"; 
+import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 
 function Customer_modify() {
   const [profileImage, setProfileImage] = useState(null);
@@ -28,7 +29,7 @@ function Customer_modify() {
         setName(data.name);
         setNickname(data.nickname);
         setPhone(data.phone);
-        setGender(data.gender); // ✅ 여기만 바뀜
+        setGender(data.gender); 
         setBirthdate(data.birthDate || "");
       })
       .catch((err) => {
@@ -50,7 +51,7 @@ function Customer_modify() {
     formData.append("name", name);
     formData.append("nickname", nickname);
     formData.append("phone", phone);
-    formData.append("gender", gender); // 그대로 전송
+    formData.append("gender", gender); 
     formData.append("birthdate", birthdate);
 
     try {
@@ -78,7 +79,70 @@ function Customer_modify() {
         <Header />
       </div>
 
-      <div className="modify-area">
+      <div className="body">
+      <SideMenuBtn />
+
+      <div className="mypage-container">
+
+           {/* 왼쪽 사이드 */}
+          <aside className="mypage-sidebar">
+            <div className="title-xl">마이페이지</div>
+
+            <div className="sidebar-section">
+
+              <div className="title-lg">쇼핑정보</div>
+              <ul>
+                <li>주문목록/배송조회</li>
+                <li>환불/입금 내역</li>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+
+              <div className="title-lg">회원정보</div>
+              <ul>
+                <li>회원정보 변경</li>
+                <li>배송지 관리</li>
+              </ul>
+            </div>
+            
+            <div className="sidebar-section">
+
+              <div className="title-lg">고객센터</div>
+              <ul>
+                <li>1:1 문의하기</li>
+                <li>1:1 문의내역</li>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+
+              <div className="title-lg">혜택관리</div>
+              <ul>
+                <li>적립내역</li>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+
+              <div className="title-lg">상품문의</div>
+              <ul>
+                <li>상품문의</li>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+
+              <div className="title-lg">리뷰관리</div>
+              <ul>
+                <li>리뷰관리</li>
+              </ul>
+            </div>
+
+          </aside>
+
+        {/* 회원정보 수정 */}
+        <div className="modify-area">
         <form className="modify-form" onSubmit={handleSubmit}>
           <h2 style={{ textAlign: "center", marginBottom: "20px" }}>회원정보 수정</h2>
 
@@ -187,8 +251,10 @@ function Customer_modify() {
             <button type="submit">정보 수정</button>
           </div>
         </form>
+        </div>
       </div>
 
+      </div>
       <div className="footer">
         <Footer />
       </div>

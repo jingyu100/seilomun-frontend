@@ -17,7 +17,9 @@ const MyPage = () => {
       <div className="mypage-container">
 
         <aside className="mypage-sidebar">
+
           <div className="title-xl">마이페이지</div>
+
           <div className="sidebar-section">
             <div className="title-lg">쇼핑정보</div>
             <ul>
@@ -25,14 +27,15 @@ const MyPage = () => {
               <li>환불/입금 내역</li>
             </ul>
           </div>
+
           <div className="sidebar-section">
             <div className="title-lg">회원정보</div>
             <ul>
               <li>회원정보 변경</li>
-              <li>회원 탈퇴</li>
               <li>배송지 관리</li>
             </ul>
           </div>
+
           <div className="sidebar-section">
             <div className="title-lg">고객센터</div>
             <ul>
@@ -40,29 +43,35 @@ const MyPage = () => {
               <li>1:1 문의내역</li>
             </ul>
           </div>
+
           <div className="sidebar-section">
             <div className="title-lg">혜택관리</div>
             <ul>
-              <li>적립금</li>
+              <li>적립내역</li>
             </ul>
           </div>
+
           <div className="sidebar-section">
             <div className="title-lg">상품문의</div>
             <ul>
               <li>상품문의</li>
             </ul>
           </div>
+
           <div className="sidebar-section">
             <div className="title-lg">리뷰관리</div>
             <ul>
               <li>리뷰관리</li>
             </ul>
           </div>
+
         </aside>
 
         <div className="mypage-main">
           {/* 유저 정보 */}
           <div className="user-info-box">
+
+            {/* 프로필 및 회원정보변경 */}
             <div className="user-left">
               <img src={logo} alt="프로필" className="user-profile" />
               <p><h3>홍길동 고객님 반갑습니다.</h3></p>
@@ -79,6 +88,7 @@ const MyPage = () => {
 
           {/* 리스트 */}
           <div className="mypage-list-box">
+
             <div className="list-section">
               <div className="section-header">
                 <div>1 : 1 문의내역</div>

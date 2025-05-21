@@ -19,49 +19,61 @@ const Change_dataPage = () => {
           {/* 왼쪽 사이드 */}
           <aside className="mypage-sidebar">
             <div className="title-xl">마이페이지</div>
+
             <div className="sidebar-section">
+
               <div className="title-lg">쇼핑정보</div>
               <ul>
                 <li>주문목록/배송조회</li>
                 <li>환불/입금 내역</li>
               </ul>
             </div>
+
             <div className="sidebar-section">
+
               <div className="title-lg">회원정보</div>
               <ul>
                 <li>회원정보 변경</li>
-                <li>회원 탈퇴</li>
                 <li>배송지 관리</li>
               </ul>
             </div>
+            
             <div className="sidebar-section">
+
               <div className="title-lg">고객센터</div>
               <ul>
                 <li>1:1 문의하기</li>
                 <li>1:1 문의내역</li>
               </ul>
             </div>
+
             <div className="sidebar-section">
+
               <div className="title-lg">혜택관리</div>
               <ul>
-                <li>적립금</li>
+                <li>적립내역</li>
               </ul>
             </div>
+
             <div className="sidebar-section">
+
               <div className="title-lg">상품문의</div>
               <ul>
                 <li>상품문의</li>
               </ul>
             </div>
+
             <div className="sidebar-section">
+
               <div className="title-lg">리뷰관리</div>
               <ul>
                 <li>리뷰관리</li>
               </ul>
             </div>
+
           </aside>
 
-          {/* 오른쪽 메인 */}
+          {/* 회원정보 변경 */}
           <div className="mypage-main">
             <h2 className="main-title">회원정보 변경</h2>
             <p className="info-text">
@@ -85,10 +97,12 @@ const Change_dataPage = () => {
               </tbody>
             </table>
 
+            {/* 확인/취소 버튼 */}
             <div className="btn-group">
               <button className="confirm-btn" onClick={() => navigate('/Customer_modify')}>확인</button>
               <button className="cancel-btn" onClick={() => navigate('/mypage')}>취소</button>
             </div>
+
           </div>
         </div>
       </div>
