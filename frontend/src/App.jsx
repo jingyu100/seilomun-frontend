@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
 import Payment from "./pages/payment/Payment.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx"
 import { useNavigate } from "react-router-dom";
 import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
 import useLogin from "./Hooks/useLogin";
@@ -67,6 +68,8 @@ function App() {
       <Route path="/oauth-success" element={<NaverLoginCallback />} />
       <Route path="/Customer_modify" element={<Customer_modify />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/404" element={<NotFoundPage />} />
+      <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );
 }

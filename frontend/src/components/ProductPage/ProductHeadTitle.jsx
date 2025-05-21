@@ -24,7 +24,7 @@ export default function ProductHeadTitle({
                         <h2>{name}</h2>
                     </div>
                     <div className="product-expiryDate">
-                        <p>{expiryDate}</p>
+                        <p>{expiryDate}까지</p>
                     </div>
                     <div className="productDesc">
                         <p>{description}</p>
@@ -78,6 +78,9 @@ export default function ProductHeadTitle({
                     <div className="productBuy-btns productFlex">
                         <a href=""
                             className="buyBtn"
+                            onClick={{
+                                
+                            }}
                         >
                             <div className="btnStyle1">바로구매하기</div>
                             <div className="btnStyle2">BUY IT NOW</div>

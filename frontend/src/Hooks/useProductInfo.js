@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function useProductInfo() {
-   const { id } = useParams();
+   const {id} = useParams();
+   const navigate = useNavigate();
    const [product, setProduct] = useState(null);
 
   useEffect(() => {
@@ -16,6 +17,11 @@ export default function useProductInfo() {
 
         const productDto = response.data.data.Products;
 
+        if (!productDto) {
+          navigate("/404", { replace: true });
+          return;
+        }
+
         setProduct({
             productDto,
             productPhoto: null,
@@ -24,12 +30,13 @@ export default function useProductInfo() {
 
       } catch (error) {
         console.error("API 요청 실패:", error);
-        setProduct(null);
+        // setProduct(null);
+        navigate("/404", { replace: true });
       }
     };
 
     productInfo();
-  }, [id]);
+  }, [id, navigate]);
 
   return { product };
 }

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function useStoreInfo() {
    const { sellerId } = useParams();
+   const navigate = useNavigate();
    const [store, setStore] = useState(null);
 
   useEffect(() => {
@@ -16,6 +17,11 @@ export default function useStoreInfo() {
 
         const sellerInformationDto = response.data.data.seller;
 
+        if (!sellerInformationDto) {
+          navigate("/404", { replace: true });
+          return;
+        }
+
         setStore({
           sellerInformationDto,
           sellerPhotoDto: null,
@@ -24,12 +30,13 @@ export default function useStoreInfo() {
 
       } catch (error) {
         console.error("API 요청 실패:", error);
-        setStore(null);
+        // setStore(null);
+        navigate("/404", { replace: true });
       }
     };
 
     storeInfo();
-  }, [sellerId]);
+  }, [sellerId, navigate]);
 
   return { store };
 
