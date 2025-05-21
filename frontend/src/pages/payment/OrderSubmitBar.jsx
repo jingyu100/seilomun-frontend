@@ -1,52 +1,70 @@
 import "./OrderSubmitBar.css";
 import axios from "axios";
+import { useEffect, useRef } from "react";
 
 const OrderSubmitBar = () => {
+  const tossPaymentsRef = useRef(null);
+
+  useEffect(() => {
+    if (window.TossPayments) {
+      tossPaymentsRef.current = window.TossPayments(
+        "test_ck_d46qopOB896A1WOwGApY3ZmM75y0"
+      );
+    } else {
+      console.error("TossPayments SDK가 로드되지 않았습니다.");
+    }
+  }, []);
+
   const handlePaymentClick = async () => {
     try {
+      const quantity = 1;
+      const originalPrice = 2000;
+      const discountRate = 10;
+      const discountedPrice = (originalPrice * (100 - discountRate)) / 100;
+
       const orderData = {
         usedPoints: 0,
-        memo: "",
+        memo: "샘플 테스트 주문",
         isDelivery: "N",
-        deliveryAddress: "서울시 강남구 역삼동",
-        productId: 1, // 실제 존재하는 상품 ID
-        quantity: 1,
-        price: 5000, // 실제 가격
-        currentDiscountRate: 25,
-        payType: "card",
-        orderName: "샘플 상품 주문",
-        yourSuccessUrl: "http://localhost/api/orders/toss/success",
-        yourFailUrl: "http://localhost/api/orders/toss/fail",
+        deliveryAddress: "서울시 강남구 테헤란로 123",
+        productId: 19,
+        quantity: quantity,
+        price: discountedPrice,
+        currentDiscountRate: discountRate,
+        payType: "CARD",
+        orderName: `샘플 상품 ${quantity}개`,
+        yourSuccessUrl: "http://localhost/api/orders/toss/success", // ✅ 수정
+        yourFailUrl: "http://localhost/api/orders/toss/fail", // ✅ 수정
       };
 
       const response = await axios.post("http://localhost/api/orders/buy", orderData, {
         withCredentials: true,
+        headers: { "Content-Type": "application/json" },
       });
 
-      const paymentUrl = response.data?.Update?.paymentUrl;
-      if (paymentUrl) {
-        window.location.href = paymentUrl;
-      } else {
-        console.error("서버 응답에 paymentUrl이 없습니다:", response.data);
-        alert("결제 URL을 받아오지 못했습니다.");
+      const paymentData = response.data?.data?.Update;
+      if (!paymentData) {
+        throw new Error("서버에서 결제 정보를 받지 못했습니다.");
       }
-    } catch (error) {
-      console.error("결제 요청 중 오류 발생 🔥");
 
-      // axios 응답에 서버 에러 내용이 있는 경우 출력
-      if (error.response) {
-        console.error("🔸 status:", error.response.status);
-        console.error("🔸 data:", error.response.data);
-        console.error("🔸 headers:", error.response.headers);
-        alert(`서버 오류: ${error.response.data?.message || "에러 발생"}`);
-      } else if (error.request) {
-        // 요청은 갔지만 응답이 없을 경우
-        console.error("❌ 요청은 전송됐지만 응답이 없습니다:", error.request);
-        alert("서버로부터 응답이 없습니다.");
+      await tossPaymentsRef.current.requestPayment("CARD", {
+        amount: paymentData.amount,
+        orderId: paymentData.orderId,
+        orderName: paymentData.orderName,
+        customerName: paymentData.customerName || "테스트 고객",
+        customerEmail: paymentData.customerEmail || "test@example.com",
+        successUrl: paymentData.successUrl,
+        failUrl: paymentData.failUrl,
+      });
+    } catch (error) {
+      if (error?.code === "USER_CANCEL") {
+        alert("결제가 취소되었습니다.");
+      } else if (error?.response) {
+        console.error("서버 오류:", error.response.data);
+        alert("서버 오류: " + (error.response.data.message || "에러 발생"));
       } else {
-        // 요청 만들기 자체에서 실패
-        console.error("❗ 요청 설정 중 에러 발생:", error.message);
-        alert(`요청 에러: ${error.message}`);
+        console.error("기타 오류:", error);
+        alert("오류 발생: " + error.message);
       }
     }
   };
@@ -54,7 +72,7 @@ const OrderSubmitBar = () => {
   return (
     <div className="payment-button-wrapper">
       <button className="payment-button" onClick={handlePaymentClick}>
-        총 43,000원 결제하기
+        총 1,800원 결제하기
       </button>
     </div>
   );
