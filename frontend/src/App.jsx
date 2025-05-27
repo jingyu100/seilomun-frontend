@@ -21,6 +21,7 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
 import useLogin from "./Hooks/useLogin";
+import OrderListPage from "./pages/customer/OrderListPage.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -70,6 +71,7 @@ function App() {
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/404" element={<NotFoundPage />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
+      <Route path="/OrderList" element={<OrderListPage />} />
     </Routes>
   );
 }
