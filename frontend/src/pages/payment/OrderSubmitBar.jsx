@@ -27,7 +27,7 @@ const OrderSubmitBar = () => {
         memo: "샘플 테스트 주문",
         isDelivery: "N",
         deliveryAddress: "서울시 강남구 테헤란로 123",
-        productId: 19,
+        productId: 1,
         quantity: quantity,
         price: discountedPrice,
         currentDiscountRate: discountRate,

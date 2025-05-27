@@ -5,7 +5,13 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,
     port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://localhost", // 백엔드가 80포트에서 도는 경우
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });
