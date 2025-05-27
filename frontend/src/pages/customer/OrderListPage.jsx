@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "../../App.css";
+import "../../css/customer/frame.css";
+import Footer from "../../components/Footer.jsx";
+import Header from "../../components/Header.jsx";
+import FilterBar from "../../components/OrderList/FilterBar.jsx";
+import OrderCard from "../../components/OrderList/OrderCard.jsx";
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState([]);
@@ -40,11 +46,19 @@ const OrderListPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
-      <h2>주문 목록</h2>
-      <p>총 주문 수: {totalElements}</p>
-      <p>다음 페이지 있음: {hasNext ? "예" : "아니오"}</p>
-      <pre>{JSON.stringify(orders, null, 2)}</pre>
+    <div className="OrderListPage">
+      <div className="header">
+        <Header />
+      </div>
+
+      <div className="body sideMargin">
+        <FilterBar />
+        <OrderCard />
+      </div>
+
+      <div className="footer">
+        <Footer />
+      </div>
     </div>
   );
 };
