@@ -53,7 +53,18 @@ const OrderListPage = () => {
 
       <div className="body sideMargin">
         <FilterBar />
-        <OrderCard />
+        {orders.map((order, idx) => (
+          <OrderCard
+            key={idx}
+            order={{
+              date: "2024-11-18", // 또는 실제 날짜 필드가 있다면 그것으로
+              count: order.orderItems.length,
+              store: order.sellerName,
+              name: order.orderItems[0],
+              price: order.totalAmount,
+            }}
+          />
+        ))}
       </div>
 
       <div className="footer">
