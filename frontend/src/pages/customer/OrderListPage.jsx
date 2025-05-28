@@ -73,7 +73,7 @@ const OrderListPage = () => {
           <OrderCard
             key={idx}
             order={{
-              date: "2024-11-18", // 실제 날짜 필드 있으면 교체
+              date: "2024-11-18",
               count: order.orderItems.length,
               store: order.sellerName,
               name: order.orderItems[0],

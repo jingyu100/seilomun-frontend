@@ -5,6 +5,7 @@ import useLogin from "../Hooks/useLogin.js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
@@ -552,9 +553,9 @@ const Header = () => {
                   </a>
                 </li>
                 <li className="">
-                  <a href="/" className="menu-font-st menu-under">
+                  <Link to="/OrderList" className="menu-font-st menu-under">
                     주문 목록
-                  </a>
+                  </Link>
                 </li>
                 <li className="">
                   <a href="/" className="menu-font-st menu-under">
