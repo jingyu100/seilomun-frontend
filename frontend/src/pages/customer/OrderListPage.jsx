@@ -73,7 +73,7 @@ const OrderListPage = () => {
           <OrderCard
             key={idx}
             order={{
-              date: "2024-11-18",
+              date: new Date(order.orderDate).toISOString().slice(0, 10),
               count: order.orderItems.length,
               store: order.sellerName,
               name: order.orderItems[0],
