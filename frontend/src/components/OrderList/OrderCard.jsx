@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./OrderCard.css";
 import ProductImageBox from "./ProductImageBox";
 import OrderDetailBox from "./OrderDetailBox";
 import OrderButtonGroup from "./OrderButtonGroup";
+import ReviewForm from "./ReviewForm";
 
 export default function OrderCard({ order }) {
+  const [mode, setMode] = useState("default");
+
+  if (mode === "review") {
+    return <ReviewForm order={order} onCancel={() => setMode("default")} />;
+  }
+
   return (
     <div className="order-card">
       <div className="order-date">{order.date}</div>
@@ -21,7 +28,7 @@ export default function OrderCard({ order }) {
 
         {/* 우측 버튼 영역 */}
         <div className="order-actions">
-          <OrderButtonGroup />
+          <OrderButtonGroup onReviewClick={() => setMode("review")} />
         </div>
       </div>
     </div>
