@@ -82,22 +82,6 @@ function LoginPage() {
           </div>
 
           <div className="login-right">
-            {!isLoading &&
-              (showPhoneAuth ? (
-                <div className="phone-auth-container">
-                  <button
-                    className="phone-auth-button"
-                    onClick={() => navigate("/register")}
-                  >
-                    <img
-                      src={phoneIcon}
-                      alt="휴대폰 인증 아이콘"
-                      className="phone-auth-icon"
-                    />
-                    <span>휴대폰 인증</span>
-                  </button>
-                </div>
-              ) : (
                 <div>
                   <div className="main-login">로그인</div>
                   <form className="login-form" onSubmit={handleLoginSubmit}>
@@ -117,15 +101,7 @@ function LoginPage() {
                       </label>
                       <div className="links">
                         <a href="#">아이디 찾기</a> | <a href="#">비밀번호 재설정</a> |{" "}
-                        <a
-                          href=""
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setShowPhoneAuth(true);
-                          }}
-                        >
-                          회원가입
-                        </a>
+                        <a href="/register">회원가입</a>
                       </div>
                     </div>
                     <button type="submit" className="login-btn">
@@ -168,7 +144,7 @@ function LoginPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              
           </div>
         </div>
       </div>

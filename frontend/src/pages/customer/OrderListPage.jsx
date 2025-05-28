@@ -9,32 +9,33 @@ import OrderCard from "../../components/OrderList/OrderCard.jsx";
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState([]);
-  const [hasNext, setHasNext] = useState(false);
-  const [totalElements, setTotalElements] = useState(0);
+  const [page, setPage] = useState(0);
+  const [hasNext, setHasNext] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchOrders = async () => {
     try {
-      setLoading(true);
-
+      setIsFetching(true);
       const response = await axios.get("http://localhost/api/customers/orders", {
-        withCredentials: true, // ✅ 쿠키 기반 인증을 위해 필수
+        withCredentials: true,
         params: {
-          page: 0,
+          page,
           size: 10,
         },
       });
 
       const data = response.data.data;
-      setOrders(data.orders);
+      setOrders((prev) => [...prev, ...data.orders]);
       setHasNext(data.hasNext);
-      setTotalElements(data.totalElements);
+      setPage((prev) => prev + 1);
     } catch (err) {
       console.error("주문 목록 조회 실패:", err);
       setError("주문 목록을 불러오지 못했습니다.");
     } finally {
       setLoading(false);
+      setIsFetching(false);
     }
   };
 
@@ -42,7 +43,22 @@ const OrderListPage = () => {
     fetchOrders();
   }, []);
 
-  if (loading) return <div>로딩 중...</div>;
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const fullHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight + 100 >= fullHeight && hasNext && !isFetching) {
+        fetchOrders();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasNext, isFetching]);
+
+  if (loading && page === 0) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
   return (
@@ -57,7 +73,7 @@ const OrderListPage = () => {
           <OrderCard
             key={idx}
             order={{
-              date: "2024-11-18", // 또는 실제 날짜 필드가 있다면 그것으로
+              date: "2024-11-18", // 실제 날짜 필드 있으면 교체
               count: order.orderItems.length,
               store: order.sellerName,
               name: order.orderItems[0],
@@ -65,6 +81,8 @@ const OrderListPage = () => {
             }}
           />
         ))}
+        {isFetching && <div>불러오는 중...</div>}
+        {!hasNext && <div>더 이상 데이터가 없습니다.</div>}
       </div>
 
       <div className="footer">

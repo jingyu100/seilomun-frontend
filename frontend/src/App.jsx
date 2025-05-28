@@ -1,27 +1,37 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
+import useLogin from "./Hooks/useLogin";
 import "./App.css";
+
+/* 소비자 */
 import LoginPage from "./pages/customer/LoginPage.jsx";
 import HomePage from "./pages/customer/HomePage.jsx";
 import NewPage from "./pages/customer/NewPage.jsx";
 import RegisterPage from "./pages/customer/RegisterPage.jsx";
-import MyPage from "./pages/customer_mypage/MyPage.jsx";
-import SeloginPage from "./pages/seller/SeloginPage.jsx";
 import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
 import StorePage from "./pages/customer/StorePage.jsx";
 import ProductPage from "./pages/customer/ProductPage.jsx";
+import PaymentPage from "./pages/customer/PaymentPage.jsx";
+import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
+import OrderListPage from "./pages/customer/OrderListPage.jsx";
+
+/* 소비자 마이페이지 */
+import MyPage from "./pages/customer_mypage/MyPage.jsx";
 import Change_dataPage from "./pages/customer_mypage/Change_dataPage.jsx";
+import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
+import Delivery_destination from "./pages/customer_mypage/Delivery_destination.jsx";
+
+/* 판매자 */
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
-import { useEffect } from "react";
-import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
-import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
-import PaymentPage from "./pages/customer/PaymentPage.jsx";
+import SeloginPage from "./pages/seller/SeloginPage.jsx";
+
 import NotFoundPage from "./pages/NotFoundPage.jsx";
-import { useNavigate } from "react-router-dom";
-import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
-import useLogin from "./Hooks/useLogin";
-import OrderListPage from "./pages/customer/OrderListPage.jsx";
+
+
 
 function App() {
   // const { isLoading } = useLogin();
@@ -58,6 +68,7 @@ function App() {
       <Route path="/new" element={<NewPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/mypage" element={<MyPage />} />
+      <Route path="/Delivery_destination" element={<Delivery_destination />} />
       <Route path="/Change_dataPage" element={<Change_dataPage />} />
       <Route path="/selogin" element={<SeloginPage />} />
       <Route path="/sail" element={<SailPage />} />
