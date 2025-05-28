@@ -31,7 +31,7 @@ export default function ReviewForm({ order, onCancel }) {
         `http://localhost/api/review/${order.id}`,
         {
           rating,
-          content: text,
+          reviewContent: text.trim(),
         },
         {
           withCredentials: true,
