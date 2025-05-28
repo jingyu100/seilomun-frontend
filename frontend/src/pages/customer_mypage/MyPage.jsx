@@ -35,7 +35,7 @@ const MyPage = () => {
               회원정보 변경
             </li>
 
-            <li onClick={() => window.location.href = '/Delivery_distnation'}>
+            <li onClick={() => window.location.href = '/Delivery_destination'}>
               배송지 관리
             </li>
             </ul>
