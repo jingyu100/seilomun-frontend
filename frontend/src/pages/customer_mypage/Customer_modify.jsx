@@ -101,33 +101,18 @@ function Customer_modify() {
 
               <div className="title-lg">회원정보</div>
               <ul>
-                <li>회원정보 변경</li>
+              <li onClick={() => window.location.href = '/change_datapage'}>
+                회원정보 변경
+              </li>
                 <li>배송지 관리</li>
               </ul>
             </div>
             
             <div className="sidebar-section">
 
-              <div className="title-lg">고객센터</div>
-              <ul>
-                <li>1:1 문의하기</li>
-                <li>1:1 문의내역</li>
-              </ul>
-            </div>
-
-            <div className="sidebar-section">
-
               <div className="title-lg">혜택관리</div>
               <ul>
                 <li>적립내역</li>
-              </ul>
-            </div>
-
-            <div className="sidebar-section">
-
-              <div className="title-lg">상품문의</div>
-              <ul>
-                <li>상품문의</li>
               </ul>
             </div>
 

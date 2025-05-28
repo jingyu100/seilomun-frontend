@@ -31,16 +31,13 @@ const MyPage = () => {
           <div className="sidebar-section">
             <div className="title-lg">회원정보</div>
             <ul>
-              <li>회원정보 변경</li>
-              <li>배송지 관리</li>
-            </ul>
-          </div>
+            <li onClick={() => window.location.href = '/change_datapage'}>
+              회원정보 변경
+            </li>
 
-          <div className="sidebar-section">
-            <div className="title-lg">고객센터</div>
-            <ul>
-              <li>1:1 문의하기</li>
-              <li>1:1 문의내역</li>
+            <li onClick={() => window.location.href = '/Delivery_distnation'}>
+              배송지 관리
+            </li>
             </ul>
           </div>
 
@@ -48,13 +45,6 @@ const MyPage = () => {
             <div className="title-lg">혜택관리</div>
             <ul>
               <li>적립내역</li>
-            </ul>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="title-lg">상품문의</div>
-            <ul>
-              <li>상품문의</li>
             </ul>
           </div>
 
@@ -91,15 +81,15 @@ const MyPage = () => {
 
             <div className="list-section">
               <div className="section-header">
-                <div>1 : 1 문의내역</div>
+                <div>주문 내역</div>
                 <a href="#">더보기 &gt;</a>
               </div>
               <ul className="record-list">
-                <li><span className="status blue">[ 문의 대기 ]</span> 문의제목 1 <span className="date">2025-12-31</span></li>
-                <li><span className="status red">[ 문의 완료 ]</span> 문의제목 2 <span className="date">2025-12-31</span></li>
-                <li><span className="status red">[ 문의 완료 ]</span> 문의제목 3 <span className="date">2025-12-31</span></li>
-                <li><span className="status red">[ 문의 완료 ]</span> 문의제목 4 <span className="date">2025-12-31</span></li>
-                <li><span className="status red">[ 문의 완료 ]</span> 문의제목 5 <span className="date">2025-12-31</span></li>
+                <li><span className="status blue">[ 문의 대기 ]</span> 상품이름 1 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status red">[ 문의 완료 ]</span> 상품이름 2 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status red">[ 문의 완료 ]</span> 상품이름 3 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status red">[ 문의 완료 ]</span> 상품이름 4 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status red">[ 문의 완료 ]</span> 상품이름 5 <span className="date-number">2025-12-31</span></li>
               </ul>
             </div>
 
@@ -109,11 +99,11 @@ const MyPage = () => {
                 <a href="#">더보기 &gt;</a>
               </div>
               <ul className="record-list">
-                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 1 <span className="date">2025-12-31</span></li>
-                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 2 <span className="date">2025-12-31</span></li>
-                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 3 <span className="date">2025-12-31</span></li>
-                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 4 <span className="date">2025-12-31</span></li>
-                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 5 <span className="date">2025-12-31</span></li>
+                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 1 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 2 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 3 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 4 <span className="date-number">2025-12-31</span></li>
+                <li><span className="status gray">[ 물품 ]</span> 리뷰제목 5 <span className="date-number">2025-12-31</span></li>
               </ul>
             </div>
           </div>

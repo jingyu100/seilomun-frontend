@@ -40,26 +40,9 @@ const Change_dataPage = () => {
             
             <div className="sidebar-section">
 
-              <div className="title-lg">고객센터</div>
-              <ul>
-                <li>1:1 문의하기</li>
-                <li>1:1 문의내역</li>
-              </ul>
-            </div>
-
-            <div className="sidebar-section">
-
               <div className="title-lg">혜택관리</div>
               <ul>
                 <li>적립내역</li>
-              </ul>
-            </div>
-
-            <div className="sidebar-section">
-
-              <div className="title-lg">상품문의</div>
-              <ul>
-                <li>상품문의</li>
               </ul>
             </div>
 
