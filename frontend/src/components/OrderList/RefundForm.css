@@ -1,0 +1,286 @@
+/* RefundForm.css - 환불 신청 폼 스타일 */
+.refund-form {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto 20px;
+  box-sizing: border-box;
+  max-width: 800px;
+  border: 1px solid #ddd;
+  font-family: sans-serif;
+}
+
+.refund-top-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.refund-date {
+  color: #666;
+}
+
+.refund-status {
+  font-weight: bold;
+  font-size: 18px;
+  color: #e74c3c;
+}
+
+.refund-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.refund-product-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.refund-thumbnail {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.refund-product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.refund-product-info strong {
+  font-size: 16px;
+  color: #333;
+}
+
+.refund-product-name {
+  color: #666;
+  font-size: 14px;
+}
+
+.refund-product-price {
+  color: #333;
+  font-weight: 500;
+}
+
+.refund-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.refund-form-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.refund-type-selection {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.refund-type-btn {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.refund-type-btn.active {
+  background-color: #000;
+  color: white;
+  border-color: #000;
+}
+
+.refund-type-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.refund-type-btn.active:hover {
+  background-color: #333;
+}
+
+.refund-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.refund-input-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.refund-input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.refund-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.refund-textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.refund-textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.refund-photo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.refund-photo-upload {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.refund-photo-box {
+  width: 80px;
+  height: 80px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: border-color 0.2s;
+}
+
+.refund-photo-box:hover {
+  border-color: #007bff;
+}
+
+.refund-photo-box.has-image {
+  border: 1px solid #ccc;
+  border-style: solid;
+  position: relative;
+  overflow: hidden;
+}
+
+.refund-photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.refund-photo-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.refund-photo-info {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+}
+
+.refund-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.refund-footer button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-weight: 500;
+}
+
+.refund-cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.refund-cancel-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.refund-submit-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.refund-submit-btn:hover {
+  background-color: #c0392b;
+}
+
+.refund-submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.refund-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 13px;
+  color: #856404;
+  line-height: 1.4;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  margin-top: 4px;
+}
