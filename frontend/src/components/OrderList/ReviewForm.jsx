@@ -50,11 +50,22 @@ export default function ReviewForm({ order, onCancel }) {
 
   return (
     <div className="review-form">
+      <div className="review-top-info">
+        <div className="review-date">{order.date}</div>
+        <div className="review-status">주문 완료</div>
+      </div>
       <div className="review-header">
-        <div className="review-store">
-          <strong>{order.store}</strong>
-          <div className="review-product">{order.name}</div>
-          <div className="review-price">{order.price}원</div>
+        <div className="review-store-wrapper">
+          <img
+            src={order.photoUrl || "/images/placeholder.png"} // 없으면 기본 이미지
+            className="review-thumbnail"
+          />
+
+          <div className="review-store">
+            <strong>{order.store}</strong>
+            <div className="review-product">{order.name}</div>
+            <div className="review-price">{order.price}원</div>
+          </div>
         </div>
         <div className="review-stars">
           <label>별점:</label>
@@ -83,7 +94,13 @@ export default function ReviewForm({ order, onCancel }) {
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
-          <div className="image-text">사진 첨부하기</div>
+          <button
+            type="button"
+            onClick={() => document.getElementById("image-upload").click()}
+            className="image-upload-button"
+          >
+            사진 첨부하기
+          </button>
           <div className="image-count">{images.length}/5</div>
         </div>
 
