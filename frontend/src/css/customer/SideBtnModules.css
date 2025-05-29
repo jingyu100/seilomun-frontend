@@ -24,6 +24,13 @@
     bottom: 70px;
     z-index: 100;
   }
+
+  .sideChattModule {
+    position: absolute;
+    width: 300px;
+    bottom: 9px;
+    z-index: 100;
+  }
   /* ---------- 사이드 메뉴 모듈 부분 ---------- */
 
 .displayFlex {
@@ -142,3 +149,10 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+
+/* ---------- 채팅 모듈 부분 ---------- */
+.chatModuleHead {
+    
+}
+/* ---------- 채팅 모듈 부분 ---------- */

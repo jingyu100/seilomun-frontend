@@ -22,7 +22,7 @@ function LoginPage() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       await axios.post(
         "http://localhost/api/auth/login",
@@ -35,20 +35,23 @@ function LoginPage() {
           withCredentials: true,
         }
       );
-
+  
       try {
         const response = await axios.get("http://localhost/api/customers/me", {
           withCredentials: true,
         });
-
-        const nickname = response.data.data.username;
-
-        setUser({ nickname });
+  
+        const { username, userType } = response.data.data;
+  
+        // userType까지 함께 저장
+        const userData = { nickname: username, userType };
+  
+        setUser(userData);
         setIsLoggedIn(true);
-        localStorage.setItem("user", JSON.stringify({ nickname }));
+        localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("isLoggedIn", "true");
-
-        console.log("로그인 성공! 닉네임:", nickname);
+  
+        console.log("로그인 성공! 사용자 정보:", userData);
         navigate("/");
       } catch (infoError) {
         console.warn("사용자 정보 조회 실패. 하지만 로그인은 성공:", infoError);

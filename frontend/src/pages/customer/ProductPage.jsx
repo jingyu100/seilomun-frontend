@@ -53,9 +53,7 @@ export default function ProductPage() {
                         <div className='productDetail'>
                             <div className='productUI'>
                                 <div className='productHead'>
-                                    <ProductHead 
-                                        
-                                    />
+                                    <ProductHead />
                                 </div>
 
                                 <div className='productRec'>

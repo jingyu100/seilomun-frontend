@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import React from "react";
 import useStoreInfo from "../../Hooks/useStoreInfo.js";
-import "../../css/customer/Store.css";
 import Rating from "../StarRating.jsx";
 import StoreMiniInfo from "./StoreMiniInfo.jsx";
 import Inquiry from "./Inquiry.jsx";
 import StoreInfo from "./StoreInfo.jsx";
 
 export default function StoreHead() {
-   const { store } = useStoreInfo();
-   
-    if (!store) return;
-  
-    const { sellerRegisterDto, sellerInformationDto, sellerPhotoDto } = store;
-   
+  const { store } = useStoreInfo();
+  if (!store) return null;
+
+  const { sellerInformationDto, sellerPhotoDto } = store;
+  const sellerId = sellerInformationDto?.sellerId;
+
   return (
     <div className="storeHead">
       <div className="storeName">
@@ -34,7 +32,7 @@ export default function StoreHead() {
           />
         </div>
         <div className="storeHead-half storeHead-right">
-          <Inquiry />
+          <Inquiry sellerId={sellerId} />
           <StoreInfo
             description={sellerInformationDto?.storeDescription || ""}
             operatingHours={sellerInformationDto?.operatingHours || ""}

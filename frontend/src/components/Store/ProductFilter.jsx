@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/customer/ProductList.css"; 
+import "../../css/customer/ProductList.css"; 
 import { useState } from "react";
 
 export default function ProductFilter({ setSortType }) {

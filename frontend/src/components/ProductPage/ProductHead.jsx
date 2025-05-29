@@ -76,7 +76,8 @@ export default function ProductHead() {
             </div>
             
             <div className="productHead-right">
-                <ProductHeadTitle 
+                <ProductHeadTitle
+                    thumbnailUrl= {productDto?.thumbnailUrl || "사진 없음"}
                     name= {productDto?.name || "제품명 없음"}
                     expiryDate= {productDto?.expiryDate || "유통기한 없음"}
                     description= {productDto?.description || "제품 설명 없음"}

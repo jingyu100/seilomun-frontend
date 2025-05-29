@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import "../../css/customer/Product.css";
 
 export default function ProductHeadTitle({
+    thumbnailUrl,
     name,
     expiryDate,
     description,

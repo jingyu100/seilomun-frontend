@@ -97,4 +97,8 @@
 .storeBody {
     background-color: #fff;
 }
+
+.productList {
+    /* display: flex; */
+}
 /* ---------- 스토어 바디 부분 ---------- */

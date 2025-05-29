@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import AlarmViewModule from "./AlarmViewModule";
-import SideAlarmBtn from './SideAlarmBtn';
-import SideCartBtn from './SideCartBtn';
+import SideAlarmBtn from './SideAlarmBtn.jsx';
+import SideCartBtn from './SideCartBtn.jsx';
+import SideChatBtn from './SideChatBtn.jsx';
 
 function SideMenuBtn () {
    const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
@@ -32,15 +33,7 @@ function SideMenuBtn () {
 
          <SideCartBtn />
 
-         <a href="" role="button" className="sideMenuBtn" onClick={(e) => {
-            e.preventDefault();
-            toggleChatModal();
-         }}>
-            <em className="iconCount" id="chat-cnt">0</em>
-            <img src="/image/icon/icon-chat2.png" alt="chat"
-               className="sideBtnIcon" id="chatIcon"
-            />
-         </a>
+         <SideChatBtn />
 
       </div>
    );
