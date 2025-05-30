@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../css/seller/Business_number.css"; 
+import axios from "axios";
+import "../../css/seller/Business_number.css";
 import logo from "../../image/logo/spLogo.png";
 
 function Business_numberPage() {
@@ -12,23 +13,51 @@ function Business_numberPage() {
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (!bizNum || !ownerName || !year || !month || !day) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
 
-    const openDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    const openDate = `${year}${month.padStart(2, "0")}${day.padStart(2, "0")}`;
 
-    alert("사업자 인증이 임시로 통과되었습니다.");
+    try {
+      const response = await axios.post("http://localhost/api/auth/businessVerification", {
+        bNo: bizNum,
+        startDt: openDate,
+        pNm: ownerName,
+        pNm2: "",
+        bNm: "",
+        corpNo: "",
+        bSector: "",
+        bType: "",
+        bAdr: ""
+      });
 
-    navigate("/SeRegister", {
-      state: {
-        businessNumber: bizNum,
-        ownerName,
-        openDate
+      const isValid = response.data?.data?.isValid;
+
+      if (isValid) {
+        alert("사업자 인증 성공");
+        navigate("/SeRegister", {
+          state: {
+            businessNumber: bizNum,
+            ownerName,
+            openDate
+          }
+        });
+      } else {
+        alert("사업자 인증 실패: 정보가 일치하지 않습니다.");
+        console.log("요청 값:", {
+          bNo: bizNum,
+          startDt: openDate,
+          pNm: ownerName
+        });
+        console.log("응답 데이터:", response.data);
       }
-    });
+    } catch (error) {
+      console.error("사업자 인증 오류:", error);
+      alert("서버 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -38,8 +67,8 @@ function Business_numberPage() {
         <h1 className="join-title">회원가입</h1>
       </div>
 
-      {/* 사업자 등록번호 */}
       <div className="form-section">
+        {/* 사업자 등록번호 */}
         <div className="input-group">
           <label>
             사업자 등록번호<span className="required">*</span>
@@ -52,7 +81,7 @@ function Business_numberPage() {
           />
         </div>
 
-      {/* 대표자 성명 */}
+        {/* 대표자 성명 */}
         <div className="input-group">
           <label>
             대표자 성명<span className="required">*</span>
@@ -65,7 +94,7 @@ function Business_numberPage() {
           />
         </div>
 
-      {/* 개업일자 */}
+        {/* 개업일자 */}
         <div className="input-group">
           <label>
             개업일자<span className="required">*</span>
@@ -73,8 +102,8 @@ function Business_numberPage() {
           <div className="data-group">
             <select value={year} onChange={(e) => setYear(e.target.value)} className="date-select">
               <option value="">선택</option>
-              {[...Array(50)].map((_, i) => {
-                const y = 1975 + i;
+              {[...Array(71)].map((_, i) => {
+                const y = 1950 + i;
                 return <option key={y} value={y}>{y}</option>;
               })}
             </select>
@@ -83,7 +112,7 @@ function Business_numberPage() {
             <select value={month} onChange={(e) => setMonth(e.target.value)} className="date-select">
               <option value="">선택</option>
               {[...Array(12)].map((_, i) => {
-                const m = i + 1;
+                const m = (i + 1).toString().padStart(2, '0');
                 return <option key={m} value={m}>{m}</option>;
               })}
             </select>
@@ -92,7 +121,7 @@ function Business_numberPage() {
             <select value={day} onChange={(e) => setDay(e.target.value)} className="date-select">
               <option value="">선택</option>
               {[...Array(31)].map((_, i) => {
-                const d = i + 1;
+                const d = (i + 1).toString().padStart(2, '0');
                 return <option key={d} value={d}>{d}</option>;
               })}
             </select>

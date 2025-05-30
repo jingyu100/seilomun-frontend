@@ -18,6 +18,7 @@ import ProductPage from "./pages/customer/ProductPage.jsx";
 import PaymentPage from "./pages/customer/PaymentPage.jsx";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import OrderListPage from "./pages/customer/OrderListPage.jsx";
+import PostcodePopup from "./components/PostcodePopup";
 
 /* 소비자 마이페이지 */
 import MyPage from "./pages/customer_mypage/MyPage.jsx";
@@ -78,6 +79,7 @@ function App() {
         <Route path="/Business_numberPage" element={<Business_numberPage />} />
         <Route path="/SeRegister" element={<SeRegisterPage />} />
         <Route path="/sellers/:sellerId" element={<StorePage />} />
+        <Route path="/postcode-popup" element={<PostcodePopup />} />
         <Route path="/products/:id" element={<ProductPage />} />
         <Route path="/oauth-success" element={<NaverLoginCallback />} />
         <Route path="/Customer_modify" element={<Customer_modify />} />

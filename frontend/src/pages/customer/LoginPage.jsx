@@ -42,16 +42,13 @@ function LoginPage() {
         });
   
         const { username, userType } = response.data.data;
-  
-        // userType까지 함께 저장
-        const userData = { nickname: username, userType };
-  
+    
         setUser(userData);
         setIsLoggedIn(true);
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("isLoggedIn", "true");
   
-        console.log("로그인 성공! 사용자 정보:", userData);
+        console.log("로그인 성공! 사용자 정보:", userData ,userType);
         navigate("/");
       } catch (infoError) {
         console.warn("사용자 정보 조회 실패. 하지만 로그인은 성공:", infoError);

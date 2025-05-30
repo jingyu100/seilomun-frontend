@@ -2,7 +2,7 @@
 
 .register-Container {
     width: 800px;
-    height: 1230px;
+    height: 1550px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -72,7 +72,6 @@
 #id-check-btn {
     width: 160px;
     height: 45px;
-    padding: 12px;
     background-color: white;
     border: 1.8px solid black;
     border-radius: 10px;
@@ -81,6 +80,55 @@
     cursor: pointer;
     text-align: center;
 }
+
+
+/* 인증번호 확인 */
+
+.input-container22 {
+    display: flex;
+    align-items: center; 
+    gap: 30px; 
+}
+
+
+#id-input22 {
+    flex: 1; 
+    padding: 15px;
+    border: 2.0px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    color: black;
+    margin-left: 30px;
+}
+
+#id-input22:focus {
+    border: 2.0px solid #ccc !important; 
+    outline: none; 
+}
+
+
+#id-input22::placeholder {
+    color: #ccc;
+}
+
+#id-check-btn22 {
+    width: 160px;
+    height: 45px;
+    background-color: white;
+    border: 1.8px solid black;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 남은 시간 확인 */
+.auth-timer {
+    margin-left: 30px;
+    color: red;
+}
+
 
 /* 패스워드,확인*/
 .input-row {
@@ -273,7 +321,7 @@
   .input-gender label {
     display: inline-flex;
     align-items: center;
-    gap: 8px; /* 버튼과 텍스트 사이 간격 */
+    gap: 8px; 
     margin-right: 20px;
     margin-bottom: 20px;
     cursor: pointer;
@@ -316,6 +364,73 @@
     font-size: 18px; 
     margin-bottom: 30px;
 }
+
+/* 전화번호 인증번호 발송 */
+
+.input-container33 {
+    display: flex;
+    align-items: center; 
+    gap: 30px; 
+}
+
+#id-label3 {
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+#id-input33 {
+    flex: 1; 
+    padding: 15px;
+    border: 2.0px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    color: black;
+    margin-left: 30px;
+}
+
+#id-input33:focus {
+    border: 2.0px solid #ccc !important; 
+    outline: none; 
+}
+
+
+#id-input33::placeholder {
+    color: #ccc;
+}
+
+#id-check-btn33 {
+    width: 160px;
+    height: 45px;
+    background-color: white;
+    border: 1.8px solid black;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 휴대폰 남은 시간 확인 */
+.auth-timer2 {
+    color: red;
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+#auth-check-btn {
+    width: 140px;
+    height: 42px;
+    background-color: white;
+    border: 1.8px solid black;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 휴대폰 인증번호 확인 */
 
 /* 주소 */
 
@@ -397,7 +512,7 @@
 
 #birth-month, #birth-day {
     flex: 1;
-    width: 140px;
+    width: 100px;
     height: 50px;
     border: 2px solid #ccc;
     border-radius: 10px;
