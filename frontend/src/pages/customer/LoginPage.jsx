@@ -22,7 +22,7 @@ function LoginPage() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       await axios.post(
         "http://localhost/api/auth/login",
@@ -35,20 +35,22 @@ function LoginPage() {
           withCredentials: true,
         }
       );
-  
+
       try {
         const response = await axios.get("http://localhost/api/customers/me", {
           withCredentials: true,
         });
-  
+
         const { username, userType } = response.data.data;
-    
+
+        const userData = { nickname: username, userType };
+
         setUser(userData);
         setIsLoggedIn(true);
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("isLoggedIn", "true");
-  
-        console.log("로그인 성공! 사용자 정보:", userData ,userType);
+
+        console.log("로그인 성공! 사용자 정보:", userData, userType);
         navigate("/");
       } catch (infoError) {
         console.warn("사용자 정보 조회 실패. 하지만 로그인은 성공:", infoError);
@@ -82,69 +84,68 @@ function LoginPage() {
           </div>
 
           <div className="login-right">
-                <div>
-                  <div className="main-login">로그인</div>
-                  <form className="login-form" onSubmit={handleLoginSubmit}>
-                    <input
-                      type="text"
-                      placeholder="아이디"
-                      onChange={(e) => setLoginId(e.target.value)}
-                    />
-                    <input
-                      type="password"
-                      placeholder="비밀번호"
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                    />
-                    <div className="options">
-                      <label>
-                        <input type="checkbox" /> 아이디 저장
-                      </label>
-                      <div className="links">
-                        <a href="#">아이디 찾기</a> | <a href="#">비밀번호 재설정</a> |{" "}
-                        <a href="/register">회원가입</a>
-                      </div>
-                    </div>
-                    <button type="submit" className="login-btn">
-                      로그인
-                    </button>
-                    <hr className="divider" />
-                  </form>
-                  <div className="social-login">
-                    <p>간편하게 로그인</p>
-                    <div className="social-icons">
-                      <button
-                        className="google"
-                        style={{
-                          backgroundImage: `url(${googleLogo})`,
-                        }}
-                        onClick={() =>
-                          window.open("http://localhost:80/oauth2/authorization/google")
-                        }
-                      ></button>
-
-                      <button
-                        className="naver"
-                        style={{
-                          backgroundImage: `url(${naverLogo})`,
-                        }}
-                        onClick={() =>
-                          window.open("http://localhost:80/oauth2/authorization/naver")
-                        }
-                      ></button>
-
-                      <button
-                        className="kakao"
-                        style={{
-                          backgroundImage: `url(${kakaoLogo})`,
-                        }}
-                        onClick={() =>
-                          window.open("http://localhost:80/oauth2/authorization/kakao")
-                        }
-                      ></button>
-                    </div>
+            <div>
+              <div className="main-login">로그인</div>
+              <form className="login-form" onSubmit={handleLoginSubmit}>
+                <input
+                  type="text"
+                  placeholder="아이디"
+                  onChange={(e) => setLoginId(e.target.value)}
+                />
+                <input
+                  type="password"
+                  placeholder="비밀번호"
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                />
+                <div className="options">
+                  <label>
+                    <input type="checkbox" /> 아이디 저장
+                  </label>
+                  <div className="links">
+                    <a href="#">아이디 찾기</a> | <a href="#">비밀번호 재설정</a> |{" "}
+                    <a href="/register">회원가입</a>
                   </div>
                 </div>
-              
+                <button type="submit" className="login-btn">
+                  로그인
+                </button>
+                <hr className="divider" />
+              </form>
+              <div className="social-login">
+                <p>간편하게 로그인</p>
+                <div className="social-icons">
+                  <button
+                    className="google"
+                    style={{
+                      backgroundImage: `url(${googleLogo})`,
+                    }}
+                    onClick={() =>
+                      window.open("http://localhost:80/oauth2/authorization/google")
+                    }
+                  ></button>
+
+                  <button
+                    className="naver"
+                    style={{
+                      backgroundImage: `url(${naverLogo})`,
+                    }}
+                    onClick={() =>
+                      window.open("http://localhost:80/oauth2/authorization/naver")
+                    }
+                  ></button>
+
+                  <button
+                    className="kakao"
+                    style={{
+                      backgroundImage: `url(${kakaoLogo})`,
+                    }}
+                    onClick={() =>
+                      window.open("http://localhost:80/oauth2/authorization/kakao")
+                    }
+                  ></button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
