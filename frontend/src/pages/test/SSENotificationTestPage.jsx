@@ -6,7 +6,7 @@ const SSENotificationTestPage = () => {
     const [connectionStatus, setConnectionStatus] = useState('disconnected');
     const [token, setToken] = useState('');
     const [userId, setUserId] = useState('');
-    const [apiUrl, setApiUrl] = useState('http://localhost:8080');
+    const [apiUrl, setApiUrl] = useState('http://localhost');
     const [logs, setLogs] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
@@ -43,7 +43,7 @@ const SSENotificationTestPage = () => {
 
         // EventSource는 헤더를 설정할 수 없으므로 쿼리 파라미터로 토큰 전달
         // 또는 쿠키를 사용하거나 백엔드에서 다른 방식으로 인증 구현
-        const url = `${apiUrl}/api/notifications/connect`;
+        const url = `${apiUrl}/api/notifications/customer/connect`;
 
         // 또는 토큰 없이 먼저 연결 테스트
         // const url = `${apiUrl}/api/notifications/connect`;
@@ -254,7 +254,7 @@ const SSENotificationTestPage = () => {
                                     border: '1px solid #d1d5db',
                                     borderRadius: '0.375rem'
                                 }}
-                                placeholder="http://localhost:8080"
+                                placeholder="http://localhost"
                             />
                         </div>
 
