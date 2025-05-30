@@ -32,6 +32,7 @@ export default function StoreMenu() {
                           maxDiscountRate={prod.maxDiscountRate}
                           minDiscountRate={prod.minDiscountRate}
                           discountPrice={prod.discountPrice}
+                          currentDiscountRate= {prod.currentDiscountRate || "현재 할인"}
                         />
                       ))
                 )}

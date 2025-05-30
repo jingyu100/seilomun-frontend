@@ -77,8 +77,8 @@ function App() {
         <Route path="/wish" element={<WishListPage />} />
         <Route path="/Business_numberPage" element={<Business_numberPage />} />
         <Route path="/SeRegister" element={<SeRegisterPage />} />
-        <Route path="/api/sellers/:sellerId" element={<StorePage />} />
-        <Route path="/api/products/:id" element={<ProductPage />} />
+        <Route path="/sellers/:sellerId" element={<StorePage />} />
+        <Route path="/products/:id" element={<ProductPage />} />
         <Route path="/oauth-success" element={<NaverLoginCallback />} />
         <Route path="/Customer_modify" element={<Customer_modify />} />
         <Route path="/payment" element={<PaymentPage />} />

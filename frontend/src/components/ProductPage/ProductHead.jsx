@@ -40,53 +40,57 @@ export default function ProductHead() {
       };
 
     return (
-        <div className="productHead-inner productFlex">
-            <div className="productHead-left">
-                <div className="productHead-image">
-                    <ul className="productImg-slide productFlex"
-                        style={{
-                            transform: `translate3d(${moveX}px, 0px, 0px)`,
-                            msTransitionDuration: "0ms",
-                            display: "flex",
-                        }}    
-                    >
-                        {images.map((src, index) => (
-                            <li 
-                                className="swiper-slide"
-                                key={index}
-                            >
-                                <img 
-                                    src={src}
-                                    alt={`제품 이미지 ${index + 1}`} 
-                                    style={{ width: "100%", height: "auto", }} 
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div 
-                    className="slideBtn"
-                    style={{
-                        textAlign: "center", marginTop: "10px" 
-                    }}
-                >
-                    <button onClick={prevSlide} disabled={currentIndex === 0}>이전</button>
-                    <button onClick={nextSlide} disabled={currentIndex === images.length - 1}>다음</button>
-                </div>
-            </div>
+        <div>
             
-            <div className="productHead-right">
-                <ProductHeadTitle
-                    thumbnailUrl= {productDto?.thumbnailUrl || "사진 없음"}
-                    name= {productDto?.name || "제품명 없음"}
-                    expiryDate= {productDto?.expiryDate || "유통기한 없음"}
-                    description= {productDto?.description || "제품 설명 없음"}
-                    originalPrice= {productDto?.originalPrice || "상품 가격 없음"}
-                    maxDiscountRate= {productDto?. maxDiscountRate || "최대 할인"}
-                    minDiscountRate= {productDto?. minDiscountRate || "최소 할인"}
-                    discountPrice= {productDto?.discountPrice || "할인 가격 없음"}
+            <div className="productHead-inner productFlex">
+                <div className="productHead-left">
+                    <div className="productHead-image">
+                        <ul className="productImg-slide productFlex"
+                            style={{
+                                transform: `translate3d(${moveX}px, 0px, 0px)`,
+                                msTransitionDuration: "0ms",
+                                display: "flex",
+                            }}    
+                        >
+                            {images.map((src, index) => (
+                                <li 
+                                    className="swiper-slide"
+                                    key={index}
+                                >
+                                    <img 
+                                        src={src}
+                                        alt={`제품 이미지 ${index + 1}`} 
+                                        style={{ width: "100%", height: "auto", }} 
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div 
+                        className="slideBtn"
+                        style={{
+                            textAlign: "center", marginTop: "10px" 
+                        }}
+                    >
+                        <button onClick={prevSlide} disabled={currentIndex === 0}>이전</button>
+                        <button onClick={nextSlide} disabled={currentIndex === images.length - 1}>다음</button>
+                    </div>
+                </div>
+                
+                <div className="productHead-right">
+                    <ProductHeadTitle
+                        thumbnailUrl= {productDto?.thumbnailUrl || "사진 없음"}
+                        name= {productDto?.name || "제품명 없음"}
+                        expiryDate= {productDto?.expiryDate || "유통기한 없음"}
+                        description= {productDto?.description || "제품 설명 없음"}
+                        originalPrice= {productDto?.originalPrice || "상품 가격 없음"}
+                        maxDiscountRate= {productDto?. maxDiscountRate || "최대 할인"}
+                        minDiscountRate= {productDto?. minDiscountRate || "최소 할인"}
+                        currentDiscountRate= {productDto?. currentDiscountRate || "현재 할인"}
+                        discountPrice= {productDto?.discountPrice || "할인 가격 없음"}
 
-                />
+                    />
+                </div>
             </div>
         </div>
     )

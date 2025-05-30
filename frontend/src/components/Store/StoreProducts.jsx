@@ -10,6 +10,7 @@ export default function StoreProducts({
   discountPrice,
   maxDiscountRate,
   minDiscountRate,
+  currentDiscountRate,
 }) {
 
     
@@ -25,7 +26,7 @@ export default function StoreProducts({
       }}
     >
       
-      <Link to={`/api/products/${id}`}>
+      <Link to={`/products/${id}`}>
         {thumbnailUrl && (
           <img
             src={thumbnailUrl}
@@ -38,6 +39,7 @@ export default function StoreProducts({
         <p>
           <strong>{discountPrice.toLocaleString()}원</strong>
         </p>
+        <p>{currentDiscountRate}%</p>
       </Link>
     </div>
   );

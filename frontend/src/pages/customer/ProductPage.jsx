@@ -45,9 +45,7 @@ export default function ProductPage() {
                                 borderBottom: "1px solid #ededed"
                             }}
                         >
-                            {sellerInformationDto && (
-                                <StoreHead storeInfo={sellerInformationDto} />
-                            )}
+                            <StoreHead />
                         </div>
 
                         <div className='productDetail'>

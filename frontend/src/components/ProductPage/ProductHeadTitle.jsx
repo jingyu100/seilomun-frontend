@@ -10,12 +10,13 @@ export default function ProductHeadTitle({
     discountPrice,
     maxDiscountRate,
     minDiscountRate,
+    currentDiscountRate,
 }) {
 
     const parsedOriginalPrice = parseInt(originalPrice) || 0;
     const parsedDisPrice = parseInt(discountPrice) || 0;
 
-    // const discountRate  = parseInt(currentDiscountRate) || 0;
+    const discountRate  = parseInt(currentDiscountRate) || 0;
     
     return (
         <div className="productTitle">
@@ -47,7 +48,7 @@ export default function ProductHeadTitle({
                                     width: "33px"
                                 }}
                             />
-                            <p className="discountPercent">{minDiscountRate}%</p>
+                            <p className="discountPercent">{discountRate}%</p>
                         </div>
                         <div className="discountedPrice productFlex">
                             <p>할인가</p>
