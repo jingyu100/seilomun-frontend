@@ -4,6 +4,7 @@ import Rating from "../StarRating.jsx";
 import StoreMiniInfo from "./StoreMiniInfo.jsx";
 import Inquiry from "./Inquiry.jsx";
 import StoreInfo from "./StoreInfo.jsx";
+import FavoriteButtonBox from "./FavoriteButtonBox.jsx";
 
 export default function StoreHead() {
   const { store } = useStoreInfo();
@@ -39,6 +40,7 @@ export default function StoreHead() {
             pickupTime={sellerInformationDto?.pickupTime || ""}
             notification={sellerInformationDto?.notification || ""}
           />
+          <FavoriteButtonBox />
         </div>
       </div>
     </div>
