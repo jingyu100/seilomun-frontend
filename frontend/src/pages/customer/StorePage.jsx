@@ -15,8 +15,6 @@ export default function StorePage() {
   const sellerPhotoDto = store?.sellerPhotoDto;
   // const sellerInformationDto = store?.sellerInformationDto;
 
-  console.log(sellerId);
-
   return (
     <div className="storeMain">
       <div className="header">
