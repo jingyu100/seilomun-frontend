@@ -1,16 +1,15 @@
 import React from "react";
-import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import Rating from "../StarRating.jsx";
 import StoreMiniInfo from "./StoreMiniInfo.jsx";
 import Inquiry from "./Inquiry.jsx";
 import StoreInfo from "./StoreInfo.jsx";
 import FavoriteButtonBox from "./FavoriteButtonBox.jsx";
 
-export default function StoreHead() {
-  const { store } = useStoreInfo();
+export default function StoreHead({ store }) {
   if (!store) return null;
 
-  const { sellerInformationDto, sellerPhotoDto } = store;
+  // const { sellerInformationDto, sellerPhotoDto } = store;
+  const { sellerInformationDto } = store;
   const sellerId = sellerInformationDto?.sellerId;
 
   return (
