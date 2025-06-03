@@ -26,6 +26,11 @@ function RegisterPage() {
   const [postCode, setPostCode] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
+  const [phoneAuthCode, setPhoneAuthCode] = useState("");
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [phoneAuthSent, setPhoneAuthSent] = useState(false);
+  const [phoneTimeLeft, setPhoneTimeLeft] = useState(0);
+  const phoneTimerRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -72,6 +77,46 @@ function RegisterPage() {
     }
   };
 
+  useEffect(() => {
+    if (phoneAuthSent && phoneTimeLeft > 0) {
+      phoneTimerRef.current = setTimeout(() => {
+        setPhoneTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (phoneTimeLeft === 0) {
+      clearTimeout(phoneTimerRef.current);
+    }
+    return () => clearTimeout(phoneTimerRef.current);
+  }, [phoneTimeLeft, phoneAuthSent]);
+  const handleSendPhoneAuthCode = async () => {
+    const phone = `${phonePart1}${phonePart2}${phonePart3}`;
+    if (!phone || phone.length < 10) {
+      alert("휴대폰 번호를 올바르게 입력해주세요.");
+      return;
+    }
+    try {
+      await axios.post("http://localhost/api/customers/verificationCode", {
+        phone,
+      });
+      alert("휴대폰 인증번호가 발송되었습니다.");
+      setPhoneAuthSent(true);
+      setIsPhoneVerified(false);
+      setPhoneTimeLeft(300); // 5분
+    } catch (error) {
+      console.error("휴대폰 인증번호 발송 실패:", error);
+      alert("휴대폰 인증번호 전송 실패.");
+    }
+  };
+
+  const handleVerifyPhoneCode = () => {
+    if (phoneAuthCode.trim().length > 0) {
+      alert("휴대폰 인증이 완료되었습니다.");
+      setIsPhoneVerified(true);
+      setPhoneTimeLeft(0);
+    } else {
+      alert("인증번호를 입력해주세요.");
+    }
+  };
+
   const handleVerifyAuthCode = async () => {
     try {
       const response = await axios.post("http://localhost/api/auth/verifyEmail", {
@@ -106,7 +151,8 @@ function RegisterPage() {
       !addressDetail ||
       !birthMonth ||
       !birthDay ||
-      !isEmailVerified
+      !isEmailVerified ||
+      !isPhoneVerified 
     ) {
       alert("모든 필수 입력란을 채워주세요 (이메일 인증 포함).\n");
       return;
@@ -250,7 +296,7 @@ function RegisterPage() {
               <span>ㅡ</span>
               <input type="text" id="phone-input-3" value={phonePart3} onChange={(e) => setPhonePart3(e.target.value)} />
 
-              <button id="auth-check-btn" onClick={handleVerifyAuthCode}>인증번호 발송</button>
+              <button id="auth-check-btn" onClick={handleSendPhoneAuthCode}>인증번호 발송</button>
             </div>
 
             {/* 휴대폰 인증번호 확인 */}
@@ -261,15 +307,17 @@ function RegisterPage() {
               <input
                 type="text"
                 id="id-input33"
+                value={phoneAuthCode}
+                onChange={(e) => setPhoneAuthCode(e.target.value)}
                 placeholder="인증번호를 입력해주세요"
               />
-              <button id="id-check-btn33">인증번호 확인</button>
+              <button id="id-check-btn33" onClick={handleVerifyPhoneCode}>인증번호 확인</button>
             </div>
 
           {/* 인증번호 남은 시간 */}
-            {authSent && (
-              <div className="auth-timer2">남은 시간: {formatTime(timeLeft)}</div>
-            )}
+          {phoneAuthSent && (
+            <div className="auth-timer2">남은 시간: {formatTime(phoneTimeLeft)}</div>
+          )}
 
           {/* 주소 찾기, 상세주소 */}
             <label id="address-main-label">주소<span className="required">*</span></label>
