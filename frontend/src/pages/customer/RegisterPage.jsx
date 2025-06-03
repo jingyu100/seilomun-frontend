@@ -31,6 +31,9 @@ function RegisterPage() {
   const [phoneAuthSent, setPhoneAuthSent] = useState(false);
   const [phoneTimeLeft, setPhoneTimeLeft] = useState(0);
   const phoneTimerRef = useRef(null);
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
+  const [nicknameMessage, setNicknameMessage] = useState("*게시글 작성시 사용할 닉네임을 입력해주세요");
+  const [nicknameMessageColor, setNicknameMessageColor] = useState("gray");
 
   const navigate = useNavigate();
 
@@ -136,6 +139,48 @@ function RegisterPage() {
     }
   };
 
+  useEffect(() => {
+    setIsNicknameAvailable(null);
+    setNicknameMessage("*게시글 작성시 사용할 닉네임을 입력해주세요");
+    setNicknameMessageColor("gray");
+  }, [nickname]);
+  
+  const handleCheckNickname = async () => {
+    if (!nickname.trim()) {
+      alert("닉네임을 입력해주세요.");
+      return;
+
+    }
+      // ✅ 임시로 항상 성공한 것처럼 처리
+      setNicknameMessage("임시로 닉네임 중복체크를 완료하였습니다.");
+      setNicknameMessageColor("blue");
+      setIsNicknameAvailable(true);
+    };
+    
+
+
+   // 닉네임 중복 확인 기능
+  //   try {
+  //     const response = await axios.get("http://localhost/api/customers/check-nickname", {
+  //       params: { nickname }
+  //     });
+  
+  //     if (response.data.available) {
+  //       setNicknameMessage("사용 가능한 닉네임입니다!");
+  //       setNicknameMessageColor("blue");
+  //       setIsNicknameAvailable(true);
+  //     } else {
+  //       setNicknameMessage("중복된 닉네임입니다.");
+  //       setNicknameMessageColor("red");
+  //       setIsNicknameAvailable(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("닉네임 중복 체크 에러:", error);
+  //     alert("닉네임 중복 확인 중 오류가 발생했습니다.");
+  //   }
+  // };
+  
+
   const handleRegister = async () => {
     if (
       !email ||
@@ -160,6 +205,11 @@ function RegisterPage() {
 
     if (password !== passwordConfirm) {
       alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+
+    if (isNicknameAvailable !== true) {
+      alert("닉네임 중복 확인을 먼저 해주세요.");
       return;
     }
 
@@ -269,10 +319,14 @@ function RegisterPage() {
               <label id="nickname-label">닉네임<span className="required">*</span></label>
             </div>
             <div className="input-nick">
-              <input type="text" id="nickname-input" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="닉네임 입력" />
-              <button id="nickname-check-btn">닉네임 중복체크</button>
+              <input type="text" 
+              id="nickname-input" 
+              value={nickname} 
+              onChange={(e) => setNickname(e.target.value)} 
+              placeholder="닉네임 입력" />
+              <button id="nickname-check-btn" onClick={handleCheckNickname}>닉네임 중복체크</button>
             </div>
-            <p id="nickname-info">*게시글 작성시 사용할 닉네임을 입력해주세요</p>
+            <p id="nickname-info" style={{ color: nicknameMessageColor }}>{nicknameMessage}</p>
 
           {/* 이름 */}
             <label id="name-label">이름<span className="required">*</span></label>
