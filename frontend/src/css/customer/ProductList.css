@@ -139,8 +139,6 @@
   outline: none;
 }
 
-
-
 /* ---------- 가로 제품 필터 ---------- */
 button {
   border: none;
@@ -196,6 +194,6 @@ button {
   width: 2px;
   height: 2px;
   margin: auto;
-  background-color: hsla(0, 0%, 58%, .65);
+  background-color: hsla(0, 0%, 58%, 0.65);
   content: "";
 }
