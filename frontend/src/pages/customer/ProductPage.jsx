@@ -12,14 +12,15 @@ import StoreBody from "../../components/Store/StoreBody.jsx";
 import ProductHead from "../../components/ProductPage/ProductHead.jsx";
 
 export default function ProductPage() {
-  const { store } = useStoreInfo();
   const { product } = useProductInfo();
+  const { store, sellerId } = useStoreInfo();
 
+  // const sellerRegisterDto = store?.sellerRegisterDto;
   const sellerPhotoDto = store?.sellerPhotoDto;
-  const sellerInformationDto = store?.sellerInformationDto;
-  const productDto = product?.productDto;
-  const productPhoto = product?.productPhoto;
-  const productDocument = product?.productDocument;
+  // const sellerInformationDto = store?.sellerInformationDto;
+  // const productDto = product?.productDto;
+  // const productPhoto = product?.productPhoto;
+  // const productDocument = product?.productDocument;
 
   return (
     <div className="storeMain">
@@ -29,7 +30,7 @@ export default function ProductPage() {
 
       <div className="storeBanner">
         <img
-          src={sellerPhotoDto?.photoUrl || "../../image/ㅋㅍㅁㄱ.jpg"}
+          src={sellerPhotoDto?.photoUrl || "/image/ㅋㅍㅁㄱ.jpg"}
           alt="가게 메인 이미지"
           className="storeImage"
         />
@@ -45,13 +46,13 @@ export default function ProductPage() {
                 borderBottom: "1px solid #ededed",
               }}
             >
-              <StoreHead />
+              <StoreHead store={store} sellerId={sellerId} />
             </div>
 
             <div className="productDetail">
               <div className="productUI">
                 <div className="productHead">
-                  <ProductHead />
+                  <ProductHead product={product} />
                 </div>
 
                 <div className="productRec">{/* 제품 추천 */}</div>
