@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function useProductInfo() {
-   const {id} = useParams();
-   const navigate = useNavigate();
-   const [product, setProduct] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -23,11 +23,10 @@ export default function useProductInfo() {
         }
 
         setProduct({
-            productDto,
-            productPhoto: null,
-            productDocument: null,
+          productDto,
+          productPhoto: null,
+          productDocument: null,
         });
-
       } catch (error) {
         console.error("API 요청 실패:", error);
         // setProduct(null);

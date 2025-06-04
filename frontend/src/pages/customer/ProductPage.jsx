@@ -22,6 +22,8 @@ export default function ProductPage() {
   // const productPhoto = product?.productPhoto;
   // const productDocument = product?.productDocument;
 
+  console.log(product);
+
   return (
     <div className="storeMain">
       <div className="header">
