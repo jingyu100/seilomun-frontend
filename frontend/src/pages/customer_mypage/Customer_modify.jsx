@@ -98,19 +98,29 @@ function Customer_modify() {
             <div className="title-xl">마이페이지</div>
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
-              <ul><li>주문목록/배송조회</li><li>환불/입금 내역</li></ul>
+              <ul>
+                <li>주문목록/배송조회</li>
+                <li>환불/입금 내역</li>
+              </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">회원정보</div>
-              <ul><li>회원정보 변경</li><li>배송지 관리</li></ul>
+              <ul>
+                <li>회원정보 변경</li>
+                <li>배송지 관리</li>
+              </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">혜택관리</div>
-              <ul><li>적립내역</li></ul>
+              <ul>
+                <li>적립내역</li>
+              </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">리뷰관리</div>
-              <ul><li>리뷰관리</li></ul>
+              <ul>
+                <li>리뷰관리</li>
+              </ul>
             </div>
           </aside>
 
@@ -125,8 +135,12 @@ function Customer_modify() {
                 onClick={handleImageClick}
               />
               <div className="profile-buttons">
-                <button className="black-btn" type="button">변경</button>
-                <button className="white-btn" type="button">삭제</button>
+                <button className="black-btn" type="button">
+                  변경
+                </button>
+                <button className="white-btn" type="button">
+                  삭제
+                </button>
               </div>
               <input
                 type="file"
@@ -142,37 +156,88 @@ function Customer_modify() {
                 <tbody>
                   <tr>
                     <td>아이디(이메일)</td>
-                    <td colSpan="2" className="value">{email}</td>
+                    <td colSpan="2" className="value">
+                      {email}
+                    </td>
                   </tr>
                   <tr>
                     <td>이름</td>
-                    <td><input value={name} onChange={(e) => setName(e.target.value)} /></td>
-                    <td><button type="button" className="gray-btn">이름변경</button></td>
+                    <td>
+                      <input value={name} onChange={(e) => setName(e.target.value)} />
+                    </td>
+                    <td>
+                      <button type="button" className="gray-btn">
+                        이름변경
+                      </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>닉네임</td>
-                    <td><input value={nickname} onChange={(e) => setNickname(e.target.value)} /></td>
-                    <td><button type="button" className="gray-btn">닉네임 변경</button></td>
+                    <td>
+                      <input
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <button type="button" className="gray-btn">
+                        닉네임 변경
+                      </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>휴대폰 번호</td>
                     <td>
                       <div className="phone-input-group">
-                        <input value={phone1} onChange={(e) => setPhone1(e.target.value)} maxLength={3} />
+                        <input
+                          value={phone1}
+                          onChange={(e) => setPhone1(e.target.value)}
+                          maxLength={3}
+                        />
                         <span>-</span>
-                        <input value={phone2} onChange={(e) => setPhone2(e.target.value)} maxLength={4} />
+                        <input
+                          value={phone2}
+                          onChange={(e) => setPhone2(e.target.value)}
+                          maxLength={4}
+                        />
                         <span>-</span>
-                        <input value={phone3} onChange={(e) => setPhone3(e.target.value)} maxLength={4} />
+                        <input
+                          value={phone3}
+                          onChange={(e) => setPhone3(e.target.value)}
+                          maxLength={4}
+                        />
                       </div>
                     </td>
-                    <td><button type="button" className="gray-btn">휴대폰 번호 변경</button></td>
+                    <td>
+                      <button type="button" className="gray-btn">
+                        휴대폰 번호 변경
+                      </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>성별</td>
                     <td colSpan="2">
                       <div className="gender-options-inline">
-                        <label><input type="radio" name="gender" value="M" checked={gender === "M"} onChange={() => setGender("M")} /> 남성</label>
-                        <label><input type="radio" name="gender" value="G" checked={gender === "G"} onChange={() => setGender("G")} /> 여성</label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="gender"
+                            value="M"
+                            checked={gender === "M"}
+                            onChange={() => setGender("M")}
+                          />{" "}
+                          남성
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="gender"
+                            value="G"
+                            checked={gender === "G"}
+                            onChange={() => setGender("G")}
+                          />{" "}
+                          여성
+                        </label>
                       </div>
                     </td>
                   </tr>
@@ -180,19 +245,25 @@ function Customer_modify() {
                     <td>생년월일</td>
                     <td colSpan="2">
                       <div className="birthdate-select">
-                        <select value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)}>
+                        <select
+                          value={birthMonth}
+                          onChange={(e) => setBirthMonth(e.target.value)}
+                        >
                           <option value="">월</option>
                           {[...Array(12)].map((_, i) => (
-                            <option key={i} value={(i+1).toString().padStart(2, '0')}>
-                              {i+1}
+                            <option key={i} value={(i + 1).toString().padStart(2, "0")}>
+                              {i + 1}
                             </option>
                           ))}
                         </select>
-                        <select value={birthDay} onChange={(e) => setBirthDay(e.target.value)}>
+                        <select
+                          value={birthDay}
+                          onChange={(e) => setBirthDay(e.target.value)}
+                        >
                           <option value="">일</option>
                           {[...Array(31)].map((_, i) => (
-                            <option key={i} value={(i+1).toString().padStart(2, '0')}>
-                              {i+1}
+                            <option key={i} value={(i + 1).toString().padStart(2, "0")}>
+                              {i + 1}
                             </option>
                           ))}
                         </select>
@@ -203,14 +274,20 @@ function Customer_modify() {
               </table>
 
               <div className="form-buttons">
-                <button type="button" className="white-btn">회원탈퇴</button>
-                <button type="submit" className="black-btn">정보변경</button>
+                <button type="button" className="white-btn">
+                  회원탈퇴
+                </button>
+                <button type="submit" className="black-btn">
+                  정보변경
+                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <Footer />
+      <div className="footer">
+        <Footer />
+      </div>
     </div>
   );
 }

@@ -46,7 +46,7 @@ const Change_dataPage = () => {
         <Header />
       </div>
 
-      <div className="body-container2">
+      <div className="area-container2">
         <SideMenuBtn />
 
         <div className="mypage-container22">
@@ -54,7 +54,10 @@ const Change_dataPage = () => {
             <div className="title-xl">마이페이지</div>
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
-              <ul><li>주문목록/배송조회</li><li>환불/입금 내역</li></ul>
+              <ul>
+                <li>주문목록/배송조회</li>
+                <li>환불/입금 내역</li>
+              </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">회원정보</div>
