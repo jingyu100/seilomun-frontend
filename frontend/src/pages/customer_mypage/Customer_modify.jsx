@@ -13,6 +13,9 @@ function Customer_modify() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [phone1, setPhone1] = useState("");
   const [phone2, setPhone2] = useState("");
   const [phone3, setPhone3] = useState("");
@@ -29,7 +32,7 @@ function Customer_modify() {
         const data = res.data?.data?.customer;
         if (!data) return;
 
-        setEmail(data.email || "");
+        setEmail((data.email || "").toLowerCase()); 
         setName(data.name || "");
         setNickname(data.nickname || "");
         if (data.phone) {
@@ -62,17 +65,20 @@ function Customer_modify() {
 
     const requestData = {
       updateDto: {
-        email: email || "",
+        email: (email || "").toLowerCase(),
         name: name || "",
+        currentPassword: currentPassword || "",
         nickname: nickname || "",
         phone: `${phone1}${phone2}${phone3}` || "",
         gender: gender || "",
-        birthdate: `${birthMonth}${birthDay}` || ""
+        birthDate: `${birthMonth}${birthDay}`,
+        profileImageUrl: ""
+
       },
       passwordChangeDto: {
-        currentPassword: "", 
-        newPassword: "",
-        confirmPassword: ""
+        currentPassword: currentPassword || "", 
+        newPassword: newPassword || "",
+        confirmPassword: confirmPassword || ""
       }
     };
 
@@ -95,33 +101,42 @@ function Customer_modify() {
         <SideMenuBtn />
         <div className="mypage-container">
           <aside className="mypage-sidebar">
-            <div className="title-xl">마이페이지</div>
-            <div className="sidebar-section">
-              <div className="title-lg">쇼핑정보</div>
-              <ul>
-                <li>주문목록/배송조회</li>
-                <li>환불/입금 내역</li>
-              </ul>
-            </div>
-            <div className="sidebar-section">
-              <div className="title-lg">회원정보</div>
-              <ul>
-                <li>회원정보 변경</li>
-                <li>배송지 관리</li>
-              </ul>
-            </div>
-            <div className="sidebar-section">
-              <div className="title-lg">혜택관리</div>
-              <ul>
-                <li>적립내역</li>
-              </ul>
-            </div>
-            <div className="sidebar-section">
-              <div className="title-lg">리뷰관리</div>
-              <ul>
-                <li>리뷰관리</li>
-              </ul>
-            </div>
+          <div className="title-xl">마이페이지</div>
+
+          <div className="sidebar-section">
+            <div className="title-lg">쇼핑정보</div>
+            <ul>
+            <li onClick={() => window.location.href = '/OrderList'}>주문목록/배송조회</li>
+              <li>환불/입금 내역</li>
+            </ul>
+          </div>
+
+          <div className="sidebar-section">
+            <div className="title-lg">회원정보</div>
+            <ul>
+            <li onClick={() => window.location.href = '/change_datapage'}>
+              회원정보 변경
+            </li>
+
+            <li onClick={() => window.location.href = '/Delivery_destination'}>
+              배송지 관리
+            </li>
+            </ul>
+          </div>
+
+          <div className="sidebar-section">
+            <div className="title-lg">혜택관리</div>
+            <ul>
+              <li>적립내역</li>
+            </ul>
+          </div>
+
+          <div className="sidebar-section">
+            <div className="title-lg">리뷰관리</div>
+            <ul>
+              <li>리뷰관리</li>
+            </ul>
+          </div>
           </aside>
 
           <div className="modify-area">
@@ -157,7 +172,7 @@ function Customer_modify() {
                   <tr>
                     <td>아이디(이메일)</td>
                     <td colSpan="2" className="value">
-                      {email}
+                      {email} 
                     </td>
                   </tr>
                   <tr>
@@ -171,6 +186,7 @@ function Customer_modify() {
                       </button>
                     </td>
                   </tr>
+
                   <tr>
                     <td>닉네임</td>
                     <td>
@@ -185,6 +201,35 @@ function Customer_modify() {
                       </button>
                     </td>
                   </tr>
+
+                  <tr>
+                    <td>비밀번호 변경</td>
+
+                    <td>현재 비밀번호⠀
+                      <input
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)} />
+                        <br></br><br></br>
+                        새 비밀번호⠀
+                        <input
+                        type="password"                        
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}/>
+                        <br></br><br></br>
+                        비밀번호 확인⠀
+                        <input
+                        type="password"                        
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}/>    
+                    </td>
+                    <td>
+                      <button type="button" className="gray-btn">
+                        비밀번호 변경
+                      </button>
+                    </td>
+                  </tr>
+
                   <tr>
                     <td>휴대폰 번호</td>
                     <td>
