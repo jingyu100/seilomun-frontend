@@ -9,7 +9,7 @@ export default function ProductHead() {
 
   const index = Number(productId);
 
-  if (!products) return;
+  if (!products) return ;
 
   if (isNaN(index) || index < 0 || index >= products.length) {
     return <div>잘못된 상품 번호입니다.</div>;
@@ -24,7 +24,6 @@ export default function ProductHead() {
       </div>
       <div className="productHead-right">
         <ProductHeadTitle
-          productId={productId}
           thumbnailUrl={product.thumbnailUrl || "사진 없음"}
           name={product.name || "제품명 없음"}
           expiryDate={product.expiryDate || "유통기한 없음"}
@@ -39,3 +38,5 @@ export default function ProductHead() {
     </div>
   );
 }
+
+

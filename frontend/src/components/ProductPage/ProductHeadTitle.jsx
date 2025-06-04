@@ -3,7 +3,6 @@ import "../../css/customer/Product.css";
 import LikeButtonBox from "./LikeButtonBox";
 
 export default function ProductHeadTitle({
-  productId,
   thumbnailUrl,
   name,
   expiryDate,
@@ -42,7 +41,7 @@ export default function ProductHeadTitle({
         <div className="productTitle-head">
           <div className="productName">
             <h2>{name}</h2>
-            <LikeButtonBox productId={productId} />
+            <LikeButtonBox />
           </div>
           <div className="product-expiryDate">
             <p>{expiryDate}까지</p>
@@ -92,10 +91,7 @@ export default function ProductHeadTitle({
           <div className="productName">
             <p>{name}</p>
           </div>
-          <div
-            className="plust-minus productFlex"
-            style={{ gap: "10px", alignItems: "center" }}
-          >
+          <div className="plust-minus productFlex" style={{ gap: "10px", alignItems: "center" }}>
             <button onClick={decreaseQuantity} style={{ padding: "5px 10px" }}>
               -
             </button>
@@ -107,10 +103,7 @@ export default function ProductHeadTitle({
         </div>
 
         <div className="productBuy">
-          <div
-            className="totalPrice-inner productFlex"
-            style={{ justifyContent: "space-between", marginTop: "10px" }}
-          >
+          <div className="totalPrice-inner productFlex" style={{ justifyContent: "space-between", marginTop: "10px" }}>
             <span className="total">TOTAL</span>
             <div className="totalPrice productFlex">
               <p>{totalPrice.toLocaleString()} 원</p>

@@ -14,6 +14,8 @@ export default function StoreProducts({
   minDiscountRate,
   currentDiscountRate,
 }) {
+  
+
   return (
     <div
       className="productItem"
@@ -25,6 +27,7 @@ export default function StoreProducts({
         marginBottom: "20px",
       }}
     >
+
       <Link to={`/sellers/${sellerId}/products/${index}`}>
         {thumbnailUrl && (
           <img
