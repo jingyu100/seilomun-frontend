@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 export default function StoreProducts({
   id,
+  index,
+  sellerId,
   thumbnailUrl,
   name,
   expiryDate,
@@ -12,8 +14,8 @@ export default function StoreProducts({
   minDiscountRate,
   currentDiscountRate,
 }) {
+  
 
-    
   return (
     <div
       className="productItem"
@@ -25,8 +27,8 @@ export default function StoreProducts({
         marginBottom: "20px",
       }}
     >
-      
-      <Link to={`/products/${id}`}>
+
+      <Link to={`/sellers/${sellerId}/products/${index}`}>
         {thumbnailUrl && (
           <img
             src={thumbnailUrl}

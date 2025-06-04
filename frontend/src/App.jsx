@@ -80,7 +80,7 @@ function App() {
         <Route path="/SeRegister" element={<SeRegisterPage />} />
         <Route path="/sellers/:sellerId" element={<StorePage />} />
         <Route path="/postcode-popup" element={<PostcodePopup />} />
-        <Route path="/products/:id" element={<ProductPage />} />
+        <Route path="/sellers/:sellerId/products/:productId" element={<ProductPage />} />
         <Route path="/oauth-success" element={<NaverLoginCallback />} />
         <Route path="/Customer_modify" element={<Customer_modify />} />
         <Route path="/payment" element={<PaymentPage />} />

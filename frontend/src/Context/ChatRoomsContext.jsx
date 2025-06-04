@@ -16,7 +16,7 @@ export function ChatRoomsProvider({ children }) {
 
     const fetchChatRooms = async () => {
       try {
-        const res = await axios.get("http://localhost/api/chat/rooms", {
+        const res = await axios.post("http://localhost/api/chat/rooms", {
           headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
         });
         setChatRooms(res.data.data.chatRooms || []);

@@ -1,15 +1,16 @@
-/* 업데이트된 StoreHead.jsx */
 import React from "react";
+import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import Rating from "../StarRating.jsx";
 import StoreMiniInfo from "./StoreMiniInfo.jsx";
 import Inquiry from "./Inquiry.jsx";
 import StoreInfo from "./StoreInfo.jsx";
-import FavoriteButtonBox from "./FavoriteButtonBox.jsx";
 
-export default function StoreHead({ store, sellerId }) {
+export default function StoreHead() {
+  const { store } = useStoreInfo();
   if (!store) return null;
 
-  const { sellerInformationDto } = store;
+  const { sellerInformationDto, sellerPhotoDto } = store;
+  const sellerId = sellerInformationDto?.sellerId;
 
   return (
     <div className="storeHead">
@@ -38,8 +39,6 @@ export default function StoreHead({ store, sellerId }) {
             pickupTime={sellerInformationDto?.pickupTime || ""}
             notification={sellerInformationDto?.notification || ""}
           />
-          {/* sellerId를 FavoriteButtonBox로 전달 */}
-          <FavoriteButtonBox sellerId={sellerId} />
         </div>
       </div>
     </div>

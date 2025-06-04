@@ -1,15 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import useSellerProducts from "../../Hooks/useSellerProducts.js";
 import "../../css/customer/Store.css";
 import ProductFilter from "./ProductFilter";
 import StoreProducts from "./StoreProducts";
 
 export default function StoreMenu() {
-    const { products } = useSellerProducts();
+    const { sellerId } = useParams();
+    const { products } = useSellerProducts(sellerId);
     const [sortType, setSortType] = useState("LATEST");
 
-    const productList = products || [];
-    
+    const productList = useMemo(() => {
+        if (!products) return [];
+
+        const sortedProducts = [...products];
+
+        switch (sortType) {
+            case "LATEST":
+                return sortedProducts.sort((a, b) => {
+                    const dateA = new Date(a.createdAt || 0);
+                    const dateB = new Date(b.createdAt || 0);
+                    return dateB - dateA;
+                });
+
+            case "LOW_PRICE":
+                return sortedProducts.sort((a, b) => a.discountPrice - b.discountPrice);
+
+            case "HIGH_PRICE":
+                return sortedProducts.sort((a, b) => b.discountPrice - a.discountPrice);
+
+            case "HIGH_RATING":
+                return sortedProducts.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+
+            case "LOW_RATING":
+                return sortedProducts.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+
+            case "BASIC":
+            default:
+                // 기본 정렬 - 원본 배열 그대로
+                return sortedProducts;
+        }
+    }, [products, sortType]);
 
     return (
         <div className="storeMenu" style={{ position: "relative", padding: "30px 0 25px" }}>
@@ -23,7 +54,10 @@ export default function StoreMenu() {
                 ) : (
                     productList.map((prod, index) => (
                         <StoreProducts                          
-                          id={prod.id ?? index+1}   // 백의 productDto에 id가 없어서 DB index 사용 (임시)
+                          key={prod.id || index}  // key는 고유값으로 주는게 좋아요
+                          id={index}
+                          index= {index}
+                          sellerId={sellerId}
                           thumbnailUrl={prod.thumbnailUrl || "사진 없음"}
                           name={prod.name}
                           expiryDate={prod.expiryDate}

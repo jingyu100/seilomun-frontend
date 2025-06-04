@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../../css/customer/Product.css";
 import LikeButtonBox from "./LikeButtonBox";
 
@@ -15,8 +15,25 @@ export default function ProductHeadTitle({
 }) {
   const parsedOriginalPrice = parseInt(originalPrice) || 0;
   const parsedDisPrice = parseInt(discountPrice) || 0;
-
   const discountRate = parseInt(currentDiscountRate) || 0;
+
+  // 수량 상태 추가
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = () => setQuantity((q) => q + 1);
+  const decreaseQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
+
+  // 총 가격 계산
+  const totalPrice = parsedDisPrice * quantity;
+
+  // 구매 버튼 클릭 예시
+  const handleBuyNow = () => {
+    alert(`구매하기: ${name} ${quantity}개, 총 ${totalPrice}원`);
+  };
+
+  const handleAddCart = () => {
+    alert(`장바구니에 추가: ${name} ${quantity}개`);
+  };
 
   return (
     <div className="productTitle">
@@ -41,13 +58,13 @@ export default function ProductHeadTitle({
                   fontSize: "18px",
                 }}
               >
-                {parsedOriginalPrice}원
+                {parsedOriginalPrice.toLocaleString()}원
               </p>
             </div>
             <div className="productDiscount productFlex">
               <img
                 src="../../../image/icon/icon_dicountArrow.png"
-                alt=""
+                alt="할인 아이콘"
                 style={{
                   position: "relative",
                   display: "block",
@@ -64,33 +81,40 @@ export default function ProductHeadTitle({
                   fontWeight: "1000",
                 }}
               >
-                {parsedDisPrice}원
+                {parsedDisPrice.toLocaleString()}원
               </p>
             </div>
           </div>
         </div>
 
-        <div className="productQuantity productFlex">
+        <div className="productQuantity productFlex" style={{ alignItems: "center" }}>
           <div className="productName">
             <p>{name}</p>
           </div>
-          <div className="plust-minus productFlex"></div>
+          <div className="plust-minus productFlex" style={{ gap: "10px", alignItems: "center" }}>
+            <button onClick={decreaseQuantity} style={{ padding: "5px 10px" }}>
+              -
+            </button>
+            <span>{quantity}</span>
+            <button onClick={increaseQuantity} style={{ padding: "5px 10px" }}>
+              +
+            </button>
+          </div>
         </div>
 
         <div className="productBuy">
-          <div className="totalPrice-inner productFlex">
+          <div className="totalPrice-inner productFlex" style={{ justifyContent: "space-between", marginTop: "10px" }}>
             <span className="total">TOTAL</span>
             <div className="totalPrice productFlex">
-              <p>토탈 가격 원</p>
-              <span></span>
+              <p>{totalPrice.toLocaleString()} 원</p>
             </div>
           </div>
           <div className="productBuy-btns productFlex">
-            <a href="" className="buyBtn" onClick={{}}>
+            <a href="" className="buyBtn" onClick={handleBuyNow}>
               <div className="btnStyle1">바로구매하기</div>
               <div className="btnStyle2">BUY IT NOW</div>
             </a>
-            <a href="" className="cartBtn">
+            <a href="" className="cartBtn" onClick={handleAddCart}>
               <div className="btnStyle1">장바구니</div>
               <div className="btnStyle2">ADD CART</div>
             </a>

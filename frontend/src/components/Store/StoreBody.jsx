@@ -1,34 +1,64 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/customer/Store.css";
 import StoreMenu from "./StoreMenu";
+// 추후 만들 컴포넌트
+// import StoreInfo from "./StoreInfo";
+// import StoreReview from "./StoreReview";
 
 export default function StoreBody() {
+    const [activeTab, setActiveTab] = useState("menu");
+
+    const tabRefs = {
+        menu: useRef(null),
+        info: useRef(null),
+        review: useRef(null),
+    };
+
+    const underlineRef = useRef(null);
+
+    useEffect(() => {
+        const updateUnderline = () => {
+            const current = tabRefs[activeTab]?.current;
+            const underline = underlineRef.current;
+            
+            if (current && underline) {
+                underline.style.left = `${current.offsetLeft}px`;
+                underline.style.width = `${current.offsetWidth}px`;
+            }
+        };
+
+        updateUnderline();
+        window.addEventListener("resize", updateUnderline);
+    
+        return () => {
+            window.removeEventListener("resize", updateUnderline);
+        };
+    }, [activeTab]);
+    
+    const tabs = [
+        { key: "menu", label: "메뉴", content: <StoreMenu /> },
+        { key: "info", label: "정보", content: <div>정보 내용 (StoreInfo 자리)</div> },
+        { key: "review", label: "리뷰", content: <div>리뷰 내용 (StoreReview 자리)</div> },
+    ];
 
     return (
         <div className="storeBody">
-            <div style={{
-                position: "relative",
-                justifyItems: "center",
-            }}>
-                <div style={{
-                    position: "relative",
-                    display: "flex",
-                    width: "60%",
-                    alignItems: "center",
-                    textAlign: "center",
-                    justifyContent: "center",
-                    borderBottom: "1px solid gray",
-                    gap: "33%",   
-                }}>
-                    <div><p>메뉴</p></div>
-                    <div><p>정보</p></div>
-                    <div><p>리뷰</p></div>
-                </div>
+            <div className="storeTabWrapper">
+                <div className="tabUnderline" ref={underlineRef} />
+
+                {tabs.map(({ key, label }) => (
+                    <div
+                        key={key}
+                        ref={tabRefs[key]}
+                        className={`storeTabItem ${activeTab === key ? "active" : ""}`}
+                        onClick={() => setActiveTab(key)}
+                    >
+                        <p>{label}</p>
+                    </div>
+                ))}
             </div>
-            
-            <div className=" ">
-                <StoreMenu />
-            </div>
+
+            <div>{tabs.find(tab => tab.key === activeTab)?.content}</div>
         </div>
     );
 }

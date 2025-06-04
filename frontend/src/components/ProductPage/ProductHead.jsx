@@ -1,97 +1,42 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Pagination } from "swiper/modules";
-import useProductInfo from "../../Hooks/useProductInfo.js";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "../../css/customer/Product.css";
-import ProductHeadTitle from "./ProductHeadTitle.jsx";
+import React from "react";
+import { useParams } from "react-router-dom";
+import useSellerProducts from "../../Hooks/useSellerProducts";
+import ProductHeadTitle from "./ProductHeadTitle";
 
 export default function ProductHead() {
+  const { sellerId, productId } = useParams();
+  const { products } = useSellerProducts(sellerId);
 
-    const { product } = useProductInfo();
-    
-    const productDto = product?.productDto;
-    const productPhoto = product?.productPhoto;
-    const productDocument = product?.productDocument;
-    
+  const index = Number(productId);
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+  if (!products) return ;
 
-    const images = [
-        "/images/product1.jpg",
-        "/images/product2.jpg",
-        "/images/product3.jpg"
-    ];
-    
-    const imageWidth = 510;
-    // const currentIndex = ;
-    
-    const moveX = -imageWidth * currentIndex;
+  if (isNaN(index) || index < 0 || index >= products.length) {
+    return <div>잘못된 상품 번호입니다.</div>;
+  }
 
-    const prevSlide = () => {
-        setCurrentIndex((prev) => Math.max(prev - 1, 0));
-      };
-    
-      const nextSlide = () => {
-        setCurrentIndex((prev) => Math.min(prev + 1, images.length - 1));
-      };
+  const product = products[index];
 
-    return (
-        <div>
-            
-            <div className="productHead-inner productFlex">
-                <div className="productHead-left">
-                    <div className="productHead-image">
-                        <ul className="productImg-slide productFlex"
-                            style={{
-                                transform: `translate3d(${moveX}px, 0px, 0px)`,
-                                msTransitionDuration: "0ms",
-                                display: "flex",
-                            }}    
-                        >
-                            {images.map((src, index) => (
-                                <li 
-                                    className="swiper-slide"
-                                    key={index}
-                                >
-                                    <img 
-                                        src={src}
-                                        alt={`제품 이미지 ${index + 1}`} 
-                                        style={{ width: "100%", height: "auto", }} 
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div 
-                        className="slideBtn"
-                        style={{
-                            textAlign: "center", marginTop: "10px" 
-                        }}
-                    >
-                        <button onClick={prevSlide} disabled={currentIndex === 0}>이전</button>
-                        <button onClick={nextSlide} disabled={currentIndex === images.length - 1}>다음</button>
-                    </div>
-                </div>
-                
-                <div className="productHead-right">
-                    <ProductHeadTitle
-                        thumbnailUrl= {productDto?.thumbnailUrl || "사진 없음"}
-                        name= {productDto?.name || "제품명 없음"}
-                        expiryDate= {productDto?.expiryDate || "유통기한 없음"}
-                        description= {productDto?.description || "제품 설명 없음"}
-                        originalPrice= {productDto?.originalPrice || "상품 가격 없음"}
-                        maxDiscountRate= {productDto?. maxDiscountRate || "최대 할인"}
-                        minDiscountRate= {productDto?. minDiscountRate || "최소 할인"}
-                        currentDiscountRate= {productDto?. currentDiscountRate || "현재 할인"}
-                        discountPrice= {productDto?.discountPrice || "할인 가격 없음"}
-
-                    />
-                </div>
-            </div>
-        </div>
-    )
+  return (
+    <div className="productHead-inner productFlex">
+      <div className="productHead-left">
+        <img src={product.thumbnailUrl || "/images/default.jpg"} alt="상품 이미지" />
+      </div>
+      <div className="productHead-right">
+        <ProductHeadTitle
+          thumbnailUrl={product.thumbnailUrl || "사진 없음"}
+          name={product.name || "제품명 없음"}
+          expiryDate={product.expiryDate || "유통기한 없음"}
+          description={product.description || "제품 설명 없음"}
+          originalPrice={product.originalPrice || "상품 가격 없음"}
+          maxDiscountRate={product.maxDiscountRate || "최대 할인 없음"}
+          minDiscountRate={product.minDiscountRate || "최소 할인 없음"}
+          currentDiscountRate={product.currentDiscountRate || "현재 할인 없음"}
+          discountPrice={product.discountPrice || "할인 가격 없음"}
+        />
+      </div>
+    </div>
+  );
 }
+
+
