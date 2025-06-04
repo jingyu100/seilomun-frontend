@@ -10,7 +10,7 @@ function Customer_modify() {
   const [previewImage, setPreviewImage] = useState(defaultProfile);
   const fileInputRef = useRef(null);
 
-  const [userId, setUserId] = useState("");
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phone1, setPhone1] = useState("");
@@ -29,7 +29,7 @@ function Customer_modify() {
         const data = res.data?.data?.customer;
         if (!data) return;
 
-        setUserId(data.id || "");
+        setEmail(data.email || "");
         setName(data.name || "");
         setNickname(data.nickname || "");
         if (data.phone) {
@@ -62,6 +62,7 @@ function Customer_modify() {
 
     const requestData = {
       updateDto: {
+        email: email || "",
         name: name || "",
         nickname: nickname || "",
         phone: `${phone1}${phone2}${phone3}` || "",
@@ -141,7 +142,7 @@ function Customer_modify() {
                 <tbody>
                   <tr>
                     <td>아이디(이메일)</td>
-                    <td colSpan="2" className="value">{userId}</td>
+                    <td colSpan="2" className="value">{email}</td>
                   </tr>
                   <tr>
                     <td>이름</td>
