@@ -51,42 +51,26 @@ const Change_dataPage = () => {
 
         <div className="mypage-container22">
         <aside className="mypage-sidebar">
-        <div className="title-xl">마이페이지</div>
-
-        <div className="sidebar-section">
-          <div className="title-lg">쇼핑정보</div>
-          <ul>
-          <li onClick={() => window.location.href = '/OrderList'}>주문목록/배송조회</li>
-            <li>환불/입금 내역</li>
-          </ul>
-        </div>
-
-        <div className="sidebar-section">
-          <div className="title-lg">회원정보</div>
-          <ul>
-          <li onClick={() => window.location.href = '/change_datapage'}>
-            회원정보 변경
-          </li>
-
-          <li onClick={() => window.location.href = '/Delivery_destination'}>
-            배송지 관리
-          </li>
-          </ul>
-        </div>
-
-        <div className="sidebar-section">
-          <div className="title-lg">혜택관리</div>
-          <ul>
-            <li>적립내역</li>
-          </ul>
-        </div>
-
-        <div className="sidebar-section">
-          <div className="title-lg">리뷰관리</div>
-          <ul>
-            <li>리뷰관리</li>
-          </ul>
-        </div>
+            <div className="title-xl">마이페이지</div>
+            <div className="sidebar-section">
+              <div className="title-lg">쇼핑정보</div>
+              <ul>
+                <li>주문목록/배송조회</li>
+                <li>환불/입금 내역</li>
+              </ul>
+            </div>
+            <div className="sidebar-section">
+              <div className="title-lg">회원정보</div>
+              <ul><li>회원정보 변경</li><li>배송지 관리</li></ul>
+            </div>
+            <div className="sidebar-section">
+              <div className="title-lg">혜택관리</div>
+              <ul><li>적립내역</li></ul>
+            </div>
+            <div className="sidebar-section">
+              <div className="title-lg">리뷰관리</div>
+              <ul><li>리뷰관리</li></ul>
+            </div>
           </aside>
 
           <div className="mypage-main">
