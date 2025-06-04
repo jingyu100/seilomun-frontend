@@ -14,9 +14,9 @@ const MyPage = () => {
 
     <div className="body"> 
     <SideMenuBtn />
-      <div className="mypage-container">
+      <div className="mypage-area">
 
-        <aside className="mypage-sidebar">
+        <aside className="mypage-sidebar22">
 
           <div className="title-xl">마이페이지</div>
 
@@ -57,7 +57,7 @@ const MyPage = () => {
 
         </aside>
 
-        <div className="mypage-main">
+        <div className="mypage-center">
           {/* 유저 정보 */}
           <div className="user-info-box">
 
