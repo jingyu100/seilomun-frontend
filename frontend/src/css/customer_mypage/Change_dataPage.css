@@ -14,7 +14,7 @@
   
   /* 사이드바 */
   .mypage-sidebar {
-    margin-top: 120px;
+    margin-top: 140px;
     width: 200px;
     font-size: 12px;
     color: #111;
@@ -53,7 +53,7 @@
 /* 오른쪽 메인 */
 
 .mypage-main {
-    margin-top: 120px;
+    margin-top: 140px;
     flex: 1;
     padding-left: 40px;
   }
