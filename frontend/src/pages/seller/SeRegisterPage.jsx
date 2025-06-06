@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../../css/seller/SeRegister.css";
@@ -7,7 +7,6 @@ import logo from "../../image/logo/spLogo.png";
 function SeRegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const businessNumber = location.state?.businessNumber;
 
   const [email, setEmail] = useState("");
@@ -22,6 +21,27 @@ function SeRegisterPage() {
   const [addressDetail, setAddressDetail] = useState("");
 
   const phone = `${phone1}${phone2}${phone3}`;
+
+  // 팝업 열기 함수
+  const openAddressPopup = () => {
+    window.open(
+      "/postcode-popup", 
+      "주소 찾기",
+      "width=600,height=600,scrollbars=yes"
+    );
+  };
+
+  //  주소 선택 결과 받기
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data?.type === "ADDRESS_SELECTED") {
+        const { address: fullAddress } = event.data.payload;
+        setAddress(fullAddress);
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   const handleRegister = async () => {
     if (!businessNumber) {
@@ -40,16 +60,13 @@ function SeRegisterPage() {
       businessNumber,
       password,
       storeName,
-      categoryId, 
+      categoryId,
       phone,
       addressDetail,
     };
 
-    console.log("회원가입 요청 데이터:", payload);
-
     try {
       const res = await axios.post("http://localhost/api/sellers", payload);
-
       const emailFromServer = res?.data?.data?.email;
 
       if (res.status === 200 && emailFromServer) {
@@ -59,11 +76,7 @@ function SeRegisterPage() {
         alert(res.data.message || "회원가입 실패");
       }
     } catch (err) {
-      console.error(" 서버 응답 오류:", err.response?.data || err.message);
-      alert(
-        "회원가입 중 오류가 발생했습니다: " +
-          (err.response?.data?.message || "회원가입 실패")
-      );
+      alert("회원가입 중 오류: " + (err.response?.data?.message || "회원가입 실패"));
     }
   };
 
@@ -74,7 +87,7 @@ function SeRegisterPage() {
         <h1 className="join-title2">회원가입</h1>
       </div>
 
-      {/* 아이디 */}
+      {/* 아이디(이메일) */}
       <div className="form-group2">
         <label id="id-label2">
           아이디<span className="required2">*</span>
@@ -90,7 +103,7 @@ function SeRegisterPage() {
           <button id="id-check-btn2">아이디 중복체크</button>
         </div>
 
-      {/* 비밀번호 */}
+        {/* 비밀번호 */}
         <div className="label-group2">
           <label id="password-label2">
             비밀번호<span className="required2">*</span>
@@ -106,10 +119,8 @@ function SeRegisterPage() {
             id="password-input2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력"
+            placeholder="비밀번호 입력"
           />
-
-          {/* 비밀번호 확인 */}
           <input
             type="password"
             id="password-confirm-input2"
@@ -122,7 +133,7 @@ function SeRegisterPage() {
           *비밀번호는 영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요
         </p>
 
-      {/* 이름 */}
+        {/* 이름 */}
         <label id="name-label2">
           이름<span className="required2">*</span>
         </label>
@@ -136,34 +147,19 @@ function SeRegisterPage() {
           />
         </div>
 
-      {/* 전화번호 */}
+        {/* 전화번호 */}
         <label id="phone-label2">
           전화번호<span className="required2">*</span>
         </label>
         <div className="phone-input2">
-          <input
-            type="text"
-            id="phone-input-11"
-            value={phone1}
-            onChange={(e) => setPhone1(e.target.value)}
-          />
+          <input type="text" id="phone-input-11" value={phone1} onChange={(e) => setPhone1(e.target.value)} />
           <span>ㅡ</span>
-          <input
-            type="text"
-            id="phone-input-22"
-            value={phone2}
-            onChange={(e) => setPhone2(e.target.value)}
-          />
+          <input type="text" id="phone-input-22" value={phone2} onChange={(e) => setPhone2(e.target.value)} />
           <span>ㅡ</span>
-          <input
-            type="text"
-            id="phone-input-33"
-            value={phone3}
-            onChange={(e) => setPhone3(e.target.value)}
-          />
+          <input type="text" id="phone-input-33" value={phone3} onChange={(e) => setPhone3(e.target.value)} />
         </div>
 
-      {/* 카테고리 */}
+        {/* 카테고리*/}
         <label id="category1">
           카테고리<span className="required2">*</span>
         </label>
@@ -181,12 +177,14 @@ function SeRegisterPage() {
           <option value="4">식당</option>
         </select>
 
-      {/* 주소 */}
+        {/* 주소소*/}
         <label id="address-main-label2">
           주소<span className="required2">*</span>
         </label>
         <div className="address-group2">
-          <button id="housecode-btn2">주소 찾기</button>
+          <button id="housecode-btn2" onClick={openAddressPopup}>
+            주소 찾기
+          </button>
         </div>
         <div className="address-input-group2">
           <input
@@ -196,8 +194,6 @@ function SeRegisterPage() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
-
-          {/* 상세주소 */}
           <input
             type="text"
             id="address-detail2"
@@ -206,7 +202,7 @@ function SeRegisterPage() {
             onChange={(e) => setAddressDetail(e.target.value)}
           />
         </div>
-        
+
         {/* 회원가입 버튼 */}
         <div className="register-btn-container2">
           <button id="register-btn2" onClick={handleRegister}>
