@@ -1,19 +1,60 @@
+/* 전체 레이아웃 */
 .seller-container {
     display: flex;
-    flex-direction: row;
-    height: 100vh;
   }
   
-  /* 아이콘 흰색으로 변경 */
+  /* 좌측 메뉴 고정 */
+  .side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100vh;
+    background-color: #1e1e1e;
+    padding-top: 80px; /* 헤더 높이만큼 아래로 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    z-index: 99;
+  }
+  
+  /* 사이드 메뉴 아이템 */
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+  }
+  
   .menu-item img,
   .seller_icon {
-    filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1); /* 아이콘 흰색 처리 */
+    width: 43px;
+    height: 43px;
+    margin-bottom: 5px;
   }
   
+  /* Hover & 클릭 시 효과 */
+  .menu-item.faded {
+    opacity: 0.3;
+  }
+  
+  .menu-item.focused {
+    opacity: 1;
+    font-weight: bold;
+    transform: scale(1.05);
+  }
+  
+  /* 상단 헤더 고정 */
   .top-header {
     position: fixed;
     top: 0;
-    left: 60px;
+    left: 100px; /* 사이드 메뉴 너비만큼 이동 */
     right: 0;
     height: 80px;
     background-color: #1e1e1e;
@@ -32,9 +73,9 @@
   }
   
   .seller_icon {
-    width: 30px;
-    height: 30px;
-    margin-left: -45px;
+    width: 33px;
+    height: 33px;
+    margin-left: -82px;
   }
   
   .status-text {
@@ -52,43 +93,5 @@
     align-items: center;
     gap: 10px;
     font-size: 14px;
-  }
-  
-  .side-menu {
-    width: 100px;
-    background-color: #1e1e1e;
-    padding-top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
-  }
-  
-  .menu-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
-    font-size: 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.2s ease;
-  }
-  
-  .menu-item img {
-    width: 43px;
-    height: 43px;
-    margin-bottom: 5px;
-  }
-  
-  /* 마우스오버 및 클릭 시 흐려지는 효과 */
-  .menu-item.faded {
-    opacity: 0.3;
-  }
-  
-  .menu-item.focused {
-    opacity: 1;
-    font-weight: bold;
-    transform: scale(1.05);
   }
   
