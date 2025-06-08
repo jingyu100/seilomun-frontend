@@ -25,10 +25,10 @@ function SeloginPage() {
         }
       );
 
-      alert("판매자 로그인 성공!");
+      alert("판매자님 환영합니다.");
       
       // TODO: 로그인 후 이동할 페이지 설정
-      navigate("/selogin");
+      navigate("/Seller_Main");
     } catch (err) {
       console.error("로그인 실패:", err.response?.data || err.message);
       alert("아이디 또는 비밀번호가 올바르지 않습니다.");

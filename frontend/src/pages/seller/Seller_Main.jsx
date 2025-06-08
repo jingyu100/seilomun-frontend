@@ -1,0 +1,14 @@
+import "../../css/seller/Seller_Main.css";
+import Seller_Header from "../../components/seller/Seller_Header.jsx";
+
+const Seller_Main = () => {
+    return (
+        <div clsassName="Seller-Main">
+            <div className="Seller-Header">
+                <Seller_Header />
+            </div>
+        </div>
+    );
+  };
+  
+  export default Seller_Main;

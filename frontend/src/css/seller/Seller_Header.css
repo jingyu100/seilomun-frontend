@@ -1,0 +1,94 @@
+.seller-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+  }
+  
+  /* 아이콘 흰색으로 변경 */
+  .menu-item img,
+  .seller_icon {
+    filter: brightness(0) invert(1);
+  }
+  
+  .top-header {
+    position: fixed;
+    top: 0;
+    left: 60px;
+    right: 0;
+    height: 80px;
+    background-color: #1e1e1e;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 100;
+  }
+  
+  .left-header {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+  }
+  
+  .seller_icon {
+    width: 30px;
+    height: 30px;
+    margin-left: -45px;
+  }
+  
+  .status-text {
+    font-size: 20px;
+  }
+  
+  .red-dot {
+    width: 18px;
+    height: 18px;
+    margin-left: -38px;
+  }
+  
+  .right-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  
+  .side-menu {
+    width: 100px;
+    background-color: #1e1e1e;
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+  }
+  
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+  }
+  
+  .menu-item img {
+    width: 43px;
+    height: 43px;
+    margin-bottom: 5px;
+  }
+  
+  /* 마우스오버 및 클릭 시 흐려지는 효과 */
+  .menu-item.faded {
+    opacity: 0.3;
+  }
+  
+  .menu-item.focused {
+    opacity: 1;
+    font-weight: bold;
+    transform: scale(1.05);
+  }
+  
