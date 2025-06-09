@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import "../../css/customer/frame.css";
 import Footer from "../../components/Footer.jsx";
@@ -8,44 +7,71 @@ import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import Header from "../../components/Header.jsx";
 import EmptyWishList from "../../components/wishList/EmptyWishList.jsx";
 import WishListItem from "../../components/wishList/WishListItem.jsx";
+import EmptyFavoriteList from "../../components/wishList/EmptyFavoriteList.jsx";
+import FavoriteItem from "../../components/wishList/FavoriteItem.jsx";
 
 const WishListPage = () => {
   const [wishes, setWishes] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("wishes"); // "wishes" 또는 "favorites"
 
   // 1) 위시리스트 조회
+  const fetchWishes = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "http://localhost/api/customers/wishes?page=0&size=10",
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log("axios 응답 전체:", response.data);
+
+      const data = response.data.data;
+      console.log("response.data.data:", data);
+      setWishes(data.wishes || []);
+    } catch (error) {
+      console.error("위시리스트 조회 실패:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 2) 즐겨찾기 조회
+  const fetchFavorites = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "http://localhost/api/customers/favorites?page=0&size=10",
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log("즐겨찾기 응답:", response.data);
+      console.log("즐겨찾기 data:", response.data.data);
+      console.log("즐겨찾기 favorites:", response.data.data.favorites);
+
+      const data = response.data.data;
+      setFavorites(data.favorites || []);
+    } catch (error) {
+      console.error("즐겨찾기 조회 실패:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchWishes = async () => {
-      setLoading(true);
-      try {
-        // API 호출: 페이징 (page=0, size=10) → 필요한 경우 파라미터 조정
-        const response = await axios.get(
-          "http://localhost/api/customers/wishes?page=0&size=10",
-          {
-            withCredentials: true, // 세션/쿠키 기반 인증 시 필요
-            // 만약 JWT 토큰을 Authorization 헤더에 넣는 방식이라면,
-            // headers: { Authorization: `Bearer ${token}` } 형태로 바꿔주세요.
-          }
-        );
+    if (activeTab === "wishes") {
+      fetchWishes();
+    } else if (activeTab === "favorites") {
+      fetchFavorites();
+    }
+  }, [activeTab]);
 
-        console.log("axios 응답 전체:", response.data);
-
-        // 응답 구조: { status:200, data: { wishes: [WishProductDto], hasNext, totalElements, message }}
-        const data = response.data.data;
-        console.log("response.data.data:", data);
-        setWishes(data.wishes || []);
-      } catch (error) {
-        console.error("위시리스트 조회 실패:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWishes();
-  }, []);
-
-  // 2) 관심상품 제거 (삭제) 핸들러
+  // 3) 관심상품 제거 (삭제) 핸들러
   const handleRemove = async (wishId) => {
     try {
       await axios.delete(`http://localhost/api/customers/wishes/${wishId}`, {
@@ -58,12 +84,51 @@ const WishListPage = () => {
     }
   };
 
-  // 3) 장바구니 담기 (현재는 콘솔 로그만)
-  const handleAddToCart = (productId) => {
-    // TODO: 실제 장바구니 API 호출 로직 추가 예정
-    console.log("장바구니 담기 API 호출 필요 → productId:", productId);
-    navigate(`/cart/add/${productId}`); // 예시: 장바구니 추가 후 페이지 이동
+  // 4) 즐겨찾기 제거 핸들러
+  const handleRemoveFavorite = async (favoriteId) => {
+    try {
+      await axios.delete(`http://localhost/api/customers/favorites/${favoriteId}`, {
+        withCredentials: true,
+      });
+      // 로컬 상태에서 해당 항목만 제거
+      setFavorites((prev) => prev.filter((item) => item.id !== favoriteId));
+    } catch (error) {
+      console.error("즐겨찾기 삭제 실패:", error);
+    }
   };
+
+  // 5) 장바구니 담기
+  const handleAddToCart = async (productId) => {
+    try {
+      const response = await axios.post(
+        "http://localhost/api/carts",
+        {
+          productId: productId,
+          quantity: 1, // 기본 수량 1개
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log("장바구니 추가 성공:", response.data);
+
+      // 성공 알림 (선택사항)
+      alert(
+        `상품이 장바구니에 추가되었습니다! (총 수량: ${response.data.data.newQuantity}개)`
+      );
+    } catch (error) {
+      console.error("장바구니 추가 실패:", error);
+
+      // 에러 메시지 표시
+      if (error.response && error.response.data && error.response.data.message) {
+        alert(`장바구니 추가 실패: ${error.response.data.message}`);
+      } else {
+        alert("장바구니 추가 중 오류가 발생했습니다.");
+      }
+    }
+  };
+
   return (
     <div>
       <div className="header">
@@ -75,20 +140,80 @@ const WishListPage = () => {
 
         <section style={{ margin: "40px 0" }}>
           <h1 style={{ fontSize: "24px", marginBottom: "8px" }}>위시리스트</h1>
-          <hr style={{ border: "none", borderBottom: "1px solid #ddd" }} />
+
+          {/* 탭 메뉴 */}
+          <div
+            style={{
+              display: "flex",
+              borderBottom: "1px solid #ddd",
+              marginTop: "20px",
+              marginBottom: "20px",
+            }}
+          >
+            <button
+              onClick={() => setActiveTab("wishes")}
+              style={{
+                flex: 1,
+                padding: "12px 24px",
+                border: "none",
+                background: activeTab === "wishes" ? "#ff6b6b" : "transparent",
+                color: activeTab === "wishes" ? "white" : "#666",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: activeTab === "wishes" ? "bold" : "normal",
+                borderRadius: "4px 4px 0 0",
+                marginRight: "2px",
+              }}
+            >
+              좋아요 누른 상품
+            </button>
+            <button
+              onClick={() => setActiveTab("favorites")}
+              style={{
+                flex: 1,
+                padding: "12px 24px",
+                border: "none",
+                background: activeTab === "favorites" ? "#ff6b6b" : "transparent",
+                color: activeTab === "favorites" ? "white" : "#666",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: activeTab === "favorites" ? "bold" : "normal",
+                borderRadius: "4px 4px 0 0",
+                marginLeft: "2px",
+              }}
+            >
+              즐겨찾기 한 매장
+            </button>
+          </div>
 
           {loading ? (
             <p style={{ marginTop: "20px" }}>로딩 중...</p>
-          ) : wishes.length === 0 ? (
-            <EmptyWishList />
+          ) : activeTab === "wishes" ? (
+            // 좋아요 탭 - 상품 위시리스트
+            wishes.length === 0 ? (
+              <EmptyWishList />
+            ) : (
+              <div className="wishlist-container">
+                {wishes.map((item) => (
+                  <WishListItem
+                    key={item.wishId}
+                    item={item}
+                    onRemove={handleRemove}
+                    onAddToCart={handleAddToCart}
+                  />
+                ))}
+              </div>
+            )
+          ) : // 즐겨찾기 탭 - 매장 목록
+          favorites.length === 0 ? (
+            <EmptyFavoriteList />
           ) : (
-            <div className="wishlist-container">
-              {wishes.map((item) => (
-                <WishListItem
-                  key={item.wishId}
-                  item={item}
-                  onRemove={handleRemove}
-                  onAddToCart={handleAddToCart}
+            <div className="favorites-container">
+              {favorites.map((store) => (
+                <FavoriteItem
+                  key={store.id}
+                  store={store}
+                  onRemove={handleRemoveFavorite}
                 />
               ))}
             </div>
