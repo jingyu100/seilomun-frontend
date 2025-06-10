@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/customer/Product.css";
 import LikeButtonBox from "./LikeButtonBox";
 
@@ -10,10 +11,9 @@ export default function ProductHeadTitle({
   description,
   originalPrice,
   discountPrice,
-  maxDiscountRate,
-  minDiscountRate,
   currentDiscountRate,
 }) {
+  const navigate = useNavigate();
   const parsedOriginalPrice = parseInt(originalPrice) || 0;
   const parsedDisPrice = parseInt(discountPrice) || 0;
   const discountRate = parseInt(currentDiscountRate) || 0;
@@ -27,12 +27,30 @@ export default function ProductHeadTitle({
   // 총 가격 계산
   const totalPrice = parsedDisPrice * quantity;
 
-  // 구매 버튼 클릭 예시
-  const handleBuyNow = () => {
-    alert(`구매하기: ${name} ${quantity}개, 총 ${totalPrice}원`);
+  // 구매 버튼 클릭 - 결제페이지로 이동
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+
+    // 결제페이지로 상품 데이터 전달
+    navigate("/payment", {
+      state: {
+        product: {
+          id: productId,
+          name: name,
+          photoUrl: [thumbnailUrl],
+          expiryDate: expiryDate,
+          originalPrice: parsedOriginalPrice,
+          discountPrice: parsedDisPrice,
+          currentDiscountRate: discountRate,
+          quantity: quantity,
+          totalPrice: totalPrice,
+        },
+      },
+    });
   };
 
-  const handleAddCart = () => {
+  const handleAddCart = (e) => {
+    e.preventDefault();
     alert(`장바구니에 추가: ${name} ${quantity}개`);
   };
 
@@ -117,11 +135,11 @@ export default function ProductHeadTitle({
             </div>
           </div>
           <div className="productBuy-btns productFlex">
-            <a href="" className="buyBtn" onClick={handleBuyNow}>
+            <a href="#" className="buyBtn" onClick={handleBuyNow}>
               <div className="btnStyle1">바로구매하기</div>
               <div className="btnStyle2">BUY IT NOW</div>
             </a>
-            <a href="" className="cartBtn" onClick={handleAddCart}>
+            <a href="#" className="cartBtn" onClick={handleAddCart}>
               <div className="btnStyle1">장바구니</div>
               <div className="btnStyle2">ADD CART</div>
             </a>

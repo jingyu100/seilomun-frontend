@@ -2,8 +2,11 @@ import "./OrderSubmitBar.css";
 import axios from "axios";
 import { useEffect, useRef } from "react";
 
-const OrderSubmitBar = () => {
+const OrderSubmitBar = ({ products = [], deliveryFee, totalProductPrice }) => {
   const tossPaymentsRef = useRef(null);
+
+  // 최종 결제 금액 계산 (포인트는 PaymentInfoSection에서 처리)
+  const finalAmount = totalProductPrice + deliveryFee;
 
   useEffect(() => {
     if (window.TossPayments) {
@@ -17,24 +20,27 @@ const OrderSubmitBar = () => {
 
   const handlePaymentClick = async () => {
     try {
-      const quantity = 1;
-      const originalPrice = 2000;
-      const discountRate = 10;
-      const discountedPrice = (originalPrice * (100 - discountRate)) / 100;
+      // 실제 상품 데이터 사용
+      const firstProduct = products[0]; // 첫 번째 상품 기준 (여러 상품일 경우 수정 필요)
+
+      if (!firstProduct) {
+        alert("주문할 상품이 없습니다.");
+        return;
+      }
 
       const orderData = {
         usedPoints: 0,
-        memo: "샘플 테스트 주문",
+        memo: "실제 주문",
         isDelivery: "N",
-        deliveryAddress: "서울시 강남구 테헤란로 123",
-        productId: 1,
-        quantity: quantity,
-        price: discountedPrice,
-        currentDiscountRate: discountRate,
+        deliveryAddress: "서울시 강남구 테헤란로 123", // 실제로는 배송 정보에서 가져와야 함
+        productId: firstProduct.id,
+        quantity: firstProduct.quantity || 1,
+        price: firstProduct.discountPrice || firstProduct.originalPrice,
+        currentDiscountRate: firstProduct.currentDiscountRate || 0,
         payType: "CARD",
-        orderName: `샘플 상품 ${quantity}개`,
-        yourSuccessUrl: "http://localhost/api/orders/toss/success", // ✅ 수정
-        yourFailUrl: "http://localhost/api/orders/toss/fail", // ✅ 수정
+        orderName: `${firstProduct.name} ${firstProduct.quantity || 1}개`,
+        yourSuccessUrl: "http://localhost/api/orders/toss/success",
+        yourFailUrl: "http://localhost/api/orders/toss/fail",
       };
 
       const response = await axios.post("http://localhost/api/orders/buy", orderData, {
@@ -48,7 +54,7 @@ const OrderSubmitBar = () => {
       }
 
       await tossPaymentsRef.current.requestPayment("CARD", {
-        amount: paymentData.amount,
+        amount: finalAmount, // 실제 계산된 최종 금액 사용
         orderId: paymentData.orderId,
         orderName: paymentData.orderName,
         customerName: paymentData.customerName || "테스트 고객",
@@ -72,7 +78,7 @@ const OrderSubmitBar = () => {
   return (
     <div className="payment-button-wrapper">
       <button className="payment-button" onClick={handlePaymentClick}>
-        총 1,800원 결제하기
+        총 {finalAmount.toLocaleString()}원 결제하기
       </button>
     </div>
   );
