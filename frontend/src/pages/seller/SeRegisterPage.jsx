@@ -100,7 +100,7 @@ function SeRegisterPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button id="id-check-btn2">아이디 중복체크</button>
+          <button id="id-check-btn2">인증번호 발송</button>
         </div>
 
         {/* 비밀번호 */}
@@ -133,15 +133,16 @@ function SeRegisterPage() {
           *비밀번호는 영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요
         </p>
 
-        {/* 이름 */}
-        <label id="name-label2">
-          이름<span className="required2">*</span>
+
+        {/* 매장이름 */}
+        <label id="storename-label">
+          매장이름<span className="required2">*</span>
         </label>
-        <div className="input-name2">
+        <div className="input-storename">
           <input
             type="text"
-            id="name-input2"
-            placeholder="이름을 입력해주세요"
+            id="storename-input"
+            placeholder="매장이름을 입력해주세요"
             value={storeName}
             onChange={(e) => setStoreName(e.target.value)}
           />

@@ -183,15 +183,15 @@
     color: #ccc;
 }
 
-/* 매장 이름 */
+/* 매장이름 */
 
-/* .input-shop2 {
+.input-storename {
     display: flex;
     flex-direction: column; 
     align-items: flex-start; 
 }
 
-#shop-label2 {
+#storename-label {
     font-size: 1.1em;
     margin-bottom: 10px;
     margin-left: 30px;
@@ -204,7 +204,7 @@
 }
 
 
-#shop-input2 {
+#storename-input {
     flex: 1; 
     padding: 12px;
     border: 2.0px solid #ccc;
@@ -214,18 +214,18 @@
     min-width: 500px;
     min-height: 25px; 
     margin-left: 30px;
-    margin-bottom: 30px;
 }
 
-#shop-input2:focus {
+#storename-input:focus {
     border: 2.0px solid #ccc !important; 
     outline: none; 
 }
 
 
-#shop-input2::placeholder {
+#storename-input::placeholder {
     color: #ccc;
-} */
+}
+
 
 
 /* 전화번호 */

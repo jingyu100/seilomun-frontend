@@ -102,7 +102,7 @@ function Business_numberPage() {
           <div className="data-group">
             <select value={year} onChange={(e) => setYear(e.target.value)} className="date-select">
               <option value="">선택</option>
-              {[...Array(71)].map((_, i) => {
+              {[...Array(76)].map((_, i) => {
                 const y = 1950 + i;
                 return <option key={y} value={y}>{y}</option>;
               })}
