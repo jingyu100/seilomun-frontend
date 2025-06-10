@@ -62,7 +62,7 @@ export default function WishListItem({ item, onRemove, onAddToCart }) {
             className="discount-price"
             style={{
               fontWeight: "bold",
-              color: "#ff6b6b",
+              color: "#62d76a",
               marginRight: "12px",
               fontSize: "18px",
             }}
@@ -83,7 +83,7 @@ export default function WishListItem({ item, onRemove, onAddToCart }) {
           <span
             className="discount-rate"
             style={{
-              backgroundColor: "#ff6b6b",
+              backgroundColor: "#62d76a",
               color: "white",
               padding: "2px 6px",
               borderRadius: "4px",

@@ -145,8 +145,9 @@ header {
 
 .search-inner,
 .search-inputBtn svg {
-  /* color: #7346f3; */
-  color: #f8a092;
+  /* color: #7346f3; 보라색 */
+  /* color: #f8a092; 연한 핑크색 */
+  color: #77ca80;
 }
 
 .icon-menu {
@@ -269,7 +270,8 @@ header {
 .category-frame:hover {
   border-radius: 5px;
   /* background-color: #e9d8ff; */
-  background-color: #ffe7d8;
+  /* background-color: #ffe7d8; */
+  background-color: rgba(133, 225, 144, 0.532);
 }
 
 .menu-inner {
@@ -293,8 +295,10 @@ header {
 .menu-under:hover {
   /* color: #774eff;
   border-bottom: 2px solid #774eff; */
-  color: #f8a092;
-  border-bottom: 3px solid #f8a092;
+  /* color: #f8a092;
+  border-bottom: 3px solid #f8a092; */
+  color: #77ca80;
+  border-bottom: 3px solid #74f07c;
 }
 /* ---------- 헤더 부분 ---------- */
 

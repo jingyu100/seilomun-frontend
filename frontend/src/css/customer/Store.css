@@ -87,7 +87,8 @@
 }
 
 .storeRight-ui:hover {
-    background-color: #fcccc5;
+    /* background-color: #fcccc5; */
+    background-color: #d7f7af;
     cursor: pointer;
 }
 
@@ -140,10 +141,24 @@
 .productList {
     /* display: flex; */
 }
+/* ---------- 스토어 바디 부분 ---------- */
 
+
+
+/* ---------- 스토어 상세 정보 부분 ---------- */
 .storeMainInfo {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-/* ---------- 스토어 바디 부분 ---------- */
+
+.storeMainInfo .storeInfoTable {
+    display: flex;
+    flex-direction: column;
+}
+
+.storeMainInfo .storeInfoTable .storeInfoTable-inner {
+    display: flex;
+}
+/* ---------- 스토어 상세 정보 부분 ---------- */

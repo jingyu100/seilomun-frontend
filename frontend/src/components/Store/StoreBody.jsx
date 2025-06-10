@@ -5,7 +5,7 @@ import StoreMainInfo from "./StoreMainInfo";
 // 추후 만들 컴포넌트
 // import StoreReview from "./StoreReview";
 
-export default function StoreBody({ store }) {
+export default function StoreBody({ store, sellerId }) {
 
     if (!store) return null;
     
@@ -42,8 +42,10 @@ export default function StoreBody({ store }) {
     const tabs = [
         { key: "menu", label: "메뉴", content: <StoreMenu /> },
         { key: "info", label: "정보", content: <StoreMainInfo 
-                address={sellerInformationDto?.address || "대구광역시 북구 복현로 35"}
-
+                address= {sellerInformationDto?.address || "가게 정보 없음"}
+                phone= {sellerInformationDto?.phone || "연락처 없음"}
+                operatingHours= {sellerInformationDto?.operatingHours || "운영 시간 정보 없음"}
+                storeDescription= {sellerInformationDto?.storeDescription || "설명 없음"}
             /> 
         },
         { key: "review", label: "리뷰", content: <div>리뷰 내용 (StoreReview 자리)</div> },

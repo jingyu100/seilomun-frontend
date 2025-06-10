@@ -7,7 +7,7 @@ export default function ProductHead() {
   const { sellerId, productId } = useParams();
   const { products } = useSellerProducts(sellerId);
 
-  if (!products) return <div>로딩 중...</div>;
+  if (!products) return ;
 
   const product = products.find((p) => String(p.id) === String(productId));
 

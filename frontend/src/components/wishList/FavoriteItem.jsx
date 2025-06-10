@@ -102,7 +102,7 @@ const FavoriteItem = ({ store, onRemove }) => {
         }}
         style={{
           padding: "10px 20px",
-          backgroundColor: isButtonHovered ? "#ff3742" : "#ff4757",
+          backgroundColor: isButtonHovered ? "#ff3742" : "#62d76a",
           color: "white",
           border: "none",
           borderRadius: "6px",

@@ -23,7 +23,7 @@ export default function StoreHead({ store, sellerId }) {
         <div className="storeHead-half storeHead-left">
           <Rating />
           <StoreMiniInfo
-            address={sellerInformationDto?.address || "대구광역시 북구 복현로 35"}
+            address={sellerInformationDto?.address || "가게 정보 없음"}
             phone={sellerInformationDto?.phone || "전화번호 없음"}
             minOrderAmount={sellerInformationDto?.minOrderAmount || "정보 없음"}
             deliveryFee={sellerInformationDto?.deliveryFeeDtos?.[0]?.deliveryTip || 0}
