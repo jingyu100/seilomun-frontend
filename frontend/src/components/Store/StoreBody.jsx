@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/customer/Store.css";
 import StoreMenu from "./StoreMenu";
+import StoreMainInfo from "./StoreMainInfo";
 // 추후 만들 컴포넌트
-// import StoreInfo from "./StoreInfo";
 // import StoreReview from "./StoreReview";
 
-export default function StoreBody() {
+export default function StoreBody({ store }) {
+
+    if (!store) return null;
+    
+    const { sellerInformationDto } = store;
     const [activeTab, setActiveTab] = useState("menu");
 
     const tabRefs = {
@@ -37,7 +41,11 @@ export default function StoreBody() {
     
     const tabs = [
         { key: "menu", label: "메뉴", content: <StoreMenu /> },
-        { key: "info", label: "정보", content: <div>정보 내용 (StoreInfo 자리)</div> },
+        { key: "info", label: "정보", content: <StoreMainInfo 
+                address={sellerInformationDto?.address || "대구광역시 북구 복현로 35"}
+
+            /> 
+        },
         { key: "review", label: "리뷰", content: <div>리뷰 내용 (StoreReview 자리)</div> },
     ];
 

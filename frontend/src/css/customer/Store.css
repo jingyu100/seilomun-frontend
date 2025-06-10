@@ -140,4 +140,10 @@
 .productList {
     /* display: flex; */
 }
+
+.storeMainInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 /* ---------- 스토어 바디 부분 ---------- */

@@ -16,6 +16,15 @@ export default function ProductFilter({ setSortType }) {
         { label: "최신 순", key: "LATEST" },
         { label: "낮은 가격 순", key: "LOW_PRICE" },
         { label: "높은 가격 순", key: "HIGH_PRICE" },
+        // { label: "별점 높은 순", key: "HIGH_RATING" },
+        // { label: "별점 낮은 순", key: "LOW_RATING" },
+    ];
+
+    const sortOptions2 = [
+        { label: "기본 순", key: "BASIC" },
+        { label: "최신 순", key: "LATEST" },
+        { label: "낮은 가격 순", key: "LOW_PRICE" },
+        { label: "높은 가격 순", key: "HIGH_PRICE" },
         { label: "별점 높은 순", key: "HIGH_RATING" },
         { label: "별점 낮은 순", key: "LOW_RATING" },
     ];

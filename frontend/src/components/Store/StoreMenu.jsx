@@ -8,7 +8,7 @@ import StoreProducts from "./StoreProducts";
 export default function StoreMenu() {
     const { sellerId } = useParams();
     const { products } = useSellerProducts(sellerId);
-    const [sortType, setSortType] = useState("LATEST");
+    const [sortType, setSortType] = useState("BASIC");
 
     const productList = useMemo(() => {
         if (!products) return [];
@@ -55,8 +55,9 @@ export default function StoreMenu() {
                     productList.map((prod, index) => (
                         <StoreProducts                          
                           key={prod.id || index}  // key는 고유값으로 주는게 좋아요
-                          id={index}
+                          id={prod.id}
                           index= {index}
+                          productId={prod.id}
                           sellerId={sellerId}
                           thumbnailUrl={prod.thumbnailUrl || "사진 없음"}
                           name={prod.name}

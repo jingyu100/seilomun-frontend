@@ -38,7 +38,7 @@ export default function StorePage() {
             </div>
 
             <div className="storeBody">
-              <StoreBody />
+              <StoreBody store={store} sellerId={sellerId} />
             </div>
           </div>
         </div>

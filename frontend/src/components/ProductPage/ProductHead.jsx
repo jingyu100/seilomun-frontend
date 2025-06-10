@@ -7,15 +7,13 @@ export default function ProductHead() {
   const { sellerId, productId } = useParams();
   const { products } = useSellerProducts(sellerId);
 
-  const index = Number(productId);
+  if (!products) return <div>로딩 중...</div>;
 
-  if (!products) return;
+  const product = products.find((p) => String(p.id) === String(productId));
 
-  if (isNaN(index) || index < 0 || index >= products.length) {
-    return <div>잘못된 상품 번호입니다.</div>;
+  if (!product) {
+    return <div>해당 상품을 찾을 수 없습니다.</div>;
   }
-
-  const product = products[index];
 
   return (
     <div className="productHead-inner productFlex">
@@ -24,7 +22,7 @@ export default function ProductHead() {
       </div>
       <div className="productHead-right">
         <ProductHeadTitle
-          productId={productId}
+          productId={product.id}
           thumbnailUrl={product.thumbnailUrl || "사진 없음"}
           name={product.name || "제품명 없음"}
           expiryDate={product.expiryDate || "유통기한 없음"}
