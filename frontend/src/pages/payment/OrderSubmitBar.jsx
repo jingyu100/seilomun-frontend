@@ -2,11 +2,16 @@ import "./OrderSubmitBar.css";
 import axios from "axios";
 import { useEffect, useRef } from "react";
 
-const OrderSubmitBar = ({ products = [], deliveryFee, totalProductPrice }) => {
+const OrderSubmitBar = ({
+  products = [],
+  deliveryFee,
+  totalProductPrice,
+  isPickup = false,
+}) => {
   const tossPaymentsRef = useRef(null);
 
   // 최종 결제 금액 계산 (포인트는 PaymentInfoSection에서 처리)
-  const finalAmount = totalProductPrice + deliveryFee;
+  const finalAmount = totalProductPrice + (isPickup ? 0 : deliveryFee);
 
   useEffect(() => {
     if (window.TossPayments) {
@@ -31,7 +36,7 @@ const OrderSubmitBar = ({ products = [], deliveryFee, totalProductPrice }) => {
       const orderData = {
         usedPoints: 0,
         memo: "실제 주문",
-        isDelivery: "N",
+        isDelivery: isPickup ? "N" : "Y",
         deliveryAddress: "서울시 강남구 테헤란로 123", // 실제로는 배송 정보에서 가져와야 함
         productId: firstProduct.id,
         quantity: firstProduct.quantity || 1,
@@ -78,7 +83,7 @@ const OrderSubmitBar = ({ products = [], deliveryFee, totalProductPrice }) => {
   return (
     <div className="payment-button-wrapper">
       <button className="payment-button" onClick={handlePaymentClick}>
-        총 {finalAmount.toLocaleString()}원 결제하기
+        총 {finalAmount.toLocaleString()}원 {isPickup ? "포장주문하기" : "결제하기"}
       </button>
     </div>
   );

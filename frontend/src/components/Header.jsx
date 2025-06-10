@@ -558,9 +558,9 @@ const Header = () => {
                   </Link>
                 </li>
                 <li className="">
-                  <a href="/" className="menu-font-st menu-under">
+                  <Link to="/wish" className="menu-font-st menu-under">
                     위시리스트
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>

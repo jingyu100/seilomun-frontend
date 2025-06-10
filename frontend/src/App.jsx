@@ -27,14 +27,12 @@ import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
 import Delivery_destination from "./pages/customer_mypage/Delivery_destination.jsx";
 
 /* 판매자 */
-import Seller_Main from "./pages/seller/Seller_Main.jsx"
+import Seller_Main from "./pages/seller/Seller_Main.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
 
 import NotFoundPage from "./pages/NotFoundPage.jsx";
-
-
 
 function App() {
   // const { isLoading } = useLogin();

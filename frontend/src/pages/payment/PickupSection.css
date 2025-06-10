@@ -1,0 +1,127 @@
+.pickup-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pickup-header {
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.pickup-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 지도 영역 */
+.map-container {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 카카오맵 컨테이너 조정 */
+.map-container #map {
+  border-radius: 8px !important;
+}
+
+/* 매장 정보 */
+.store-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.store-details {
+  flex: 1;
+}
+
+.store-address,
+.store-contact {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.store-address:last-child,
+.store-contact:last-child {
+  margin-bottom: 0;
+}
+
+.address-label,
+.contact-label {
+  font-weight: bold;
+  color: #555;
+  min-width: 90px;
+  margin-right: 10px;
+}
+
+.address-text,
+.contact-text {
+  color: #333;
+  flex: 1;
+}
+
+/* 요청사항 입력 */
+.request-section {
+  margin-top: 15px;
+}
+
+.request-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  background-color: #fff;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.request-input::placeholder {
+  color: #9ca3af;
+}
+
+.request-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .store-info {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .address-label,
+  .contact-label {
+    min-width: auto;
+    margin-bottom: 5px;
+  }
+
+  .store-address,
+  .store-contact {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .request-input {
+    min-height: 60px;
+  }
+}

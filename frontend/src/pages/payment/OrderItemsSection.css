@@ -72,15 +72,3 @@
   font-weight: bold;
   color: #111;
 }
-
-.delete-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: none;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-}

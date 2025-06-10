@@ -4,6 +4,7 @@ import axios from "axios";
 import StepTabs from "./StepTabs";
 import "./Payment.css"; // 클래식 CSS 연결
 import DeliverySection from "./DeliverySection";
+import PickupSection from "./PickupSection";
 import OrderItemsSection from "./OrderItemsSection";
 import PaymentInfoSection from "./PaymentInfoSection";
 import OrderSubmitBar from "./OrderSubmitBar";
@@ -11,6 +12,7 @@ import OrderSubmitBar from "./OrderSubmitBar";
 const Payment = () => {
   const location = useLocation();
   const [sellerProducts, setSellerProducts] = useState(null);
+  const [activeTab, setActiveTab] = useState("delivery");
 
   // 상품 상세페이지에서 전달받은 데이터
   const { product } = location.state || {};
@@ -101,33 +103,47 @@ const Payment = () => {
     return applicableFee;
   };
 
-  // 실제 배달비 계산
-  const deliveryFee = calculateDeliveryFee(totalProductPrice, sellerProducts);
+  // 실제 배달비 계산 (배송 탭일 때만)
+  const deliveryFee =
+    activeTab === "delivery"
+      ? calculateDeliveryFee(totalProductPrice, sellerProducts)
+      : 0;
 
   // 디버깅용 로그
   console.log("=== 배송비 계산 디버깅 ===");
+  console.log("현재 탭:", activeTab);
   console.log("총 상품 금액:", totalProductPrice);
   console.log("판매자 데이터:", sellerProducts);
   console.log("계산된 배송비:", deliveryFee);
   console.log("======================");
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <div className="payment-wrapper">
       <div className="payment-container">
-        <StepTabs />
-        <DeliverySection />
+        <StepTabs onTabChange={handleTabChange} />
+
+        {/* 탭에 따른 컴포넌트 렌더링 */}
+        {activeTab === "delivery" && <DeliverySection />}
+        {activeTab === "pickup" && <PickupSection sellerProducts={sellerProducts} />}
+
         <OrderItemsSection products={products} deliveryFee={deliveryFee} />
         <PaymentInfoSection
           products={products}
           sellerProducts={sellerProducts}
           deliveryFee={deliveryFee}
           totalProductPrice={totalProductPrice}
+          isPickup={activeTab === "pickup"}
         />
         <OrderSubmitBar
           products={products}
           sellerProducts={sellerProducts}
           deliveryFee={deliveryFee}
           totalProductPrice={totalProductPrice}
+          isPickup={activeTab === "pickup"}
         />
       </div>
     </div>

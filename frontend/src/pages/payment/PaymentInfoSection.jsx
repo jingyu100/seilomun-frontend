@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import "./PaymentInfoSection.css";
 
-const PaymentInfoSection = ({ deliveryFee, totalProductPrice, sellerProducts }) => {
+const PaymentInfoSection = ({
+  deliveryFee,
+  totalProductPrice,
+  sellerProducts,
+  isPickup = false,
+}) => {
   const [pointToUse, setPointToUse] = useState(0);
 
   // 최종 결제 금액 계산
@@ -70,13 +75,15 @@ const PaymentInfoSection = ({ deliveryFee, totalProductPrice, sellerProducts }) 
         <span className="value">{totalProductPrice.toLocaleString()}원</span>
       </div>
 
-      <div className="payment-row">
-        <span className="label">
-          배송비
-          {getDeliveryStatus()}
-        </span>
-        <span className="value">{deliveryFee.toLocaleString()}원</span>
-      </div>
+      {!isPickup && (
+        <div className="payment-row">
+          <span className="label">
+            배송비
+            {getDeliveryStatus()}
+          </span>
+          <span className="value">{deliveryFee.toLocaleString()}원</span>
+        </div>
+      )}
 
       <div className="payment-row point-row">
         <div className="point-label-box">

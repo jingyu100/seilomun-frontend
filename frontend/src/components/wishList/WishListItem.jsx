@@ -1,11 +1,28 @@
 // src/components/WishListItem.jsx
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function WishListItem({ item, onRemove, onAddToCart }) {
+export default function WishListItem({ item, favorites, onRemove, onAddToCart }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isCartHovered, setIsCartHovered] = useState(false);
   const [isRemoveHovered, setIsRemoveHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    // 즐겨찾기 목록에서 같은 주소를 가진 매장 찾기
+    const matchedSeller = favorites?.find(
+      (fav) => fav.addressDetail === item.storeAddress
+    );
+
+    if (matchedSeller) {
+      // sellerId를 찾았으면 올바른 경로로 이동
+      navigate(`/sellers/${matchedSeller.id}/products/${item.productId}`);
+    } else {
+      // fallback: productId만으로 이동
+      navigate(`/products/${item.productId}`);
+    }
+  };
 
   return (
     <div
@@ -25,6 +42,7 @@ export default function WishListItem({ item, onRemove, onAddToCart }) {
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       {/* 썸네일 이미지 */}
       <div style={{ flexShrink: 0 }}>

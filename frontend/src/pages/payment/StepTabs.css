@@ -19,16 +19,25 @@
   border-right: none;
   box-sizing: border-box;
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid #d1d5db;
 }
 
-/* 배송 탭: 검정색, 보통 굵기 */
-.delivery {
+.tab:hover {
+  background-color: #f3f4f6;
+}
+
+/* 활성 탭 */
+.tab.active {
   border-bottom: 3px solid #000000;
+  color: #000000;
 }
 
-/* 포장 탭: 밝은 회색, 더 굵은 선 */
-.packing {
-  border-bottom: 2px solid #d1d5db; /* Tailwind 기준 gray-300 */
+/* 비활성 탭 */
+.tab:not(.active) {
+  border-bottom: 2px solid #d1d5db;
+  color: #6b7280;
 }
 
 .payment-bar {

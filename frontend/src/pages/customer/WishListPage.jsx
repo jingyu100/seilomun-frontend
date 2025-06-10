@@ -16,7 +16,7 @@ const WishListPage = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("wishes"); // "wishes" 또는 "favorites"
 
-  // 1) 위시리스트 조회
+  // 1) 좋아요 조회
   const fetchWishes = async () => {
     setLoading(true);
     try {
@@ -31,6 +31,10 @@ const WishListPage = () => {
 
       const data = response.data.data;
       console.log("response.data.data:", data);
+      console.log("wishes 배열:", data.wishes);
+      if (data.wishes && data.wishes.length > 0) {
+        console.log("첫 번째 위시 아이템:", data.wishes[0]);
+      }
       setWishes(data.wishes || []);
     } catch (error) {
       console.error("위시리스트 조회 실패:", error);
@@ -64,6 +68,9 @@ const WishListPage = () => {
   };
 
   useEffect(() => {
+    // 페이지 로드시 즐겨찾기는 항상 미리 로드
+    fetchFavorites();
+
     if (activeTab === "wishes") {
       fetchWishes();
     } else if (activeTab === "favorites") {
@@ -198,6 +205,7 @@ const WishListPage = () => {
                   <WishListItem
                     key={item.wishId}
                     item={item}
+                    favorites={favorites}
                     onRemove={handleRemove}
                     onAddToCart={handleAddToCart}
                   />
