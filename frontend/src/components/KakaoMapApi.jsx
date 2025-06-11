@@ -49,7 +49,7 @@ export default function KakaoMapApi({ address }) {
         height: "300px",
         borderRadius: '7px',
         border: '1px solid #e2e2e2',
-        margin: "30px 0",
+        // margin: "30px 0",
       }}
     ></div>
   );

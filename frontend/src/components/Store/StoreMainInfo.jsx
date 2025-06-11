@@ -10,25 +10,25 @@ export default function StoreMainInfo({
 
     return(
         <div className="storeMainInfo">
-            <KakaoMapApi address={address} />
+            <div style={{
+                // borderBottom: "1px solid #a7a7a7",
+            }}>
+                <KakaoMapApi address={address} />
+            </div>
             
             <div className="storeInfoTable">
                 <div className="storeInfoTable-ui">
-                    <div className="storeInfoTable-inner">
+                    <div className= "storeInfoTable-right">
                         <p className="storeInfoTable-title">주소</p>
-                        <p>{address}</p>
-                    </div>
-                    <div className="storeInfoTable-inner">
                         <p className="storeInfoTable-title">연락처</p>
-                        <p>{phone}</p>
-                    </div>
-                    <div className="storeInfoTable-inner">
                         <p className="storeInfoTable-title">운영 시간</p>
-                        <p>{operatingHours}</p>
-                    </div>
-                    <div className="storeInfoTable-inner">
                         <p className="storeInfoTable-title">가게 설명</p>
-                        <p>{storeDescription}</p>
+                    </div>
+                    <div className= "storeInfoTable-left">
+                        <p className="storeInfoTable-pv">{address}</p>
+                        <p className="storeInfoTable-pv">{phone}</p>
+                        <p className="storeInfoTable-pv">{operatingHours}</p>
+                        <p className="storeInfoTable-pv">{storeDescription}</p>
                     </div>
                 </div>
             </div>

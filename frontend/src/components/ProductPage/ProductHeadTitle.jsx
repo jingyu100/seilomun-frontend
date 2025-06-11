@@ -106,19 +106,41 @@ export default function ProductHeadTitle({
           </div>
         </div>
 
-        <div className="productQuantity productFlex" style={{ alignItems: "center" }}>
-          <div className="productName">
+        <div className="productQuantity productFlex" style={{ 
+          alignItems: "center",
+          justifyContent: "space-between", 
+          padding: "12px 0", 
+          }}
+        >
+          <div className="productName" style={{
+              fontWeight: "600",
+            }}
+          >
             <p>{name}</p>
           </div>
           <div
             className="plust-minus productFlex"
-            style={{ gap: "10px", alignItems: "center" }}
+            style={{ 
+              gap: "10px", 
+              alignItems: "center", 
+              fontWeight: "600" ,
+              margin: "0 10px",
+            }}
           >
-            <button onClick={decreaseQuantity} style={{ padding: "5px 10px" }}>
+            <button onClick={decreaseQuantity} style={{ 
+                padding: "0 5px",
+                fontWeight: "bold",
+                fontSize: "18px",
+              }}
+            >
               -
             </button>
             <span>{quantity}</span>
-            <button onClick={increaseQuantity} style={{ padding: "5px 10px" }}>
+            <button onClick={increaseQuantity} style={{
+                  padding: "0 2px",
+                  fontSize: "20px",
+                }}
+              >
               +
             </button>
           </div>
