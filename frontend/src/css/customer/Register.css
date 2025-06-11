@@ -2,7 +2,7 @@
 
 .register-Container {
     width: 800px;
-    height: 1550px;
+    height: 1600px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -25,13 +25,14 @@
 }
 
 /* 아이디 */
-.form-group {
+.form-group-customer {
     display: flex;
     flex-direction: column; 
     align-items: flex-start; 
 }
 
-#id-label {
+#id-label2 {
+    margin-top: 20px;
     font-size: 1.1em;
     margin-bottom: 10px;
     margin-left: 30px;
@@ -42,7 +43,7 @@
     font-size: 1.2em;
 }
 
-.input-container {
+.input-container-customer {
     display: flex;
     align-items: center; 
     gap: 30px; 
@@ -56,6 +57,7 @@
     font-size: 14px;
     color: black;
     min-width: 500px; 
+    margin-top: 10px;
     margin-left: 30px;
 }
 

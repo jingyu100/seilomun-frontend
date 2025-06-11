@@ -25,14 +25,15 @@ import MyPage from "./pages/customer_mypage/MyPage.jsx";
 import Change_dataPage from "./pages/customer_mypage/Change_dataPage.jsx";
 import Customer_modify from "./pages/customer_mypage/Customer_modify.jsx";
 import Delivery_destination from "./pages/customer_mypage/Delivery_destination.jsx";
+import Customer_point from "./pages/customer_mypage/Customer_point.jsx";
+import Customer_refund from "./pages/customer_mypage/Customer_refund.jsx";
+import Customer_review from "./pages/customer_mypage/Customer_review.jsx";
 
 /* 판매자 */
 import Seller_Main from "./pages/seller/Seller_Main.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
-
-import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -82,9 +83,10 @@ function App() {
         <Route path="/sellers/:sellerId/products/:productId" element={<ProductPage />} />
         <Route path="/oauth-success" element={<NaverLoginCallback />} />
         <Route path="/Customer_modify" element={<Customer_modify />} />
+        <Route path="/Customer_point" element={<Customer_point />} />
+        <Route path="/Customer_refund" element={<Customer_refund />} />
+        <Route path="/Customer_review" element={<Customer_review />} />
         <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
         <Route path="/OrderList" element={<OrderListPage />} />
         <Route path="/Seller_Main" element={<Seller_Main />} />
       </Routes>

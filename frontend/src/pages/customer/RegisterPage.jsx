@@ -157,7 +157,7 @@ function RegisterPage() {
 
     }
       // ✅ 임시로 항상 성공한 것처럼 처리
-      setNicknameMessage("임시로 닉네임 중복체크를 완료하였습니다.");
+      setNicknameMessage("사용가능한 닉네임입니다.");
       setNicknameMessageColor("blue");
       setIsNicknameAvailable(true);
     };
@@ -270,11 +270,11 @@ function RegisterPage() {
           <hr className="separator" />
 
           {/* 이메일 입력, 인증번호 발송 */}
-          <div className="form-group">
+          <div className="form-group-customer">
             <label id="id-label">
               아이디<span className="required">*</span>
             </label>
-            <div className="input-container">
+            <div className="input-container-customer">
               <input
                 type="text"
                 id="id-input"

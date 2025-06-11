@@ -57,7 +57,7 @@ const Change_dataPage = () => {
           <div className="title-lg">쇼핑정보</div>
           <ul>
           <li onClick={() => window.location.href = '/OrderList'}>주문목록/배송조회</li>
-            <li>환불/입금 내역</li>
+          <li onClick={() => window.location.href = '/Customer_refund'}>환불/입금 내역</li>
           </ul>
         </div>
 
@@ -77,14 +77,18 @@ const Change_dataPage = () => {
         <div className="sidebar-section">
           <div className="title-lg">혜택관리</div>
           <ul>
-            <li>적립내역</li>
+          <li onClick={() => window.location.href = '/Customer_point'}>
+              적립내역
+            </li>
           </ul>
         </div>
 
         <div className="sidebar-section">
           <div className="title-lg">리뷰관리</div>
           <ul>
-            <li>리뷰관리</li>
+          <li onClick={() => window.location.href = '/Customer_review'}>
+              리뷰관리
+              </li>
           </ul>
         </div>
           </aside>

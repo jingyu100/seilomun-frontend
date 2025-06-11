@@ -59,6 +59,7 @@
     font-size: 14px;
     color: black;
     min-width: 500px; 
+    margin-top: 12px;
     margin-left: 30px;
 }
 
@@ -94,6 +95,7 @@
     font-size: 14px;
     color: black;
     margin-left: 30px;
+    margin-top: 12px;
 }
 
 #id-seinput:focus {
@@ -113,6 +115,7 @@
     border: 1.8px solid black;
     border-radius: 10px;
     font-size: 15px;
+    margin-top: 12px;
     font-weight: bold;
     cursor: pointer;
     text-align: center;

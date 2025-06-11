@@ -24,8 +24,6 @@ function SeloginPage() {
           withCredentials: true,
         }
       );
-
-      alert("판매자님 환영합니다.");
       
       // TODO: 로그인 후 이동할 페이지 설정
       navigate("/Seller_Main");
