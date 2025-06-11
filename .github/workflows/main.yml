@@ -1,0 +1,91 @@
+name: React CI/CD with Docker
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm test -- --coverage --watchAll=false
+    
+    - name: Build React app
+      run: npm run build
+      env:
+        REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+  build-docker-image:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # main 브랜치에 push될 때만 실행
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build React app
+      run: npm run build
+      env:
+        REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+    
+    # Docker 이미지 Build
+    - name: Build Docker image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend .
+    
+    # DockerHub Login
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    
+    # Docker Hub에 push
+    - name: Push to Docker Hub
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend
+
+  deploy-to-ec2:
+    needs: build-docker-image
+    runs-on: self-hosted
+    # main 브랜치에 push될 때만 실행
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+    - name: Pull Docker image
+      run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend
+    
+    - name: Stop existing container
+      run: |
+        sudo docker stop react-frontend 2>/dev/null || true
+        sudo docker rm react-frontend 2>/dev/null || true
+    
+    - name: Run new container
+      run: sudo docker run --rm -d -p 3000:80 --name react-frontend ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend
+    
+    - name: Clean up old images
+      run: sudo docker system prune -f
