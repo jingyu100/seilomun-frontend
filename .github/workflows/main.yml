@@ -90,7 +90,7 @@ jobs:
         sudo docker rm react-frontend 2>/dev/null || true
     
     - name: Run new container
-      run: sudo docker run --rm -d -p 3000:80 --name react-frontend ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend
+      run: sudo docker run --rm -d -p 5173:80 --name react-frontend ${{ secrets.DOCKERHUB_USERNAME }}/react-frontend
     
     - name: Clean up old images
       run: sudo docker system prune -f
