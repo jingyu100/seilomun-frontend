@@ -34,10 +34,9 @@
     align-items: flex-start; 
 }
 
-#id-label2 {
+#id-label {
     font-size: 1.1em;
-    margin-top: 40px;
-    margin-bottom: 10px;
+    margin-top: 30px;
     margin-left: 30px;
 }
 
@@ -79,6 +78,52 @@
     text-align: center;
 }
 
+/* 인증번호 확인 */
+
+.input-secontainer {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+#id-seinput {
+    flex: 1;
+    padding: 15px;
+    border: 2.0px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    color: black;
+    margin-left: 30px;
+}
+
+#id-seinput:focus {
+    border: 2.0px solid #ccc !important; 
+    outline: none; 
+}
+
+
+#id-seinput::placeholder {
+    color: #ccc;
+}
+
+#id-check-sebtn {
+    width: 160px;
+    height: 45px;
+    background-color: white;
+    border: 1.8px solid black;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 남은 시간 확인 */
+.auth-timer2 {
+    margin-left: 30px;
+    color: red;
+}
+
 /* 패스워드 확인*/
 
 .input-row2 {
@@ -90,7 +135,7 @@
     font-size: 1.0em;
     font-weight: bold;
     margin-left: 28px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .label-group2 {

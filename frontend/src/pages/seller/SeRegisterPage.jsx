@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../../css/seller/SeRegister.css";
 import logo from "../../image/logo/spLogo.png";
 
 function SeRegisterPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const businessNumber = location.state?.businessNumber;
-
   const [email, setEmail] = useState("");
+  const [authCode, setAuthCode] = useState("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [authSent, setAuthSent] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const timerRef = useRef(null);
+  const location = useLocation();
+
+  const businessNumber = location.state?.businessNumber;
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [storeName, setStoreName] = useState("");
@@ -19,6 +23,8 @@ function SeRegisterPage() {
   const [phone3, setPhone3] = useState("");
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
+
+  const navigate = useNavigate();
 
   const phone = `${phone1}${phone2}${phone3}`;
 
@@ -42,6 +48,61 @@ function SeRegisterPage() {
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);
+
+  // 남은 시간
+    useEffect(() => {
+      if (authSent && timeLeft > 0) {
+        timerRef.current = setTimeout(() => {
+          setTimeLeft((prev) => prev - 1);
+        }, 1000);
+      } else if (timeLeft === 0) {
+        clearTimeout(timerRef.current);
+      }
+      return () => clearTimeout(timerRef.current);
+    }, [timeLeft, authSent]);
+
+    const formatTime = (seconds) => {
+      const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+      const s = (seconds % 60).toString().padStart(2, "0");
+      return `${m}:${s}`;
+    };
+
+    //이메일 인증
+    const handleSendAuthCode = async () => {
+      if (!email) {
+        alert("이메일을 입력해주세요.");
+        return;
+      }
+      try {
+        await axios.post("http://localhost/api/auth/email", { email });
+        alert("인증번호가 전송되었습니다.");
+        setAuthSent(true);
+        setIsEmailVerified(false);
+        setTimeLeft(300); // 5분
+      } catch (error) {
+        console.error("인증번호 전송 에러:", error);
+        alert("인증번호 전송에 실패했습니다.");
+      }
+    };  
+
+    const handleVerifyAuthCode = async () => {
+      try {
+        const response = await axios.post("http://localhost/api/auth/verifyEmail", {
+          email,
+          authNumber: authCode,
+        });
+        if (response.status === 200) {
+          alert("이메일 인증이 완료되었습니다.");
+          setIsEmailVerified(true);
+          setTimeLeft(0);
+        } else {
+          alert("인증번호가 올바르지 않습니다.");
+        }
+      } catch (error) {
+        console.error("이메일 인증 실패:", error);
+        alert("이메일 인증 중 오류가 발생했습니다.");
+      }
+    };
 
   const handleRegister = async () => {
     if (!businessNumber) {
@@ -87,21 +148,41 @@ function SeRegisterPage() {
         <h1 className="join-title2">회원가입</h1>
       </div>
 
-      {/* 아이디(이메일) */}
+      {/* 이메일 입력, 인증번호 발송 */}
       <div className="form-group2">
-        <label id="id-label2">
+        <label id="id-label">
           아이디<span className="required2">*</span>
         </label>
         <div className="input-container2">
           <input
             type="text"
             id="id-input2"
-            placeholder="이메일을 입력해주세요"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일을 입력해주세요"
           />
-          <button id="id-check-btn2">인증번호 발송</button>
+          <button id="id-check-btn2" onClick={handleSendAuthCode}>인증번호 발송</button>
         </div>
+      
+      {/* 인증번호 확인 */}
+      <label id="id-label">
+        이메일 인증번호<span className="required">*</span>
+      </label>
+      <div className="input-secontainer">
+        <input
+        type="text"
+        id="id-seinput"
+        value={authCode}
+        onChange={(e) => setAuthCode(e.target.value)}
+        placeholder="인증번호를 입력해주세요"
+        />
+        <button id="id-check-sebtn" onClick={handleVerifyAuthCode}>인증번호 확인</button> 
+      </div>
+
+      {/* 인증번호 남은 시간 */}
+        {authSent && (
+          <div className="auth-timer2">남은 시간: {formatTime(timeLeft)}</div>
+        )}
 
         {/* 비밀번호 */}
         <div className="label-group2">

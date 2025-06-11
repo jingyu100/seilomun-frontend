@@ -37,10 +37,15 @@ function RegisterPage() {
 
   const navigate = useNavigate();
 
+  // 팝업 열기 함수
   const openAddressPopup = () => {
-    window.open("/postcode-popup", "주소찾기", "width=500,height=600");
+    window.open(
+      "/postcode-popup",
+       "주소찾기", 
+       "width=500,height=600,scrollbars=yes"
+      );
   };
-
+// 주소 선택 결과 받기
   useEffect(() => {
     const receiveMessage = (event) => {
       if (event.data?.type === "ADDRESS_SELECTED") {
