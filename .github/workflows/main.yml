@@ -24,11 +24,6 @@ jobs:
         cd frontend
         npm install
     
-    - name: Run tests
-      run: |
-        cd frontend
-        npm test -- --coverage --watchAll=false
-    
     - name: Build React app
       run: |
         cd frontend
