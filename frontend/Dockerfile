@@ -1,5 +1,5 @@
 # Multi-stage build
-FROM node:18-alpine as build
+FROM node:20-alpine as build
 
 WORKDIR /app
 
@@ -18,8 +18,8 @@ RUN npm run build
 # Production stage with Nginx
 FROM nginx:alpine
 
-# Copy built app
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy built app (Vite uses dist/ not build/)
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Copy nginx config for React Router
 COPY nginx.conf /etc/nginx/nginx.conf
