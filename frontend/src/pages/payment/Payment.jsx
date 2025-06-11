@@ -13,6 +13,7 @@ const Payment = () => {
   const location = useLocation();
   const [seller, setSeller] = useState(null); // 통합된 판매자 정보
   const [activeTab, setActiveTab] = useState("delivery");
+  const [pointsToUse, setPointsToUse] = useState(0); // ✨ 1. 포인트 상태를 부모로 옮기기
 
   // 상품 상세페이지에서 전달받은 데이터
   const { product } = location.state || {};
@@ -37,6 +38,11 @@ const Payment = () => {
         const sellerData = response.data.data.seller;
         setSeller(sellerData);
         console.log("판매자 정보 설정 완료:", sellerData);
+
+        // ✨ 배달 불가 매장이면 '포장' 탭으로 즉시 전환
+        if (sellerData.deliveryAvailable !== "Y") {
+          setActiveTab("pickup");
+        }
       } catch (error) {
         console.error("판매자 정보 조회 실패:", error);
       }
@@ -64,18 +70,6 @@ const Payment = () => {
     if (!sellerData || sellerData.deliveryAvailable !== "Y") {
       console.log("❌ 배송 불가능 - 픽업만 가능");
       return 0; // 픽업만 가능
-    }
-
-    // 최소 주문 금액 확인
-    const minOrderAmount = parseInt(sellerData.minOrderAmount) || 0;
-    console.log("최소 주문 금액:", minOrderAmount);
-
-    if (orderAmount < minOrderAmount) {
-      // 최소 주문 금액 미달 시 기본 배송비 + 추가 요금
-      const defaultFee = sellerData.deliveryFeeDtos?.[0]?.deliveryTip || 3000;
-      const penaltyFee = defaultFee + 2000;
-      console.log("⚠️ 최소 주문 금액 미달 - 패널티 배송비:", penaltyFee);
-      return penaltyFee;
     }
 
     // 배송비 단계별 적용
@@ -114,22 +108,35 @@ const Payment = () => {
   const deliveryFee =
     activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
 
+  // ✨ 2. 최종 결제 금액 계산 (포인트 포함)
+  const finalAmount = totalProductPrice + deliveryFee - pointsToUse;
+
   // 디버깅용 로그
-  console.log("=== 배송비 계산 디버깅 ===");
-  console.log("현재 탭:", activeTab);
+  console.log("=== 결제 정보 업데이트 ===");
   console.log("총 상품 금액:", totalProductPrice);
-  console.log("판매자 데이터:", seller);
-  console.log("계산된 배송비:", deliveryFee);
+  console.log("배송비:", deliveryFee);
+  console.log("사용한 포인트:", pointsToUse);
+  console.log("최종 결제 금액:", finalAmount);
   console.log("======================");
 
   const handleTabChange = (tab) => {
+    // ✨ 배달 불가 매장은 '배달' 탭으로 변경 불가
+    if (seller?.deliveryAvailable !== "Y" && tab === "delivery") {
+      return;
+    }
     setActiveTab(tab);
   };
+
+  const isDeliveryAvailable = seller ? seller.deliveryAvailable === "Y" : false;
 
   return (
     <div className="payment-wrapper">
       <div className="payment-container">
-        <StepTabs onTabChange={handleTabChange} />
+        <StepTabs
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          isDeliveryAvailable={isDeliveryAvailable}
+        />
 
         {/* 탭에 따른 컴포넌트 렌더링 */}
         {activeTab === "delivery" && <DeliverySection />}
@@ -137,18 +144,20 @@ const Payment = () => {
 
         <OrderItemsSection products={products} deliveryFee={deliveryFee} />
         <PaymentInfoSection
-          products={products}
-          seller={seller}
-          deliveryFee={deliveryFee}
+          // ✨ 3. 자식에게 필요한 정보들 전달
           totalProductPrice={totalProductPrice}
+          deliveryFee={deliveryFee}
+          seller={seller}
           isPickup={activeTab === "pickup"}
+          pointsToUse={pointsToUse} // 사용 포인트 전달
+          setPointsToUse={setPointsToUse} // 포인트 변경 함수 전달
+          finalAmount={finalAmount} // 최종 금액 전달
         />
         <OrderSubmitBar
           products={products}
-          seller={seller}
           deliveryFee={deliveryFee}
-          totalProductPrice={totalProductPrice}
           isPickup={activeTab === "pickup"}
+          finalAmount={finalAmount} // ✨ 4. 버튼에도 최종 금액 전달!
         />
       </div>
     </div>

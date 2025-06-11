@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import "./PaymentInfoSection.css";
 
 const PaymentInfoSection = ({
-  deliveryFee,
   totalProductPrice,
+  deliveryFee,
   seller,
-  isPickup = false,
+  isPickup,
+  pointsToUse,
+  setPointsToUse,
+  finalAmount,
 }) => {
-  const [pointToUse, setPointToUse] = useState(0);
-
-  // 최종 결제 금액 계산
-  const finalAmount = totalProductPrice + deliveryFee - pointToUse;
-
   // 배송비 상태 메시지 생성
   const getDeliveryStatus = () => {
     if (!seller) return "";
@@ -60,10 +58,9 @@ const PaymentInfoSection = ({
 
   // 전액사용 버튼 클릭
   const handleUseAllPoints = () => {
-    // 임시로 가능한 포인트를 5000원으로 설정 (실제로는 사용자의 보유 포인트)
     const availablePoints = 5000;
-    const maxUsablePoints = Math.min(availablePoints, totalProductPrice); // 상품가격까지만 사용 가능
-    setPointToUse(maxUsablePoints);
+    const maxUsablePoints = Math.min(availablePoints, totalProductPrice);
+    setPointsToUse(maxUsablePoints);
   };
 
   return (
@@ -97,8 +94,8 @@ const PaymentInfoSection = ({
           <span className="minus">-</span>
           <input
             type="number"
-            value={pointToUse}
-            onChange={(e) => setPointToUse(Math.max(0, parseInt(e.target.value) || 0))}
+            value={pointsToUse}
+            onChange={(e) => setPointsToUse(Math.max(0, parseInt(e.target.value) || 0))}
           />
           <span className="unit">원</span>
         </div>
