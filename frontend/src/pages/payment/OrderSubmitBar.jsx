@@ -1,17 +1,15 @@
 import "./OrderSubmitBar.css";
 import axios from "axios";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const OrderSubmitBar = ({
   products = [],
-  deliveryFee,
-  totalProductPrice,
   isPickup = false,
+  finalAmount, // 부모가 계산한 최종 금액!
 }) => {
   const tossPaymentsRef = useRef(null);
-
-  // 최종 결제 금액 계산 (포인트는 PaymentInfoSection에서 처리)
-  const finalAmount = totalProductPrice + (isPickup ? 0 : deliveryFee);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (window.TossPayments) {
@@ -104,11 +102,28 @@ const OrderSubmitBar = ({
     }
   };
 
+  const handleCancel = () => {
+    if (window.confirm("결제를 취소하고 이전 페이지로 돌아가시겠습니까?")) {
+      navigate(-1);
+    }
+  };
+
   return (
-    <div className="payment-button-wrapper">
-      <button className="payment-button" onClick={handlePaymentClick}>
-        총 {finalAmount.toLocaleString()}원 {isPickup ? "포장주문하기" : "결제하기"}
-      </button>
+    <div className="order-submit-bar">
+      <div className="payment-summary">
+        <span>최종 결제 금액</span>
+        <span className="final-amount">
+          {finalAmount ? `${finalAmount.toLocaleString()}원` : "계산 중..."}
+        </span>
+      </div>
+      <div className="button-group">
+        <button onClick={handleCancel} className="cancel-button">
+          취소하기
+        </button>
+        <button onClick={handlePaymentClick} className="submit-button">
+          결제하기
+        </button>
+      </div>
     </div>
   );
 };

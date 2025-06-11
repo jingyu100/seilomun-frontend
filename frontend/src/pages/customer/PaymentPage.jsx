@@ -14,9 +14,8 @@ const PaymentPage = () => {
 
       <div className="body">
         <div className="sideMargin">
-          <SideMenuBtn />
+          <Payment />
         </div>
-        <Payment />
       </div>
 
       <div className="footer">

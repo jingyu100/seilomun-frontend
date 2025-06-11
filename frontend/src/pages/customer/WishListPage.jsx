@@ -13,12 +13,11 @@ import FavoriteItem from "../../components/wishList/FavoriteItem.jsx";
 const WishListPage = () => {
   const [wishes, setWishes] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("wishes"); // "wishes" 또는 "favorites"
 
   // 1) 좋아요 조회
   const fetchWishes = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost/api/customers/wishes?page=0&size=10",
@@ -26,26 +25,15 @@ const WishListPage = () => {
           withCredentials: true,
         }
       );
-
-      console.log("axios 응답 전체:", response.data);
-
       const data = response.data.data;
-      console.log("response.data.data:", data);
-      console.log("wishes 배열:", data.wishes);
-      if (data.wishes && data.wishes.length > 0) {
-        console.log("첫 번째 위시 아이템:", data.wishes[0]);
-      }
       setWishes(data.wishes || []);
     } catch (error) {
       console.error("위시리스트 조회 실패:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   // 2) 즐겨찾기 조회
   const fetchFavorites = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost/api/customers/favorites?page=0&size=10",
@@ -53,29 +41,33 @@ const WishListPage = () => {
           withCredentials: true,
         }
       );
-
-      console.log("즐겨찾기 응답:", response.data);
-      console.log("즐겨찾기 data:", response.data.data);
-      console.log("즐겨찾기 favorites:", response.data.data.favorites);
-
       const data = response.data.data;
       setFavorites(data.favorites || []);
     } catch (error) {
       console.error("즐겨찾기 조회 실패:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
+  // ✨ 데이터 로딩 로직을 useEffect 내에서 Promise.all로 통합 관리
   useEffect(() => {
-    // 페이지 로드시 즐겨찾기는 항상 미리 로드
-    fetchFavorites();
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        if (activeTab === "wishes") {
+          // '좋아요' 탭에서는 두 API를 모두 기다림
+          await Promise.all([fetchWishes(), fetchFavorites()]);
+        } else {
+          // '즐겨찾기' 탭에서는 해당 API만 호출
+          await fetchFavorites();
+        }
+      } catch (error) {
+        console.error("데이터 로딩 중 오류 발생:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (activeTab === "wishes") {
-      fetchWishes();
-    } else if (activeTab === "favorites") {
-      fetchFavorites();
-    }
+    loadData();
   }, [activeTab]);
 
   // 3) 관심상품 제거 (삭제) 핸들러
