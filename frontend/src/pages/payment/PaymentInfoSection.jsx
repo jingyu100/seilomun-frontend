@@ -4,7 +4,7 @@ import "./PaymentInfoSection.css";
 const PaymentInfoSection = ({
   deliveryFee,
   totalProductPrice,
-  sellerProducts,
+  seller,
   isPickup = false,
 }) => {
   const [pointToUse, setPointToUse] = useState(0);
@@ -14,14 +14,14 @@ const PaymentInfoSection = ({
 
   // 배송비 상태 메시지 생성
   const getDeliveryStatus = () => {
-    if (!sellerProducts) return "";
+    if (!seller) return "";
 
     // 배송 불가능한 경우
-    if (sellerProducts.deliveryAvailable !== "Y") {
+    if (seller.deliveryAvailable !== "Y") {
       return <span style={{ color: "orange", fontSize: "12px" }}> (픽업만 가능)</span>;
     }
 
-    const minOrderAmount = parseInt(sellerProducts.minOrderAmount) || 0;
+    const minOrderAmount = parseInt(seller.minOrderAmount) || 0;
 
     // 최소 주문 금액 미달
     if (totalProductPrice < minOrderAmount) {
@@ -39,7 +39,7 @@ const PaymentInfoSection = ({
     }
 
     // 다음 단계 배송비 안내
-    const deliveryRules = sellerProducts.deliveryFeeDtos || [];
+    const deliveryRules = seller.deliveryFeeDtos || [];
     const sortedRules = [...deliveryRules].sort((a, b) => a.ordersMoney - b.ordersMoney);
 
     for (const rule of sortedRules) {

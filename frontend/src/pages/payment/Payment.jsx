@@ -11,49 +11,39 @@ import OrderSubmitBar from "./OrderSubmitBar";
 
 const Payment = () => {
   const location = useLocation();
-  const [sellerProducts, setSellerProducts] = useState(null);
+  const [seller, setSeller] = useState(null); // 통합된 판매자 정보
   const [activeTab, setActiveTab] = useState("delivery");
 
   // 상품 상세페이지에서 전달받은 데이터
   const { product } = location.state || {};
   const products = product ? [product] : [];
 
-  // 상품의 판매자 정보 가져오기
+  // 판매자 정보 가져오기 (한 번의 API 호출로 모든 정보 조회)
   useEffect(() => {
     const fetchSellerInfo = async () => {
-      if (!product?.id) {
-        console.log("상품 ID가 없습니다:", product);
+      if (!product?.sellerId) {
+        console.log("sellerId가 없습니다:", product);
         return;
       }
 
       try {
-        console.log("상품 정보 조회 시작. 상품 ID:", product.id);
+        console.log("판매자 정보 조회 시작. sellerId:", product.sellerId);
 
-        // 상품 정보에서 판매자 ID 추출하여 판매자 정보 조회
-        const productResponse = await axios.get(
-          `http://localhost/api/products/${product.id}`
+        const response = await axios.get(
+          `http://localhost/api/sellers/${product.sellerId}`
         );
-        console.log("상품 정보 응답:", productResponse.data);
+        console.log("판매자 정보 응답:", response.data);
 
-        const productData = productResponse.data.data.Products;
-        const sellerData = productData.seller;
-        console.log("상품 데이터:", productData);
-        console.log("판매자 정보:", sellerData);
-
-        if (sellerData) {
-          // 상품 정보에 이미 판매자 배송비 정보가 포함되어 있음
-          setSellerProducts(sellerData);
-          console.log("판매자 배송비 정보 설정 완료:", sellerData);
-        } else {
-          console.log("판매자 정보를 찾을 수 없습니다.");
-        }
+        const sellerData = response.data.data.seller;
+        setSeller(sellerData);
+        console.log("판매자 정보 설정 완료:", sellerData);
       } catch (error) {
         console.error("판매자 정보 조회 실패:", error);
       }
     };
 
     fetchSellerInfo();
-  }, [product?.id]);
+  }, [product?.sellerId]);
 
   // 주문 상품 총액 계산
   const totalProductPrice = products.reduce((total, product) => {
@@ -66,21 +56,31 @@ const Payment = () => {
 
   // 동적 배달비 계산 함수 - 백엔드 구조에 맞게 수정
   const calculateDeliveryFee = (orderAmount, sellerData) => {
+    console.log("🚚 배송비 계산 시작");
+    console.log("주문 금액:", orderAmount);
+    console.log("판매자 데이터:", sellerData);
+
     // 배송 불가능한 경우
     if (!sellerData || sellerData.deliveryAvailable !== "Y") {
+      console.log("❌ 배송 불가능 - 픽업만 가능");
       return 0; // 픽업만 가능
     }
 
     // 최소 주문 금액 확인
     const minOrderAmount = parseInt(sellerData.minOrderAmount) || 0;
+    console.log("최소 주문 금액:", minOrderAmount);
+
     if (orderAmount < minOrderAmount) {
       // 최소 주문 금액 미달 시 기본 배송비 + 추가 요금
       const defaultFee = sellerData.deliveryFeeDtos?.[0]?.deliveryTip || 3000;
-      return defaultFee + 2000; // 추가 요금
+      const penaltyFee = defaultFee + 2000;
+      console.log("⚠️ 최소 주문 금액 미달 - 패널티 배송비:", penaltyFee);
+      return penaltyFee;
     }
 
     // 배송비 단계별 적용
     const deliveryRules = sellerData.deliveryFeeDtos || [];
+    console.log("배송비 규칙들:", deliveryRules);
 
     // 중복 제거를 위해 ordersMoney 기준으로 고유한 규칙만 필터링
     const uniqueRules = deliveryRules.filter(
@@ -90,30 +90,35 @@ const Payment = () => {
 
     // 주문 금액 기준으로 오름차순 정렬
     const sortedRules = [...uniqueRules].sort((a, b) => a.ordersMoney - b.ordersMoney);
+    console.log("정렬된 고유 규칙들:", sortedRules);
 
     // 주문 금액에 적용 가능한 가장 높은 기준 찾기
-    let applicableFee = 3000; // 기본 배송비
+    let applicableFee = sortedRules[0]?.deliveryTip || 3000; // 첫 번째 규칙의 배송비를 기본값으로
+    console.log("초기 배송비:", applicableFee);
 
     for (const rule of sortedRules) {
+      console.log(`규칙 확인: ${rule.ordersMoney}원 이상 → ${rule.deliveryTip}원`);
       if (orderAmount >= rule.ordersMoney) {
         applicableFee = rule.deliveryTip;
+        console.log(
+          `✅ 적용된 배송비: ${applicableFee}원 (${rule.ordersMoney}원 이상 조건)`
+        );
       }
     }
 
+    console.log("🎯 최종 배송비:", applicableFee);
     return applicableFee;
   };
 
   // 실제 배달비 계산 (배송 탭일 때만)
   const deliveryFee =
-    activeTab === "delivery"
-      ? calculateDeliveryFee(totalProductPrice, sellerProducts)
-      : 0;
+    activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
 
   // 디버깅용 로그
   console.log("=== 배송비 계산 디버깅 ===");
   console.log("현재 탭:", activeTab);
   console.log("총 상품 금액:", totalProductPrice);
-  console.log("판매자 데이터:", sellerProducts);
+  console.log("판매자 데이터:", seller);
   console.log("계산된 배송비:", deliveryFee);
   console.log("======================");
 
@@ -128,19 +133,19 @@ const Payment = () => {
 
         {/* 탭에 따른 컴포넌트 렌더링 */}
         {activeTab === "delivery" && <DeliverySection />}
-        {activeTab === "pickup" && <PickupSection sellerProducts={sellerProducts} />}
+        {activeTab === "pickup" && <PickupSection seller={seller} />}
 
         <OrderItemsSection products={products} deliveryFee={deliveryFee} />
         <PaymentInfoSection
           products={products}
-          sellerProducts={sellerProducts}
+          seller={seller}
           deliveryFee={deliveryFee}
           totalProductPrice={totalProductPrice}
           isPickup={activeTab === "pickup"}
         />
         <OrderSubmitBar
           products={products}
-          sellerProducts={sellerProducts}
+          seller={seller}
           deliveryFee={deliveryFee}
           totalProductPrice={totalProductPrice}
           isPickup={activeTab === "pickup"}

@@ -2,7 +2,11 @@ import React from "react";
 import "./PickupSection.css";
 import KakaoMapApi from "../../components/KakaoMapApi";
 
-const PickupSection = ({ sellerProducts }) => {
+const PickupSection = ({ seller }) => {
+  // 매장 정보 가져오기
+  const storeAddress = seller?.address;
+  const storePhone = seller?.phone;
+
   return (
     <div className="pickup-section">
       <div className="pickup-header">
@@ -11,12 +15,24 @@ const PickupSection = ({ sellerProducts }) => {
 
       {/* 지도 영역 */}
       <div className="map-container">
-        <KakaoMapApi
-          address="대구 중구 달성로 15-7 달성빌딩 16-3번지 2층"
-          width="100%"
-          height="200px"
-          margin="0"
-        />
+        {storeAddress ? (
+          <KakaoMapApi address={storeAddress} width="100%" height="200px" margin="0" />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "200px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+              color: "#666",
+            }}
+          >
+            매장 위치 정보를 불러오는 중...
+          </div>
+        )}
       </div>
 
       {/* 매장 정보 */}
@@ -25,13 +41,13 @@ const PickupSection = ({ sellerProducts }) => {
           <div className="store-address">
             <span className="address-label">매장 주소:</span>
             <span className="address-text">
-              대구 중구 달성로 15-7 달성빌딩 16-3번지 2층
+              {storeAddress || "매장 주소 정보를 불러오는 중..."}
             </span>
           </div>
           <div className="store-contact">
             <span className="contact-label">매장 전화번호:</span>
             <span className="contact-text">
-              {sellerProducts?.phone || "053-367-1234"}
+              {storePhone || "매장 전화번호 정보를 불러오는 중..."}
             </span>
           </div>
         </div>

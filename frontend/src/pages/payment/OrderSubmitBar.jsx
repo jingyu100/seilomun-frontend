@@ -25,28 +25,52 @@ const OrderSubmitBar = ({
 
   const handlePaymentClick = async () => {
     try {
+      // 디버깅: products 배열 확인
+      console.log("🛒 결제 데이터 디버깅 시작");
+      console.log("전체 products 배열:", products);
+      console.log("products 길이:", products?.length);
+
       // 실제 상품 데이터 사용
       const firstProduct = products[0]; // 첫 번째 상품 기준 (여러 상품일 경우 수정 필요)
+      console.log("첫 번째 상품 (firstProduct):", firstProduct);
 
       if (!firstProduct) {
+        console.error("❌ firstProduct가 없습니다!");
         alert("주문할 상품이 없습니다.");
         return;
       }
 
+      // 개별 필드 확인
+      console.log("상품 ID:", firstProduct.id);
+      console.log("상품명:", firstProduct.name);
+      console.log("수량:", firstProduct.quantity);
+      console.log("할인가:", firstProduct.discountPrice);
+      console.log("원가:", firstProduct.originalPrice);
+      console.log("할인율:", firstProduct.currentDiscountRate);
+
+      // 백엔드 OrderDto 구조에 맞게 데이터 구성
       const orderData = {
-        usedPoints: 0,
-        memo: "실제 주문",
-        isDelivery: isPickup ? "N" : "Y",
+        usedPoints: 0, // Integer로 포인트 사용량
+        memo: "실제 주문", // 요청사항
+        isDelivery: isPickup ? "N" : "Y", // Character - 배송여부 (Y/N)
         deliveryAddress: "서울시 강남구 테헤란로 123", // 실제로는 배송 정보에서 가져와야 함
-        productId: firstProduct.id,
-        quantity: firstProduct.quantity || 1,
-        price: firstProduct.discountPrice || firstProduct.originalPrice,
-        currentDiscountRate: firstProduct.currentDiscountRate || 0,
-        payType: "CARD",
-        orderName: `${firstProduct.name} ${firstProduct.quantity || 1}개`,
+        orderProducts: [
+          {
+            productId: firstProduct.id, // Long
+            quantity: firstProduct.quantity || 1, // Integer
+            price: firstProduct.discountPrice || firstProduct.originalPrice, // Integer
+            currentDiscountRate: firstProduct.currentDiscountRate || 0, // Integer
+          },
+        ],
+        payType: "CARD", // 결제 타입
+        orderName: `${firstProduct.name} ${firstProduct.quantity || 1}개`, // 주문명
         yourSuccessUrl: "http://localhost/api/orders/toss/success",
         yourFailUrl: "http://localhost/api/orders/toss/fail",
       };
+
+      console.log("📦 최종 주문 데이터:", orderData);
+      console.log("📦 orderProducts 배열:", orderData.orderProducts);
+      console.log("📦 orderProducts 길이:", orderData.orderProducts?.length);
 
       const response = await axios.post("http://localhost/api/orders/buy", orderData, {
         withCredentials: true,

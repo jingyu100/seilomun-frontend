@@ -7,7 +7,7 @@ export default function ProductHead() {
   const { sellerId, productId } = useParams();
   const { products } = useSellerProducts(sellerId);
 
-  if (!products) return ;
+  if (!products) return;
 
   const product = products.find((p) => String(p.id) === String(productId));
 
@@ -22,6 +22,7 @@ export default function ProductHead() {
       </div>
       <div className="productHead-right">
         <ProductHeadTitle
+          sellerId={sellerId}
           productId={product.id}
           thumbnailUrl={product.thumbnailUrl || "사진 없음"}
           name={product.name || "제품명 없음"}

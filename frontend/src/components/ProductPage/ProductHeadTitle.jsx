@@ -4,6 +4,7 @@ import "../../css/customer/Product.css";
 import LikeButtonBox from "./LikeButtonBox";
 
 export default function ProductHeadTitle({
+  sellerId,
   productId,
   thumbnailUrl,
   name,
@@ -31,11 +32,12 @@ export default function ProductHeadTitle({
   const handleBuyNow = (e) => {
     e.preventDefault();
 
-    // 결제페이지로 상품 데이터 전달
+    // 결제페이지로 상품 데이터와 판매자 ID 전달
     navigate("/payment", {
       state: {
         product: {
           id: productId,
+          sellerId: sellerId,
           name: name,
           photoUrl: [thumbnailUrl],
           expiryDate: expiryDate,
@@ -106,13 +108,17 @@ export default function ProductHeadTitle({
           </div>
         </div>
 
-        <div className="productQuantity productFlex" style={{ 
-          alignItems: "center",
-          justifyContent: "space-between", 
-          padding: "12px 0", 
+        <div
+          className="productQuantity productFlex"
+          style={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 0",
           }}
         >
-          <div className="productName" style={{
+          <div
+            className="productName"
+            style={{
               fontWeight: "600",
             }}
           >
@@ -120,14 +126,16 @@ export default function ProductHeadTitle({
           </div>
           <div
             className="plust-minus productFlex"
-            style={{ 
-              gap: "10px", 
-              alignItems: "center", 
-              fontWeight: "600" ,
+            style={{
+              gap: "10px",
+              alignItems: "center",
+              fontWeight: "600",
               margin: "0 10px",
             }}
           >
-            <button onClick={decreaseQuantity} style={{ 
+            <button
+              onClick={decreaseQuantity}
+              style={{
                 padding: "0 5px",
                 fontWeight: "bold",
                 fontSize: "18px",
@@ -136,11 +144,13 @@ export default function ProductHeadTitle({
               -
             </button>
             <span>{quantity}</span>
-            <button onClick={increaseQuantity} style={{
-                  padding: "0 2px",
-                  fontSize: "20px",
-                }}
-              >
+            <button
+              onClick={increaseQuantity}
+              style={{
+                padding: "0 2px",
+                fontSize: "20px",
+              }}
+            >
               +
             </button>
           </div>
@@ -161,6 +171,7 @@ export default function ProductHeadTitle({
               <div className="btnStyle1">바로구매하기</div>
               <div className="btnStyle2">BUY IT NOW</div>
             </a>
+
             <a href="#" className="cartBtn" onClick={handleAddCart}>
               <div className="btnStyle1">장바구니</div>
               <div className="btnStyle2">ADD CART</div>
