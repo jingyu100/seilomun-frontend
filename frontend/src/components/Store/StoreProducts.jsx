@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
 export default function StoreProducts({
+  sellerId,
   id,
   index,
   productId,
-  sellerId,
   thumbnailUrl,
   name,
   expiryDate,

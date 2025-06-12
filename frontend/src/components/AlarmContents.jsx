@@ -1,27 +1,65 @@
 import React from "react";
+import "../css/customer/SideBtnModules.css";
 
-const AlarmContents = ({ products }) => {
+export default function AlarmContents({ 
+    notifications, 
+    markAllAsRead,
+    markAsRead,
+}) {
+
+    const unreadNotifications = notifications.filter(noti => noti.isRead !== "Y");
+
     return (
-        <ul>
-            {products.map((product) => (
-                <li key={product.id}>
-                    <a href={product.url || "#"}> {/* URL이 없을 경우 기본값 설정 */}
-                        <li>{product.state}</li>
-                        <div>
-                            <img src={product.image} alt={product.name} style={{
-                                width: '70px', height: '70px'
-                            }} />
-                            <p>
-                                <span>
-                                    <span>{product.name}</span>
-                                </span>
-                            </p>
+        <div className="headAlarm">
+            <div className="headAlarm-inner">
+                <header className="headAlarm-head">
+                    <div className="headAlarm-title">알림</div>
+                </header>
+                <main>
+                    {unreadNotifications.length > 0 && (
+                        <div className="headAlarm-control" onClick={markAllAsRead}>
+                            전체 읽음 처리
                         </div>
-                    </a>
-                </li>
-            ))}
-        </ul>
+                    )}
+                    <div>                        
+                        {unreadNotifications.length === 0 ? (
+                            <div className="noAlarm">
+                                <li>알림이 없습니다.</li>
+                            </div>
+                        ) : (
+                            unreadNotifications.map((noti) => (
+                                <div key={noti.id} className="headAlarm-main">
+                                    <div className="headAlarm-content">
+                                        <a href="#">
+                                            <div>
+                                                <li
+                                                    style={{
+                                                        fontWeight:
+                                                            noti.isRead === "N"
+                                                                ? "bold"
+                                                                : "normal",
+                                                    }}
+                                                >
+                                                    {noti.content}
+                                                </li>
+                                                <small>
+                                                    {new Date(noti.createdAt).toLocaleString()}
+                                                </small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div
+                                        className="headAlarm-read"
+                                        onClick={() => markAsRead(noti.id)}
+                                    >
+                                        읽음
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </main>
+            </div>
+        </div>
     );
-};
-
-export default AlarmContents;
+}

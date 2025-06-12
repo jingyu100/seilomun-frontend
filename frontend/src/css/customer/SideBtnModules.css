@@ -1,3 +1,86 @@
+/* ---------- 헤드 알람 모듈 부분 ---------- */
+.headAlarm {
+    position: absolute;
+    top: 0;
+    right: -173px;
+    width: 300px;
+    height: 400px;
+    z-index: 400;
+    border-radius: 8px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-box-shadow: 0 0 0 1px #eaebec, 0 4px 8px 0 rgba(0, 0, 0, .3);
+    box-shadow: 0 0 0 1px #eaebec, 0 4px 8px 0 rgba(0, 0, 0, .3);
+    background-color: #eaebec;
+}
+
+.headAlarm .headAlarm-inner {
+    position: relative;
+    min-height: 100%;
+    /* padding-top: 50px; */
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.headAlarm .headAlarm-inner .headAlarm-head {
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    z-index: 400;
+}
+
+.headAlarm-title {
+    display: flex;
+    position: relative;
+    max-width: 1080px;
+    height: 50px;
+    margin: 0 auto;
+    padding: 0 15px;
+    font-size: 15px;
+    font-weight: bold;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.headAlarm-control {
+    padding: 10px;
+    margin: 8px 10px;
+    border-radius: 10px;
+    border: 1.3px solid #e2e2e2;
+    background: rgb(119, 202, 128);
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.headAlarm-main {
+    padding: 10px;
+    margin: 8px 10px;
+    border-radius: 10px;
+    border: 1.3px solid #e2e2e2;
+    background-color: #fff;
+}
+
+.headAlarm-read {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 500;
+    transition: 0.2s;
+    min-width: 120px;
+}
+/* ---------- 헤드 알람 모듈 부분 ---------- */
+
+
+
 /* ---------- 사이드 메뉴 모듈 부분 ---------- */
 .viewModule {
     position: relative;
@@ -31,7 +114,19 @@
     bottom: 9px;
     z-index: 100;
   }
-  /* ---------- 사이드 메뉴 모듈 부분 ---------- */
+/* ---------- 사이드 메뉴 모듈 부분 ---------- */
+
+
+.noAlarm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    color: #727272;
+    font-size: 15px;
+  }
+
 
 .displayFlex {
     display: flex;
@@ -151,8 +246,72 @@
 }
 
 
+
 /* ---------- 채팅 모듈 부분 ---------- */
-.chatModuleHead {
-    
-}
+.chatModuleBody {
+    padding: 10px;
+    background-color: #fff;
+    height: 360px;
+    overflow-y: auto;
+    border-top: 1.5px solid #e2e2e2;
+  }
+  
+  .chatRoomItem {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    border-bottom: 1px solid #eaeaea;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .chatRoomItem:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .chatRoomProfile {
+    width: 45px;
+    height: 45px;
+    background-color: #dcdcdc;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  
+  .chatRoomText {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .chatRoomName {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  
+  .chatRoomLastMessage {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .chatRoomUnread {
+    width: 22px;
+    height: 22px;
+    background-color: #3b82f6;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    flex-shrink: 0;
+  }  
 /* ---------- 채팅 모듈 부분 ---------- */
+

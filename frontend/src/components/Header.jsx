@@ -1,15 +1,21 @@
-import AlarmContents from "./AlarmContents.jsx";
-import ProductsAlarm from "./ProductsAlarm.jsx";
-import mainLogo from "../image/logo/mainLogo.png";
-import useLogin from "../Hooks/useLogin.js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AlarmContents from "./AlarmContents.jsx";
+import mainLogo from "../image/logo/mainLogo.png";
+import useLogin from "../Hooks/useLogin.js";
+import useNotifications from "../Hooks/useNotifications"; // 추가
+
 
 const Header = () => {
+
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
+  const { notifications, unreadCount,  markAsRead,  markAllAsRead,  } = useNotifications("http://localhost", "customer"); // 사용
+
   const navigate = useNavigate();
+
+  console.log("알람", notifications);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -392,8 +398,7 @@ const Header = () => {
               <div className="icon-menu">
                 <ul className="icon-menuInner">
                   <li className="icon-Btn alarm-icon">
-                    <a href="" className="myAlarm myIcon">
-                      <div>
+                      <div className="myAlarm myIcon">
                         <img
                           src="../image/icon/icon-bell.png"
                           alt="alarm"
@@ -404,43 +409,20 @@ const Header = () => {
                         />
                       </div>
                       <em className="headIconCount" id="alarm-cnt">
-                        0
+                        {unreadCount}
                       </em>
-                    </a>
                     <div className="alarm-frame">
                       <span className="alarm-contents">
                         <ul className="alarm-inner">
-                          {/* <!-- 여긴 알림에 아무것도 없거나 로그인을 안 했을 시 뜨는 문구 --> */}
-                          <li>알림 온 게 없습니다.</li>
-
-                          {/* <!-- 알림 온 게 있을 시 --> */}
-                          <AlarmContents products={ProductsAlarm} />
-                          <li>
-                            <a href="">
-                              <div>
-                                <span>해당 상품이 배송을 시작하였습니다.</span>
-                              </div>
-                              <div>
-                                <img
-                                  src="/image/product1.jpg"
-                                  alt="product1"
-                                  style={{ width: "70px", height: "70px" }}
-                                />
-                                <p>
-                                  <span>
-                                    <span>상품 이름</span>
-                                  </span>
-                                </p>
-                              </div>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="">
-                              <div>
-                                <AlarmContents products={ProductsAlarm} />
-                              </div>
-                            </a>
-                          </li>
+                          {notifications.length === 0 ? (
+                            <li>알림 온 게 없습니다.</li>
+                          ) : (
+                            <AlarmContents 
+                              notifications={notifications} 
+                              markAllAsRead={markAllAsRead} 
+                              markAsRead={markAsRead}
+                            />
+                          )}
                         </ul>
                       </span>
                     </div>

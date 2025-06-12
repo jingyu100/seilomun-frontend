@@ -1,6 +1,6 @@
 import React from "react";
-import Rating from "../StarRating.jsx";
 import StoreMiniInfo from "./StoreMiniInfo.jsx";
+import Rating from "../StarRating.jsx";
 import Inquiry from "./Inquiry.jsx";
 import StoreInfo from "./StoreInfo.jsx";
 import FavoriteButtonBox from "./FavoriteButtonBox.jsx";

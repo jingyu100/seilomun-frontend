@@ -5,15 +5,15 @@ import SideCartBtn from './SideCartBtn.jsx';
 import SideChatBtn from './SideChatBtn.jsx';
 
 function SideMenuBtn () {
-   const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
-   const [isChatModalOpen, setIsModalOpen] = useState(false);
+   // const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
+   // const [isChatModalOpen, setIsModalOpen] = useState(false);
 
-   const toggleAlarmModal = () => {
-      setIsAlarmModalOpen(isAlarmModalOpen => !isAlarmModalOpen);
-   };
-   const toggleChatModal = () => {
-      setIsModalOpen(isChatModalOpen => !isChatModalOpen);
-   }
+   // const toggleAlarmModal = () => {
+   //    setIsAlarmModalOpen(isAlarmModalOpen => !isAlarmModalOpen);
+   // };
+   // const toggleChatModal = () => {
+   //    setIsModalOpen(isChatModalOpen => !isChatModalOpen);
+   // }
     
 
    return (

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 export default function useSellerProducts() {
   const { sellerId } = useParams();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState();
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -13,10 +13,9 @@ export default function useSellerProducts() {
     const fetchProducts = async () => {
       setError(null);
       try {
-        const response = await axios.get(`http://localhost/api/products/seller/${sellerId}`);
-        console.log("판매자 제품 목록 응답:", response.data);
-
-        setProducts(response.data);
+        axios.get(`http://localhost/api/products/seller/${sellerId}`).then(res => {
+        setProducts(res.data);
+      })
       } catch (error) {
         console.error("제품 정보 요청 실패:", error);
         setError(error);

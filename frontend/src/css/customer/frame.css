@@ -94,7 +94,7 @@ header {
   height: 42px;
   margin: 0px 0px 0px 220px; /* 상 우 하 좌 */
   vertical-align: top;
-  z-index: 100;
+  /* z-index: 100; */
   justify-items: center;
 }
 
@@ -171,6 +171,7 @@ header {
   position: relative;
   vertical-align: top;
   text-align: center;
+  cursor: pointer;
 }
 
 .icon-menuInner .icon-Btn a div > img {
