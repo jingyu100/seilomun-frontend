@@ -42,7 +42,10 @@ function LoginPage() {
 
         const { username, userType } = response.data.data;
 
-        const userData = { nickname: username, userType };
+        const userData = {
+          nickname: username,
+          userType: userType || "CUSTOMER",
+        };
 
         setUser(userData);
         setIsLoggedIn(true);

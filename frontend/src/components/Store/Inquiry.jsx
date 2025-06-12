@@ -1,10 +1,11 @@
 import React from "react";
 import useLogin from "../../Hooks/useLogin.js";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
 
 export default function Inquiry({ sellerId }) {
   const { user } = useLogin();
-  const navigate = useNavigate(); // 페이지 이동을 위해 필요
+  const { addChatRoom } = useChatRooms();
 
   const handleNewChatRoom = async () => {
     if (!user) {
@@ -12,38 +13,33 @@ export default function Inquiry({ sellerId }) {
       return;
     }
 
-    const userType = user.userType;
-    const userId = user.id;
-
-    if (!userId || !userType) {
-      alert("잘못된 사용자 정보입니다.");
-      return;
-    }
-
-    let postData = {};
-    if (userType === "CUSTOMER") {
-      postData = { sellerId };
-    } else if (userType === "SELLER") {
-      postData = { customerId: userId };
-    } else {
-      alert("잘못된 사용자 유형입니다.");
-      return;
-    }
+    // 고객이 판매자에게 문의하는 경우만 처리
+    const postData = { sellerId };
 
     try {
-      const response = await axios.post(
-        "http://localhost/api/chat/rooms",
-        postData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      const response = await axios.post(`http://localhost/api/chat/rooms`, postData, {
+        withCredentials: true,
+      });
 
-      const roomId = response.data.data.roomId;
-      console.log("채팅방 생성 성공:", roomId);
-      navigate(`/chat/${roomId}`); // 생성 후 채팅방 페이지로 이동
+      const roomId = response?.data?.data?.chatRoomId;
+      if (!roomId) {
+        throw new Error("chatRoomId 가 응답에 존재하지 않습니다.");
+      }
+      console.log("채팅방 생성/조회 성공, roomId:", roomId);
+
+      // Context 업데이트: 응답 데이터를 그대로 사용해 새 채팅방 추가
+      const roomData = response.data.data;
+      addChatRoom({
+        id: roomData.chatRoomId,
+        customerId: roomData.customerId,
+        customerNickname: roomData.customerNickname,
+        sellerId: roomData.sellerId,
+        sellerStoreName: roomData.sellerStoreName,
+        createdAt: roomData.createdAt,
+        lastMessage: roomData.lastMessage,
+        lastMessageTime: roomData.lastMessageTime,
+        unreadCount: 0,
+      });
     } catch (error) {
       console.error("채팅방 생성 실패:", error);
       alert("채팅방 생성에 실패했습니다.");

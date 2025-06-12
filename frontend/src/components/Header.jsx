@@ -7,15 +7,14 @@ import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
 import useNotifications from "../Hooks/useNotifications"; // 추가
 
-
 const Header = () => {
-
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
-  const { notifications, unreadCount,  markAsRead,  markAllAsRead,  } = useNotifications("http://localhost", "customer"); // 사용
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications(
+    "http://localhost",
+    "customer"
+  ); // 사용
 
   const navigate = useNavigate();
-
-  console.log("알람", notifications);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -398,28 +397,28 @@ const Header = () => {
               <div className="icon-menu">
                 <ul className="icon-menuInner">
                   <li className="icon-Btn alarm-icon">
-                      <div className="myAlarm myIcon">
-                        <img
-                          src="../image/icon/icon-bell.png"
-                          alt="alarm"
-                          style={{
-                            width: "35px",
-                            height: "35px",
-                          }}
-                        />
-                      </div>
-                      <em className="headIconCount" id="alarm-cnt">
-                        {unreadCount}
-                      </em>
+                    <div className="myAlarm myIcon">
+                      <img
+                        src="../image/icon/icon-bell.png"
+                        alt="alarm"
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                        }}
+                      />
+                    </div>
+                    <em className="headIconCount" id="alarm-cnt">
+                      {unreadCount}
+                    </em>
                     <div className="alarm-frame">
                       <span className="alarm-contents">
                         <ul className="alarm-inner">
                           {notifications.length === 0 ? (
                             <li>알림 온 게 없습니다.</li>
                           ) : (
-                            <AlarmContents 
-                              notifications={notifications} 
-                              markAllAsRead={markAllAsRead} 
+                            <AlarmContents
+                              notifications={notifications}
+                              markAllAsRead={markAllAsRead}
                               markAsRead={markAsRead}
                             />
                           )}

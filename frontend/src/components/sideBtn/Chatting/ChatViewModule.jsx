@@ -7,8 +7,20 @@ export default function ChatViewModule() {
   const { chatRooms } = useChatRooms();
 
   if (!user) {
-    return alert("로그인 후 이용 가능합니다.");
+    return null; // 로그인 안 되어있으면 아무것도 렌더링하지 않음
   }
+
+  // 상대방(채팅방 타이틀)에 표시할 이름 결정 함수
+  const getRoomTitle = (room) => {
+    // 현재 Inquiry 컴포넌트는 고객 전용이므로 판매자 매장명만 표시
+    return room.sellerStoreName || "매장";
+  };
+
+  const getLastMessageText = (room) => {
+    return room.lastMessage && room.lastMessage.trim() !== ""
+      ? room.lastMessage
+      : "새 대화를 시작해보세요";
+  };
 
   return (
     <div className="sideChattModule viewModule">
@@ -20,12 +32,12 @@ export default function ChatViewModule() {
       </div>
       <div className="chatModuleBody">
         {chatRooms.length > 0 ? (
-          chatRooms.map((chat, idx) => (
-            <div className="chatRoomItem" key={idx}>
-              <div className="chatRoomProfile" />
+          chatRooms.map((chat) => (
+            <div className="chatRoomItem" key={chat.id}>
+              <div className="chatRoomProfile"></div>
               <div className="chatRoomText">
-                <div className="chatRoomName">{chat.senderName}</div>
-                <div className="chatRoomLastMessage">{chat.lastMessage}</div>
+                <div className="chatRoomName">{getRoomTitle(chat)}</div>
+                <div className="chatRoomLastMessage">{getLastMessageText(chat)}</div>
               </div>
               {chat.unreadCount > 0 && (
                 <div className="chatRoomUnread">{chat.unreadCount}</div>
