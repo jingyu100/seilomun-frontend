@@ -29,9 +29,6 @@ export function ChatRoomsProvider({ children }) {
       try {
         const res = await axios.get("http://localhost/api/chat/rooms", {
           withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
         });
 
         const rooms = res.data.data.chatRooms || [];

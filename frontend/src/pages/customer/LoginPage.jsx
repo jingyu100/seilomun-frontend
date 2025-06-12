@@ -11,7 +11,6 @@ import useLogin from "../../Hooks/useLogin.js";
 import axios from "axios";
 
 function LoginPage() {
-  const [showPhoneAuth, setShowPhoneAuth] = useState(false);
   const [loginId, setLoginId] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const { setIsLoggedIn, setUser, isLoading } = useLogin();
@@ -36,15 +35,19 @@ function LoginPage() {
       );
 
       try {
-        const response = await axios.get("http://localhost/api/customers/me", {
+        const response = await axios.get("http://localhost/api/customers", {
           withCredentials: true,
         });
 
-        const { username, userType } = response.data.data;
+        console.log("API 응답 데이터:", response.data);
+        const { id, nickname } = response.data.data.customer;
+        const userType = "CUSTOMER";
+        console.log("추출한 값들:", { id, nickname, userType });
 
         const userData = {
-          nickname: username,
-          userType: userType || "CUSTOMER",
+          id,
+          nickname,
+          userType,
         };
 
         setUser(userData);
