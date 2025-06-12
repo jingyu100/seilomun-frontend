@@ -4,16 +4,7 @@ const EmptyFavoriteList = () => {
   return (
     <div style={{ textAlign: "center", padding: "60px 20px" }}>
       <div style={{ fontSize: "48px", marginBottom: "16px" }}>🏪</div>
-      <h2
-        style={{
-          fontSize: "24px",
-          color: "#333",
-          marginBottom: "8px",
-          fontWeight: "500",
-        }}
-      >
-        즐겨찾기한 매장이 없습니다
-      </h2>
+
       <p
         style={{
           fontSize: "16px",
