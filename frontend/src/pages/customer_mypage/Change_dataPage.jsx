@@ -7,38 +7,47 @@ import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 
 const Change_dataPage = () => {
-  const [email, setEmail] = useState("");
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handlePasswordCheck = async () => {
-    // try {
-    //   const res = await axios.post(
-    //     "http://localhost:80/api/customers/verifyPassword", 
-    //     { password },
-    //     { withCredentials: true }
-    //   );
+  // 이메일 정보 불러오기
+  useEffect(() => {
+    axios.get("http://localhost/api/customers", {
+      withCredentials: true,
+    })
+      .then((res) => {
+        const customer = res.data?.data;
+        if (customer?.email) {
+          setEmail(customer.email);
+        }
+      })
+      .catch((err) => {
+        console.error("❌ 사용자 정보 조회 실패:", err);
+      });
+  }, []);
 
-    //   if (res.data?.success) {
-    //     navigate('/Customer_modify');
-    //   } else {
-    //     setError("비밀번호가 일치하지 않습니다.");
-    //   }
-    // } catch (err) {
-    //   setError("비밀번호 확인 중 오류가 발생했습니다.");
-    //   console.error(err);
-
-      // 임시 테스트용: 어떤 비밀번호든 확인 버튼 누르면 바로 이동
-      navigate("/Customer_modify");
-  };
-
-  // useEffect(() => {
-  //   const storedUser = JSON.parse(localStorage.getItem("user"));
-  //   if (storedUser?.email) {
-  //     setEmail(storedUser.email);
-  //   }
-  // }, []);
+    //비밀번호 검증
+    const handlePasswordCheck = async () => {
+      try {
+        const res = await axios.post(
+          "http://localhost/api/customers/verifyPassword",
+          { password },
+          { withCredentials: true }
+        );
+  
+        if (res.data?.success) {
+          navigate('/Customer_modify');
+        } else {
+          setError("비밀번호가 일치하지 않습니다.");
+        }
+      } catch (err) {
+        console.error("❌ 비밀번호 검증 실패:", err);
+        setError("비밀번호 확인 중 오류가 발생했습니다.");
+      }
+    };
 
   return (
     <div>
@@ -93,21 +102,19 @@ const Change_dataPage = () => {
         </div>
           </aside>
 
+          {/* 메인 콘텐츠 */}
           <div className="mypage-main">
             <h2 className="main-title">회원정보 변경</h2>
             <p className="info-text">
-            <strong className="email">starcarry0203@naver.com</strong>
-            님의 정보를 보호하기 위해 <br />
-            {/* <strong className="email">{email}</strong> 님의 정보를 보호하기 위해 <br /> */}
+              <strong className="email">{email}</strong> 님의 정보를 보호하기 위해<br />
               비밀번호를 다시 한번 확인합니다.
             </p>
 
             <table className="info-table">
               <tbody>
                 <tr>
-                  <td className="label-cell">아이디(이메일)</td>
-                  <td className="value-cell">starcarry0203@naver.com</td>                
-                  {/* <td className="value-cell">{email}</td> */}
+                  <td className="label-cell">아이디(이메일)</td>                
+                  <td className="value-cell">{email}</td>
                 </tr>
                 <tr>
                   <td className="label-cell">비밀번호</td>
@@ -116,7 +123,10 @@ const Change_dataPage = () => {
                       type="password"
                       className="password-input"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        setError(""); //입력 시 에러 초기화
+                      }}
                     />
                     {error && <div className="error-text">{error}</div>}
                   </td>
@@ -124,9 +134,15 @@ const Change_dataPage = () => {
               </tbody>
             </table>
 
-            <div className="btn-group">
-              <button className="confirm-btn" onClick={handlePasswordCheck}>확인</button>
-              <button className="cancel-btn" onClick={() => navigate('/mypage')}>취소</button>
+            <div className="btn-group22">
+              <button 
+              className="confirm-btn22" 
+              onClick={handlePasswordCheck}>
+                확인</button>
+              <button 
+              className="cancel-btn22" 
+              onClick={() => navigate('/mypage')}>
+                취소</button>
             </div>
 
           </div>
