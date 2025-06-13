@@ -37,6 +37,7 @@ import Seller_Main from "./pages/seller/Seller_Main.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
+import Seller_newstoreRegistration from "./pages/seller/Seller_newstoreRegistration.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -97,6 +98,7 @@ function App() {
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/OrderList" element={<OrderListPage />} />
               <Route path="/Seller_Main" element={<Seller_Main />} />
+              <Route path="/Seller_newstoreRegistration" element={<Seller_newstoreRegistration />} /> 
             </Routes>
         </WebSocketProvider>
       </ChatRoomsProvider>
