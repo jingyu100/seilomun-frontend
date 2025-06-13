@@ -3,19 +3,17 @@ import { useState } from "react";
 import axios from "axios";
 import "../../css/seller/Selogin.css";
 import logo from "../../image/logo/spLogo.png";
-import useLogin from "../../Hooks/useLogin";
 
 function SeloginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUser, setIsLoggedIn } = useLogin();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost/api/auth/login",
         {
           email,
@@ -26,29 +24,7 @@ function SeloginPage() {
           withCredentials: true,
         }
       );
-
-      const response = await axios.get("http://localhost/api/sellers", {
-        withCredentials: true,
-      });
-
-      console.log("API 응답 데이터:", response.data);
-      const { sellerId, sellerName } = response.data.data.seller;
-      const userType = "SELLER";
-      console.log("추출한 값들:", { sellerId, sellerName, userType });
-
-      // 4. userData를 localStorage에 저장
-      const userData = {
-        id: sellerId,
-        nickname: sellerName,
-        userType,
-      };
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("isLoggedIn", "true");
-
-      // 5. (필요하다면 Context에도 저장)
-      setUser(userData);
-      setIsLoggedIn(true);
-
+      
       // TODO: 로그인 후 이동할 페이지 설정
       navigate("/Seller_Main");
     } catch (err) {
@@ -61,6 +37,7 @@ function SeloginPage() {
     <div className="selogin-area">
       <div className="Selogin-inarea">
         <div className="Selogin-container">
+          
           {/* 좌측 영역 */}
           <div className="login-left selogin-left">
             <img src={logo} alt="로고" className="selogo2" />
