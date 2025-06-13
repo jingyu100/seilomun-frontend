@@ -13,42 +13,50 @@ const Change_dataPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+
   // 이메일 정보 불러오기
   useEffect(() => {
     axios.get("http://localhost/api/customers", {
       withCredentials: true,
     })
       .then((res) => {
-        const customer = res.data?.data;
+        const customer = res.data?.data?.customer;
         if (customer?.email) {
           setEmail(customer.email);
+        } else {
+          console.warn("⚠ 이메일 없음:", customer);
         }
       })
       .catch((err) => {
         console.error("❌ 사용자 정보 조회 실패:", err);
       });
   }, []);
-
-    //비밀번호 검증
-    const handlePasswordCheck = async () => {
-      try {
-        const res = await axios.post(
-          "http://localhost/api/customers/verifyPassword",
-          { password },
-          { withCredentials: true }
-        );
   
-        if (res.data?.success) {
-          navigate('/Customer_modify');
-        } else {
-          setError("비밀번호가 일치하지 않습니다.");
-        }
-      } catch (err) {
-        console.error("❌ 비밀번호 검증 실패:", err);
-        setError("비밀번호 확인 중 오류가 발생했습니다.");
-      }
-    };
+//비밀번호 변경
+const handlePasswordCheck = async () => {
+  if (!password) {
+    alert("비밀번호를 입력하세요.");
+    return;
+  }
 
+  try {
+    const res = await axios.post(
+      "http://localhost/api/customers/mypage/password",
+      { currentPassword: password },
+      { withCredentials: true }
+    );
+    console.log("응답:", res.data);
+    
+    // ✅ 비밀번호 일치 → 페이지 이동
+    navigate("/customer_modify");
+
+  } catch (e) {
+    console.error("요청 실패", e);
+    alert("비밀번호가 일치하지 않습니다.");
+  }
+};
+
+    
   return (
     <div>
       <div className="header">

@@ -101,13 +101,13 @@
     font-size: 14px;
   }
   
-  .btn-group {
+  .btn-group22 {
     display: flex;
     gap: 12px;
     margin-left: 230px;
   }
   
-  .confirm-btn {
+  .confirm-btn22 {
     background-color: black;
     color: white;
     border: none;
@@ -117,7 +117,7 @@
     font-weight: bold;
   }
   
-  .cancel-btn {
+  .cancel-btn22 {
     background-color: white;
     border: 1px solid #ccc;
     padding: 14px 50px;
