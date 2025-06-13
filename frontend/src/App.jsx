@@ -35,6 +35,7 @@ import Seller_Main from "./pages/seller/Seller_Main.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
+import Seller_reviewPage from "./pages/seller/Seller_reviewPage.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -88,6 +89,7 @@ function App() {
           />
           <Route path="/oauth-success" element={<NaverLoginCallback />} />
           <Route path="/Customer_modify" element={<Customer_modify />} />
+          <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
           <Route path="/Customer_point" element={<Customer_point />} />
           <Route path="/Customer_refund" element={<Customer_refund />} />
           <Route path="/Customer_review" element={<Customer_review />} />
