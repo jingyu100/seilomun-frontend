@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/seller/Seller_Header.css";
 import alarm from "../../image/icon/seller_icon/seller_alarm.png";
 import menu from "../../image/icon/seller_icon/seller_menu.png";
@@ -10,6 +11,7 @@ import red from "../../image/icon/seller_icon/seller_red.png";
 import green from "../../image/icon/seller_icon/seller_green.png";
 import list from "../../image/icon/seller_icon/seller_list.png";
 
+// 왼쪽 메뉴바
 const menuItems = [
   { icon: store, label: "매장관리" },
   { icon: order, label: "주문접수" },
@@ -20,6 +22,9 @@ const menuItems = [
 ];
 
 const Seller_Header = () => {
+
+  const navigate = useNavigate();
+
   const [hoverIndex, setHoverIndex] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -84,6 +89,7 @@ const Seller_Header = () => {
     <div className="seller-container">
       {/* 상단 헤더 */}
       <div className="top-header">
+
         {/* 좌측: 영업 상태 */}
         <div className="left-header" onClick={toggleOpenStatus} style={{ cursor: "pointer" }}>
           <img src={list} alt="menu" className="seller_icon" />
@@ -106,27 +112,33 @@ const Seller_Header = () => {
       {/* 좌측 메뉴 */}
       <div className="side-menu">
         {menuItems.map((item, index) => (
-          <div
-            key={index}
-            className={`menu-item ${
-              selectedIndex !== null
-                ? selectedIndex === index
-                  ? "focused"
-                  : "faded"
-                : hoverIndex !== null
-                ? hoverIndex === index
-                  ? ""
-                  : "faded"
-                : ""
-            }`}
-            onMouseEnter={() => setHoverIndex(index)}
-            onMouseLeave={() => setHoverIndex(null)}
-            onClick={() => setSelectedIndex(index)}
-          >
-            <img src={item.icon} alt={item.label} />
-            <span>{item.label}</span>
-          </div>
-        ))}
+    <div
+      key={index}
+      className={`menu-item ${
+        selectedIndex !== null
+          ? selectedIndex === index
+            ? "focused"
+            : "faded"
+          : hoverIndex !== null
+          ? hoverIndex === index
+            ? ""
+            : "faded"
+          : ""
+      }`}
+      onMouseEnter={() => setHoverIndex(index)}
+      onMouseLeave={() => setHoverIndex(null)}
+      onClick={() => {
+        setSelectedIndex(index);
+        if (item.label === "리뷰관리") {
+          navigate("/Seller_reviewPage");
+        }
+      }}
+    >
+      <img src={item.icon} alt={item.label} />
+      <span>{item.label}</span>
+    </div>
+      ))}
+
       </div>
     </div>
   );
