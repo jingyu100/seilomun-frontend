@@ -2,27 +2,44 @@ import "../../../css/customer/SideBtnModules.css";
 import useLogin from "../../../Hooks/useLogin.js";
 import { useState, useEffect } from "react";
 import { useWebSocket } from "../../../Context/WebSocketContext.jsx";
+import axios from "axios";
 
 export default function ChatRoomView({ chatRoom, onBack }) {
   const { user } = useLogin();
   const [messageInput, setMessageInput] = useState("");
 
   // WebSocket 관련 훅 및 함수
-  const { subscribeToRoom, unsubscribeFromRoom, sendMessage, getRoomMessages } =
-    useWebSocket();
+  const {
+    subscribeToRoom,
+    unsubscribeFromRoom,
+    sendMessage,
+    getRoomMessages,
+    setRoomMessages,
+  } = useWebSocket();
 
   // 현재 방의 메시지 목록을 Context 에서 가져옴
   const [messages, setMessages] = useState(() => getRoomMessages(chatRoom.id));
 
-  // 방 입장 시 구독, 언마운트 시 구독 해제
+  // 방 입장 시 과거 메시지 불러오고, 구독, 언마운트 시 구독 해제
   useEffect(() => {
-    // 구독 시작
+    // 1. 과거 메시지 불러오기
+    axios
+      .get(`http://localhost/api/chat/rooms/${chatRoom.id}`, { withCredentials: true })
+      .then((res) => {
+        const history = res.data.data.ok || [];
+        setMessages(history);
+        setRoomMessages(chatRoom.id, history); // Context에도 저장
+      })
+      .catch((err) => {
+        console.error("채팅 기록 불러오기 실패:", err);
+        setMessages([]);
+        setRoomMessages(chatRoom.id, []);
+      });
+
+    // 2. 구독 시작
     subscribeToRoom(chatRoom.id);
 
-    // 초기 메시지 세팅
-    setMessages(getRoomMessages(chatRoom.id));
-
-    // 컴포넌트 언마운트 시 구독 해제
+    // 3. 컴포넌트 언마운트 시 구독 해제
     return () => {
       unsubscribeFromRoom(chatRoom.id);
     };
