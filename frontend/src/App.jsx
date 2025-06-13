@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
 import { ChatRoomsProvider } from "../src/Context/ChatRoomsContext.jsx";
 import { WebSocketProvider } from "../src/Context/WebSocketContext.jsx";
+import { CartProvider } from "../src/Context/CartContext";
+
 import useLogin from "./Hooks/useLogin";
 import "./App.css";
 
@@ -35,7 +37,6 @@ import Seller_Main from "./pages/seller/Seller_Main.jsx";
 import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
-import Seller_reviewPage from "./pages/seller/Seller_reviewPage.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -66,39 +67,40 @@ function App() {
   }, [navigate, setIsLoggedIn, setUser]);
 
   return (
-    <ChatRoomsProvider>
-      <WebSocketProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/new" element={<NewPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/Delivery_destination" element={<Delivery_destination />} />
-          <Route path="/Change_dataPage" element={<Change_dataPage />} />
-          <Route path="/selogin" element={<SeloginPage />} />
-          <Route path="/sail" element={<SailPage />} />
-          <Route path="/wish" element={<WishListPage />} />
-          <Route path="/Business_numberPage" element={<Business_numberPage />} />
-          <Route path="/SeRegister" element={<SeRegisterPage />} />
-          <Route path="/sellers/:sellerId" element={<StorePage />} />
-          <Route path="/postcode-popup" element={<PostcodePopup />} />
-          <Route
-            path="/sellers/:sellerId/products/:productId"
-            element={<ProductPage />}
-          />
-          <Route path="/oauth-success" element={<NaverLoginCallback />} />
-          <Route path="/Customer_modify" element={<Customer_modify />} />
-          <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
-          <Route path="/Customer_point" element={<Customer_point />} />
-          <Route path="/Customer_refund" element={<Customer_refund />} />
-          <Route path="/Customer_review" element={<Customer_review />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/OrderList" element={<OrderListPage />} />
-          <Route path="/Seller_Main" element={<Seller_Main />} />
-        </Routes>
-      </WebSocketProvider>
-    </ChatRoomsProvider>
+    <CartProvider>
+      <ChatRoomsProvider>
+        <WebSocketProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/new" element={<NewPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/Delivery_destination" element={<Delivery_destination />} />
+              <Route path="/Change_dataPage" element={<Change_dataPage />} />
+              <Route path="/selogin" element={<SeloginPage />} />
+              <Route path="/sail" element={<SailPage />} />
+              <Route path="/wish" element={<WishListPage />} />
+              <Route path="/Business_numberPage" element={<Business_numberPage />} />
+              <Route path="/SeRegister" element={<SeRegisterPage />} />
+              <Route path="/sellers/:sellerId" element={<StorePage />} />
+              <Route path="/postcode-popup" element={<PostcodePopup />} />
+              <Route
+                path="/sellers/:sellerId/products/:productId"
+                element={<ProductPage />}
+              />
+              <Route path="/oauth-success" element={<NaverLoginCallback />} />
+              <Route path="/Customer_modify" element={<Customer_modify />} />
+              <Route path="/Customer_point" element={<Customer_point />} />
+              <Route path="/Customer_refund" element={<Customer_refund />} />
+              <Route path="/Customer_review" element={<Customer_review />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/OrderList" element={<OrderListPage />} />
+              <Route path="/Seller_Main" element={<Seller_Main />} />
+            </Routes>
+        </WebSocketProvider>
+      </ChatRoomsProvider>
+    </CartProvider>
   );
 }
 

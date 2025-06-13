@@ -43,12 +43,12 @@
     align-items: center;
 }
 
-.storeHead .storeName img {
+.storeHead .storeName h1 {
     width: 100%;
     max-width: 260px;
     height: 100%;
     max-height: 80px;
-    padding: 20px 0 15px;
+    padding: 15px 0;
     aspect-ratio: 5 / 2; /* 가로:세로 비율 고정 */
     object-fit: cover;
     object-position: bottom;

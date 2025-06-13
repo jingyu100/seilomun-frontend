@@ -29,13 +29,11 @@ export default function StoreProducts({
       <Link
         to={`/sellers/${sellerId}/products/${id}`}
       >
-        {thumbnailUrl && (
-          <img
-            src={thumbnailUrl}
-            alt={name}
-            style={{ width: "100%", height: "auto", borderRadius: "8px" }}
-          />
-        )}
+        <img 
+          src={thumbnailUrl} 
+          alt={name}
+          style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+        />
         <h3>{name}</h3>
         <p>{description}</p>
         <p>

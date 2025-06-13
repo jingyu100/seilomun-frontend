@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../Context/CartContext";
 import "../../css/customer/Product.css";
 import LikeButtonBox from "./LikeButtonBox";
 
@@ -14,6 +15,7 @@ export default function ProductHeadTitle({
   discountPrice,
   currentDiscountRate,
 }) {
+  
   const navigate = useNavigate();
   const parsedOriginalPrice = parseInt(originalPrice) || 0;
   const parsedDisPrice = parseInt(discountPrice) || 0;
@@ -27,6 +29,9 @@ export default function ProductHeadTitle({
 
   // 총 가격 계산
   const totalPrice = parsedDisPrice * quantity;
+
+  // 장바구니 담기
+  const { addToCart } = useCart();
 
   // 구매 버튼 클릭 - 결제페이지로 이동
   const handleBuyNow = (e) => {
@@ -51,9 +56,25 @@ export default function ProductHeadTitle({
     });
   };
 
-  const handleAddCart = (e) => {
+  const handleAddCart = async (e) => {
     e.preventDefault();
-    alert(`장바구니에 추가: ${name} ${quantity}개`);
+    try {
+      await addToCart(
+        productId,
+        quantity,
+        name,
+        thumbnailUrl,
+        expiryDate,
+        originalPrice,
+        discountPrice,
+        currentDiscountRate,
+        totalPrice,
+      );
+      alert(`장바구니에 ${name} ${quantity}개 추가되었습니다.`);
+    } catch (error) {
+      console.error("장바구니 추가 실패:", error);
+      alert("장바구니 추가에 실패했습니다.");
+    }
   };
 
   return (

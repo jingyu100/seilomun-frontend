@@ -66,7 +66,7 @@ export default function StoreMenu() {
                           index= {index}
                           productId={prod.id}
                           sellerId={sellerId}
-                          thumbnailUrl={prod.thumbnailUrl || "사진 없음"}
+                          thumbnailUrl={prod.thumbnailUrl || "/image/product1.jpg"}
                           name={prod.name}
                           expiryDate={prod.expiryDate}
                           description={prod.description}

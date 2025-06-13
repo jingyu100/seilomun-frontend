@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import "../../css/customer/SideBtnModules.css"; 
-import CartItem from "../CartItem.jsx";
+import { useCart } from "../../Context/CartContext";
 
 const ProductsAlarm = [    
     {
@@ -47,116 +47,112 @@ const ProductsAlarm = [
     }
 ];
 
-function CartViewModule () {
-    const [cart, setCart] = useState([]); // 장바구니 상태
+function CartViewModule() {
 
-    // 상품 추가 함수
-    const addToCart = (productId) => {
-        const selectedProduct = ProductsAlarm.find(product => product.id === productId);
-        if (selectedProduct) {
-            setCart([...cart, selectedProduct]); // 기존 장바구니에 추가
-        }
-    };
+  const { cartItems, removeFromCart } = useCart();
 
-    // 상품 삭제 함수
-    const removeFromCart = (productId) => {
-        setCart(ProductsAlarm.filter(product => product.id !== productId));
-    };
+  const totalProductPrice = useMemo(() => 
+    cartItems.reduce((total, item) => total + item.originalPrice * item.quantity, 0),
+    [cartItems]
+  );
+  
+  const totalDiscount = useMemo(() => 
+    cartItems.reduce((total, item) =>
+      total + (item.originalPrice - item.discountPrice) * item.quantity,
+    0),
+    [cartItems]
+  );
 
-    // 총 상품 본 금액 계산
-    const totalProductPrice = ProductsAlarm.reduce((total, product) => {
-        return total + parseInt(product.regularPrice.replace(/[^0-9]/g, ""), 10);
-    }, 0);
+  const deliveryFee = totalProductPrice >= 50000 || cartItems.length === 0 ? 0 : 3000;
+  const totalPay = totalProductPrice + deliveryFee - totalDiscount;
 
-    // 총 할인 금액 계산
-    const totalDiscount = ProductsAlarm.reduce((total, product) => {
-        const originalPrice = parseInt(product.regularPrice.replace(/[^0-9]/g, ""), 10);
-        const salePrice = parseInt(product.price.replace(/[^0-9]/g, ""), 10);
-        return total + (originalPrice - salePrice);
-    }, 0);
+  return (
+    <div className="sideCartModule viewModule moduleFrame1">
+      <div className='moduleFrame2'>
+        <h2 className='sideModuleTitle'>장바구니</h2>
+      </div>
 
-    // 배송비 (5만원 이상 무료 배송, 이하 3000원)
-    const deliveryFee = totalProductPrice >= 50000 ? 0 : (ProductsAlarm.length > 0 ? 3000 : 0);
-
-    // 최종 결제 금액
-    const totalPay = totalProductPrice + deliveryFee - totalDiscount;
-
-    return (
-        <div className="sideCartModule viewModule moduleFrame1">
-            <div className='moduleFrame2'>
-                <h2 className='sideModuleTitle'>장바구니</h2>
+      <div className='order-area'>
+        <div className='order-inner moduleFrame2'>
+          <div className='sideCartTable moduleFrame2'>
+            <div className="sideCartTop">
+              총 
+              <span className='cartTopCnt' style={{ fontWeight: '800' }}>
+                {cartItems.length}건
+              </span>
             </div>
-
-            <div className='order-area'>
-                <div className='order-inner moduleFrame2'>
-                    <div className='sideCartTable moduleFrame2'>
-                        <div className="sideCartTop">
-                            총 
-                            <span className='cartTopCnt' style={{ fontWeight: '800' }}>
-                                {ProductsAlarm.length}건
-                            </span>
-                        </div>
+          </div>
+          
+          <div className="cartModuleMain">
+            {cartItems.length === 0 ? (
+              <p>장바구니가 비어있습니다.</p>
+            ) : (
+              cartItems.map((item) => (
+                <div className="productItem displayFlex" key={item.productId}>
+                  <div className="productUrl displayFlex">
+                    <div className="productInfo">
+                        <h3 style={{ fontSize: "15.5px" }}>{item.name}</h3>
+                        <p style={{ fontSize: "13px" }}>{item.date}</p>
+                        <span className='displayFlex'>
+                            <p style={{ fontWeight: "600" }}>{item.price}</p>
+                            <p style={{ textDecoration: "line-through", color: "#959595" }}>
+                                {item.regularPrice}
+                            </p>
+                            <p style={{ fontSize: "13px", color: "#ff0000" }}>{item.discount}</p>
+                        </span>
+                        <p style={{ fontSize: "13px" }}>{item.quantity}개</p>
                     </div>
-                    
-                    <div className="cartModuleMain">
-                        {ProductsAlarm.map((product) => (
-                            <div className="productItem displayFlex">
-                                <a key={product.id} href={product.url} target="_blank" rel="noopener noreferrer"
-                                    className='productUrl displayFlex'
-                                > {/* target="_blank"와 rel="noopener noreferrer"으로 새 창으로 열리게 */}
-                                    <img src={product.image} alt={product.name} className="productImage" />
-                                    <div className="productInfo">
-                                        <h3 style={{ fontSize: "15.5px" }}>{product.name}</h3>
-                                        <p className='' style={{
-                                            fontSize: "13px"
-                                        }}>{product.date}</p>
-                                        <span className='displayFlex'>
-                                            <p style={{ fontWeight: "600" }}>{product.price}</p>
-                                            <p style={{ textDecoration: "line-through", color: "#959595" }}>
-                                                {product.regularPrice}
-                                            </p>
-                                            <p style={{ fontSize: "13px", color: "#ff0000" }}>{product.discount}</p>
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className='order-totalsummary moduleFrame1 moduleFrame2 displayFlex'>
-                        <div className='order-subsummary displayFlex'>
-                            <div>
-                                선택 상품 금액
-                                <span>{totalProductPrice.toLocaleString()}원</span>
-                            </div>
-                            +
-                            <div>
-                                총 배송비
-                                <span>{deliveryFee > 0 ? `${deliveryFee.toLocaleString()}원` : "무료"}</span>
-                            </div>
-                            -
-                            <div>
-                                할인 금액
-                                <span style={{
-                                                color: "#ff0000",
-                                            }}>{totalDiscount.toLocaleString()}원</span>
-                            </div>
-                        </div>
-                        <div className='order-totalpay'>
-                            주문 금액
-                            <span>{totalPay.toLocaleString()}원</span>
-                        </div>
-                    </div>
+                    <button 
+                      onClick={() => {
+                        console.log("삭제 시도:", item.productId);
+                        removeFromCart(item.productId);
+                      }} 
+                      style={{ marginLeft: "auto", border: "none", background: "transparent" }}
+                    >
+                      <img src="../../../image/icon/close_X.svg" />
+                    </button>
+                  </div>
                 </div>
-            </div>
+              ))
+            )}
+          </div>
 
-            <div className='cartBuy moduleFrame1 moduleFrame2'>
-                <button className='cartBuyBtn' disabled={cart.length === 0}>
-                    바로 구매
-                </button>
+          <div className='order-totalsummary moduleFrame1 moduleFrame2 displayFlex'>
+            <div className='order-subsummary displayFlex'>
+              <div>
+                선택 상품 금액
+                <span>{totalProductPrice.toLocaleString()}원</span>
+              </div>
+              +
+              <div>
+                총 배송비
+                <span>{deliveryFee > 0 ? `${deliveryFee.toLocaleString()}원` : "무료"}</span>
+              </div>
+              -
+              <div>
+                할인 금액
+                <span style={{ color: "#ff0000" }}>
+                  {totalDiscount.toLocaleString()}원
+                </span>
+              </div>
             </div>
+            <div className='order-totalpay'>
+              주문 금액
+              <span>{totalPay.toLocaleString()}원</span>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+
+      {cartItems.length > 0 && (
+        <div className='cartBuy moduleFrame1 moduleFrame2'>
+          <button className='cartBuyBtn'>
+            바로 구매
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default CartViewModule;

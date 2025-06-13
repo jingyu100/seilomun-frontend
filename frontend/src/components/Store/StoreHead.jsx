@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import StoreMiniInfo from "./StoreMiniInfo.jsx";
 import Rating from "../StarRating.jsx";
 import Inquiry from "./Inquiry.jsx";
@@ -13,11 +14,11 @@ export default function StoreHead({ store, sellerId }) {
   return (
     <div className="storeHead">
       <div className="storeName">
-        <img
-          src={sellerInformationDto?.storeImageUrl || "../../image/상호샘플.png"}
-          alt="가게 상호"
-          className="storeName"
-        />
+        <Link to={`/sellers/${sellerId}`}>
+          <h1
+            className="storeName"          
+          >{sellerInformationDto?.storeName || "상호 없음"}</h1>
+        </Link>
       </div>
       <div className="storeHead-inner">
         <div className="storeHead-half storeHead-left">

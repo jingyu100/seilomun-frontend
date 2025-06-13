@@ -1,247 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import "../css/customer/ProductList.css"; 
-import { useState } from "react";
-
-const products = [
-  {
-    id: 1,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 2,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,100원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 3,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 4,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 5,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 6,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 7,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 8,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 9,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 10,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 11,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 12,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-  {
-    id: 13,
-    name: "발효훈연소시지 1팩 (50g*4개) 2종",
-    price: "3,000원",
-    regularPrice: "5,000원",
-    address: "대구광역시 북구 복현동",
-    discount: "40%",
-    image: "/image/product1.jpg",
-    date: "2024년 11월 13일까지",
-  },
-];
-
-const ProductCard = ({ product }) => {
-  return (
-    <div className="product-card">
-      <img src={product.image} alt={product.name} className="product-image" />
-      <div className="product-text">
-        <h3 className="product-name">{product.name}</h3>
-        <div className="product-info">
-          <span className="product-price">{product.price}</span>
-          <div className="product-price-container">
-            <span className="product-regularprice">{product.regularPrice}</span>
-            <span className="product-discount">{product.discount}</span>
-          </div>
-        </div>
-        <p className="product-address">{product.address}</p>
-        <p className="product-date">{product.date}</p>
-      </div>
-    </div>
-  );
-};
 
 const ProductList = () => {
+
+  const [products, setProducts] = useState([]);
   // 화면에 표시할 상품 개수 (기본: 12개)
   const [visibleCount, setVisibleCount] = useState(12);
 
   // "더보기" 버튼 클릭 시 6개씩 추가 표시
   const handleLoadMore = () => {
     setVisibleCount((prevCount) => prevCount + 8);
+  };
+
+  useEffect(() => {
+    const fetchExpiringProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost/api/products/search", {
+          params: {
+            keyword: "",
+            filterType: "EXPIRING_SOON",
+            sortType: "EXPIRING",
+            page: 0,
+            size: 99,
+          },
+        });
+        const productList = res?.data?.content || [];
+        setProducts(productList);
+        console.log("받은 임박 특가 상품 목록:", productList);
+      } catch (error) {
+        console.error("임박 상품 조회 실패", error);
+      }
+    };
+
+    fetchExpiringProducts();
+  }, []);
+
+  const ProductCard = ({ product }) => {
+    return (
+      <Link
+          to={`/sellers/${product.sellerId}/products/${product.id}`}
+          className="product_card"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div className="product-card">
+            <img
+              src={product.imageUrl || "/image/product1.jpg"}
+              alt={product.name}
+              className="product_image"
+            />
+            <div className="product_text">
+              <h3 className="product_name">{product.name}</h3>
+              <div className="product_info">
+                <span className="product_price">{product.discountPrice?.toLocaleString()}원</span>
+                <div className="product_price_container">
+                  <span className="product_regularprice">{product.originalPrice?.toLocaleString()}원</span>
+                  {product.discountRate && (
+                    <span className="product_discount">{product.discountRate}%</span>
+                  )}
+                </div>
+              </div>
+              <p className="product_address">{product.address}</p>
+              <p className="product_date">{product.expiryDate}</p>
+            </div>
+          </div>
+      </Link>
+    );
   };
 
   return (
