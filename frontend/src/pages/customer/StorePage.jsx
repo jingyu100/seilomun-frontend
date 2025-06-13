@@ -23,7 +23,7 @@ export default function StorePage() {
 
       <div className="storeBanner">
         <img
-          src={sellerPhotoDto?.photoUrl || "/image/ㅋㅍㅁㄱ.jpg"}
+          src={sellerPhotoDto?.photoUrl || "/image/product1.jpg"}
           alt="가게 메인 이미지"
           className="storeImage"
         />

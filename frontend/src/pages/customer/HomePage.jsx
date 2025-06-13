@@ -8,6 +8,7 @@ import MainLastSP from "../../components/Main/MainLastSP.jsx";
 import MainNewMatch from "../../components/Main/MainNewMatch.jsx";
 
 const HomePage = () => {
+  
   return (
     <div className="homePage">
       <div className="header">

@@ -35,6 +35,13 @@ export default function StoreMenu() {
             case "LOW_RATING":
                 return sortedProducts.sort((a, b) => (a.rating || 0) - (b.rating || 0));
 
+            case "EXPIRING":
+                return sortedProducts.sort((a, b) => {
+                    const rateA = a.currentDiscountRate || 0;
+                    const rateB = b.currentDiscountRate || 0;
+                    return rateB - rateA;
+                });
+
             case "BASIC":
             default:
                 // 기본 정렬 - 원본 배열 그대로

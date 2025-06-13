@@ -18,7 +18,11 @@ export default function ProductHead() {
   return (
     <div className="productHead-inner productFlex">
       <div className="productHead-left">
-        <img src={product.thumbnailUrl || "/images/default.jpg"} alt="상품 이미지" />
+        <img 
+          className="productHead-image" 
+          src={product.thumbnailUrl || "/image/product1.jpg"} 
+          alt="상품 이미지" 
+        />
       </div>
       <div className="productHead-right">
         <ProductHeadTitle
