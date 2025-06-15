@@ -3,9 +3,11 @@ import useLogin from "../../../Hooks/useLogin.js";
 import { useState, useEffect } from "react";
 import { useWebSocket } from "../../../Context/WebSocketContext.jsx";
 import axios from "axios";
+import { useChatRooms } from "../../../Context/ChatRoomsContext.jsx";
 
 export default function ChatRoomView({ chatRoom, onBack }) {
   const { user } = useLogin();
+  const { setChatRooms } = useChatRooms();
   const [messageInput, setMessageInput] = useState("");
 
   // WebSocket 관련 훅 및 함수
@@ -80,6 +82,25 @@ export default function ChatRoomView({ chatRoom, onBack }) {
     }
   };
 
+  // 뒤로가기 버튼 클릭 시 마지막 메시지 갱신 후 onBack 호출
+  const handleBackWithUpdate = () => {
+    // 마지막 메시지 추출
+    const lastMsgArr = getRoomMessages(chatRoom.id);
+    const lastMsg =
+      lastMsgArr && lastMsgArr.length > 0
+        ? lastMsgArr[lastMsgArr.length - 1].content
+        : "";
+    // chatRooms의 해당 방 lastMessage 갱신
+    if (lastMsg && setChatRooms) {
+      setChatRooms((prevRooms) =>
+        prevRooms.map((room) =>
+          room.id === chatRoom.id ? { ...room, lastMessage: lastMsg } : room
+        )
+      );
+    }
+    onBack();
+  };
+
   return (
     <div className="sideChattModule viewModule">
       {/* 채팅방 헤더 */}
@@ -88,7 +109,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
           <div className="chatHeaderLeft">
             <button
               className="chatBackBtn"
-              onClick={onBack}
+              onClick={handleBackWithUpdate}
               title="채팅방 목록으로 돌아가기"
             >
               <svg

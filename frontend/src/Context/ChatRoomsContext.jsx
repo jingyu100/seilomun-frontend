@@ -62,7 +62,7 @@ export function ChatRoomsProvider({ children }) {
   };
 
   return (
-    <ChatRoomsContext.Provider value={{ chatRooms, addChatRoom }}>
+    <ChatRoomsContext.Provider value={{ chatRooms, addChatRoom, setChatRooms }}>
       {children}
     </ChatRoomsContext.Provider>
   );

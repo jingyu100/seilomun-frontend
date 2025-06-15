@@ -28,8 +28,11 @@ export default function ChatViewModule() {
 
   // 상대방(채팅방 타이틀)에 표시할 이름 결정 함수
   const getRoomTitle = (room) => {
-    // 현재 Inquiry 컴포넌트는 고객 전용이므로 판매자 매장명만 표시
-    return room.sellerStoreName || "매장";
+    if (user.userType === "SELLER") {
+      return room.customerNickname || "고객";
+    } else {
+      return room.sellerStoreName || "매장";
+    }
   };
 
   const getLastMessageText = (room) => {
