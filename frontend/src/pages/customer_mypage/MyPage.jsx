@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../../css/customer_mypage/MyPage.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
@@ -10,6 +11,32 @@ import useLogin from "../../Hooks/useLogin.js";
 const MyPage = () => {
   const { user } = useLogin(); // ✅ 전역 user 정보 가져오기
   const userName = user?.nickname || "회원"; // ✅ fallback 이름 설정
+  const [point, setPoint] = useState(0); // ✅ 포인트 상태 추가
+  const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const res = await axios.get("http://localhost/api/customers", {
+          withCredentials: true,
+        });
+  
+        const customer = res.data?.data?.customer;
+        const points = customer?.points ?? 0;
+        const profileImageFileName = customer?.profileImageUrl;
+  
+        setPoint(points);
+        if (profileImageFileName) {
+          setProfileImage(`http://localhost/image/${profileImageFileName}`);
+        }
+      } catch (error) {
+        console.error("고객 정보 불러오기 실패:", error);
+      }
+    };
+  
+    fetchCustomer();
+  }, []);
+
 
   return (
     <div>
@@ -69,7 +96,11 @@ const MyPage = () => {
           <div className="mypage-center">
             <div className="user-info-box">
               <div className="user-left">
-                <img src={logo} alt="프로필" className="user-profile" />
+            <img
+            src={profileImage || logo} 
+            alt="프로필"
+            className="user-profile"
+          />
                 <h3>{userName} 고객님 반갑습니다.</h3>
               </div>
               <div className="user-right">
@@ -80,7 +111,7 @@ const MyPage = () => {
             </div>
 
             <div className="point-box">
-              세일로문 포인트 <span className="highlight">12000</span> P &gt;
+              세일로문 포인트 <span className="highlight">{point}</span> P &gt;
             </div>
 
             <div className="mypage-list-box">
