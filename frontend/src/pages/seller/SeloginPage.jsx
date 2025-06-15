@@ -104,7 +104,7 @@ function SeloginPage() {
                 </button>
                 <button
                   type="button"
-                  className="register-btn seregister-btn"
+                  className="register-btn-aa"
                   onClick={() => navigate("/Business_numberPage")}
                 >
                   회원가입
