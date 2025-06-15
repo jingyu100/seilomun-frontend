@@ -16,7 +16,7 @@ import SellerChatBtn from "./SellerChatBtn";
 const menuItems = [
   { icon: store, label: "매장관리" },
   { icon: order, label: "주문접수" },
-  { icon: menu, label: "상품관리" },
+  { icon: menu, label: "상품관리", path: "/seller/product/management"},
   { icon: alarm, label: "알림" },
   { icon: review, label: "리뷰관리" },
   { icon: statistics, label: "통계보기" },
@@ -133,6 +133,10 @@ const Seller_Header = () => {
               onMouseLeave={() => setHoverIndex(null)}
               onClick={() => {
                 setSelectedIndex(index);
+                if (item.path) {
+                  navigate(item.path);
+                }
+
                 if (item.label === "리뷰관리") {
                   navigate("/Seller_reviewPage");
                 }
