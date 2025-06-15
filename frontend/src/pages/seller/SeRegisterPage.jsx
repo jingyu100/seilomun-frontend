@@ -259,7 +259,7 @@ function SeRegisterPage() {
           <option value="4">식당</option>
         </select>
 
-        {/* 주소소*/}
+        {/* 주소*/}
         <label id="address-main-label2">
           주소<span className="required2">*</span>
         </label>
