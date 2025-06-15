@@ -1,0 +1,90 @@
+.seller-review-page {
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    padding-bottom: 50px;
+    margin-top: 70px;
+  }
+  
+  .review-content-wrapper {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  
+  .review-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+  
+  .review-card {
+    border-bottom: 10px solid #eee;
+    padding: 20px 0;
+  }
+  
+  .review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .customer-photo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+  }
+  
+  .customer-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .review-date {
+    font-size: 13px;
+    color: #777;
+  }
+  
+  .review-rating {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #ff9900;
+  }
+  
+  .review-products {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .review-content {
+    font-size: 15px;
+    margin: 10px 0;
+  }
+  
+  .review-images {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .review-images img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .no-reviews {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding: 40px 0;
+  }
+  

@@ -106,7 +106,7 @@ const handleNoticeImageChange = (e) => {
         {/* 매장 사진 */}
         <div className="store-form-group-33">
           <label className="store-label">매장 사진</label>
-          <div className="image-upload-box" onClick={handleStoreImageClick}>
+          <div className="image-upload-box-11" onClick={handleStoreImageClick}>
             <img
               src={seller_camera}
               alt="카메라 아이콘"
