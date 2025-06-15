@@ -1,0 +1,35 @@
+.seller-chat-btn {
+  position: fixed;
+  right: 36px;
+  bottom: 36px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #232323;
+  color: #fff;
+  border: none;
+  border-radius: 32px;
+  padding: 14px 28px 14px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.seller-chat-btn:hover {
+  background: #333;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+}
+.seller-chat-btn .chat-icon {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+  margin-right: 2px;
+}
+.seller-chat-btn span {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}

@@ -10,6 +10,7 @@ import store from "../../image/icon/seller_icon/seller_store.png";
 import red from "../../image/icon/seller_icon/seller_red.png";
 import green from "../../image/icon/seller_icon/seller_green.png";
 import list from "../../image/icon/seller_icon/seller_list.png";
+import SellerChatBtn from "./SellerChatBtn";
 
 // 왼쪽 메뉴바
 const menuItems = [
@@ -22,7 +23,6 @@ const menuItems = [
 ];
 
 const Seller_Header = () => {
-
   const navigate = useNavigate();
 
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -86,61 +86,66 @@ const Seller_Header = () => {
   };
 
   return (
-    <div className="seller-container">
-      {/* 상단 헤더 */}
-      <div className="top-header">
+    <>
+      <div className="seller-container">
+        {/* 상단 헤더 */}
+        <div className="top-header">
+          {/* 좌측: 영업 상태 */}
+          <div
+            className="left-header"
+            onClick={toggleOpenStatus}
+            style={{ cursor: "pointer" }}
+          >
+            <img src={list} alt="menu" className="seller_icon" />
+            <span className="status-text">{isOpen ? "영업종료" : "영업중"}</span>
+            <img src={isOpen ? red : green} alt="status-dot" className="red-dot" />
+          </div>
 
-        {/* 좌측: 영업 상태 */}
-        <div className="left-header" onClick={toggleOpenStatus} style={{ cursor: "pointer" }}>
-          <img src={list} alt="menu" className="seller_icon" />
-          <span className="status-text">{isOpen ? "영업종료" : "영업중"}</span>
-          <img src={isOpen ? red : green} alt="status-dot" className="red-dot" />
+          {/* 우측: 사용자 정보 */}
+          <div className="right-header">
+            <span>{storeName ? `${storeName} 님` : "판매자"}</span>
+            <span>|</span>
+            <span onClick={handleLogout} style={{ cursor: "pointer" }}>
+              로그아웃
+            </span>
+            <span>|</span>
+            <span>고객센터</span>
+          </div>
         </div>
 
-        {/* 우측: 사용자 정보 */}
-        <div className="right-header">
-          <span>{storeName ? `${storeName} 님` : "판매자"}</span>
-          <span>|</span>
-          <span onClick={handleLogout} style={{ cursor: "pointer" }}>
-            로그아웃
-          </span>
-          <span>|</span>
-          <span>고객센터</span>
+        {/* 좌측 메뉴 */}
+        <div className="side-menu">
+          {menuItems.map((item, index) => (
+            <div
+              key={index}
+              className={`menu-item ${
+                selectedIndex !== null
+                  ? selectedIndex === index
+                    ? "focused"
+                    : "faded"
+                  : hoverIndex !== null
+                  ? hoverIndex === index
+                    ? ""
+                    : "faded"
+                  : ""
+              }`}
+              onMouseEnter={() => setHoverIndex(index)}
+              onMouseLeave={() => setHoverIndex(null)}
+              onClick={() => {
+                setSelectedIndex(index);
+                if (item.label === "리뷰관리") {
+                  navigate("/Seller_reviewPage");
+                }
+              }}
+            >
+              <img src={item.icon} alt={item.label} />
+              <span>{item.label}</span>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* 좌측 메뉴 */}
-      <div className="side-menu">
-        {menuItems.map((item, index) => (
-    <div
-      key={index}
-      className={`menu-item ${
-        selectedIndex !== null
-          ? selectedIndex === index
-            ? "focused"
-            : "faded"
-          : hoverIndex !== null
-          ? hoverIndex === index
-            ? ""
-            : "faded"
-          : ""
-      }`}
-      onMouseEnter={() => setHoverIndex(index)}
-      onMouseLeave={() => setHoverIndex(null)}
-      onClick={() => {
-        setSelectedIndex(index);
-        if (item.label === "리뷰관리") {
-          navigate("/Seller_reviewPage");
-        }
-      }}
-    >
-      <img src={item.icon} alt={item.label} />
-      <span>{item.label}</span>
-    </div>
-      ))}
-
-      </div>
-    </div>
+      <SellerChatBtn />
+    </>
   );
 };
 
