@@ -27,7 +27,7 @@ const MyPage = () => {
               <div className="title-lg">쇼핑정보</div>
               <ul>
                 <li onClick={() => (window.location.href = "/OrderList")}>
-                  주문목록/배송조회
+                  주문목록
                 </li>
                 <li onClick={() => window.location.href = '/Customer_refund'}>
                   환불/입금 내역
@@ -86,13 +86,13 @@ const MyPage = () => {
             <div className="mypage-list-box">
               <div className="list-section">
                 <div className="section-header">
-                  <div>주문 내역</div>
+                  <div>환불/입금 내역</div>
                   <a href="#">더보기 &gt;</a>
                 </div>
                 <ul className="record-list">
                   <div className="empty-list-box">
                     <img src={reading_glasses} alt="no data" className="empty-icon" />
-                    <p>주문 내역이 없습니다.</p>
+                    <p>환불/입금내역이 없습니다.</p>
                   </div>
                 </ul>
               </div>

@@ -73,7 +73,7 @@ const handlePasswordCheck = async () => {
         <div className="sidebar-section">
           <div className="title-lg">쇼핑정보</div>
           <ul>
-          <li onClick={() => window.location.href = '/OrderList'}>주문목록/배송조회</li>
+          <li onClick={() => window.location.href = '/OrderList'}>주문목록</li>
           <li onClick={() => window.location.href = '/Customer_refund'}>환불/입금 내역</li>
           </ul>
         </div>

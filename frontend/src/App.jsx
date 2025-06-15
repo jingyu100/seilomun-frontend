@@ -38,6 +38,7 @@ import Business_numberPage from "./pages/seller/Business_numberPage.jsx";
 import SeRegisterPage from "./pages/seller/SeRegisterPage.jsx";
 import SeloginPage from "./pages/seller/SeloginPage.jsx";
 import Seller_newstoreRegistration from "./pages/seller/Seller_newstoreRegistration.jsx";
+import Seller_reviewPage from "./pages/seller/Seller_reviewPage.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -99,7 +100,8 @@ function App() {
               <Route path="/OrderList" element={<OrderListPage />} />
               <Route path="/Seller_Main" element={<Seller_Main />} />
               <Route path="/Seller_newstoreRegistration" element={<Seller_newstoreRegistration />} /> 
-            </Routes>
+              <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />          
+              </Routes>
         </WebSocketProvider>
       </ChatRoomsProvider>
     </CartProvider>
