@@ -110,7 +110,11 @@ const MyPage = () => {
               </div>
             </div>
 
-            <div className="point-box">
+            <div
+              className="point-box"
+              onClick={() => (window.location.href = "/Customer_point")}
+              style={{ cursor: "pointer" }} 
+            >
               세일로문 포인트 <span className="highlight">{point}</span> P &gt;
             </div>
 
