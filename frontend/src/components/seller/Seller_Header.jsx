@@ -14,7 +14,7 @@ import SellerChatBtn from "./SellerChatBtn";
 
 // 왼쪽 메뉴바
 const menuItems = [
-  { icon: store, label: "매장관리" },
+  { icon: store, label: "매장관리", path: "/Seller_newstoreRegistration" }, 
   { icon: order, label: "주문접수" },
   { icon: menu, label: "상품관리", path: "/seller/product/management"},
   { icon: alarm, label: "알림" },

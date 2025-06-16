@@ -93,7 +93,7 @@ const Seller_newstoreRegistration = () => {
         <Seller_Header />
       </div>
       <div className="Seller-newstoreRegistration">
-        <h2 className="seller-new-form-title">매장 정보 설정</h2>
+        <h2 className="seller-new-form-title">매장 정보 설정 및 변경</h2>
         <div className="store-form-line" />
 
         {/* 매장이름 */}
