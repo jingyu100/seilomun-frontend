@@ -486,6 +486,19 @@
     color: #999;
   }
 
+  .image-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  
+  .preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
 /* 저장 및 취소 */ 
 
 .store-form-group-aa {

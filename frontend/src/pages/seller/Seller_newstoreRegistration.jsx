@@ -6,31 +6,64 @@ import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
 
 const Seller_newstoreRegistration = () => {
   const [deliveryStatus, setDeliveryStatus] = useState("");
-  const [amountInputs, setAmountInputs] = useState([{ min: "", max: "", fee: "" }, ]);
+  const [amountInputs, setAmountInputs] = useState([{ min: "", max: "", fee: "" }]);
   const [freeDelivery, setFreeDelivery] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const noticeImageRef = useRef(null);
-  const storeImageRef = useRef(null);
   const [description, setDescription] = useState("");
   const [storeDescription, setStoreDescription] = useState("");
   const [storeTime, setStoreTime] = useState("");
-  const [noticeImage, setNoticeImage] = useState(null);
 
-// 매장 사진
-const handleStoreImageClick = () => {
-    storeImageRef.current.click();
-  };
-  
-  const handleStoreImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log("매장 사진 선택됨:", file.name);
+  // ✅ 매장 사진 (최대 5개)
+  const [storeImages, setStoreImages] = useState([]);
+
+  const handleAddStoreImage = () => {
+    if (storeImages.length < 5) {
+      setStoreImages([...storeImages, null]);
     }
   };
 
-//배달주문금액
-const handleAddInput = () => {
+  const handleRemoveStoreImage = () => {
+    if (storeImages.length > 0) {
+      setStoreImages(storeImages.slice(0, -1));
+    }
+  };
+
+  const handleStoreImageChange = (index, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const updated = [...storeImages];
+      updated[index] = URL.createObjectURL(file);
+      setStoreImages(updated);
+    }
+  };
+
+  // ✅ 공지 이미지 (최대 5개)
+  const [noticeImages, setNoticeImages] = useState([]);
+
+  const handleAddNoticeImage = () => {
+    if (noticeImages.length < 5) {
+      setNoticeImages([...noticeImages, null]);
+    }
+  };
+
+  const handleRemoveNoticeImage = () => {
+    if (noticeImages.length > 0) {
+      setNoticeImages(noticeImages.slice(0, -1));
+    }
+  };
+
+  const handleNoticeImageChange = (index, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const updated = [...noticeImages];
+      updated[index] = URL.createObjectURL(file);
+      setNoticeImages(updated);
+    }
+  };
+
+  // 배달 금액 입력 관련
+  const handleAddInput = () => {
     setAmountInputs([...amountInputs, { min: "", max: "", fee: "" }]);
   };
 
@@ -46,27 +79,12 @@ const handleAddInput = () => {
     setAmountInputs(updated);
   };
 
-//매장 카테고리
-const categories = ["편의점", "마트", "빵집", "식당"];
+  // 카테고리 선택
+  const categories = ["편의점", "마트", "빵집", "식당"];
 
-const handleSelect = (category) => {
-  setSelectedCategory(category);
-  setIsOpen(false);
-};
-
-
-// 공지 사진
-const handleImageClick = () => {
-    noticeImageRef.current.click();
-  };
-
-const handleNoticeImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setNoticeImage(imageUrl);
-      console.log("공지 이미지 선택됨:", file.name);
-    }
+  const handleSelect = (category) => {
+    setSelectedCategory(category);
+    setIsOpen(false);
   };
 
   return (
@@ -103,25 +121,37 @@ const handleNoticeImageChange = (e) => {
           <button className="store-button-4">변경</button>
         </div>
 
-        {/* 매장 사진 */}
+        {/* 매장 사진 영역 */}
         <div className="store-form-group-33">
           <label className="store-label">매장 사진</label>
-          <div className="image-upload-box-11" onClick={handleStoreImageClick}>
-            <img
-              src={seller_camera}
-              alt="카메라 아이콘"
-              className="camera-icon"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              ref={storeImageRef}
-              onChange={handleStoreImageChange}
-              style={{ display: "none" }}
-            />
+          <div className="image-row">
+            {storeImages.map((img, index) => (
+              <div
+                className="image-upload-box-11"
+                key={index}
+                onClick={() => document.getElementById(`store-img-${index}`).click()}
+              >
+                <img
+                  src={img || seller_camera}
+                  alt="store"
+                  className="camera-icon"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  id={`store-img-${index}`}
+                  style={{ display: "none" }}
+                  onChange={(e) => handleStoreImageChange(index, e)}
+                />
+              </div>
+            ))}
           </div>
-          <button className="store-button-5">등록</button>
-          <button className="store-button-6">변경</button>
+          <div className="amount-button-group">
+            <button className="amount-gray-btn" onClick={handleAddStoreImage}>추가</button>
+            <button className="amount-gray-btn" onClick={handleRemoveStoreImage}>삭제</button>
+            <button className="store-button-5">등록</button>
+            <button className="store-button-6">변경</button>
+          </div>
         </div>
 
 
@@ -272,35 +302,50 @@ const handleNoticeImageChange = (e) => {
           <button className="store-button-c">변경</button>
         </div>
 
-        {/* 가게 공지 사진 및 설명 */}
-        <div className="store-form-group-99">
-          <label className="store-label">가게 공지 사진 및 설명</label>
-          <div className="notice-wrapper">
-            <div className="notice-image-box" onClick={handleImageClick}>
-            {noticeImage ? (
-                <img src={noticeImage} alt="업로드된 이미지" className="preview-image" />
-            ) : (
-                <img src={seller_camera} alt="카메라 아이콘" className="camera-icon" />
-            )}
-            <input
-                type="file"
-                accept="image/*"
-                ref={noticeImageRef}
-                onChange={handleNoticeImageChange}
-                style={{ display: "none" }}
-            />
-            </div>
-            <textarea
-            className="notice-description"
-            placeholder="500자 이내로 입력해주세요"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            />
-        </div>
+          {/* 가게 공지 사진 및 설명 */}
+          <div className="store-form-group-99">
+            <label className="store-label">가게 공지</label>
 
-          <button className="store-button-d">등록</button>
-          <button className="store-button-e">변경</button>
-        </div> 
+            <div className="notice-wrapper">
+              <div className="image-row">
+              {noticeImages.map((file, index) => (
+                <div
+                  key={index}
+                  className="notice-image-box"
+                  onClick={() => document.getElementById(`notice-img-${index}`).click()}
+                >
+                  <img
+                    src={file ? URL.createObjectURL(file) : seller_camera}  // ✅ 수정
+                    alt="notice"
+                    className="camera-icon"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id={`notice-img-${index}`}
+                    style={{ display: "none" }}
+                    onChange={(e) => handleNoticeImageChange(index, e)}
+                  />
+                </div>
+              ))}
+              </div>
+              <div className="amount-button-group">
+                <button className="amount-gray-btn" onClick={handleAddNoticeImage}>추가</button>
+                <button className="amount-gray-btn" onClick={handleRemoveNoticeImage}>삭제</button>
+                <button className="store-button-d">등록</button>
+                <button className="store-button-e">변경</button>
+              </div>
+
+              <textarea
+                className="notice-description"
+                placeholder="500자 이내로 입력해주세요"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+
+
+            </div>
+          </div>
 
         {/* 저장 및 취소 */}
         <div className="store-form-group-aa">
