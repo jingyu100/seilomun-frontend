@@ -3,7 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import "./ReviewForm.css";
 
-export default function ReviewForm({ order, onCancel }) {
+// ✅ onReviewComplete props 추가
+export default function ReviewForm({ order, onCancel, onReviewComplete }) {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");
   const [images, setImages] = useState([]);
@@ -91,7 +92,12 @@ export default function ReviewForm({ order, onCancel }) {
         }
       });
 
-      onCancel();
+      // ✅ 리뷰 완료 콜백 호출 (즉시 상태 업데이트)
+      if (onReviewComplete) {
+        onReviewComplete(); // 부모 컴포넌트에서 isReview 상태를 true로 변경
+      } else {
+        onCancel(); // 혹시 콜백이 없으면 기본 동작
+      }
     } catch (err) {
       console.error("리뷰 등록 실패:", err);
       alert("리뷰 등록에 실패했습니다.");

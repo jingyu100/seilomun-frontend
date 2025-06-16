@@ -27,6 +27,37 @@ const OrderListPage = () => {
       });
 
       const data = response.data.data;
+
+      // 🔍 데이터 구조 확인을 위한 console.log 추가
+      console.log("=== API 전체 응답 ===");
+      console.log(response.data);
+
+      console.log("=== 주문 데이터 배열 ===");
+      console.log(data.orders);
+
+      console.log("=== 첫 번째 주문 상세 데이터 ===");
+      if (data.orders && data.orders.length > 0) {
+        console.log(data.orders[0]);
+        console.log("주문 상태 (orderStatus):", data.orders[0].orderStatus);
+        console.log("리뷰 작성 여부 (isReview):", data.orders[0].isReview);
+        console.log("주문 ID:", data.orders[0].orderId);
+        console.log("판매자명:", data.orders[0].sellerName);
+        console.log("총 금액:", data.orders[0].totalAmount);
+        console.log("주문 날짜:", data.orders[0].orderDate);
+        console.log("주문 아이템들:", data.orders[0].orderItems);
+        console.log("사진 URL:", data.orders[0].photoUrl);
+      }
+
+      console.log("=== 모든 주문들의 상태 요약 ===");
+      data.orders.forEach((order, index) => {
+        console.log(`주문 ${index + 1}:`, {
+          orderId: order.orderId,
+          orderStatus: order.orderStatus,
+          isReview: order.isReview,
+          sellerName: order.sellerName,
+        });
+      });
+
       setOrders((prev) => [...prev, ...data.orders]);
       setHasNext(data.hasNext);
       setPage((prev) => prev + 1);
@@ -78,6 +109,10 @@ const OrderListPage = () => {
               store: order.sellerName,
               name: order.orderItems[0],
               price: order.totalAmount,
+              // 🔍 주문 상태 관련 데이터 추가로 전달
+              orderStatus: order.orderStatus,
+              isReview: order.isReview,
+              photoUrl: order.photoUrl,
             }}
           />
         ))}
