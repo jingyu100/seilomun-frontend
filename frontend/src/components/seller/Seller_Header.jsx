@@ -11,19 +11,22 @@ import red from "../../image/icon/seller_icon/seller_red.png";
 import green from "../../image/icon/seller_icon/seller_green.png";
 import list from "../../image/icon/seller_icon/seller_list.png";
 import SellerChatBtn from "./SellerChatBtn";
+import useLogin from "../../Hooks/useLogin"; // ✅ 추가
+import axios from "axios"; // ✅ 추가
 
 // 왼쪽 메뉴바
 const menuItems = [
-  { icon: store, label: "매장관리", path: "/Seller_newstoreRegistration" }, 
+  { icon: store, label: "매장관리", path: "/Seller_newstoreRegistration" },
   { icon: order, label: "주문접수" },
-  { icon: menu, label: "상품관리", path: "/seller/product/management"},
+  { icon: menu, label: "상품관리", path: "/seller/product/management" },
   { icon: alarm, label: "알림" },
   { icon: review, label: "리뷰관리" },
-  { icon: statistics, label: "통계보기" , path: "/seller/stats"},
+  { icon: statistics, label: "통계보기", path: "/seller/stats" },
 ];
 
 const Seller_Header = () => {
   const navigate = useNavigate();
+  const { setUser, setIsLoggedIn, user } = useLogin(); // ✅ user 추가
 
   const [hoverIndex, setHoverIndex] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -32,29 +35,25 @@ const Seller_Header = () => {
 
   // storeName 불러오기
   useEffect(() => {
-    fetch("/api/sellers/me", {
-      method: "GET",
-      credentials: "include", // ✅ 쿠키 포함
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`응답 실패 (${res.status}): ${text}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("✅ /me 응답 데이터:", data);
-        const store = data.data?.storeName;
+    const fetchSellerInfo = async () => {
+      try {
+        const response = await axios.get("http://localhost/api/sellers/me", {
+          withCredentials: true,
+        });
+
+        console.log("✅ /me 응답 데이터:", response.data);
+        const store = response.data.data?.storeName;
         if (store) {
           setStoreName(store);
         } else {
           console.warn("⚠ storeName이 응답에 없습니다.");
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("❌ 판매자 정보 불러오기 실패:", err);
-      });
+      }
+    };
+
+    fetchSellerInfo();
   }, []);
 
   // 영업중/영업종료 toggle
@@ -62,27 +61,35 @@ const Seller_Header = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // 로그아웃 핸들러
+  // ✅ 로그아웃 핸들러 수정 (소비자 방식과 동일하게 axios 사용)
   const handleLogout = async () => {
-    const username = localStorage.getItem("username");
-    const userType = "SELLER";
-
     try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      await axios.post(
+        "http://localhost/api/auth/logout",
+        {
+          username: user?.email || localStorage.getItem("username"),
+          userType: "SELLER",
         },
-        credentials: "include",
-        body: JSON.stringify({ username, userType }),
-      });
-    } catch (e) {
-      console.warn("⚠ 로그아웃 실패 (무시하고 진행):", e);
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (err) {
+      console.warn("⚠ 로그아웃 실패 (무시하고 진행):", err);
     }
 
+    // ✅ LoginContext 상태 초기화 (웹소켓 연결 해제됨)
+    setUser(null);
+    setIsLoggedIn(false);
+
+    // ✅ localStorage 정리
+    localStorage.removeItem("user");
+    localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("username");
     localStorage.removeItem("sellerId");
-    window.location.href = "/selogin";
+
+    // ✅ navigate 사용
+    navigate("/selogin");
   };
 
   return (

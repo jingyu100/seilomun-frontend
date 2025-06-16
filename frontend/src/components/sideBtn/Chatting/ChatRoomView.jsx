@@ -151,9 +151,9 @@ export default function ChatRoomView({ chatRoom, onBack }) {
               <p>대화를 시작해보세요!</p>
             </div>
           ) : (
-            messages.map((message) => (
+            messages.map((message, index) => (
               <div
-                key={message.id}
+                key={message.id || `message-${chatRoom.id}-${index}`}
                 className={`chatMessage ${
                   message.senderType === (user.userType === "CUSTOMER" ? "C" : "S")
                     ? "myMessage"
