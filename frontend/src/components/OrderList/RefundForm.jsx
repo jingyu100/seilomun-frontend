@@ -1,4 +1,4 @@
-// RefundForm.jsx - 환불 신청 폼 컴포넌트
+// RefundForm.jsx - 환불 신청 폼 컴포넌트 (수정됨)
 import { useState } from "react";
 import axios from "axios";
 import "./RefundForm.css";
@@ -48,31 +48,6 @@ export default function RefundForm({ order, onCancel }) {
     });
   };
 
-  const uploadPhotosToServer = async () => {
-    if (photos.length === 0) return [];
-
-    try {
-      const uploadPromises = photos.map(async (photo) => {
-        const formData = new FormData();
-        formData.append("file", photo.file);
-
-        // 실제 프로젝트에서는 이미지 업로드 API 엔드포인트로 변경
-        const response = await axios.post("/api/upload/image", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true,
-        });
-
-        return response.data.url; // 업로드된 이미지 URL 반환
-      });
-
-      return await Promise.all(uploadPromises);
-    } catch (error) {
-      console.error("이미지 업로드 실패:", error);
-      // 업로드 실패 시 빈 배열 반환 (환불 신청은 계속 진행)
-      return [];
-    }
-  };
-
   const handleSubmit = async () => {
     // 유효성 검사
     if (!refundType) {
@@ -98,21 +73,36 @@ export default function RefundForm({ order, onCancel }) {
     setIsSubmitting(true);
 
     try {
-      // 이미지 업로드 (선택사항)
-      const uploadedPhotoUrls = await uploadPhotosToServer();
+      // FormData 생성
+      const formData = new FormData();
 
-      // 환불 신청 API 호출
+      // 환불 데이터를 JSON으로 추가
       const refundData = {
         refundType,
         title: title.trim(),
         content: content.trim(),
-        refundPhotos: uploadedPhotoUrls,
       };
 
-      await axios.post(`http://localhost/api/orders/refund/${order.id}`, refundData, {
+      // JSON 데이터를 Blob으로 변환하여 추가
+      formData.append(
+        "refund",
+        new Blob([JSON.stringify(refundData)], {
+          type: "application/json",
+        })
+      );
+
+      // 사진 파일들 추가
+      photos.forEach((photo) => {
+        if (photo.file) {
+          formData.append("photos", photo.file);
+        }
+      });
+
+      // 환불 신청 API 호출
+      await axios.post(`http://localhost/api/orders/refund/${order.id}`, formData, {
         withCredentials: true,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
