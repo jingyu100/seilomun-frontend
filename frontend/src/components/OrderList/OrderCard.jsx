@@ -1,4 +1,4 @@
-// OrderCard.jsx - 리뷰 작성 후 상태 업데이트 추가
+// OrderCard.jsx - 주문 상태 정보를 버튼 그룹에 전달
 import React, { useState } from "react";
 import "./OrderCard.css";
 import ProductImageBox from "./ProductImageBox";
@@ -10,7 +10,7 @@ import RefundForm from "./RefundForm";
 export default function OrderCard({ order }) {
   const [mode, setMode] = useState("default");
   // ✅ 로컬 상태 추가 - 리뷰 작성 상태 관리
-  const [localIsReview, setLocalIsReview] = useState(order.isReview);
+  const [localIsReview, setLocalIsReview] = useState(order.isReview); // ✅ order.isReview로 수정
 
   // ✅ 리뷰 작성 완료 후 호출될 콜백 함수
   const handleReviewComplete = () => {
@@ -32,29 +32,31 @@ export default function OrderCard({ order }) {
     return <RefundForm order={order} onCancel={() => setMode("default")} />;
   }
 
-  // 주문 상태에 따른 표시 텍스트
-  const getOrderStatusText = (status) => {
+  // 주문 상태에 따른 표시 텍스트와 CSS 클래스
+  const getOrderStatusInfo = (status) => {
     switch (status) {
       case "S":
-        return "주문 접수중";
+        return { text: "주문 접수중", className: "status-processing" };
       case "F":
-        return "결제 실패";
+        return { text: "결제 실패", className: "status-failed" };
       case "C":
-        return "주문 취소";
+        return { text: "주문 취소", className: "status-cancelled" };
       case "A":
-        return "주문 완료";
+        return { text: "주문 완료", className: "status-completed" };
       case "R":
-        return "주문 거절";
+        return { text: "주문 거절", className: "status-rejected" };
       case "B":
-        return "환불 완료";
+        return { text: "환불 완료", className: "status-refunded" };
       case "P":
-        return "환불 신청중";
+        return { text: "환불 신청중", className: "status-refund-pending" };
       case "N":
-        return "주문 대기";
+        return { text: "주문 대기", className: "status-waiting" };
       default:
-        return "주문 상태 확인";
+        return { text: "주문 상태 확인", className: "status-unknown" };
     }
   };
+
+  const statusInfo = getOrderStatusInfo(order.orderStatus);
 
   return (
     <div className="order-card">
@@ -63,7 +65,7 @@ export default function OrderCard({ order }) {
       <div className="order-main-content">
         {/* 좌측 정보 영역 */}
         <div className="order-info">
-          <div className="order-status">{getOrderStatusText(order.orderStatus)}</div>
+          <div className={`order-status ${statusInfo.className}`}>{statusInfo.text}</div>
           <div className="order-body">
             <ProductImageBox />
             <OrderDetailBox store={order.store} name={order.name} price={order.price} />

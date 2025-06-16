@@ -39,7 +39,7 @@ const OrderListPage = () => {
       if (data.orders && data.orders.length > 0) {
         console.log(data.orders[0]);
         console.log("주문 상태 (orderStatus):", data.orders[0].orderStatus);
-        console.log("리뷰 작성 여부 (isReview):", data.orders[0].isReview);
+        console.log("리뷰 작성 여부 (review):", data.orders[0].review); // ✅ 올바른 필드명
         console.log("주문 ID:", data.orders[0].orderId);
         console.log("판매자명:", data.orders[0].sellerName);
         console.log("총 금액:", data.orders[0].totalAmount);
@@ -53,7 +53,7 @@ const OrderListPage = () => {
         console.log(`주문 ${index + 1}:`, {
           orderId: order.orderId,
           orderStatus: order.orderStatus,
-          isReview: order.isReview,
+          review: order.review, // ✅ review 필드로 수정
           sellerName: order.sellerName,
         });
       });
@@ -109,9 +109,9 @@ const OrderListPage = () => {
               store: order.sellerName,
               name: order.orderItems[0],
               price: order.totalAmount,
-              // 🔍 주문 상태 관련 데이터 추가로 전달
+              // 🔍 올바른 필드명 사용
               orderStatus: order.orderStatus,
-              isReview: order.isReview,
+              isReview: order.review, // ✅ review 필드를 isReview로 매핑
               photoUrl: order.photoUrl,
             }}
           />
