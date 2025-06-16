@@ -41,6 +41,7 @@ import Seller_newstoreRegistration from "./pages/seller/Seller_newstoreRegistrat
 import Seller_reviewPage from "./pages/seller/Seller_reviewPage.jsx";
 import Seller_ProductManagement from "./pages/seller/Seller_ProductManagement.jsx";
 import Seller_ProductRegister from "./pages/seller/Seller_ProductRegister.jsx";
+import Seller_Stats from "./pages/seller/Seller_Stats.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -105,6 +106,7 @@ function App() {
               <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
               <Route path="/seller/product/management" element={<Seller_ProductManagement />} />
               <Route path="/seller/product/register" element={<Seller_ProductRegister />} />
+              <Route path="/seller/stats" element={<Seller_Stats />} />
               </Routes>
         </WebSocketProvider>
       </ChatRoomsProvider>
