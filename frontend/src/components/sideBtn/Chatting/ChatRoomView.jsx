@@ -66,8 +66,12 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
 
+    // receiverId 결정 (상대방 ID)
+    const receiverId =
+      user.userType === "CUSTOMER" ? chatRoom.sellerId : chatRoom.customerId;
+
     // 메시지 전송 (WebSocket)
-    const success = sendMessage(chatRoom.id, messageInput);
+    const success = sendMessage(chatRoom.id, messageInput, receiverId);
 
     if (success) {
       setMessageInput("");

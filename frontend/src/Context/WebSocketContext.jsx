@@ -73,6 +73,7 @@ export function WebSocketProvider({ children }) {
           setStompClient(null);
         },
         connectHeaders: {
+          userId: user.id.toString(), // ✅ 추가
           userType: user.userType === "CUSTOMER" ? "C" : "S",
           userName: user.nickname || "익명사용자",
         },
@@ -104,6 +105,7 @@ export function WebSocketProvider({ children }) {
             }));
           },
           {
+            userId: user.id.toString(), // ✅ 추가
             userType: user.userType === "CUSTOMER" ? "C" : "S",
           }
         );
@@ -115,6 +117,7 @@ export function WebSocketProvider({ children }) {
         const enterMessage = {
           type: "JOIN",
           chatRoomId: parseInt(chatRoomId),
+          senderId: user.id, // ✅ 추가
           senderType: user.userType === "CUSTOMER" ? "C" : "S",
         };
         stompClient.publish({
@@ -142,13 +145,15 @@ export function WebSocketProvider({ children }) {
   }, []);
 
   const sendMessage = useCallback(
-    (chatRoomId, content = null) => {
+    (chatRoomId, content = null, receiverId = null) => {
+      // ✅ receiverId 매개변수 추가
       if (!stompClient || !connected || !content.trim()) return false;
 
       const message = {
         type: "CHAT",
         chatRoomId: parseInt(chatRoomId),
         senderId: user.id,
+        receiverId: receiverId, // ✅ 추가
         senderName: user.nickname || "익명사용자",
         senderType: user.userType === "CUSTOMER" ? "C" : "S",
         content: content.trim(),
