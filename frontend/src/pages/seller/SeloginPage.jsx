@@ -44,6 +44,7 @@ function SeloginPage() {
       };
       localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("sellerId", sellerId);
 
       // 5. (필요하다면 Context에도 저장)
       setUser(userData);
