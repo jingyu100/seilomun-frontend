@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../css/customer/ProductList.css"; 
 
 const ProductList = () => {
 
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
   const [products, setProducts] = useState([]);
   // 화면에 표시할 상품 개수 (기본: 12개)
   const [visibleCount, setVisibleCount] = useState(12);
@@ -20,9 +23,9 @@ const ProductList = () => {
       try {
         const res = await axios.get("http://localhost/api/products/search", {
           params: {
-            keyword: "",
-            filterType: "EXPIRING_SOON",
-            sortType: "EXPIRING",
+            keyword: keyword,
+            filterType: "",
+            sortType: "",
             page: 0,
             size: 99,
           },

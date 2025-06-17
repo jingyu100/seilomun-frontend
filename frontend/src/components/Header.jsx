@@ -9,6 +9,7 @@ import useNotifications from "../Hooks/useNotifications";
 import SemiHeader from "./SemiHeader.jsx";
 import CategoryMenu from "./sideBtn/CategoryMenu.jsx";
 import "../css/header/header.css"
+import { useSearchParams } from "react-router-dom";
 
 const Header = () => {
     const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
@@ -17,9 +18,13 @@ const Header = () => {
         "customer"
     );
 
+    const [searchParams] = useSearchParams();
+    const keywordFromURL = searchParams.get("keyword") || "";
+    // const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState(keywordFromURL);
+
     const navigate = useNavigate();
 
-    const [searchTerm, setSearchTerm] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -213,43 +218,14 @@ const Header = () => {
             }
         }
 
-        try {
-            setSearchLoading(true);
-            const res = await axios.get("http://localhost/api/products/search", {
-                params: {
-                    keyword: trimmed,
-                    filterType: "ALL",
-                    sortType: "LATEST",
-                    page: 0,
-                    size: 10,
-                },
-            });
+        // 검색 상태 초기화
+        setSearchResults([]);
+        setIsDropdownVisible(false);
+        setIsFocused(false);
 
-            const products = res.data?.content || [];
-            const filtered = products.filter((p) =>
-                p.name.toLowerCase().includes(trimmed.toLowerCase())
-            );
+        // 상품검색 페이지로 이동 (검색어를 쿼리 파라미터로 전달)
+        navigate(`/new?keyword=${encodeURIComponent(trimmed)}`);
 
-            if (
-                filtered.length === 1 &&
-                filtered[0].name.trim().toLowerCase() === trimmed.toLowerCase()
-            ) {
-                const p = filtered[0];
-                // 🔥 페이지 이동 전에 검색 결과 초기화
-                setSearchResults([]);
-                setSearchTerm("");
-                setIsDropdownVisible(false);
-                return navigate(`/sellers/${p.sellerId}/products/${p.id}`);
-            }
-
-            setSearchResults(filtered);
-            setIsDropdownVisible(true);
-        } catch (err) {
-            console.error("상품 검색 실패:", err);
-            alert("검색 중 오류가 발생했습니다.");
-        } finally {
-            setSearchLoading(false);
-        }
     };
 
     // 검색어 클릭 핸들러 개선
