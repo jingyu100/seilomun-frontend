@@ -246,7 +246,7 @@ const Header = () => {
         }
     };
 
-    // 🔥 검색어 클릭 핸들러 개선
+    // 검색어 클릭 핸들러 개선
     const handleSearchTermClick = (term) => {
         setSearchTerm(term);
         // 검색어를 클릭했을 때는 검색 결과를 초기화하지 않고 유지
