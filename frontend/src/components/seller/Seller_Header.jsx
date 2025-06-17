@@ -115,8 +115,6 @@ const Seller_Header = () => {
             <span onClick={handleLogout} style={{ cursor: "pointer" }}>
               로그아웃
             </span>
-            <span>|</span>
-            <span>고객센터</span>
           </div>
         </div>
 
