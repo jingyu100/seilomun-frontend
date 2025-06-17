@@ -1,10 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import AlarmViewModule from "./AlarmViewModule";
 
-const SideAlarmBtn = () => {
+const SideAlarmBtn = ({
+    notifications, 
+    markAllAsRead,
+    markAsRead,
+}) => {
     const [isAlarmModal, setisAlarmModal] = useState(false);
     const modalRef = useRef(null);
     const buttonRef = useRef(null); // 버튼 참조 추가
+
+    const unreadNotifications = notifications.filter(noti => noti.isRead !== "Y");
 
     const toggleAlarmModal = () => {
         setisAlarmModal(prev => !prev);

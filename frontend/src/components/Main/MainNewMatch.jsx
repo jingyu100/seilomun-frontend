@@ -31,6 +31,16 @@ function MainNewMatch() {
     fetchLatestProducts();
   }, []);
 
+  const getThumbnailUrl = (product) => {
+    const url = product.thumbnailUrl;
+  
+    if (!url) return "/image/product1.jpg";
+  
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
+  };
+
   const ProductCard = ({ product }) => {
     return (
       <Link
@@ -39,7 +49,7 @@ function MainNewMatch() {
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <img
-          src={product.imageUrl || "/image/product1.jpg"}
+          src={getThumbnailUrl(product)}
           alt={product.name}
           className="NM_product_image"
         />
@@ -47,7 +57,7 @@ function MainNewMatch() {
           <h3 className="NM_product_name">{product.name}</h3>
           <div className="NM_product_info">
             <span className="NM_product_price">
-              {product.discountPrice?.toLocaleString()}원
+              {product.discountedPrice?.toLocaleString()}원
             </span>
             <div className="NM_product_price_container">
               <span className="NM_product_regularprice">

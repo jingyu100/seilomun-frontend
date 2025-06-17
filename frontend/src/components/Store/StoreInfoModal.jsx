@@ -17,18 +17,19 @@ export default function StoreMiniInfo ({
             <div className="storeInfo-body">
                 <div className="storeInfo-content">
                 {notificationPhotos.length > 0 && (
-                    <div className="notification-images">
-                    <h4>공지 이미지</h4>
-                    <div className="image-grid">
-                        {notificationPhotos.map((url, idx) => (
-                        <img
-                            key={idx}
-                            src={url}
-                            alt={`공지 이미지 ${idx + 1}`}
-                            className="notification-image"
-                        />
-                        ))}
-                    </div>
+                    <div className="storeInfo-inner">
+                        <h2>공지사항</h2>
+                        <p>{notification}</p>
+                        <div className="notification-images">
+                            {notificationPhotos.map((url, idx) => (
+                            <img
+                                key={idx}
+                                src={url}
+                                alt={`공지 이미지 ${idx + 1}`}
+                                className="notification-image"
+                            />
+                            ))}
+                        </div>
                     </div>
                 )}
                 </div>
