@@ -26,8 +26,13 @@ const MyPage = () => {
         const profileImageFileName = customer?.profileImageUrl;
   
         setPoint(points);
+  
         if (profileImageFileName) {
-          setProfileImage(`http://localhost/image/${profileImageFileName}`);
+          const fullUrl = profileImageFileName.startsWith("http")
+            ? profileImageFileName
+            : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${profileImageFileName}`; // ✅ 실제 버킷 URL로 변경
+          console.log("📷 프로필 이미지 전체 URL:", fullUrl);
+          setProfileImage(fullUrl);
         }
       } catch (error) {
         console.error("고객 정보 불러오기 실패:", error);
@@ -96,11 +101,15 @@ const MyPage = () => {
           <div className="mypage-center">
             <div className="user-info-box">
               <div className="user-left">
-            <img
-            src={profileImage || logo} 
-            alt="프로필"
-            className="user-profile"
-          />
+              <img
+                src={profileImage ? profileImage : logo}
+                alt="프로필"
+                className="user-profile"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = logo;
+                }}
+              />
                 <h3>{userName} 고객님 반갑습니다.</h3>
               </div>
               <div className="user-right">

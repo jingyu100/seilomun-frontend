@@ -88,3 +88,58 @@
     padding: 40px 0;
   }
   
+  /* 답글기능 */
+  .comment-section {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .comment-input {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+  
+  .comment-submit-btn {
+    align-self: flex-end;
+    padding: 6px 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .comment-submit-btn:hover {
+    background-color: #45a049;
+  }
+
+  /* 등록된 답글 표시 */
+
+  .seller-comment-box {
+    margin-top: 15px;
+    background-color: #f1f1f1;
+    padding: 10px 14px;
+    border-left: 4px solid #4CAF50;
+    border-radius: 6px;
+  }
+  
+  .seller-comment-box strong {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .seller-comment-text {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #444;
+  }
+  
