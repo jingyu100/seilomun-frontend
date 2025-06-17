@@ -8,6 +8,13 @@ const Seller_reviewPage = () => {
   const [storeName, setStoreName] = useState("");
   const [commentInputs, setCommentInputs] = useState({});
 
+  const getFullUrl = (url) => {
+    if (!url) return "";
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
+  };
+
   // 답글 내용 변경 핸들러
   const handleCommentChange = (reviewId, text) => {
     setCommentInputs((prev) => ({ ...prev, [reviewId]: text }));
@@ -93,7 +100,8 @@ const Seller_reviewPage = () => {
             return (
               <div key={idx} className="review-card">
                 <div className="review-header">
-                  <img src={review.customerPhoto} alt="프로필" className="customer-photo" />
+                <img src={getFullUrl(review.customerPhoto)} alt="프로필" className="customer-photo" />
+
                   <div>
                     <div className="customer-name">{review.customerName}</div>
                     <div className="review-date">
@@ -109,11 +117,10 @@ const Seller_reviewPage = () => {
                 </div>
 
                 <div className="review-content">{review.reviewContent}</div>
-
                 {review.reviewPhotoUrls.length > 0 && (
                   <div className="review-images">
                     {review.reviewPhotoUrls.map((url, i) => (
-                      <img key={i} src={url} alt="리뷰 이미지" />
+                      <img key={i} src={getFullUrl(url)} alt="리뷰 이미지" />
                     ))}
                   </div>
                 )}
