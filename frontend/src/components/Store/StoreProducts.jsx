@@ -30,9 +30,9 @@ export default function StoreProducts({
         to={`/sellers/${sellerId}/products/${id}`}
       >
         <img 
+          className="store-product-image"
           src={thumbnailUrl || "/image/product1.jpg"} 
           alt={name}
-          style={{ width: "100%", height: "auto", borderRadius: "8px" }}
         />
         <h3>{name}</h3>
         <p>{description}</p>

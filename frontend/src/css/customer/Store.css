@@ -181,8 +181,28 @@
 }
 
 .productList {
-    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
+
+@media (max-width: 1200px) {
+    .productList {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .productList {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .productList {
+      grid-template-columns: 1fr;
+    }
+  }
 /* ---------- 스토어 바디 부분 ---------- */
 
 
@@ -241,3 +261,19 @@
     font-weight: 500;
 }
 /* ---------- 스토어 상세 정보 부분 ---------- */
+
+
+
+/* ---------- 스토어 제품 카드 부분 ---------- */
+.store-product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.productItem:hover .store-product-image {
+    transform: scale(1.05);
+  }
+/* ---------- 스토어 제품 카드 부분 ---------- */

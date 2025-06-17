@@ -86,7 +86,6 @@
   right: 30px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
