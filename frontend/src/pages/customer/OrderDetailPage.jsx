@@ -41,34 +41,12 @@ const OrderDetailPage = () => {
       const orderDetailData = response.data.data["주문 상세 보기"];
       console.log("✅ 주문 상세 데이터:", orderDetailData);
 
-      // ✅ 실제 OrderDetailResponseDto 구조에 맞춰 데이터 매핑
+      // ✅ 백엔드 데이터 그대로 사용 (계산 없음)
       const transformedData = {
         storeName: orderDetailData?.storeName || "알 수 없는 상점",
         orderDate: orderDetailData?.orderDate || new Date().toISOString(),
         orderNumber: orderDetailData?.orderNumber || `ORD${orderId}`,
-        orderItems: Array.isArray(orderDetailData?.orderItems)
-          ? orderDetailData.orderItems.map((item) => {
-              const unitPrice = Number(item?.unitPrice) || 0;
-              const quantity = Number(item?.quantity) || 1;
-              const discountRate = Number(item?.discountRate) || 0;
-
-              // 할인된 단가 계산: 단가 * (1 - 할인율/100)
-              const discountedPrice = unitPrice * (1 - discountRate / 100);
-              // 총 가격 계산: 할인된 단가 * 수량
-              const totalPrice = discountedPrice * quantity;
-
-              return {
-                productName: item?.productName || "상품명 없음",
-                expiryDate: item?.expiryDate || null,
-                quantity: quantity,
-                unitPrice: unitPrice,
-                discountRate: discountRate,
-                discountedPrice: discountedPrice, // 할인 적용된 단가
-                totalPrice: totalPrice, // 총 가격
-                photoUrl: item?.photoUrl || null,
-              };
-            })
-          : [],
+        orderItems: orderDetailData?.orderItems || [], // 그대로 사용
         totalAmount: Number(orderDetailData?.totalAmount) || 0,
         usedPoint: Number(orderDetailData?.usedPoint) || 0,
         deliveryFee: Number(orderDetailData?.deliveryFee) || 0,
@@ -313,54 +291,84 @@ const OrderDetailPage = () => {
               <h3 style={{ margin: "0", fontSize: "18px", color: "#333" }}>주문 상품</h3>
             </div>
             <div style={{ padding: "20px" }}>
-              {orderDetail.orderItems?.map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "15px 0",
-                    borderBottom:
-                      index < orderDetail.orderItems.length - 1
-                        ? "1px solid #f0f0f0"
-                        : "none",
-                  }}
-                >
-                  <div style={{ flex: 1 }}>
-                    <h4 style={{ margin: "0 0 5px 0", fontSize: "16px", color: "#333" }}>
-                      {item.productName || "상품명 없음"}
-                    </h4>
-                    <div style={{ margin: "0", fontSize: "14px", color: "#666" }}>
-                      <div>
-                        단가: {formatPrice(item.unitPrice || 0)}
-                        {item.discountRate > 0 && (
-                          <span style={{ color: "#e74c3c", marginLeft: "8px" }}>
-                            ({item.discountRate}% 할인)
-                          </span>
+              {orderDetail.orderItems?.map((item, index) => {
+                // ✅ unitPrice는 이미 할인된 가격이므로 그대로 사용
+                const discountedPrice = item.unitPrice || 0; // 이미 할인된 가격
+                const discountRate = item.discountRate || 0; // 표시용 할인률
+                const quantity = item.quantity || 1;
+
+                // 원가 역산 (표시용)
+                const originalPrice =
+                  discountRate > 0
+                    ? Math.round(discountedPrice / (1 - discountRate / 100))
+                    : discountedPrice;
+
+                // 총 가격 계산 (할인된 가격 × 수량)
+                const totalPrice = discountedPrice * quantity;
+
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "15px 0",
+                      borderBottom:
+                        index < orderDetail.orderItems.length - 1
+                          ? "1px solid #f0f0f0"
+                          : "none",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <h4
+                        style={{ margin: "0 0 5px 0", fontSize: "16px", color: "#333" }}
+                      >
+                        {item.productName || "상품명 없음"}
+                      </h4>
+                      <div style={{ margin: "0", fontSize: "14px", color: "#666" }}>
+                        {discountRate > 0 ? (
+                          <>
+                            <div>
+                              원가:{" "}
+                              <span
+                                style={{ textDecoration: "line-through", color: "#999" }}
+                              >
+                                {formatPrice(originalPrice)}
+                              </span>
+                              <span style={{ color: "#e74c3c", marginLeft: "8px" }}>
+                                ({discountRate}% 할인)
+                              </span>
+                            </div>
+                            <div>
+                              할인가:{" "}
+                              <span style={{ color: "#e74c3c", fontWeight: "bold" }}>
+                                {formatPrice(discountedPrice)}
+                              </span>{" "}
+                              × {quantity}개
+                            </div>
+                          </>
+                        ) : (
+                          <div>
+                            가격: {formatPrice(discountedPrice)} × {quantity}개
+                          </div>
+                        )}
+                        {item.expiryDate && (
+                          <div
+                            style={{ fontSize: "12px", color: "#999", marginTop: "2px" }}
+                          >
+                            유통기한:{" "}
+                            {new Date(item.expiryDate).toLocaleDateString("ko-KR")}
+                          </div>
                         )}
                       </div>
-                      <div>
-                        {item.discountRate > 0
-                          ? formatPrice(item.discountedPrice || 0)
-                          : formatPrice(item.unitPrice || 0)}{" "}
-                        × {item.quantity || 1}개
-                      </div>
-                      {item.expiryDate && (
-                        <div
-                          style={{ fontSize: "12px", color: "#999", marginTop: "2px" }}
-                        >
-                          유통기한:{" "}
-                          {new Date(item.expiryDate).toLocaleDateString("ko-KR")}
-                        </div>
-                      )}
+                    </div>
+                    <div style={{ fontWeight: "bold", fontSize: "16px", color: "#333" }}>
+                      {formatPrice(totalPrice)}
                     </div>
                   </div>
-                  <div style={{ fontWeight: "bold", fontSize: "16px", color: "#333" }}>
-                    {formatPrice(item.totalPrice || 0)}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -384,67 +392,92 @@ const OrderDetailPage = () => {
               <h3 style={{ margin: "0", fontSize: "18px", color: "#333" }}>결제 정보</h3>
             </div>
             <div style={{ padding: "20px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <span style={{ color: "#666" }}>상품 금액</span>
-                <span>
-                  {formatPrice(
-                    orderDetail.orderItems?.reduce(
-                      (sum, item) => sum + (item.totalPrice || 0),
-                      0
-                    ) || 0
-                  )}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <span style={{ color: "#666" }}>배달비</span>
-                <span>{formatPrice(orderDetail.deliveryFee || 0)}</span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <span style={{ color: "#007bff" }}>포인트 사용</span>
-                <span style={{ color: "#007bff" }}>
-                  -{formatPrice(orderDetail.usedPoint || 0)}
-                </span>
-              </div>
-              <hr
-                style={{
-                  margin: "15px 0",
-                  border: "none",
-                  borderTop: "1px solid #e9ecef",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                }}
-              >
-                <span>총 결제 금액</span>
-                <span style={{ color: "#007bff" }}>
-                  {formatPrice(
-                    (orderDetail.totalAmount || 0) - (orderDetail.usedPoint || 0)
-                  )}
-                </span>
-              </div>
+              {(() => {
+                // ✅ 상품 총액 계산 (unitPrice는 이미 할인된 가격)
+                const itemsTotal =
+                  orderDetail.orderItems?.reduce((sum, item) => {
+                    const discountedPrice = item.unitPrice || 0; // 이미 할인된 가격
+                    const quantity = item.quantity || 1;
+                    return sum + discountedPrice * quantity;
+                  }, 0) || 0;
+
+                return (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <span style={{ color: "#666" }}>상품 금액</span>
+                      <span>{formatPrice(itemsTotal)}</span>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <span style={{ color: "#666" }}>배달비</span>
+                      <span>{formatPrice(orderDetail.deliveryFee || 0)}</span>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <span style={{ color: "#007bff" }}>포인트 사용</span>
+                      <span style={{ color: "#007bff" }}>
+                        -{formatPrice(orderDetail.usedPoint || 0)}
+                      </span>
+                    </div>
+                    <hr
+                      style={{
+                        margin: "15px 0",
+                        border: "none",
+                        borderTop: "1px solid #e9ecef",
+                      }}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        fontSize: "18px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <span>총 결제 금액</span>
+                      <span style={{ color: "#007bff" }}>
+                        {/* ✅ 백엔드의 totalAmount 사용 (이미 모든 계산이 완료된 값) */}
+                        {formatPrice(orderDetail.totalAmount || 0)}
+                      </span>
+                    </div>
+                    {/* ✅ 실제 결제 금액 (포인트 차감 후) 추가 표시 */}
+                    {(orderDetail.usedPoint || 0) > 0 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          fontSize: "16px",
+                          color: "#28a745",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <span>실제 결제 금액</span>
+                        <span>
+                          {formatPrice(
+                            (orderDetail.totalAmount || 0) - (orderDetail.usedPoint || 0)
+                          )}
+                        </span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
 
