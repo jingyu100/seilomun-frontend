@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import AlarmContents from "./AlarmContents.jsx";
 import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
-import useNotifications from "../Hooks/useNotifications"; // 추가
+import useNotifications from "../Hooks/useNotifications";
 import SemiHeader from "./SemiHeader.jsx";
 import "../css/header/header.css"
 
@@ -14,7 +14,7 @@ const Header = () => {
     const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotifications(
         "http://localhost",
         "customer"
-    ); // 사용
+    );
 
     const navigate = useNavigate();
 
@@ -22,12 +22,15 @@ const Header = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+    // 🔹 검색 기록과 인기 검색어를 별도 상태로 분리
+    const [searchHistory, setSearchHistory] = useState([]);
     const [popularKeywords, setPopularKeywords] = useState([]);
 
     const [searchResults, setSearchResults] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
 
-    // 🔹 검색 기록만 로그인된 사용자에게 (분리)
+    // 🔹 검색 기록 로드 (로그인된 사용자만)
     useEffect(() => {
         if (isLoggedIn && isDropdownVisible && searchTerm.trim() === "") {
             const fetchSearchHistory = async () => {
@@ -39,18 +42,21 @@ const Header = () => {
                         }
                     );
                     const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
-                    setSuggestions(keywords);
+                    setSearchHistory(keywords); // 🔥 별도 상태로 관리
                 } catch (err) {
                     console.error("❌ 검색 기록 불러오기 실패:", err);
-                    setSuggestions([]);
+                    setSearchHistory([]);
                 }
             };
 
             fetchSearchHistory();
+        } else if (!isLoggedIn) {
+            // 비로그인 상태에서는 검색 기록 초기화
+            setSearchHistory([]);
         }
     }, [isLoggedIn, isDropdownVisible, searchTerm]);
 
-    // 🔹 인기 검색어는 모든 사용자에게 (분리)
+    // 🔹 인기 검색어 로드 (모든 사용자)
     useEffect(() => {
         if (isDropdownVisible && searchTerm.trim() === "") {
             const fetchPopularKeywords = async () => {
@@ -61,6 +67,7 @@ const Header = () => {
                     setPopularKeywords(res.data?.data?.popularKeywords || []);
                 } catch (err) {
                     console.error("❌ 인기 검색어 불러오기 실패:", err);
+                    setPopularKeywords([]);
                 }
             };
 
@@ -68,11 +75,12 @@ const Header = () => {
         }
     }, [isDropdownVisible, searchTerm]);
 
+    // 🔹 자동완성 (입력값이 있을 때만)
     useEffect(() => {
-        if (searchTerm.trim() === "") return; // ✅ 공백일 땐 suggestions 유지
-
-        // 🔥 입력 바뀌었으면 바로 이전 suggestions 잠깐 비우기 (UI 깜빡임 방지)
-        setSuggestions([]);
+        if (searchTerm.trim() === "") {
+            setSuggestions([]); // 입력값이 없으면 자동완성 초기화
+            return;
+        }
 
         const fetchSuggestions = async () => {
             try {
@@ -97,6 +105,7 @@ const Header = () => {
                 setSuggestions(merged);
             } catch (err) {
                 console.error("자동완성 API 호출 실패", err);
+                setSuggestions([]);
             }
         };
 
@@ -135,12 +144,10 @@ const Header = () => {
     };
 
     const handleSearchBlur = () => {
-        // 마우스가 드롭다운 안에 있으면 blur 무시
         if (isMouseInsideDropdown.current) {
             return;
         }
 
-        // 약간의 딜레이로 blur 직후 항목 클릭 가능하게
         setTimeout(() => {
             if (!isMouseInsideDropdown.current) {
                 setIsFocused(false);
@@ -149,13 +156,11 @@ const Header = () => {
         }, 200);
     };
 
-    // 검색 api
     const handleSearchSubmit = async (e) => {
         e.preventDefault();
         const trimmed = searchTerm.trim();
         if (!trimmed) return;
 
-        // 🔹 검색 기록 저장은 로그인된 사용자만
         if (isLoggedIn) {
             try {
                 await axios.post(
@@ -181,13 +186,10 @@ const Header = () => {
             });
 
             const products = res.data?.content || [];
-
-            // 상품명으로만 필터링
             const filtered = products.filter((p) =>
                 p.name.toLowerCase().includes(trimmed.toLowerCase())
             );
 
-            // 검색어가 이름과 정확히 일치하는 단일 상품이면 바로 이동
             if (
                 filtered.length === 1 &&
                 filtered[0].name.trim().toLowerCase() === trimmed.toLowerCase()
@@ -196,7 +198,6 @@ const Header = () => {
                 return navigate(`/sellers/${p.sellerId}/products/${p.id}`);
             }
 
-            // 필터링된 결과만 보여줌
             setSearchResults(filtered);
             setIsDropdownVisible(true);
         } catch (err) {
@@ -208,8 +209,8 @@ const Header = () => {
     };
 
     const handleDeleteHistoryItem = async (e, keyword) => {
-        e.stopPropagation(); // 이벤트 전파 방지
-        e.preventDefault(); // 기본 동작 방지
+        e.stopPropagation();
+        e.preventDefault();
 
         try {
             await axios.delete(
@@ -222,16 +223,13 @@ const Header = () => {
                 withCredentials: true,
             });
             const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
-            setSuggestions(keywords);
+            setSearchHistory(keywords); // 🔥 수정된 부분
 
-            // 포커스 상태 유지
             setIsFocused(true);
             setIsDropdownVisible(true);
 
         } catch (err) {
             console.error("삭제 실패:", err);
-        } finally {
-            // 삭제 완료
         }
     };
 
@@ -243,9 +241,8 @@ const Header = () => {
             await axios.delete("http://localhost/api/search/history/all", {
                 withCredentials: true,
             });
-            setSuggestions([]);
+            setSearchHistory([]); // 🔥 수정된 부분
 
-            // 포커스 상태 유지
             setIsFocused(true);
             setIsDropdownVisible(true);
 
@@ -304,7 +301,6 @@ const Header = () => {
                                                     marginLeft: "110px",
                                                 }}
                                             />
-                                            {/* <!-- 프로젝트 로고 --> */}
                                         </div>
                                     </a>
                                 </h2>
@@ -341,13 +337,13 @@ const Header = () => {
                                                             cy="10.412"
                                                             r="7.482"
                                                             stroke="currentColor"
-                                                            stroke-linecap="round"
-                                                            stroke-width="1.5"
+                                                            strokeLinecap="round"
+                                                            strokeWidth="1.5"
                                                         ></circle>
                                                         <path
                                                             stroke="currentColor"
-                                                            stroke-linecap="round"
-                                                            stroke-width="1.5"
+                                                            strokeLinecap="round"
+                                                            strokeWidth="1.5"
                                                             d="M16.706 16.706L21 21"
                                                         ></path>
                                                     </svg>
@@ -369,7 +365,7 @@ const Header = () => {
                                         >
                                             <div className="search-sections-container">
                                                 {/* 🔹 검색 기록 (로그인된 사용자만) */}
-                                                {isLoggedIn && suggestions.length > 0 && (
+                                                {isLoggedIn && searchHistory.length > 0 && (
                                                     <div className="search-section">
                                                         <div className="search-section-header">
                                                             <h4 className="search-section-title">
@@ -389,18 +385,18 @@ const Header = () => {
                                                             </button>
                                                         </div>
                                                         <ul className="search-list">
-                                                            {suggestions.map((item, i) => (
+                                                            {searchHistory.map((item, i) => (
                                                                 <li key={i} className="search-item">
-              <span
-                  className="search-item-text"
-                  onMouseDown={() => setSearchTerm(typeof item === "string" ? item : item.keyword)}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="history-icon">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                  <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
-                </svg>
-                  {typeof item === "string" ? item : item.keyword}
-              </span>
+                                                                    <span
+                                                                        className="search-item-text"
+                                                                        onMouseDown={() => setSearchTerm(typeof item === "string" ? item : item.keyword)}
+                                                                    >
+                                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="history-icon">
+                                                                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                                                                            <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
+                                                                        </svg>
+                                                                        {typeof item === "string" ? item : item.keyword}
+                                                                    </span>
                                                                     <button
                                                                         className="delete-btn"
                                                                         onClick={(e) => handleDeleteHistoryItem(e, item)}
@@ -423,7 +419,7 @@ const Header = () => {
                                                 {popularKeywords.length > 0 && (
                                                     <div className="search-section">
                                                         {/* 검색 기록이 있을 때만 구분선 */}
-                                                        {isLoggedIn && suggestions.length > 0 &&
+                                                        {isLoggedIn && searchHistory.length > 0 &&
                                                             <div className="search-divider"></div>}
 
                                                         <div className="search-section-header">
@@ -493,9 +489,9 @@ const Header = () => {
                                                             className="search-item autocomplete-item"
                                                             onMouseDown={() => setSearchTerm(typeof s === "string" ? s : s.keyword)}
                                                         >
-            <span className="search-item-text">
-              {typeof s === "string" ? s : s.keyword}
-            </span>
+                                                            <span className="search-item-text">
+                                                                {typeof s === "string" ? s : s.keyword}
+                                                            </span>
                                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                                                                  className="arrow-icon">
                                                                 <path d="M7 13L12 18L17 13M7 6L12 11L17 6"
@@ -610,19 +606,19 @@ const Header = () => {
                                             {unreadCount}
                                         </em>
                                         <div className="alarm-frame">
-                      <span className="alarm-contents">
-                        <ul className="alarm-inner">
-                          {notifications.length === 0 ? (
-                              <li>알림 온 게 없습니다.</li>
-                          ) : (
-                              <AlarmContents
-                                  notifications={notifications}
-                                  markAllAsRead={markAllAsRead}
-                                  markAsRead={markAsRead}
-                              />
-                          )}
-                        </ul>
-                      </span>
+                                            <span className="alarm-contents">
+                                                <ul className="alarm-inner">
+                                                    {notifications.length === 0 ? (
+                                                        <li>알림 온 게 없습니다.</li>
+                                                    ) : (
+                                                        <AlarmContents
+                                                            notifications={notifications}
+                                                            markAllAsRead={markAllAsRead}
+                                                            markAsRead={markAsRead}
+                                                        />
+                                                    )}
+                                                </ul>
+                                            </span>
                                         </div>
                                     </li>
                                     <li className="icon-Btn shopping-bag-icon">
@@ -642,23 +638,21 @@ const Header = () => {
                                             </em>
                                         </a>
                                         <div className="alarm-frame">
-                      <span className="cart-contents">
-                        <ul className="cart-inner">
-                          {/* <!-- 여긴 장바구니에 아무것도 없거나 로그인을 안 했을 시 뜨는 문구 --> */}
-                            <li>장바구니에 담긴 상품이 없습니다.</li>
-                            {/* <!-- 장바구니에 담은 물건이 있을 시 --> */}
-                            <li>
-                            <a href="">
-                              <img src="" alt=""/>
-                              <p>
-                                <span>
-                                  <span>상품 이름</span>
-                                </span>
-                              </p>
-                            </a>
-                          </li>
-                        </ul>
-                      </span>
+                                            <span className="cart-contents">
+                                                <ul className="cart-inner">
+                                                    <li>장바구니에 담긴 상품이 없습니다.</li>
+                                                    <li>
+                                                        <a href="">
+                                                            <img src="" alt=""/>
+                                                            <p>
+                                                                <span>
+                                                                    <span>상품 이름</span>
+                                                                </span>
+                                                            </p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </span>
                                         </div>
                                     </li>
                                 </ul>
@@ -688,15 +682,15 @@ const Header = () => {
                                         height: "24px",
                                     }}
                                 >
-                  <span>
-                    <img
-                        src="../../image/icon/icon_nav.svg"
-                        alt="category"
-                        style={{
-                            marginRight: "8px",
-                        }}
-                    />
-                  </span>
+                                    <span>
+                                        <img
+                                            src="../../image/icon/icon_nav.svg"
+                                            alt="category"
+                                            style={{
+                                                marginRight: "8px",
+                                            }}
+                                        />
+                                    </span>
                                     카테고리
                                     <span></span>
                                 </button>
