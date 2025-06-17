@@ -7,6 +7,7 @@ import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
 import useNotifications from "../Hooks/useNotifications"; // 추가
 import SemiHeader from "./SemiHeader.jsx";
+import "../css/header/header.css"
 
 const Header = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
@@ -358,171 +359,187 @@ const Header = () => {
                     {/* 🔹 검색창 포커스 시 & 검색어 없을 때 표시되는 영역 */}
                     {isFocused && searchTerm.trim() === "" && (
                         <div
-                            className="history-popular-box"
+                            className="search-dropdown history-popular-box"
                             onMouseEnter={() => { isMouseInsideDropdown.current = true; }}
                             onMouseLeave={() => { isMouseInsideDropdown.current = false; }}
-                            style={{
-                              background: "white",
-                              border: "1px solid #ccc",
-                              padding: "8px",
-                              marginTop: "4px",
-                              position: "absolute",
-                              width: "100%",
-                              zIndex: 9,
-                            }}
                         >
                           {/* 🔹 검색 기록 (로그인된 사용자만) */}
                           {isLoggedIn && suggestions.length > 0 && (
-                              <>
-                                <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      marginBottom: "6px",
-                                    }}
-                                >
-                                  <strong>검색 기록</strong>
-                                  <button onClick={handleClearAllHistory}>전체 삭제</button>
+                              <div className="search-section">
+                                <div className="search-section-header">
+                                  <h4 className="search-section-title">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="search-icon-small">
+                                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+                                    </svg>
+                                    최근 검색어
+                                  </h4>
+                                  <button
+                                      className="clear-all-btn"
+                                      onClick={handleClearAllHistory}
+                                  >
+                                    전체삭제
+                                  </button>
                                 </div>
-                                <ul
-                                    style={{
-                                      listStyle: "none",
-                                      paddingLeft: 0,
-                                      marginBottom: "12px",
-                                    }}
-                                >
+                                <ul className="search-list">
                                   {suggestions.map((item, i) => (
-                                      <li
-                                          key={i}
-                                          style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            padding: "4px 0",
-                                            borderBottom:
-                                                i !== suggestions.length - 1
-                                                    ? "1px solid #eee"
-                                                    : "none",
-                                          }}
-                                      >
-                                <span
-                                    style={{ cursor: "pointer" }}
-                                    onMouseDown={() => setSearchTerm(typeof item === "string" ? item : item.keyword)}
-                                >
-                                  {typeof item === "string" ? item : item.keyword}
-                                </span>
-                                        <button onClick={(e) => handleDeleteHistoryItem(e, item)}>
-                                          X
+                                      <li key={i} className="search-item">
+              <span
+                  className="search-item-text"
+                  onMouseDown={() => setSearchTerm(typeof item === "string" ? item : item.keyword)}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="history-icon">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                  <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+                {typeof item === "string" ? item : item.keyword}
+              </span>
+                                        <button
+                                            className="delete-btn"
+                                            onClick={(e) => handleDeleteHistoryItem(e, item)}
+                                            title="삭제"
+                                        >
+                                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                          </svg>
                                         </button>
                                       </li>
                                   ))}
                                 </ul>
-                              </>
+                              </div>
                           )}
 
                           {/* 🔹 인기 검색어 (모든 사용자) */}
                           {popularKeywords.length > 0 && (
-                              <>
+                              <div className="search-section">
                                 {/* 검색 기록이 있을 때만 구분선 */}
-                                {isLoggedIn && suggestions.length > 0 && (
-                                    <hr
-                                        style={{
-                                          border: "none",
-                                          borderTop: "2px solid #aaa",
-                                          margin: "8px 0",
-                                        }}
-                                    />
-                                )}
-                                <strong style={{ display: "block", marginBottom: "6px" }}>
-                                  인기 검색어
-                                </strong>
-                                <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+                                {isLoggedIn && suggestions.length > 0 && <div className="search-divider"></div>}
+
+                                <div className="search-section-header">
+                                  <h4 className="search-section-title">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="search-icon-small">
+                                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                                               fill="currentColor"/>
+                                    </svg>
+                                    인기 검색어
+                                  </h4>
+                                </div>
+                                <ul className="search-list popular-list">
                                   {popularKeywords.map((item, i) => (
                                       <li
                                           key={i}
-                                          style={{
-                                            padding: "4px 0",
-                                            cursor: "pointer",
-                                            borderBottom:
-                                                i !== popularKeywords.length - 1
-                                                    ? "1px solid #eee"
-                                                    : "none",
-                                          }}
+                                          className="search-item popular-item"
                                           onMouseDown={() => setSearchTerm(item.keyword)}
                                       >
-                                        {item.keyword}
+                                        <span className="popular-rank">{i + 1}</span>
+                                        <span className="search-item-text popular-text">{item.keyword}</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="trending-icon">
+                                          <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        </svg>
                                       </li>
                                   ))}
                                 </ul>
-                              </>
+                              </div>
                           )}
                         </div>
                     )}
 
                     {/* 🔹 자동완성: 입력값 있을 때만 */}
                     {isFocused && searchTerm.trim() !== "" && suggestions.length > 0 && (
-                        <ul
-                            className="autocomplete-list"
+                        <div
+                            className="search-dropdown autocomplete-dropdown"
                             onMouseEnter={() => { isMouseInsideDropdown.current = true; }}
                             onMouseLeave={() => { isMouseInsideDropdown.current = false; }}
-                            style={{
-                              background: "white",
-                              border: "1px solid #ccc",
-                              position: "absolute",
-                              zIndex: 10,
-                              width: "100%",
-                            }}
                         >
-                          {suggestions.map((s, i) => (
-                              <li
-                                  key={i}
-                                  style={{ padding: "8px", cursor: "pointer" }}
-                                  onMouseDown={() =>
-                                      setSearchTerm(typeof s === "string" ? s : s.keyword)
-                                  }
-                              >
-                                {typeof s === "string" ? s : s.keyword}
-                              </li>
-                          ))}
-                        </ul>
+                          <div className="search-section">
+                            <div className="search-section-header">
+                              <h4 className="search-section-title">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="search-icon-small">
+                                  <circle cx="10.412" cy="10.412" r="7.482" stroke="currentColor" strokeWidth="1.5"/>
+                                  <path d="M16.706 16.706L21 21" stroke="currentColor" strokeWidth="1.5"/>
+                                </svg>
+                                자동완성
+                              </h4>
+                            </div>
+                            <ul className="search-list autocomplete-list">
+                              {suggestions.map((s, i) => (
+                                  <li
+                                      key={i}
+                                      className="search-item autocomplete-item"
+                                      onMouseDown={() => setSearchTerm(typeof s === "string" ? s : s.keyword)}
+                                  >
+            <span className="search-item-text">
+              {typeof s === "string" ? s : s.keyword}
+            </span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="arrow-icon">
+                                      <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="currentColor" strokeWidth="2"/>
+                                    </svg>
+                                  </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                     )}
+
                     {/* 🔹 검색 결과 렌더링 */}
                     {searchTerm.trim() !== "" && isFocused && (
                         <div
+                            className="search-dropdown search-results-dropdown"
                             onMouseEnter={() => { isMouseInsideDropdown.current = true; }}
                             onMouseLeave={() => { isMouseInsideDropdown.current = false; }}
-                            style={{
-                              background: "white",
-                              border: "1px solid #aaa",
-                              padding: "12px",
-                              position: "absolute",
-                              width: "100%",
-                              top: "100%",
-                              zIndex: 20,
-                              maxHeight: "300px",
-                              overflowY: "auto",
-                            }}
                         >
-                          {searchLoading ? (
-                              <p style={{ margin: 0 }}>검색 중...</p>
-                          ) : searchResults.length > 0 ? (
-                              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                                {searchResults.map((product) => (
-                                    <li
-                                        key={product.id}
-                                        style={{ padding: "6px 0", borderBottom: "1px solid #eee" }}
-                                    >
-                                      <Link
-                                          to={`/sellers/${product.sellerId}/products/${product.id}`}
-                                          style={{ textDecoration: "none", color: "black" }}
-                                      >
-                                        <strong>{product.name}</strong>
-                                      </Link>
-                                    </li>
-                                ))}
-                              </ul>
-                          ) : (
-                              <p style={{ margin: 0 }}>검색 결과가 없습니다.</p>
-                          )}
+                          <div className="search-section">
+                            <div className="search-section-header">
+                              <h4 className="search-section-title">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="search-icon-small">
+                                  <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                </svg>
+                                검색 결과
+                              </h4>
+                              {searchResults.length > 0 && (
+                                  <span className="result-count">{searchResults.length}개</span>
+                              )}
+                            </div>
+
+                            {searchLoading ? (
+                                <div className="loading-state">
+                                  <div className="loading-spinner"></div>
+                                  <span>검색 중...</span>
+                                </div>
+                            ) : searchResults.length > 0 ? (
+                                <ul className="search-list results-list">
+                                  {searchResults.map((product) => (
+                                      <li key={product.id} className="search-item result-item">
+                                        <Link
+                                            to={`/sellers/${product.sellerId}/products/${product.id}`}
+                                            className="result-link"
+                                        >
+                                          <div className="result-content">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="product-icon">
+                                              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                                              <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" strokeWidth="2"/>
+                                              <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" strokeWidth="2"/>
+                                            </svg>
+                                            <span className="result-name">{product.name}</span>
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="arrow-icon">
+                                              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2"/>
+                                            </svg>
+                                          </div>
+                                        </Link>
+                                      </li>
+                                  ))}
+                                </ul>
+                            ) : (
+                                <div className="empty-state">
+                                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" className="empty-icon">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                                    <path d="M16 16L12 12L8 8" stroke="currentColor" strokeWidth="2"/>
+                                    <path d="M8 16L12 12L16 8" stroke="currentColor" strokeWidth="2"/>
+                                  </svg>
+                                  <p>검색 결과가 없습니다</p>
+                                  <span>다른 키워드로 검색해보세요</span>
+                                </div>
+                            )}
+                          </div>
                         </div>
                     )}
                   </div>

@@ -1,0 +1,341 @@
+/* 검색 드롭다운 기본 스타일 */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 50;
+    margin-top: 4px;
+    overflow: hidden;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 검색 섹션 */
+.search-section {
+    padding: 16px 0;
+}
+
+.search-section:not(:last-child) {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* 섹션 헤더 */
+.search-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px 12px;
+}
+
+.search-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.search-icon-small {
+    color: #77ca80;
+    flex-shrink: 0;
+}
+
+/* 전체삭제 버튼 */
+.clear-all-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.clear-all-btn:hover {
+    color: #ef4444;
+    background-color: #fef2f2;
+}
+
+/* 검색 리스트 */
+.search-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 검색 아이템 공통 스타일 */
+.search-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    position: relative;
+}
+
+.search-item:hover {
+    background: linear-gradient(90deg, #f8fffe 0%, #f0fdfa 100%);
+}
+
+.search-item:hover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #77ca80;
+    border-radius: 0 2px 2px 0;
+}
+
+/* 검색 아이템 텍스트 */
+.search-item-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #374151;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 히스토리 아이콘 */
+.history-icon {
+    color: #9ca3af;
+    flex-shrink: 0;
+}
+
+/* 삭제 버튼 - 항상 표시되도록 강화 */
+.delete-btn {
+    background: none !important;
+    border: none !important;
+    color: #9ca3af !important; /* 기본 회색 */
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 1 !important; /* 강제로 항상 표시 */
+    visibility: visible !important; /* 강제로 항상 표시 */
+    transform: scale(1);
+}
+
+.delete-btn:hover {
+    color: #ef4444 !important; /* 호버 시 빨간색 */
+    transform: scale(1.1);
+}
+
+/* 인기 검색어 특별 스타일 */
+.popular-item {
+    position: relative;
+}
+
+.popular-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #77ca80, #69b371);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.popular-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* 인기검색어 이동버튼 */
+.trending-icon {
+    color: #6b7280;
+    opacity: 1; /* 항상 표시 */
+    transition: all 0.2s ease;
+    transform: translateX(0);
+}
+
+.popular-item:hover .trending-icon {
+    color: #f59e0b;
+    transform: translateX(2px);
+}
+
+/* 자동완성 아이템 */
+.autocomplete-item .search-item-text {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* 화살표 아이콘 통합 */
+.arrow-icon {
+    color: #6b7280;
+    opacity: 1; /* 항상 표시 */
+    transition: all 0.2s ease;
+    transform: translateX(0);
+}
+
+.autocomplete-item:hover .arrow-icon,
+.result-item:hover .arrow-icon {
+    color: #77ca80;
+    transform: translateX(2px);
+}
+
+/* 검색 결과 스타일 */
+.result-count {
+    font-size: 12px;
+    color: #77ca80;
+    background: rgba(119, 202, 128, 0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.result-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+.result-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.product-icon {
+    color: #77ca80;
+    flex-shrink: 0;
+}
+
+.result-name {
+    flex: 1;
+    font-weight: 500;
+    color: #1f2937;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 로딩 상태 */
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 16px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid #77ca80;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 빈 상태 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.empty-icon {
+    color: #d1d5db;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+    color: #374151;
+}
+
+.empty-state span {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/*!* 구분선 *!*/
+/*.search-divider {*/
+/*    height: 1px;*/
+/*    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);*/
+/*    margin: 8px 16px;*/
+/*}*/
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .search-dropdown {
+        border-radius: 8px;
+        margin-top: 2px;
+    }
+
+    .search-section {
+        padding: 12px 0;
+    }
+
+    .search-section-header {
+        padding: 0 12px 8px;
+    }
+
+    .search-item {
+        padding: 8px 12px;
+    }
+
+    .search-item-text {
+        font-size: 13px;
+    }
+
+    .popular-rank {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+}
