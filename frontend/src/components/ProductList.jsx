@@ -39,7 +39,7 @@ const ProductList = () => {
     };
 
     fetchExpiringProducts();
-  }, []);
+  }, [keyword]);
 
 
   const getThumbnailUrl = (product) => {
