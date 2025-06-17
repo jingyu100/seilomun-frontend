@@ -6,33 +6,75 @@ const DeliverySection = () => {
     <div className="delivery-section">
       <h3 className="section-title">배송지</h3>
 
-      <div className="form-row">
-        <label className="label">
+      {/* 주소 선택 영역 */}
+      <div className="address-selector">
+        <label className="address-label">
           주소<span className="required">*</span>
         </label>
-        <button className="btn">주소 선택</button>
-        <button className="btn">주소 검색</button>
+        <div className="address-buttons">
+          <button className="address-select-btn">주소 선택</button>
+          <button className="address-search-btn">주소 검색</button>
+        </div>
       </div>
 
-      <input type="text" className="input" placeholder="기본주소" />
-      <input type="text" className="input" placeholder="상세주소(선택 입력 가능)" />
+      {/* 주소 입력 필드들 */}
+      <div className="address-inputs">
+        <input
+          type="text"
+          className="address-main-input"
+          placeholder="기본주소를 입력하세요"
+        />
+        <input
+          type="text"
+          className="address-detail-input"
+          placeholder="상세주소를 입력하세요 (동, 호수 등)"
+        />
+      </div>
 
-      <div className="form-row">
-        <label className="label">
+      {/* 휴대전화 입력 영역 */}
+      <div className="phone-section">
+        <label className="phone-label">
           휴대전화<span className="required">*</span>
         </label>
-        <input type="text" className="input small" />
-        <span className="dash">-</span>
-        <input type="text" className="input small" />
-        <span className="dash">-</span>
-        <input type="text" className="input small" />
+        <div className="phone-inputs-container">
+          <input
+            type="text"
+            className="phone-input-first"
+            maxLength="3"
+            placeholder="010"
+          />
+          <span className="phone-separator">-</span>
+          <input
+            type="text"
+            className="phone-input-middle"
+            maxLength="4"
+            placeholder="1234"
+          />
+          <span className="phone-separator">-</span>
+          <input
+            type="text"
+            className="phone-input-last"
+            maxLength="4"
+            placeholder="5678"
+          />
+        </div>
       </div>
 
-      <textarea className="textarea" placeholder="요청사항을 입력해주세요."></textarea>
+      {/* 요청사항 입력 영역 */}
+      <div className="request-section">
+        <textarea
+          className="request-textarea"
+          placeholder="배송 시 요청사항을 입력해주세요 (예: 문 앞에 놓아주세요, 부재 시 경비실에 맡겨주세요)"
+          rows={3}
+        ></textarea>
+      </div>
 
-      <div className="checkbox-row">
-        <input type="checkbox" id="save-default" />
-        <label htmlFor="save-default">기본 배송지에 저장</label>
+      {/* 체크박스 영역 */}
+      <div className="checkbox-section">
+        <input type="checkbox" id="save-default" className="save-default-checkbox" />
+        <label htmlFor="save-default" className="save-default-label">
+          기본 배송지로 저장
+        </label>
       </div>
     </div>
   );
