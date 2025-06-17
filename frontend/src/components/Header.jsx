@@ -141,7 +141,7 @@ const Header = () => {
         };
 
         // 🔥 디바운싱 시간 단축 (200ms로 더 빠른 반응)
-        const delayDebounce = setTimeout(fetchSuggestions, 200);
+        const delayDebounce = setTimeout(fetchSuggestions, 100);
         return () => clearTimeout(delayDebounce);
     }, [searchTerm]);
 
@@ -187,7 +187,7 @@ const Header = () => {
                 // 🔥 드롭다운이 닫힐 때 검색 결과 초기화
                 setSearchResults([]);
             }
-        }, 200);
+        }, 100);
     };
 
     // 🔥 검색어 입력값 변경 핸들러 추가
