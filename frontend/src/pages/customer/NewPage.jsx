@@ -6,27 +6,27 @@ import ProductList from "../../components/ProductList.jsx";
 import "../../css/customer/New.css";
 
 const NewPage = () => {
-  return (
-    <div className="New">
-      <div className="header">
-        <Header />
-      </div>
+    return (
+        <div className="New">
+            <div className="header">
+                <Header/>
+            </div>
 
-      <div className="body sideMargin">
-        <div className="sail-inner">
-          <Filter />
-          <div className="main-container">
-            <ProductList />
-            <SideMenuBtn />
-          </div>
+            <div className="body sideMargin">
+                <div className="sail-inner">
+                    <Filter/>
+                    <div className="main-container">
+                        <ProductList/>
+                        <SideMenuBtn/>
+                    </div>
+                </div>
+            </div>
+
+            <div className="footer">
+                <Footer/>
+            </div>
         </div>
-      </div>
-
-      <div className="footer">
-        <Footer />
-      </div>
-    </div>
-  );
+    );
 };
 
 export default NewPage;
