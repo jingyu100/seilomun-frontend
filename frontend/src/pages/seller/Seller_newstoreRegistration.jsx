@@ -191,7 +191,7 @@ const Seller_newstoreRegistration = () => {
           <div className="delivery-input-group" key={index}>
             <input
               type="text"
-              placeholder="14,900원"
+              placeholder="최소금액"
               value={input.min}
               onChange={(e) =>
                 handleChange(index, "min", e.target.value)
@@ -201,7 +201,7 @@ const Seller_newstoreRegistration = () => {
             <span>~</span>
             <input
               type="text"
-              placeholder="19,900원"
+              placeholder="최대금액"
               value={input.max}
               onChange={(e) =>
                 handleChange(index, "max", e.target.value)
@@ -210,7 +210,7 @@ const Seller_newstoreRegistration = () => {
             />
             <input
               type="text"
-              placeholder="2,000원"
+              placeholder="배달비 "
               value={input.fee}
               onChange={(e) =>
                 handleChange(index, "fee", e.target.value)

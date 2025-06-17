@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import "../../css/seller/Seller_reviewPage.css";
+import axios from "axios";
 
 const Seller_reviewPage = () => {
   const [reviews, setReviews] = useState([]);
   const [storeName, setStoreName] = useState("");
 
   useEffect(() => {
-    const sellerId = localStorage.getItem("sellerId");
-    if (!sellerId) return;
+    const fetchData = async () => {
+      const sellerId = localStorage.getItem("sellerId");
+      if (!sellerId) return;
 
-    // 가게명 불러오기
-    fetch("/api/sellers/me", { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => setStoreName(data.data?.storeName || "내 가게"));
+      try {
+        // 가게명 불러오기
+        const sellerRes = await axios.get("/api/sellers/me", {
+          withCredentials: true,
+        });
+        setStoreName(sellerRes.data.data?.storeName || "내 가게");
 
-    // 리뷰 목록 불러오기
-    fetch(`/api/reviews/${sellerId}?page=0&size=10`, { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => setReviews(data["리뷰 조회"]?.reviews || []));
+        // 리뷰 목록 불러오기
+        const reviewsRes = await axios.get(`/api/reviews/${sellerId}`, {
+          params: { page: 0, size: 10 },
+          withCredentials: true,
+        });
+        setReviews(reviewsRes.data["리뷰 조회"]?.reviews || []);
+      } catch (error) {
+        console.error("리뷰 또는 가게 정보 불러오기 실패:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
