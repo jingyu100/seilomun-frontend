@@ -9,7 +9,22 @@ export default function WishListItem({ item, favorites, onRemove, onAddToCart })
   const [isRemoveHovered, setIsRemoveHovered] = useState(false);
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
+
+    // 이미지 URL 처리
+    const getImageUrl = (photoUrl) => {
+        if (!photoUrl) {
+            return "/image/product1.jpg"; // 기본 이미지
+        }
+
+        if (photoUrl.startsWith("http")) {
+            return photoUrl;
+        }
+
+        return `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photoUrl}`;
+    };
+
+
+    const handleCardClick = () => {
     // 즐겨찾기 목록에서 같은 주소를 가진 매장 찾기
     const matchedSeller = favorites?.find(
       (fav) => fav.addressDetail === item.storeAddress
@@ -47,7 +62,7 @@ export default function WishListItem({ item, favorites, onRemove, onAddToCart })
       {/* 썸네일 이미지 */}
       <div style={{ flexShrink: 0 }}>
         <img
-          src={item.photoUrl}
+          src={getImageUrl(item.photoUrl)}
           alt={item.name}
           style={{
             width: "120px",
