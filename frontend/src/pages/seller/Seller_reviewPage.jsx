@@ -103,7 +103,7 @@ const Seller_reviewPage = () => {
                 <img src={getFullUrl(review.customerPhoto)} alt="프로필" className="customer-photo" />
 
                   <div>
-                    <div className="customer-name">{review.customerName}</div>
+                    <div className="customer-name">{review.customerName}님</div>
                     <div className="review-date">
                       {new Date(review.createdAt).toLocaleDateString()}
                     </div>
@@ -130,7 +130,7 @@ const Seller_reviewPage = () => {
                   <div className="seller-comment-box">
                     <strong>사장님 답글:</strong>
                     <p className="seller-comment-text">{review.comment.content}</p>
-                    <p className="comment-date">
+                    <p className="seller-comment-date-aa">
                       {new Date(review.comment.createdAt).toLocaleDateString()}
                     </p>
                   </div>

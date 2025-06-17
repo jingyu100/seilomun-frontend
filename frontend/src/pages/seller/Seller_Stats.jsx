@@ -380,7 +380,7 @@ const Seller_Stats = () => {
                 <div className="stats-container">
                     {/* Header */}
                     <div className="stats-header">
-                        <h1 className="stats-title">📊 판매자 통계 대시보드</h1>
+                        <h1 className="stats-title"> 판매자 통계</h1>
                         <p className="stats-subtitle">매출 및 주문 현황을 다양한 기간별로 확인하세요</p>
                     </div>
 
@@ -504,19 +504,19 @@ const Seller_Stats = () => {
                             <div className="summary-section">
                                 <div className="summary-cards">
                                     <div className="summary-card">
-                                        <h3 className="card-title">💰 총 매출</h3>
+                                        <h3 className="card-title"> 총 매출</h3>
                                         <p className="card-value">{formatCurrency(summaryData.totalSales)}</p>
                                         <div className="card-subtitle">{getPeriodText()}</div>
                                     </div>
 
                                     <div className="summary-card">
-                                        <h3 className="card-title">📦 총 주문수</h3>
+                                        <h3 className="card-title"> 총 주문수</h3>
                                         <p className="card-value">{summaryData.totalOrders.toLocaleString()}건</p>
                                         <div className="card-subtitle">{getPeriodText()}</div>
                                     </div>
 
                                     <div className="summary-card">
-                                        <h3 className="card-title">💳 평균 주문금액</h3>
+                                        <h3 className="card-title"> 평균 주문금액</h3>
                                         <p className="card-value">{formatCurrency(summaryData.avgOrderValue)}</p>
                                         <div className="card-subtitle">주문당 평균</div>
                                     </div>
@@ -526,14 +526,14 @@ const Seller_Stats = () => {
                             {/* Charts */}
                             <div className="charts-section">
                                 <div className="chart-container">
-                                    <div className="chart-title">💰 {getPeriodText()} 매출 현황</div>
+                                    <div className="chart-title"> {getPeriodText()} 매출 현황</div>
                                     <div className="chart-wrapper">
                                         <canvas ref={salesChartRef}></canvas>
                                     </div>
                                 </div>
 
                                 <div className="chart-container">
-                                    <div className="chart-title">📦 {getPeriodText()} 주문 현황</div>
+                                    <div className="chart-title"> {getPeriodText()} 주문 현황</div>
                                     <div className="chart-wrapper">
                                         <canvas ref={orderChartRef}></canvas>
                                     </div>
