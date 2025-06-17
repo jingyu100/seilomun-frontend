@@ -80,6 +80,24 @@
 /* ---------- 헤드 알람 모듈 부분 ---------- */
 
 /* ---------- 사이드 메뉴 모듈 부분 ---------- */
+.sideMenu {
+  position: fixed;
+  bottom: 50px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sideMenu.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .viewModule {
   position: relative;
   right: 30px;
@@ -152,6 +170,7 @@
   border-bottom: 1.5px solid #e2e2e2;
 }
 
+/* ---------- 사이드 장바구니 모듈 부분 ---------- */
 .order-area {
   width: auto;
   padding: 17px 7px 40px;
@@ -234,7 +253,7 @@
 .cartBuyBtn {
   display: inline-block;
   color: #fff;
-  background-color: #f8a092;
+  background-color: rgb(119, 202, 128);
   width: 220px;
   height: 40px;
   border-radius: 8px;
@@ -242,6 +261,7 @@
   font-weight: bold;
   cursor: pointer;
 }
+/* ---------- 사이드 장바구니 모듈 부분 ---------- */
 
 /* ---------- 채팅 모듈 부분 ---------- */
 .chatModuleHead {

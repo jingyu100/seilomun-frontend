@@ -25,6 +25,7 @@ li {
   max-height: 760px;
   overflow: hidden;
   margin-left: auto;
+  align-content: center;
 }
 
 .productHead-inner .productHead-left .productHead-image {

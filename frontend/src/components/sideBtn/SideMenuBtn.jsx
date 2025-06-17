@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AlarmViewModule from "./AlarmViewModule";
 import SideAlarmBtn from './SideAlarmBtn.jsx';
 import SideCartBtn from './SideCartBtn.jsx';
@@ -15,26 +15,29 @@ function SideMenuBtn () {
    //    setIsModalOpen(isChatModalOpen => !isChatModalOpen);
    // }
     
+   const [isVisible, setIsVisible] = useState(false);
+
+   useEffect(() => {
+      const handleScroll = () => {
+         setIsVisible(window.scrollY > 130);
+      };
+
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+   }, []);
 
    return (
-      <div className="sideMenu">
+      <div className={`sideMenu ${isVisible ? 'visible' : ''}`}>
          <a href="" className="sideMenuBtn up" onClick={(e) => {
-            e.preventDefault(); // 페이지가 새로고침 되거나 하는 걸 막는 용도
-            window.scrollTo({
-               top: 0,
-               // behavior: 'smooth'
-            })
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
          }}>
-            <img src="/image/icon/icon-up-arrow.png" alt="up"
-               className="sideBtnIcon" />
+            <img src="/image/icon/icon-up-arrow.png" alt="up" className="sideBtnIcon" />
          </a>
-         
+
          <SideAlarmBtn />
-
          <SideCartBtn />
-
          <SideChatBtn />
-
       </div>
    );
 };

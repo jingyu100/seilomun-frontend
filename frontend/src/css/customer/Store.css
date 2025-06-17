@@ -92,6 +92,48 @@
     cursor: pointer;
 }
 
+.storeInfoMini {
+    position: absolute;
+    right: 0px;
+    top: 83px;
+    background-color: #ffffff;
+    min-width: 27%;
+    max-width: auto;
+    min-height: 100%;
+    max-height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px #e3e5e8, 0px 3px 5px 0 rgba(0, 0, 0, 0.3);
+    z-index: 20;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.storeInfo-head {
+    background-color: #f8f9fa;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 13px 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.storeInfo-head h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.storeInfo-body {
+    padding: 0;
+    background-color: #fff;
+    height: auto;
+    overflow-y: auto;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.storeInfo-body  .storeInfo-content {
+    position: relative;
+}
 
 
 /* ---------- 스토어 바디 부분 ---------- */

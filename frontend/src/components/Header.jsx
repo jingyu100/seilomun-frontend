@@ -6,6 +6,7 @@ import AlarmContents from "./AlarmContents.jsx";
 import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
 import useNotifications from "../Hooks/useNotifications"; // 추가
+import SemiHeader from "./SemiHeader.jsx";
 
 const Header = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
@@ -20,6 +21,9 @@ const Header = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const [popularKeywords, setPopularKeywords] = useState([]);
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn && isFocused && searchTerm.trim() === "") {
@@ -115,27 +119,60 @@ const Header = () => {
     setIsFocused(true);
   };
 
+  // 검색 api
   const handleSearchSubmit = async (e) => {
     e.preventDefault();
-    if (!searchTerm.trim()) return;
-
+    const trimmed = searchTerm.trim();
+    if (!trimmed) return;
+  
     if (isLoggedIn) {
       try {
         await axios.post(
-          `http://localhost/api/search/history?keyword=${encodeURIComponent(searchTerm)}`,
+          `http://localhost/api/search/history?keyword=${encodeURIComponent(trimmed)}`,
           {},
           { withCredentials: true }
         );
-        // 🔄 서버에서 최신 기록 다시 불러오기
-        const res = await axios.get(
-          "http://localhost/api/search/history?page=0&size=10",
-          { withCredentials: true }
-        );
-        const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
-        setSuggestions(keywords);
       } catch (err) {
-        console.error("검색 실패:", err);
+        console.error("검색 기록 저장 실패:", err);
       }
+    }
+  
+    try {
+      setSearchLoading(true);
+      const res = await axios.get("http://localhost/api/products/search", {
+        params: {
+          keyword: trimmed,
+          filterType: "ALL",
+          sortType: "LATEST",
+          page: 0,
+          size: 10,
+        },
+      });
+  
+      const products = res.data?.content || [];
+  
+      // 상품명으로만 필터링
+      const filtered = products.filter((p) =>
+        p.name.toLowerCase().includes(trimmed.toLowerCase())
+      );
+  
+      // 검색어가 이름과 정확히 일치하는 단일 상품이면 바로 이동
+      if (
+        filtered.length === 1 &&
+        filtered[0].name.trim().toLowerCase() === trimmed.toLowerCase()
+      ) {
+        const p = filtered[0];
+        return navigate(`/sellers/${p.sellerId}/products/${p.id}`);
+      }
+  
+      // 필터링된 결과만 보여줌
+      setSearchResults(filtered);
+      setIsFocused(true);
+    } catch (err) {
+      console.error("상품 검색 실패:", err);
+      alert("검색 중 오류가 발생했습니다.");
+    } finally {
+      setSearchLoading(false);
     }
   };
 
@@ -391,6 +428,44 @@ const Header = () => {
                         </li>
                       ))}
                     </ul>
+                  )}
+                  {/* 🔹 검색 결과 렌더링 */}
+                  {searchTerm.trim() !== "" && isFocused && (
+                    <div
+                      style={{
+                        background: "white",
+                        border: "1px solid #aaa",
+                        padding: "12px",
+                        position: "absolute",
+                        width: "100%",
+                        top: "100%",
+                        zIndex: 20,
+                        maxHeight: "300px",
+                        overflowY: "auto",
+                      }}
+                    >
+                      {searchLoading ? (
+                        <p style={{ margin: 0 }}>검색 중...</p>
+                      ) : searchResults.length > 0 ? (
+                        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                          {searchResults.map((product) => (
+                            <li
+                              key={product.id}
+                              style={{ padding: "6px 0", borderBottom: "1px solid #eee" }}
+                            >
+                              <Link
+                                to={`/sellers/${product.sellerId}/products/${product.id}`}
+                                style={{ textDecoration: "none", color: "black" }}
+                              >
+                                <strong>{product.name}</strong>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p style={{ margin: 0 }}>검색 결과가 없습니다.</p>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>

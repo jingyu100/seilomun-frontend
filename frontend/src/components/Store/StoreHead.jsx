@@ -7,6 +7,7 @@ import StoreInfo from "./StoreInfo.jsx";
 import FavoriteButtonBox from "./FavoriteButtonBox.jsx";
 
 export default function StoreHead({ store, sellerId }) {
+
   if (!store) return null;
 
   const { sellerInformationDto } = store;
@@ -37,6 +38,13 @@ export default function StoreHead({ store, sellerId }) {
             operatingHours={sellerInformationDto?.operatingHours || ""}
             pickupTime={sellerInformationDto?.pickupTime || ""}
             notification={sellerInformationDto?.notification || ""}
+            notificationPhotos={
+              (sellerInformationDto?.notificationPhotos || []).map(url =>
+                url.startsWith("http")
+                  ? url
+                  : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`
+              )
+            }
           />
           <FavoriteButtonBox sellerId={sellerId} />
         </div>

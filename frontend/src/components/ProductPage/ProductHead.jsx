@@ -15,12 +15,16 @@ export default function ProductHead() {
     return <div>해당 상품을 찾을 수 없습니다.</div>;
   }
 
+  const thumbnail = product.photoUrl?.[0]?.startsWith("http")
+    ? product.photoUrl[0]
+    : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${product.photoUrl?.[0]}`;
+
   return (
     <div className="productHead-inner productFlex">
       <div className="productHead-left">
         <img 
           className="productHead-image" 
-          src={product.thumbnailUrl || "/image/product1.jpg"} 
+          src={thumbnail || "/image/product1.jpg"} 
           alt="상품 이미지" 
         />
       </div>

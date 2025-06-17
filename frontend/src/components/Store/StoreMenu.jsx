@@ -48,6 +48,7 @@ export default function StoreMenu() {
                 return sortedProducts;
         }
     }, [products, sortType]);
+    
 
     return (
         <div className="storeMenu" style={{ position: "relative", padding: "30px 0 25px" }}>
@@ -66,7 +67,11 @@ export default function StoreMenu() {
                           index= {index}
                           productId={prod.id}
                           sellerId={sellerId}
-                          thumbnailUrl={prod.thumbnailUrl || "/image/product1.jpg"}
+                          thumbnailUrl={
+                            prod.photoUrl?.[0]?.startsWith("http")
+                              ? prod.photoUrl[0]
+                              : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${prod.photoUrl?.[0]}`
+                          }
                           name={prod.name}
                           expiryDate={prod.expiryDate}
                           description={prod.description}

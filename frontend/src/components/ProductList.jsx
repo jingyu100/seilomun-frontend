@@ -13,6 +13,7 @@ const ProductList = () => {
   const handleLoadMore = () => {
     setVisibleCount((prevCount) => prevCount + 8);
   };
+  
 
   useEffect(() => {
     const fetchExpiringProducts = async () => {
@@ -37,6 +38,17 @@ const ProductList = () => {
     fetchExpiringProducts();
   }, []);
 
+
+  const getThumbnailUrl = (product) => {
+    const url = product.thumbnailUrl;
+  
+    if (!url) return "/image/product1.jpg";
+  
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
+  };
+
   const ProductCard = ({ product }) => {
     return (
       <Link
@@ -46,7 +58,7 @@ const ProductList = () => {
         >
           <div className="product-card">
             <img
-              src={product.imageUrl || "/image/product1.jpg"}
+              src={getThumbnailUrl(product)}
               alt={product.name}
               className="product_image"
             />

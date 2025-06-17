@@ -30,6 +30,17 @@ function MainLastSP() {
     fetchExpiringProducts();
   }, []);
 
+
+  const getThumbnailUrl = (product) => {
+    const url = product.imageUrl || product.photoUrl?.[0];
+  
+    if (!url) return "/image/product1.jpg";
+  
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
+  };
+
   const ProductCard = ({ product }) => {
     return (
       <Link
@@ -38,7 +49,7 @@ function MainLastSP() {
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <img
-          src={product.imageUrl || "/image/product1.jpg"}
+          src={getThumbnailUrl(product)}
           alt={product.name}
           className="product_image"
         />

@@ -1,62 +1,19 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from "react-router-dom";
 import "../../css/customer/SideBtnModules.css"; 
 import { useCart } from "../../Context/CartContext";
-
-const ProductsAlarm = [    
-    {
-        id: 'qdsf115eg',
-        name: "커피 원두",
-        price: "3,000원",
-        regularPrice: "5,000원",
-        address: "대구광역시 북구 복현동",
-        discount: "40%",
-        image: '/image/product1.jpg',
-        date: "2025년 11월 13일까지",
-        url: 'https://myungga.com/product/%EB%B8%8C%EB%9D%BC%EC%A7%88-%EB%AA%AC%ED%85%8C-%EC%95%8C%EB%A0%88%EA%B7%B8%EB%A0%88-%EB%AC%B8%EB%8F%84-%EB%85%B8%EB%B3%B4/161/category/49/display/1/',
-        state: '해당 상품의 주문이 취소되었습니다.',
-        sellerId: "",
-        BRNumber: "123456"
-    },
-    {
-        id: "f115eg",
-        name: "발효훈연소시지 1팩 (50g*4개) 2종",
-        price: "3,000원",
-        regularPrice: "5,000원",
-        address: "대구광역시 북구 복현동",
-        discount: "40%",
-        image: "/image/product1.jpg",
-        date: "2024년 11월 13일까지",
-        url: "",
-        state: "해당 상품이 배송을 시작했습니다.",
-        sellerId: "",
-        BRNumber: "9876432"
-    },
-    {
-        id: "f115eg",
-        name: "발효훈연소시지 1팩 (50g*4개) 2종",
-        price: "3,000원",
-        regularPrice: "5,000원",
-        address: "대구광역시 북구 복현동",
-        discount: "40%",
-        image: "/image/product1.jpg",
-        date: "2024년 11월 13일까지",
-        url: "",
-        state: "해당 상품이 배송을 시작했습니다.",
-        sellerId: "",
-        BRNumber: "9876432"
-    }
-];
+import axios from "axios";
 
 function CartViewModule() {
-
   const { cartItems, removeFromCart } = useCart();
+  const navigate = useNavigate();
 
-  const totalProductPrice = useMemo(() => 
+  const totalProductPrice = useMemo(() =>
     cartItems.reduce((total, item) => total + item.originalPrice * item.quantity, 0),
     [cartItems]
   );
-  
-  const totalDiscount = useMemo(() => 
+
+  const totalDiscount = useMemo(() =>
     cartItems.reduce((total, item) =>
       total + (item.originalPrice - item.discountPrice) * item.quantity,
     0),
@@ -65,6 +22,58 @@ function CartViewModule() {
 
   const deliveryFee = totalProductPrice >= 50000 || cartItems.length === 0 ? 0 : 3000;
   const totalPay = totalProductPrice + deliveryFee - totalDiscount;
+
+//   const handleBuyNow = async (e) => {
+//     e.preventDefault();
+  
+//     try {
+//         const params = new URLSearchParams();
+//         cartItems.forEach((item) => {
+//           params.append("productIdList", item.productId);
+//           params.append("quantityList", item.quantity);
+//         });
+        
+//         const response = await axios.get(`/api/orders/cart/buy?${params.toString()}`, {
+//           withCredentials: true
+//         });        
+  
+//         const data = response.data;
+//         console.log("장바구니 구매 응답:", data);
+    
+//         navigate("/payment", {
+//             state: {
+//             paymentInfo: data,
+//             }
+//         });
+//     } catch (error) {
+//       console.error("장바구니 구매 API 실패:", error);
+//     }
+//   };
+
+
+const handleBuyNow = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post("http://localhost/api/orders/cart/buy", cartItems, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+  
+      const data = response.data;
+      console.log("장바구니 구매 응답:", data);
+  
+      navigate("/payment", {
+        state: {
+          paymentInfo: data,
+        }
+      });
+    } catch (error) {
+      console.error("장바구니 구매 API 실패:", error);
+    }
+  }; 
 
   return (
     <div className="sideCartModule viewModule moduleFrame1">
@@ -146,7 +155,7 @@ function CartViewModule() {
 
       {cartItems.length > 0 && (
         <div className='cartBuy moduleFrame1 moduleFrame2'>
-          <button className='cartBuyBtn'>
+          <button className='cartBuyBtn' onClick={handleBuyNow}>
             바로 구매
           </button>
         </div>
