@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlarmContents from "../../components/AlarmContents.jsx";
 import useLogin from "../../Hooks/useLogin.js";
@@ -10,61 +10,20 @@ import "../../css/seller/Seller_notification.css";
 const Seller_notification = () => {
     const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
 
-    // 🔹 판매자용 알림 SSE 연결 - "SELLER" 타입으로 설정
+    // 판매자용 알림 SSE 연결 - "SELLER" 타입으로 설정
     const {
         notifications,
         unreadCount,
         markAsRead,
         markAllAsRead,
         connectionStatus,
-        logs,
-        reconnect,
-        receivedCount,
-        lastReceivedTime
+        reconnect
     } = useNotifications(
         "http://localhost",
         "SELLER"
     );
 
     const navigate = useNavigate();
-
-    // 🔹 디버깅을 위한 상태 추가
-    const [debugMode, setDebugMode] = useState(false);
-    const [lastUpdateTime, setLastUpdateTime] = useState(new Date());
-
-    // 🔹 notifications 배열이 변경될 때마다 마지막 업데이트 시간 갱신
-    useEffect(() => {
-        setLastUpdateTime(new Date());
-        console.log('📱 판매자 알림 업데이트:', {
-            count: notifications.length,
-            unread: unreadCount,
-            timestamp: new Date().toLocaleTimeString(),
-            firstNotification: notifications[0] ? {
-                id: notifications[0].id,
-                content: notifications[0].content?.substring(0, 30)
-            } : null
-        });
-    }, [notifications, unreadCount]);
-
-    // 🔹 렌더링 횟수 카운트
-    const renderCount = useRef(0);
-    renderCount.current += 1;
-
-    // 🔹 매 렌더링마다 상태 로깅
-    useEffect(() => {
-        console.log(`🔄 컴포넌트 렌더링 #${renderCount.current}:`, {
-            알림개수: notifications.length,
-            읽지않음: unreadCount,
-            연결상태: connectionStatus,
-            받은메시지: receivedCount,
-            마지막수신: lastReceivedTime?.toLocaleTimeString()
-        });
-    });
-
-    // 🔹 SSE 연결 상태 모니터링
-    useEffect(() => {
-        console.log('🔌 SSE 연결 상태 변경:', connectionStatus);
-    }, [connectionStatus]);
 
     // 로그인 체크
     if (!isLoggedIn) {
@@ -83,7 +42,7 @@ const Seller_notification = () => {
         );
     }
 
-    // 🔹 연결 상태에 따른 스타일 결정
+    // 연결 상태에 따른 스타일 결정
     const getConnectionStatusStyle = () => {
         switch (connectionStatus) {
             case 'connected':
@@ -115,106 +74,6 @@ const Seller_notification = () => {
             {/* 세로 긴 검은 직사각형 바 */}
             <div className="seller-notification-bar">
                 {/* 헤더 */}
-                <div className="seller-notification-header">
-                    <div className="seller-notification-stats">
-                        <span className="seller-notification-total">
-                            전체: {notifications.length}
-                        </span>
-                        <span className="seller-notification-unread">
-                            읽지않음: {unreadCount}
-                        </span>
-                    </div>
-
-                    {/* 🔹 연결 상태 표시 */}
-                    <div className="seller-notification-connection">
-                        <span style={getConnectionStatusStyle()}>
-                            {getConnectionStatusText()}
-                        </span>
-                        <button
-                            onClick={() => setDebugMode(!debugMode)}
-                            className="seller-notification-debug-btn"
-                            style={{
-                                marginLeft: '10px',
-                                padding: '2px 6px',
-                                fontSize: '12px',
-                                background: debugMode ? '#3b82f6' : '#e5e7eb',
-                                color: debugMode ? 'white' : '#374151',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            디버그 {debugMode ? 'ON' : 'OFF'}
-                        </button>
-                        {connectionStatus === 'error' && (
-                            <button
-                                onClick={reconnect}
-                                style={{
-                                    marginLeft: '10px',
-                                    padding: '4px 8px',
-                                    fontSize: '12px',
-                                    background: '#10b981',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                재연결
-                            </button>
-                        )}
-                    </div>
-
-                    {/* 🔹 연결 통계 정보 */}
-                    <div className="seller-notification-stats-detail">
-                        <small style={{ color: '#6b7280', display: 'block' }}>
-                            받은 메시지: {receivedCount}개
-                        </small>
-                        {lastReceivedTime && (
-                            <small style={{ color: '#6b7280', display: 'block' }}>
-                                마지막 수신: {lastReceivedTime.toLocaleTimeString()}
-                            </small>
-                        )}
-                    </div>
-
-                    {/* 🔹 마지막 업데이트 시간 */}
-                    <div className="seller-notification-last-update">
-                        <small style={{ color: '#6b7280' }}>
-                            마지막 업데이트: {lastUpdateTime.toLocaleTimeString()}
-                        </small>
-                    </div>
-                </div>
-
-                {/* 🔹 디버그 모드일 때 로그 표시 */}
-                {debugMode && (
-                    <div className="seller-notification-debug" style={{
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '6px',
-                        padding: '12px',
-                        margin: '10px 0',
-                        maxHeight: '200px',
-                        overflowY: 'auto'
-                    }}>
-                        <h4 style={{ margin: '0 0 8px 0', fontSize: '14px' }}>SSE 연결 로그:</h4>
-                        {logs.length === 0 ? (
-                            <p style={{ margin: 0, fontSize: '12px', color: '#6b7280' }}>로그가 없습니다.</p>
-                        ) : (
-                            <div style={{ fontSize: '12px' }}>
-                                {logs.slice(0, 10).map((log) => (
-                                    <div key={log.id} style={{
-                                        marginBottom: '4px',
-                                        color: log.type === 'error' ? '#ef4444' :
-                                            log.type === 'success' ? '#10b981' : '#374151'
-                                    }}>
-                                        <span style={{ color: '#6b7280' }}>[{log.timestamp}]</span> {log.message}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
-
                 {/* 알림 리스트 */}
                 <div className="seller-notification-list">
                     {notifications.length === 0 ? (
@@ -234,7 +93,7 @@ const Seller_notification = () => {
                     ) : (
                         notifications.map((notification, index) => (
                             <div
-                                key={`${notification.id}-${index}`} // 🔹 고유 키 보장
+                                key={`${notification.id}-${index}`}
                                 className={`seller-notification-item ${notification.isRead === "Y" ? 'read' : 'unread'}`}
                                 onClick={() => markAsRead(notification.id)}
                             >
@@ -276,7 +135,7 @@ const Seller_notification = () => {
                     </div>
                 )}
 
-                {/* 🔹 연결 문제 시 재연결 버튼 */}
+                {/* 연결 문제 시 재연결 버튼 */}
                 {connectionStatus === 'error' && (
                     <div className="seller-notification-reconnect" style={{
                         padding: '12px',
