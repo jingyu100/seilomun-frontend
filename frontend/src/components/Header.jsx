@@ -120,6 +120,12 @@ const Header = () => {
         loadCartData();
     }, [isLoggedIn]);
 
+    // URL 변경 시 검색어 동기화
+    useEffect(() => {
+        const keywordFromURL = searchParams.get("keyword") || "";
+        setSearchTerm(keywordFromURL);
+    }, [searchParams]);
+
     // 🛒 장바구니에서 상품 삭제
     const handleRemoveFromCart = async (productId) => {
         try {
@@ -374,6 +380,9 @@ const Header = () => {
     };
 
     const handleSearchTermClick = (term) => {
+        setSearchTerm(term); // 검색어를 검색창에 설정
+        setIsDropdownVisible(false); // 드롭다운 닫기
+        setIsFocused(false);
         navigate(`/new?keyword=${encodeURIComponent(term)}`);
     };
 
