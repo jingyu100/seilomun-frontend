@@ -25,13 +25,30 @@
     }
 }
 
+/* 검색 섹션 컨테이너 - 좌우 분할 */
+.search-sections-container {
+    display: flex;
+    min-height: 200px;
+}
+
 /* 검색 섹션 */
 .search-section {
     padding: 16px 0;
+    flex: 1;
 }
 
 .search-section:not(:last-child) {
-    border-bottom: 1px solid #f3f4f6;
+    border-right: 1px solid #f3f4f6;
+}
+
+/* 왼쪽 섹션 (검색기록) */
+.search-section.left {
+    border-right: 1px solid #f3f4f6;
+}
+
+/* 오른쪽 섹션 (인기검색어) */
+.search-section.right {
+    border-right: none;
 }
 
 /* 섹션 헤더 */
@@ -39,7 +56,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px 12px;
+    padding: 0 12px 12px;
 }
 
 .search-section-title {
@@ -89,7 +106,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 16px;
+    padding: 10px 12px;
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 0;
@@ -115,8 +132,8 @@
 .search-item-text {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 6px;
+    font-size: 13px;
     color: #374151;
     flex: 1;
     min-width: 0;
@@ -137,7 +154,7 @@
     border: none !important;
     color: #9ca3af !important; /* 기본 회색 */
     cursor: pointer;
-    padding: 4px;
+    padding: 3px;
     border-radius: 50%;
     display: flex !important;
     align-items: center;
@@ -146,7 +163,8 @@
     opacity: 1 !important; /* 강제로 항상 표시 */
     visibility: visible !important; /* 강제로 항상 표시 */
     transform: scale(1);
-    margin-left: 8px; /* 삭제 버튼 왼쪽 마진 추가 */
+    margin-left: 6px; /* 삭제 버튼 왼쪽 마진 조정 */
+    font-size: 12px;
 }
 
 .delete-btn:hover {
@@ -163,20 +181,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background: linear-gradient(135deg, #77ca80, #69b371);
     color: white;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 6px;
     flex-shrink: 0;
 }
 
 .popular-text {
     flex: 1;
     font-weight: 500;
+    font-size: 13px;
 }
 
 /* 인기검색어 이동버튼 */
@@ -185,7 +204,8 @@
     opacity: 1; /* 항상 표시 */
     transition: all 0.2s ease;
     transform: translateX(0);
-    margin-right: 8px; /* 오른쪽 마진 추가로 삭제 버튼과 간격 조정 */
+    margin-right: 6px; /* 오른쪽 마진 조정 */
+    font-size: 14px;
 }
 
 .popular-item:hover .trending-icon {
@@ -205,7 +225,8 @@
     opacity: 1; /* 항상 표시 */
     transition: all 0.2s ease;
     transform: translateX(0);
-    margin-right: 8px; /* 오른쪽 마진 추가로 삭제 버튼과 간격 조정 */
+    margin-right: 6px; /* 오른쪽 마진 조정 */
+    font-size: 14px;
 }
 
 .autocomplete-item:hover .arrow-icon,
@@ -321,8 +342,19 @@
         margin-top: 2px;
     }
 
+    /* 모바일에서는 세로 레이아웃으로 변경 */
+    .search-sections-container {
+        flex-direction: column;
+        min-height: auto;
+    }
+
     .search-section {
         padding: 12px 0;
+    }
+
+    .search-section:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid #f3f4f6;
     }
 
     .search-section-header {
