@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import axios from "axios";
 import {useEffect, useState, useRef} from "react";
 import {Link} from "react-router-dom";
@@ -24,6 +24,7 @@ const Header = () => {
     const [searchTerm, setSearchTerm] = useState(keywordFromURL);
 
     const navigate = useNavigate();
+    const location = useLocation(); // 🔹 현재 위치 정보 가져오기
 
     const [suggestions, setSuggestions] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
@@ -40,6 +41,58 @@ const Header = () => {
     const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
     const [selectedCategoryData, setSelectedCategoryData] = useState(null);
     const categoryButtonRef = useRef(null);
+
+    // 🔹 현재 활성 메뉴를 판별하는 함수
+    const getActiveMenu = () => {
+        const { pathname, search } = location;
+
+        // 홈 페이지
+        if (pathname === '/') {
+            return 'home';
+        }
+
+        // NEW 페이지 (filterType=RECENT 또는 keyword가 있는 /new 페이지)
+        if (pathname === '/new') {
+            const urlParams = new URLSearchParams(search);
+            const filterType = urlParams.get('filterType');
+            const keyword = urlParams.get('keyword');
+
+            if (filterType === 'RECENT' || keyword) {
+                return 'new';
+            }
+            if (filterType === 'EXPIRING_SOON') {
+                return 'expiring';
+            }
+            // filterType이 없는 경우도 NEW로 간주
+            return 'new';
+        }
+
+        // 주문 목록
+        if (pathname === '/OrderList') {
+            return 'orders';
+        }
+
+        // 위시리스트
+        if (pathname === '/wish') {
+            return 'wishlist';
+        }
+
+        return null;
+    };
+
+    const activeMenu = getActiveMenu();
+
+    // 🔹 메뉴 스타일을 동적으로 적용하는 함수
+    const getMenuStyle = (menuType) => {
+        if (activeMenu === menuType) {
+            return {
+                borderBottom: "2px solid rgb(0, 0, 0)",
+                fontWeight: "600"
+            };
+        }
+        return {};
+    };
+
 
     // 🔹 검색 기록 로드 (로그인된 사용자만)
     useEffect(() => {
@@ -895,9 +948,7 @@ const Header = () => {
                                         <a
                                             href="/"
                                             className="menu-font-st menu-under"
-                                            style={{
-                                                borderBottom: "2px solid rgb(0, 0, 0)",
-                                            }}
+                                            style={getMenuStyle('home')}
                                         >
                                             홈
                                         </a>
@@ -907,7 +958,7 @@ const Header = () => {
                                            onClick={(e) => {
                                                e.preventDefault(); // 기본 링크 동작 방지
                                                navigate(`/new?filterType=RECENT`);
-                                           }}>
+                                           }}style={getMenuStyle('new')}>
                                             NEW
                                         </a>
                                     </li>
@@ -916,17 +967,19 @@ const Header = () => {
                                            onClick={(e) => {
                                                e.preventDefault(); // 기본 링크 동작 방지
                                                navigate(`/new?filterType=EXPIRING_SOON`);
-                                           }}>
+                                           }}style={getMenuStyle('expiring')}>
                                             임박특가
                                         </a>
                                     </li>
                                     <li className="">
-                                        <Link to="/OrderList" className="menu-font-st menu-under">
+                                        <Link to="/OrderList" className="menu-font-st menu-under"
+                                              style={getMenuStyle('orders')}>
                                             주문 목록
                                         </Link>
                                     </li>
                                     <li className="">
-                                        <Link to="/wish" className="menu-font-st menu-under">
+                                        <Link to="/wish" className="menu-font-st menu-under"
+                                              style={getMenuStyle('wishlist')}>
                                             위시리스트
                                         </Link>
                                     </li>
