@@ -146,6 +146,7 @@
     opacity: 1 !important; /* 강제로 항상 표시 */
     visibility: visible !important; /* 강제로 항상 표시 */
     transform: scale(1);
+    margin-left: 8px; /* 삭제 버튼 왼쪽 마진 추가 */
 }
 
 .delete-btn:hover {
@@ -184,6 +185,7 @@
     opacity: 1; /* 항상 표시 */
     transition: all 0.2s ease;
     transform: translateX(0);
+    margin-right: 8px; /* 오른쪽 마진 추가로 삭제 버튼과 간격 조정 */
 }
 
 .popular-item:hover .trending-icon {
@@ -203,6 +205,7 @@
     opacity: 1; /* 항상 표시 */
     transition: all 0.2s ease;
     transform: translateX(0);
+    margin-right: 8px; /* 오른쪽 마진 추가로 삭제 버튼과 간격 조정 */
 }
 
 .autocomplete-item:hover .arrow-icon,
@@ -219,6 +222,7 @@
     padding: 2px 8px;
     border-radius: 12px;
     font-weight: 600;
+    margin-right: 8px; /* 오른쪽 마진 추가 */
 }
 
 .result-link {
