@@ -2,8 +2,8 @@
 .search-dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+    left: 50px;
+    width: 500px;
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
