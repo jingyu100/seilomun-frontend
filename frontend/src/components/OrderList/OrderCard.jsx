@@ -1,5 +1,6 @@
-// OrderCard.jsx - 주문 상태 정보를 버튼 그룹에 전달
+// OrderCard.jsx - 디버깅을 위한 코드 추가
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./OrderCard.css";
 import ProductImageBox from "./ProductImageBox";
 import OrderDetailBox from "./OrderDetailBox";
@@ -9,13 +10,27 @@ import RefundForm from "./RefundForm";
 
 export default function OrderCard({ order }) {
   const [mode, setMode] = useState("default");
-  // ✅ 로컬 상태 추가 - 리뷰 작성 상태 관리
-  const [localIsReview, setLocalIsReview] = useState(order.isReview); // ✅ order.isReview로 수정
+  const [localIsReview, setLocalIsReview] = useState(order.isReview);
+  const navigate = useNavigate();
 
-  // ✅ 리뷰 작성 완료 후 호출될 콜백 함수
+  // 주문 상세 페이지로 이동하는 함수
+  const handleOrderDetailClick = () => {
+    console.log("🔍 주문 상세 클릭 - orderId:", order.id); // ✅ 디버깅용 로그
+    console.log("🔍 전체 order 객체:", order); // ✅ 전체 데이터 확인
+
+    // orderId 검증
+    if (!order.id) {
+      console.error("❌ orderId가 없습니다!");
+      alert("주문 ID를 찾을 수 없습니다.");
+      return;
+    }
+
+    navigate(`/OrderDetail/${order.id}`);
+  };
+
   const handleReviewComplete = () => {
-    setLocalIsReview(true); // 리뷰 완료 상태로 변경
-    setMode("default"); // 기본 화면으로 돌아가기
+    setLocalIsReview(true);
+    setMode("default");
   };
 
   if (mode === "review") {
@@ -23,7 +38,7 @@ export default function OrderCard({ order }) {
       <ReviewForm
         order={order}
         onCancel={() => setMode("default")}
-        onReviewComplete={handleReviewComplete} // ✅ 콜백 전달
+        onReviewComplete={handleReviewComplete}
       />
     );
   }
@@ -32,7 +47,6 @@ export default function OrderCard({ order }) {
     return <RefundForm order={order} onCancel={() => setMode("default")} />;
   }
 
-  // 주문 상태에 따른 표시 텍스트와 CSS 클래스
   const getOrderStatusInfo = (status) => {
     switch (status) {
       case "S":
@@ -62,8 +76,12 @@ export default function OrderCard({ order }) {
     <div className="order-card">
       <div className="order-date">{order.date}</div>
 
+      {/* ✅ 디버깅을 위한 orderId 표시 */}
+      <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+        Order ID: {order.id}
+      </div>
+
       <div className="order-main-content">
-        {/* 좌측 정보 영역 */}
         <div className="order-info">
           <div className={`order-status ${statusInfo.className}`}>{statusInfo.text}</div>
           <div className="order-body">
@@ -72,14 +90,13 @@ export default function OrderCard({ order }) {
           </div>
         </div>
 
-        {/* 우측 버튼 영역 */}
         <div className="order-actions">
           <OrderButtonGroup
             onReviewClick={() => setMode("review")}
             onRefundClick={() => setMode("refund")}
+            onOrderDetailClick={handleOrderDetailClick}
             orderStatus={order.orderStatus}
-            isReview={localIsReview} // ✅ 로컬 상태 사용
-            // isRefundRequested는 나중에 백엔드에서 추가되면 order.isRefundRequested로 변경
+            isReview={localIsReview}
             isRefundRequested={false}
           />
         </div>

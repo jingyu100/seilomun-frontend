@@ -102,7 +102,9 @@ function App() {
             <Route path="/Customer_review" element={<Customer_review />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/OrderList" element={<OrderListPage />} />
+            {/* ✅ 기존 라우트와 새로운 파라미터 라우트 모두 유지 */}
             <Route path="/OrderDetail" element={<OrderDetailPage />} />
+            <Route path="/OrderDetail/:orderId" element={<OrderDetailPage />} />
             <Route path="/Seller_Main" element={<Seller_Main />} />
             <Route
               path="/Seller_newstoreRegistration"
