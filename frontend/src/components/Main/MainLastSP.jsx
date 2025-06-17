@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 
 function MainLastSP() {
 
   const [products, setProducts] = useState([]);
   const [visibleCount] = useState(4);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExpiringProducts = async () => {
@@ -81,7 +82,11 @@ function MainLastSP() {
           </h1>
         </span>
         <span className="homepageTitleUI allWatch">
-          <a href="/sail">
+          <a href="/"
+             onClick={(e) => {
+               e.preventDefault(); // 기본 링크 동작 방지
+               navigate(`/new?filterType=RECENT`);
+             }}>
             전체보기
             <svg
               width="16"
