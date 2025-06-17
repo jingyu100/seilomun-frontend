@@ -1,0 +1,229 @@
+/* Seller_notification.css */
+
+.seller-notification-container {
+    position: relative;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.seller-notification-login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.seller-notification-login-box {
+    padding: 40px;
+    background-color: white;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.seller-notification-login-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.seller-notification-bar {
+    position: absolute;
+    left: 100px;
+    top: 80px;
+    width: 250px;
+    height: calc(100vh - 80px);
+    background-color: #1e1e1e;
+    border-radius: 0;
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.seller-notification-header {
+    text-align: center;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #444;
+}
+
+.seller-notification-title {
+    color: white;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+}
+
+.seller-notification-stats {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.seller-notification-total {
+    color: #ccc;
+    font-size: 12px;
+}
+
+.seller-notification-unread {
+    color: #ff6b6b;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.seller-notification-list {
+    height: calc(100% - 100px);
+    overflow-y: auto;
+    padding-right: 3px;
+}
+
+.seller-notification-empty {
+    text-align: center;
+    color: #888;
+    padding: 30px 15px;
+}
+
+.seller-notification-empty-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.seller-notification-empty-text {
+    margin: 0;
+}
+
+.seller-notification-item {
+    margin: 0 0 10px 0;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.seller-notification-item.read {
+    background-color: #3a3a3a;
+    border-left: 3px solid #666;
+}
+
+.seller-notification-item.unread {
+    background-color: #4a5568;
+    border-left: 3px solid #ffa500;
+}
+
+.seller-notification-item:hover.read {
+    background-color: #454545;
+}
+
+.seller-notification-item:hover.unread {
+    background-color: #5a6578;
+}
+
+.seller-notification-unread-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+}
+
+.seller-notification-content {
+    color: white;
+    font-size: 13px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+}
+
+.seller-notification-content.read {
+    font-weight: normal;
+}
+
+.seller-notification-content.unread {
+    font-weight: bold;
+}
+
+.seller-notification-meta {
+    color: #aaa;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.seller-notification-new-badge {
+    color: #ffa500;
+    font-size: 9px;
+    padding: 1px 5px;
+    background-color: rgba(255, 165, 0, 0.2);
+    border-radius: 8px;
+}
+
+.seller-notification-actions {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #444;
+    text-align: center;
+}
+
+.seller-notification-mark-all-btn {
+    padding: 8px 16px;
+    background-color: #ffa500;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.seller-notification-mark-all-btn:hover {
+    background-color: #ff8c00;
+}
+
+.seller-notification-status {
+    margin-top: 12px;
+    text-align: center;
+    color: #4ade80;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.seller-notification-status-dot {
+    width: 5px;
+    height: 5px;
+    background-color: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* 스크롤바 스타일링 */
+.seller-notification-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.seller-notification-list::-webkit-scrollbar-track {
+    background: #444;
+    border-radius: 3px;
+}
+
+.seller-notification-list::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 3px;
+}
+
+.seller-notification-list::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
