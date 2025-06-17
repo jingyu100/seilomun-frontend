@@ -68,14 +68,27 @@ export default function ProductHeadTitle({
         originalPrice,
         discountPrice,
         currentDiscountRate,
-        totalPrice,
+        totalPrice
       );
+  
+      console.log("🛒 장바구니 추가 요청:", {
+        productId,
+        quantity,
+        name,
+        thumbnailUrl,
+        expiryDate,
+        originalPrice,
+        discountPrice,
+        currentDiscountRate,
+        totalPrice,
+      });
+  
       alert(`장바구니에 ${name} ${quantity}개 추가되었습니다.`);
     } catch (error) {
-      console.error("장바구니 추가 실패:", error);
+      console.error("❌ 장바구니 추가 실패:", error);
       alert("장바구니 추가에 실패했습니다.");
     }
-  };
+  };  
 
   return (
     <div className="productTitle">

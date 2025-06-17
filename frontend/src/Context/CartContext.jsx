@@ -38,18 +38,63 @@ export const CartProvider = ({ children }) => {
   }, [cartItems]);
 
   // 상품 추가
-  const addToCart = async (productId, quantity) => {
+  const addToCart = async (
+    productId,
+    quantity,
+    name,
+    thumbnailUrl,
+    expiryDate,
+    originalPrice,
+    discountPrice,
+    currentDiscountRate,
+    totalPrice
+  ) => {
     try {
       await axios.post(
         "http://localhost/api/carts",
         { productId, quantity },
         { withCredentials: true }
       );
+  
+      // 서버 동기화
       fetchCart();
+  
+      // 프론트 상태에 UI 표시용 데이터 추가
+      setCartItems((prev) => {
+        const exists = prev.find((item) => item.productId === productId);
+        if (exists) {
+          // 기존에 있으면 수량 누적
+          return prev.map((item) =>
+            item.productId === productId
+              ? {
+                  ...item,
+                  quantity: item.quantity + quantity,
+                  totalPrice: (item.quantity + quantity) * discountPrice,
+                }
+              : item
+          );
+        } else {
+          return [
+            ...prev,
+            {
+              productId,
+              quantity,
+              name,
+              thumbnailUrl,
+              date: expiryDate,
+              price: `${discountPrice.toLocaleString()}원`,
+              regularPrice: `${originalPrice.toLocaleString()}원`,
+              discount: `${currentDiscountRate}%`,
+              totalPrice,
+            },
+          ];
+        }
+      });
     } catch (e) {
       console.error("장바구니 추가 실패", e);
     }
   };
+  
 
   // 상품 삭제
   const removeFromCart = async (productId) => {
