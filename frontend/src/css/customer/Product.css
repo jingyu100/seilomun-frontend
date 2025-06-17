@@ -5,6 +5,10 @@ li {
 
 .productFlex {
   display: flex;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 /* ---------- 제품 페이지 헤드 부분 ---------- */
@@ -14,33 +18,134 @@ li {
   flex-direction: column;
 }
 
-.productHead-inner .productHead-left {
-  max-height: unset;
+.productHead-inner {
+  display: flex;
+  gap: 40px;
 }
 
 .productHead-inner .productHead-left {
-  float: left;
   position: relative;
-  width: 510px;
-  max-height: 760px;
-  overflow: hidden;
-  margin-left: auto;
-  align-content: center;
+  width: 600px;
+  max-width: 600px;
+  margin-right: 40px;
 }
 
-.productHead-inner .productHead-left .productHead-image {
+/* 메인 이미지 컨테이너 */
+.productHead-image-container {
   position: relative;
   width: 100%;
+  height: 600px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.swiper-slide {
-  flex-shrink: 0;
+.productHead-image {
   width: 100%;
   height: 100%;
-  position: relative;
-  transition-property: transform;
+  object-fit: cover;
+  cursor: zoom-in;
 }
 
+/* 썸네일 네비게이션 */
+.product-thumbnails {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.product-thumbnails::-webkit-scrollbar {
+  height: 6px;
+}
+
+.product-thumbnails::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.product-thumbnails::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.thumbnail-item {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.thumbnail-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.thumbnail-item.active {
+  border-color: #00d975;
+  box-shadow: 0 0 0 1px #00d975;
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 이미지 카운터 */
+.image-counter {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 네비게이션 버튼 */
+.image-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #333;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.image-nav-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.image-nav-btn.prev {
+  left: 16px;
+}
+
+.image-nav-btn.next {
+  right: 16px;
+}
+
+/* 오른쪽 상품 정보 영역 */
 .productTitle {
   float: right;
   padding: 10px 20px 10px 20px;
@@ -139,7 +244,17 @@ li {
   border: 1px solid #00d975;
   padding: 9px 18px;
   background: #00d975;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 16px;
 }
+
+.productBuy .productBuy-btns .buyBtn:hover {
+  background: #00c266;
+  border-color: #00c266;
+}
+
 .productBuy .productBuy-btns .cartBtn {
   margin-right: 0;
   border: 1px solid #dcdcdc;
@@ -149,7 +264,15 @@ li {
   justify-items: center;
   background: #fff;
   padding: 9px 18px;
-  font-size: 18px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.productBuy .productBuy-btns .cartBtn:hover {
+  background: #f8f9fa;
+  border-color: #bbb;
 }
 
 .btnStyle1 {
@@ -159,4 +282,34 @@ li {
 .btnStyle2 {
   font-weight: 1000;
 }
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .productFlex {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .productHead-inner .productHead-left {
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+
+  .productTitle {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .productHead-image-container {
+    height: 400px;
+  }
+
+  .thumbnail-item {
+    width: 60px;
+    height: 60px;
+  }
+}
+
 /* ---------- 제품 페이지 헤드 부분 ---------- */
