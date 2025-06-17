@@ -1,0 +1,96 @@
+/* 전체 배너 영역 */
+.bannerWrapper {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+    padding: 30px 0;
+    box-sizing: border-box;
+  }
+  
+  /* Swiper 슬라이드 스타일 */
+  .bannerSlide {
+    width: 85%;
+    max-width: none;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .bannerSlide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* 활성 슬라이드 강조 효과 */
+  .swiper-slide-active {
+    transform: scale(1.05);
+    z-index: 2;
+  }
+  
+  /* 좌우 버튼 (MainBanner 스타일 SVG 포함) */
+  .bannerNav-left {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -400px;
+    cursor: pointer;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .bannerNav-right {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    right: 50%;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-right: -400px;
+    cursor: pointer;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bannerNav svg {
+    width: 25px;
+    height: 35px;
+    stroke: #ffffff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  
+  @media (max-width: 768px) {
+    .bannerWrapper {
+      padding: 20px;
+    }
+  
+    .bannerSlide {
+      width: 90%;
+    }
+  
+    .bannerNav {
+      width: 35px;
+      height: 35px;
+    }
+  
+    .bannerNav svg {
+      width: 20px;
+      height: 28px;
+    }
+  }

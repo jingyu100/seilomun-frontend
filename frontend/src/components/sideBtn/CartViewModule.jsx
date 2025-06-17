@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import "../../css/customer/SideBtnModules.css"; 
 import { useCart } from "../../Context/CartContext";
@@ -7,6 +7,10 @@ import axios from "axios";
 function CartViewModule() {
   const { cartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("cartItems:", cartItems);
+  }, [cartItems]);
 
   const totalProductPrice = useMemo(() =>
     cartItems.reduce((total, item) => total + item.originalPrice * item.quantity, 0),
@@ -51,29 +55,26 @@ function CartViewModule() {
 //   };
 
 
-const handleBuyNow = async (e) => {
-    e.preventDefault();
+    // 예시: 장바구니 결제 버튼에서
+    const handleBuyNow = async () => {
+        const orderProducts = cartItems.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+        currentDiscountRate: item.currentDiscountRate, // 필요하면
+        name: item.name,
+        thumbnailUrl: item.thumbnailUrl,
+        date: item.date,
+        }));
+    
+        console.log("✅ 보내는 orderProducts:", orderProducts);
+    
+        navigate("/payment", {
+        state: { orderProducts },
+        });
+    };
   
-    try {
-      const response = await axios.post("http://localhost/api/orders/cart/buy", cartItems, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
   
-      const data = response.data;
-      console.log("장바구니 구매 응답:", data);
-  
-      navigate("/payment", {
-        state: {
-          paymentInfo: data,
-        }
-      });
-    } catch (error) {
-      console.error("장바구니 구매 API 실패:", error);
-    }
-  }; 
 
   return (
     <div className="sideCartModule viewModule moduleFrame1">
