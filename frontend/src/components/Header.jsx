@@ -903,12 +903,20 @@ const Header = () => {
                                         </a>
                                     </li>
                                     <li className="">
-                                        <a href="/" className="menu-font-st menu-under">
+                                        <a href="/" className="menu-font-st menu-under"
+                                           onClick={(e) => {
+                                               e.preventDefault(); // 기본 링크 동작 방지
+                                               navigate(`/new?filterType=RECENT`);
+                                           }}>
                                             NEW
                                         </a>
                                     </li>
                                     <li className="">
-                                        <a href="/" className="menu-font-st menu-under">
+                                        <a href="/" className="menu-font-st menu-under"
+                                           onClick={(e) => {
+                                               e.preventDefault(); // 기본 링크 동작 방지
+                                               navigate(`/new?filterType=EXPIRING_SOON`);
+                                           }}>
                                             임박특가
                                         </a>
                                     </li>
