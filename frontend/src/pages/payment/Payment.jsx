@@ -13,7 +13,24 @@ const Payment = () => {
   const location = useLocation();
   const [seller, setSeller] = useState(null); // 통합된 판매자 정보
   const [activeTab, setActiveTab] = useState("delivery");
-  const [pointsToUse, setPointsToUse] = useState(0); // ✨ 1. 포인트 상태를 부모로 옮기기
+  const [pointsToUse, setPointsToUse] = useState(0); // 포인트 상태
+
+  // ✨ 새로 추가: 배송 정보 state
+  const [deliveryInfo, setDeliveryInfo] = useState({
+    mainAddress: "",
+    detailAddress: "",
+    postCode: "",
+    phoneFirst: "",
+    phoneMiddle: "",
+    phoneLast: "",
+    deliveryRequest: "",
+    saveAsDefault: false,
+  });
+
+  // ✨ 새로 추가: 픽업 정보 state
+  const [pickupInfo, setPickupInfo] = useState({
+    pickupRequest: "",
+  });
 
   // 상품 상세페이지에서 전달받은 데이터
   const { product } = location.state || {};
@@ -108,7 +125,7 @@ const Payment = () => {
   const deliveryFee =
     activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
 
-  // ✨ 2. 최종 결제 금액 계산 (포인트 포함)
+  // 최종 결제 금액 계산 (포인트 포함)
   const finalAmount = totalProductPrice + deliveryFee - pointsToUse;
 
   // 디버깅용 로그
@@ -117,10 +134,12 @@ const Payment = () => {
   console.log("배송비:", deliveryFee);
   console.log("사용한 포인트:", pointsToUse);
   console.log("최종 결제 금액:", finalAmount);
+  console.log("배송 정보:", deliveryInfo);
+  console.log("픽업 정보:", pickupInfo);
   console.log("======================");
 
   const handleTabChange = (tab) => {
-    // ✨ 배달 불가 매장은 '배달' 탭으로 변경 불가
+    // 배달 불가 매장은 '배달' 탭으로 변경 불가
     if (seller?.deliveryAvailable !== "Y" && tab === "delivery") {
       return;
     }
@@ -139,25 +158,38 @@ const Payment = () => {
         />
 
         {/* 탭에 따른 컴포넌트 렌더링 */}
-        {activeTab === "delivery" && <DeliverySection />}
-        {activeTab === "pickup" && <PickupSection seller={seller} />}
+        {activeTab === "delivery" && (
+          <DeliverySection
+            deliveryInfo={deliveryInfo}
+            setDeliveryInfo={setDeliveryInfo}
+          />
+        )}
+        {activeTab === "pickup" && (
+          <PickupSection
+            seller={seller}
+            pickupInfo={pickupInfo}
+            setPickupInfo={setPickupInfo}
+          />
+        )}
 
         <OrderItemsSection products={products} deliveryFee={deliveryFee} />
         <PaymentInfoSection
-          // ✨ 3. 자식에게 필요한 정보들 전달
           totalProductPrice={totalProductPrice}
           deliveryFee={deliveryFee}
           seller={seller}
           isPickup={activeTab === "pickup"}
-          pointsToUse={pointsToUse} // 사용 포인트 전달
-          setPointsToUse={setPointsToUse} // 포인트 변경 함수 전달
-          finalAmount={finalAmount} // 최종 금액 전달
+          pointsToUse={pointsToUse}
+          setPointsToUse={setPointsToUse}
+          finalAmount={finalAmount}
         />
         <OrderSubmitBar
           products={products}
           deliveryFee={deliveryFee}
           isPickup={activeTab === "pickup"}
-          finalAmount={finalAmount} // ✨ 4. 버튼에도 최종 금액 전달!
+          finalAmount={finalAmount}
+          deliveryInfo={deliveryInfo}
+          pickupInfo={pickupInfo}
+          pointsToUse={pointsToUse}
         />
       </div>
     </div>
