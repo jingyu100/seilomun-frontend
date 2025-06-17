@@ -19,10 +19,10 @@
   background-color: #fff;
   margin-bottom: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  gap: 8px;
 }
 
 .search-icon {
-  margin-right: 8px;
   font-size: 16px;
   color: #666;
 }
@@ -33,6 +33,64 @@
   flex-grow: 1;
   font-size: 14px;
   color: #333;
+}
+
+/* 검색 버튼들 */
+.search-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.search-btn, .reset-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.search-btn {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+.search-btn:hover:not(:disabled) {
+  background-color: #333;
+}
+
+.search-btn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.reset-btn {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.reset-btn:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.reset-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* 검색 결과 정보 */
+.search-result-info {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: #f0f8ff;
+  border: 1px solid #b8daff;
+  border-radius: 20px;
+  color: #004085;
+  font-size: 13px;
+  text-align: center;
 }
 
 /* 버튼 영역 */
@@ -54,4 +112,21 @@
 .filter-btn.active {
   background-color: black;
   color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .search-box {
+    flex-wrap: wrap;
+  }
+
+  .search-buttons {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .search-btn, .reset-btn {
+    flex: 1;
+  }
 }

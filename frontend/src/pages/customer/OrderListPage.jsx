@@ -15,52 +15,44 @@ const OrderListPage = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchOrders = async () => {
+  // 검색 관련 state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentSearchTerm, setCurrentSearchTerm] = useState("");
+
+  const fetchOrders = async (isNewSearch = false, searchQuery = "") => {
     try {
       setIsFetching(true);
+
+      const currentPage = isNewSearch ? 0 : page;
+
+      const params = {
+        page: currentPage,
+        size: 10,
+      };
+
+      if (searchQuery.trim()) {
+        params.storeName = searchQuery.trim();
+      }
+
       const response = await axios.get("http://localhost/api/customers/orders", {
         withCredentials: true,
-        params: {
-          page,
-          size: 10,
-        },
+        params,
       });
 
       const data = response.data.data;
 
-      // 🔍 데이터 구조 확인을 위한 console.log 추가
       console.log("=== API 전체 응답 ===");
       console.log(response.data);
 
-      console.log("=== 주문 데이터 배열 ===");
-      console.log(data.orders);
-
-      console.log("=== 첫 번째 주문 상세 데이터 ===");
-      if (data.orders && data.orders.length > 0) {
-        console.log(data.orders[0]);
-        console.log("주문 상태 (orderStatus):", data.orders[0].orderStatus);
-        console.log("리뷰 작성 여부 (review):", data.orders[0].review); // ✅ 올바른 필드명
-        console.log("주문 ID:", data.orders[0].orderId);
-        console.log("판매자명:", data.orders[0].sellerName);
-        console.log("총 금액:", data.orders[0].totalAmount);
-        console.log("주문 날짜:", data.orders[0].orderDate);
-        console.log("주문 아이템들:", data.orders[0].orderItems);
-        console.log("사진 URL:", data.orders[0].photoUrl);
+      if (isNewSearch) {
+        setOrders(data.orders);
+        setPage(1);
+      } else {
+        setOrders((prev) => [...prev, ...data.orders]);
+        setPage((prev) => prev + 1);
       }
 
-      console.log("=== 모든 주문들의 상태 요약 ===");
-      data.orders.forEach((order, index) => {
-        console.log(`주문 ${index + 1}:`, {
-          orderId: order.orderId,
-          orderStatus: order.orderStatus,
-          review: order.review, // ✅ review 필드로 수정
-          sellerName: order.sellerName,
-        });
-      });
-
-      setOrders((prev) => [...prev, ...data.orders]);
       setHasNext(data.hasNext);
-      setPage((prev) => prev + 1);
     } catch (err) {
       console.error("주문 목록 조회 실패:", err);
       setError("주문 목록을 불러오지 못했습니다.");
@@ -70,8 +62,25 @@ const OrderListPage = () => {
     }
   };
 
+  // 검색 함수
+  const handleSearch = () => {
+    setCurrentSearchTerm(searchTerm);
+    setLoading(true);
+    setPage(0);
+    fetchOrders(true, searchTerm);
+  };
+
+  // 검색 초기화 함수
+  const handleSearchReset = () => {
+    setSearchTerm("");
+    setCurrentSearchTerm("");
+    setLoading(true);
+    setPage(0);
+    fetchOrders(true, "");
+  };
+
   useEffect(() => {
-    fetchOrders();
+    fetchOrders(true, "");
   }, []);
 
   useEffect(() => {
@@ -81,49 +90,72 @@ const OrderListPage = () => {
       const fullHeight = document.documentElement.scrollHeight;
 
       if (scrollTop + windowHeight + 100 >= fullHeight && hasNext && !isFetching) {
-        fetchOrders();
+        fetchOrders(false, currentSearchTerm);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasNext, isFetching]);
+  }, [hasNext, isFetching, currentSearchTerm]);
 
-  if (loading && page === 0) return <div>로딩 중...</div>;
+  if (loading && orders.length === 0) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="OrderListPage">
-      <div className="header">
-        <Header />
-      </div>
+      <div className="OrderListPage">
+        <div className="header">
+          <Header />
+        </div>
 
-      <div className="body sideMargin">
-        <FilterBar />
-        {orders.map((order, idx) => (
-          <OrderCard
-            key={idx}
-            order={{
-              id: order.orderId,
-              date: new Date(order.orderDate).toISOString().slice(0, 10),
-              store: order.sellerName,
-              name: order.orderItems[0],
-              price: order.totalAmount,
-              // 🔍 올바른 필드명 사용
-              orderStatus: order.orderStatus,
-              isReview: order.review, // ✅ review 필드를 isReview로 매핑
-              photoUrl: order.photoUrl,
-            }}
+        <div className="body sideMargin">
+          <FilterBar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onSearch={handleSearch}
+              onReset={handleSearchReset}
+              isFetching={isFetching}
+              currentSearchTerm={currentSearchTerm}
+              orderCount={orders.length}
           />
-        ))}
-        {isFetching && <div>불러오는 중...</div>}
-        {!hasNext && <div>더 이상 데이터가 없습니다.</div>}
-      </div>
 
-      <div className="footer">
-        <Footer />
+          {/* 검색 결과가 없을 때 메시지 */}
+          {orders.length === 0 && !loading && (
+              <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+                {currentSearchTerm ?
+                    `"${currentSearchTerm}"에 대한 주문을 찾을 수 없습니다.` :
+                    "주문 내역이 없습니다."
+                }
+              </div>
+          )}
+
+          {orders.map((order, idx) => (
+              <OrderCard
+                  key={`${order.orderId}-${idx}`}
+                  order={{
+                    id: order.orderId,
+                    date: new Date(order.orderDate).toISOString().slice(0, 10),
+                    store: order.sellerName,
+                    name: order.orderItems[0],
+                    price: order.totalAmount,
+                    orderStatus: order.orderStatus,
+                    isReview: order.review,
+                    photoUrl: order.photoUrl,
+                  }}
+              />
+          ))}
+
+          {isFetching && <div style={{ textAlign: "center", padding: "20px" }}>불러오는 중...</div>}
+          {!hasNext && orders.length > 0 && (
+              <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                더 이상 데이터가 없습니다.
+              </div>
+          )}
+        </div>
+
+        <div className="footer">
+          <Footer />
+        </div>
       </div>
-    </div>
   );
 };
 
