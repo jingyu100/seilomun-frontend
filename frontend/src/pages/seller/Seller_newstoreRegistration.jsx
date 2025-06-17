@@ -1,22 +1,105 @@
-import { useRef } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../css/seller/Seller_newstoreRegistration.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
 
 const Seller_newstoreRegistration = () => {
-  const [deliveryStatus, setDeliveryStatus] = useState("");
-  const [amountInputs, setAmountInputs] = useState([{ min: "", max: "", fee: "" }]);
-  const [freeDelivery, setFreeDelivery] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [description, setDescription] = useState("");
+  // 기본 매장 정보
+  const [storeName, setStoreName] = useState("");
   const [storeDescription, setStoreDescription] = useState("");
+  const [phone, setPhone] = useState("");
+  const [pickupTime, setPickupTime] = useState("");
+  const [minOrderAmount, setMinOrderAmount] = useState("");
+
+  // 배달 관련
+  const [deliveryStatus, setDeliveryStatus] = useState("");
+  const [amountInputs, setAmountInputs] = useState([{ min: "", fee: "" }]);
+  const [freeDelivery, setFreeDelivery] = useState(false);
+  const [deliveryArea, setDeliveryArea] = useState("");
+
+  // 카테고리 및 시간
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [storeTime, setStoreTime] = useState("");
 
-  // ✅ 매장 사진 (최대 5개)
-  const [storeImages, setStoreImages] = useState([]);
+  // 공지사항
+  const [description, setDescription] = useState("");
 
+  // 이미지
+  const [storeImages, setStoreImages] = useState([]);
+  const [storeImageFiles, setStoreImageFiles] = useState([]);
+  const [noticeImages, setNoticeImages] = useState([]);
+  const [noticeImageFiles, setNoticeImageFiles] = useState([]);
+
+  // 로딩 및 에러 상태
+  const [loading, setLoading] = useState(false);
+
+  // 카테고리 매핑
+  const categories = [
+    { id: 1, name: "편의점" },
+    { id: 2, name: "마트" },
+    { id: 3, name: "빵집" },
+    { id: 4, name: "식당" },
+  ];
+
+  // 페이지 로드시 기존 매장 정보 불러오기
+  useEffect(() => {
+    fetchSellerInfo();
+  }, []);
+
+  const fetchSellerInfo = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/sellers/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const sellerInfo = data.sellerInformationDto;
+
+        // 기존 데이터로 폼 초기화
+        setStoreName(sellerInfo.storeName || "");
+        setStoreDescription(sellerInfo.storeDescription || "");
+        setPhone(sellerInfo.phone || "");
+        setPickupTime(sellerInfo.pickupTime || "");
+        setMinOrderAmount(sellerInfo.minOrderAmount || "");
+        setDeliveryStatus(sellerInfo.deliveryAvailable === "Y" ? "ACCEPT" : "DECLINE");
+        setDeliveryArea(sellerInfo.deliveryArea || "");
+        setStoreTime(sellerInfo.operatingHours || "");
+        setDescription(sellerInfo.notification || "");
+
+        // 카테고리 설정
+        const category = categories.find((cat) => cat.id === sellerInfo.categoryId);
+        if (category) {
+          setSelectedCategory(category.name);
+          setCategoryId(sellerInfo.categoryId);
+        }
+
+        // 배달비 설정
+        if (sellerInfo.deliveryFeeDtos && sellerInfo.deliveryFeeDtos.length > 0) {
+          setAmountInputs(
+            sellerInfo.deliveryFeeDtos.map((fee) => ({
+              id: fee.id,
+              min: fee.ordersMoney?.toString() || "",
+              fee: fee.deliveryTip?.toString() || "",
+            }))
+          );
+        }
+
+        // 기존 이미지 URL 설정
+        setStoreImages(sellerInfo.sellerPhotos || []);
+        setNoticeImages(sellerInfo.notificationPhotos || []);
+      }
+    } catch (error) {
+      console.error("매장 정보 조회 실패:", error);
+    }
+  };
+
+  // 매장 사진 관련 함수들
   const handleAddStoreImage = () => {
     if (storeImages.length < 5) {
       setStoreImages([...storeImages, null]);
@@ -26,21 +109,25 @@ const Seller_newstoreRegistration = () => {
   const handleRemoveStoreImage = () => {
     if (storeImages.length > 0) {
       setStoreImages(storeImages.slice(0, -1));
+      setStoreImageFiles(storeImageFiles.slice(0, -1));
     }
   };
 
   const handleStoreImageChange = (index, e) => {
     const file = e.target.files[0];
     if (file) {
-      const updated = [...storeImages];
-      updated[index] = URL.createObjectURL(file);
-      setStoreImages(updated);
+      const updatedImages = [...storeImages];
+      const updatedFiles = [...storeImageFiles];
+
+      updatedImages[index] = URL.createObjectURL(file);
+      updatedFiles[index] = file;
+
+      setStoreImages(updatedImages);
+      setStoreImageFiles(updatedFiles);
     }
   };
 
-  // ✅ 공지 이미지 (최대 5개)
-  const [noticeImages, setNoticeImages] = useState([]);
-
+  // 공지 사진 관련 함수들
   const handleAddNoticeImage = () => {
     if (noticeImages.length < 5) {
       setNoticeImages([...noticeImages, null]);
@@ -50,21 +137,27 @@ const Seller_newstoreRegistration = () => {
   const handleRemoveNoticeImage = () => {
     if (noticeImages.length > 0) {
       setNoticeImages(noticeImages.slice(0, -1));
+      setNoticeImageFiles(noticeImageFiles.slice(0, -1));
     }
   };
 
   const handleNoticeImageChange = (index, e) => {
     const file = e.target.files[0];
     if (file) {
-      const updated = [...noticeImages];
-      updated[index] = URL.createObjectURL(file);
-      setNoticeImages(updated);
+      const updatedImages = [...noticeImages];
+      const updatedFiles = [...noticeImageFiles];
+
+      updatedImages[index] = URL.createObjectURL(file);
+      updatedFiles[index] = file;
+
+      setNoticeImages(updatedImages);
+      setNoticeImageFiles(updatedFiles);
     }
   };
 
   // 배달 금액 입력 관련
   const handleAddInput = () => {
-    setAmountInputs([...amountInputs, { min: "", max: "", fee: "" }]);
+    setAmountInputs([...amountInputs, { min: "", fee: "" }]);
   };
 
   const handleRemoveInput = () => {
@@ -80,281 +173,507 @@ const Seller_newstoreRegistration = () => {
   };
 
   // 카테고리 선택
-  const categories = ["편의점", "마트", "빵집", "식당"];
-
   const handleSelect = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category.name);
+    setCategoryId(category.id);
     setIsOpen(false);
   };
 
+  // 폼 검증
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!storeName.trim()) newErrors.storeName = "매장이름은 필수입니다.";
+    if (!phone.trim()) newErrors.phone = "전화번호는 필수입니다.";
+    if (!pickupTime.trim()) newErrors.pickupTime = "픽업시간은 필수입니다.";
+    if (!storeTime.trim()) newErrors.operatingHours = "영업시간은 필수입니다.";
+    if (!categoryId) newErrors.categoryId = "매장 카테고리는 필수입니다.";
+  };
+
+  // 매장 정보 저장
+  const handleSubmit = async () => {
+    if (!validateForm()) {
+      alert("필수 항목을 모두 입력해주세요.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+
+      // DTO 데이터 구성
+      const sellerInfo = {
+        storeName: storeName,
+        storeDescription: storeDescription,
+        notification: description,
+        deliveryAvailable: deliveryStatus === "ACCEPT" ? "Y" : "N",
+        minOrderAmount: minOrderAmount,
+        deliveryFeeDtos: amountInputs
+          .filter((input) => input.min && input.fee)
+          .map((input) => ({
+            id: input.id || null,
+            ordersMoney: parseInt(input.min),
+            deliveryTip: freeDelivery ? 0 : parseInt(input.fee),
+            deleted: false,
+          })),
+        deliveryArea: deliveryArea,
+        operatingHours: storeTime,
+        categoryId: categoryId,
+        phone: phone,
+        pickupTime: pickupTime,
+        sellerPhotoUrls: [],
+        notificationPhotos: [],
+        notificationPhotoIds: [],
+      };
+
+      formData.append(
+        "sellerInformationDto",
+        new Blob([JSON.stringify(sellerInfo)], {
+          type: "application/json",
+        })
+      );
+
+      // 매장 이미지 추가
+      storeImageFiles.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("storeImage", file);
+        }
+      });
+
+      // 공지 이미지 추가
+      noticeImageFiles.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("notificationImage", file);
+        }
+      });
+
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/sellers", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("매장 정보가 성공적으로 업데이트되었습니다!");
+      } else {
+        throw new Error("서버 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("매장 정보 업데이트 실패:", error);
+      alert("매장 정보 업데이트에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <div className="Seller-Header">
-        <Seller_Header />
-      </div>
-      <div className="Seller-newstoreRegistration">
-        <h2 className="seller-new-form-title">매장 정보 설정 및 변경</h2>
-        <div className="store-form-line" />
+    <>
+      <Seller_Header />
 
-        {/* 매장이름 */}
-        <div className="store-form-group-11">
-          <label className="store-label">매장이름</label>
-          <input
-            type="text"
-            className="store-input-1"
-            placeholder="매장이름을 입력해주세요"
-          />
-          <button className="store-button-1">등록</button>
-          <button className="store-button-2">변경</button>
-        </div>
+      <div className="store-registration">
+        <div className="container">
+          {/* 에러 알림 */}
 
-        {/* 매장 설명 */}
-        <div className="store-form-group-22">
-          <label className="store-label">매장 설명</label>
-          <textarea
-            className="store-textarea-1"
-            placeholder="500자 이내로 입력해주세요"
-            value={storeDescription}
-            onChange={(e) => setStoreDescription(e.target.value)}
-          />
-          <button className="store-button-3">등록</button>
-          <button className="store-button-4">변경</button>
-        </div>
-
-        {/* 매장 사진 영역 */}
-        <div className="store-form-group-33">
-          <label className="store-label">매장 사진</label>
-          <div className="image-row">
-            {storeImages.map((img, index) => (
-              <div
-                className="image-upload-box-11"
-                key={index}
-                onClick={() => document.getElementById(`store-img-${index}`).click()}
-              >
-                <img
-                  src={img || seller_camera}
-                  alt="store"
-                  className="camera-icon"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  id={`store-img-${index}`}
-                  style={{ display: "none" }}
-                  onChange={(e) => handleStoreImageChange(index, e)}
-                />
+          {/* 메인 폼 */}
+          <div className="form-container">
+            {/* 기본 정보 */}
+            <section className="card">
+              <div className="card-header">
+                <div className="card-title">
+                  <span className="icon">🏪</span>
+                  <h3>기본 정보</h3>
+                </div>
+                <p className="card-subtitle">매장의 기본적인 정보를 입력해주세요</p>
               </div>
-            ))}
-          </div>
-          <div className="amount-button-group">
-            <button className="amount-gray-btn" onClick={handleAddStoreImage}>추가</button>
-            <button className="amount-gray-btn" onClick={handleRemoveStoreImage}>삭제</button>
-            <button className="store-button-5">등록</button>
-            <button className="store-button-6">변경</button>
-          </div>
-        </div>
 
+              <div className="card-content">
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label className="label">
+                      매장이름 <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="매장이름을 입력해주세요"
+                      value={storeName}
+                      onChange={(e) => setStoreName(e.target.value)}
+                    />
+                  </div>
 
-        {/* 배달 여부 확인 */}
-        <div className="store-form-group-44">
-          <label className="store-label">배달여부 확인</label>
+                  <div className="form-field">
+                    <label className="label">
+                      전화번호 <span className="required">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      className="input"
+                      placeholder="010-0000-0000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
 
-        <label className="delivery-radio">
-            <input
-            type="radio"
-            name="delivery"
-            value="ACCEPT"
-            checked={deliveryStatus === "ACCEPT"}
-            onChange={() => setDeliveryStatus("ACCEPT")}
-            />
-            배달 수락
-        </label>
+                  <div className="form-field">
+                    <label className="label">
+                      픽업 소요시간 <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="예: 30분"
+                      value={pickupTime}
+                      onChange={(e) => setPickupTime(e.target.value)}
+                    />
+                  </div>
 
-        <label className="delivery-radio">
-            <input
-            type="radio"
-            name="delivery"
-            value="DECLINE"
-            checked={deliveryStatus === "DECLINE"}
-            onChange={() => setDeliveryStatus("DECLINE")}
-            />
-            배달 거절
-        </label>
-        </div>
+                  <div className="form-field">
+                    <label className="label">최소 주문 금액</label>
+                    <input
+                      type="number"
+                      className="input"
+                      placeholder="0"
+                      value={minOrderAmount}
+                      onChange={(e) => setMinOrderAmount(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-        {/* 배달 주문 금액 */}
-        <div className="store-form-group-55">
-          <label className="store-label">배달 주문 금액</label>
-
-          <div className="delivery-amount-container">
-        {amountInputs.map((input, index) => (
-          <div className="delivery-input-group" key={index}>
-            <input
-              type="text"
-              placeholder="최소금액"
-              value={input.min}
-              onChange={(e) =>
-                handleChange(index, "min", e.target.value)
-              }
-              className="delivery-input"
-            />
-            <span>~</span>
-            <input
-              type="text"
-              placeholder="최대금액"
-              value={input.max}
-              onChange={(e) =>
-                handleChange(index, "max", e.target.value)
-              }
-              className="delivery-input"
-            />
-            <input
-              type="text"
-              placeholder="배달비 "
-              value={input.fee}
-              onChange={(e) =>
-                handleChange(index, "fee", e.target.value)
-              }
-              className="delivery-input"
-            />
-          </div>
-        ))}
-
-        <div className="amount-button-group">
-          <button className="amount-gray-btn" onClick={handleAddInput}>추가</button>
-          <button className="amount-gray-btn" onClick={handleRemoveInput}>삭제</button>
-        </div>
-
-        <label className="free-delivery-checkbox">
-          <input
-            type="checkbox"
-            checked={freeDelivery}
-            onChange={(e) => setFreeDelivery(e.target.checked)}
-          />
-          <span>무료 배달</span>
-        </label>
-      </div>
-
-          <button className="store-button-7">등록</button>
-          <button className="store-button-8">변경</button>
-        </div>
-
-        {/* 매장 카테고리 */}
-        <div className="store-form-group-66">
-          <label className="store-label">매장 카테고리</label>
-          <div className="category-dropdown">
-        <button
-          type="button"
-          className="category-toggle"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {selectedCategory || "선택"} <span className="arrow">▼</span>
-        </button>
-
-        {isOpen && (
-          <ul className="category-list">
-            {categories.map((cat) => (
-              <li
-                key={cat}
-                onClick={() => handleSelect(cat)}
-                className="category-item"
-              >
-                {cat}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-        </div>
-
-        {/* 영업시간 */}
-        <div className="store-form-group-77">
-          <label className="store-label">영업시간</label>
-            <textarea
-            className="store-time-textarea"
-            value={storeTime}
-            onChange={(e) => setStoreTime(e.target.value)}
-            placeholder={
-                `ex) 월요일 09:00 ~ 18:00\n` +
-                `화요일 09:00 ~ 18:00\n` +
-                `수요일 09:00 ~ 18:00\n` +
-                `목요일 09:00 ~ 18:00\n` +
-                `금요일 09:00 ~ 18:00\n` +
-                `토요일 09:00 ~ 18:00\n` +
-                `일요일 09:00 ~ 18:00`
-            }
-            />
-          <button className="store-button-9">등록</button>
-          <button className="store-button-a">변경</button>
-        </div>
-
-        {/* 배달 가능 지역 */}
-        <div className="store-form-group-88">
-          <label className="store-label">배달 가능 지역</label>
-
-          <input
-                type="text"
-                className="delivery-region-input"
-                placeholder="ex) 복현동, 원대동, 침산동"
-            />
-
-          <button className="store-button-b">등록</button>
-          <button className="store-button-c">변경</button>
-        </div>
-
-          {/* 가게 공지 사진 및 설명 */}
-          <div className="store-form-group-99">
-            <label className="store-label">가게 공지</label>
-
-            <div className="notice-wrapper">
-              <div className="image-row">
-              {noticeImages.map((file, index) => (
-                <div
-                  key={index}
-                  className="notice-image-box"
-                  onClick={() => document.getElementById(`notice-img-${index}`).click()}
-                >
-                  <img
-                    src={file ? URL.createObjectURL(file) : seller_camera}  // ✅ 수정
-                    alt="notice"
-                    className="camera-icon"
+                <div className="form-field full-width">
+                  <label className="label">매장 설명</label>
+                  <textarea
+                    className="textarea"
+                    placeholder="500자 이내로 매장을 소개해주세요"
+                    value={storeDescription}
+                    onChange={(e) => setStoreDescription(e.target.value)}
+                    maxLength="500"
+                    rows="4"
                   />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id={`notice-img-${index}`}
-                    style={{ display: "none" }}
-                    onChange={(e) => handleNoticeImageChange(index, e)}
+                  <div className="char-counter">{storeDescription.length}/500</div>
+                </div>
+              </div>
+            </section>
+
+            {/* 운영 정보 */}
+            <section className="card">
+              <div className="card-header">
+                <div className="card-title">
+                  <span className="icon">⏰</span>
+                  <h3>운영 정보</h3>
+                </div>
+                <p className="card-subtitle">매장 카테고리와 영업시간을 설정해주세요</p>
+              </div>
+
+              <div className="card-content">
+                <div className="form-grid">
+                  <div className="form-field">
+                    <label className="label">
+                      매장 카테고리 <span className="required">*</span>
+                    </label>
+                    <div className="select-container">
+                      <button
+                        type="button"
+                        className="select-trigger"
+                        onClick={() => setIsOpen(!isOpen)}
+                      >
+                        <span>{selectedCategory || "카테고리를 선택해주세요"}</span>
+                        <span className={`arrow ${isOpen ? "open" : ""}`}>▼</span>
+                      </button>
+                      {isOpen && (
+                        <div className="select-dropdown">
+                          {categories.map((cat) => (
+                            <div
+                              key={cat.id}
+                              onClick={() => handleSelect(cat)}
+                              className="select-option"
+                            >
+                              {cat.name}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-field full-width">
+                  <label className="label">
+                    영업시간 <span className="required">*</span>
+                  </label>
+                  <textarea
+                    className="textarea"
+                    value={storeTime}
+                    onChange={(e) => setStoreTime(e.target.value)}
+                    placeholder="예시:
+월요일 09:00 ~ 18:00
+화요일 09:00 ~ 18:00
+수요일 09:00 ~ 18:00
+목요일 09:00 ~ 18:00
+금요일 09:00 ~ 18:00
+토요일 09:00 ~ 18:00
+일요일 09:00 ~ 18:00"
+                    rows="6"
                   />
                 </div>
-              ))}
               </div>
-              <div className="amount-button-group">
-                <button className="amount-gray-btn" onClick={handleAddNoticeImage}>추가</button>
-                <button className="amount-gray-btn" onClick={handleRemoveNoticeImage}>삭제</button>
-                <button className="store-button-d">등록</button>
-                <button className="store-button-e">변경</button>
+            </section>
+
+            {/* 매장 사진 */}
+            <section className="card">
+              <div className="card-header">
+                <div className="card-title">
+                  <span className="icon">📸</span>
+                  <h3>매장 사진</h3>
+                </div>
+                <p className="card-subtitle">
+                  매장의 모습을 보여주는 사진을 업로드하세요 (최대 5장)
+                </p>
               </div>
 
-              <textarea
-                className="notice-description"
-                placeholder="500자 이내로 입력해주세요"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
+              <div className="card-content">
+                <div className="image-grid">
+                  {storeImages.map((img, index) => (
+                    <div
+                      key={index}
+                      className="image-upload-box"
+                      onClick={() =>
+                        document.getElementById(`store-img-${index}`).click()
+                      }
+                    >
+                      <img src={img || seller_camera} alt="매장 사진" className="image" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id={`store-img-${index}`}
+                        style={{ display: "none" }}
+                        onChange={(e) => handleStoreImageChange(index, e)}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="button-group">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleAddStoreImage}
+                    disabled={storeImages.length >= 5}
+                  >
+                    사진 추가
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleRemoveStoreImage}
+                    disabled={storeImages.length === 0}
+                  >
+                    사진 삭제
+                  </button>
+                </div>
+              </div>
+            </section>
 
+            {/* 배달 설정 */}
+            <section className="card">
+              <div className="card-header">
+                <div className="card-title">
+                  <span className="icon">🚚</span>
+                  <h3>배달 설정</h3>
+                </div>
+                <p className="card-subtitle">
+                  배달 서비스 제공 여부와 배달비를 설정하세요
+                </p>
+              </div>
 
-            </div>
+              <div className="card-content">
+                <div className="form-field">
+                  <label className="label">배달 여부</label>
+                  <div className="radio-group">
+                    <label className="radio-item">
+                      <input
+                        type="radio"
+                        name="delivery"
+                        value="ACCEPT"
+                        checked={deliveryStatus === "ACCEPT"}
+                        onChange={() => setDeliveryStatus("ACCEPT")}
+                      />
+                      <span className="radio-label">배달 수락</span>
+                    </label>
+                    <label className="radio-item">
+                      <input
+                        type="radio"
+                        name="delivery"
+                        value="DECLINE"
+                        checked={deliveryStatus === "DECLINE"}
+                        onChange={() => setDeliveryStatus("DECLINE")}
+                      />
+                      <span className="radio-label">배달 거절</span>
+                    </label>
+                  </div>
+                </div>
+
+                {deliveryStatus === "ACCEPT" && (
+                  <>
+                    <div className="delivery-section">
+                      <label className="label">배달비 설정</label>
+                      <div className="delivery-fee-container">
+                        {amountInputs.map((input, index) => (
+                          <div key={index} className="delivery-fee-row">
+                            <input
+                              type="number"
+                              placeholder="최소 주문금액"
+                              value={input.min}
+                              onChange={(e) => handleChange(index, "min", e.target.value)}
+                              className="delivery-input"
+                            />
+                            <span className="text">원 이상</span>
+                            <input
+                              type="number"
+                              placeholder="배달비"
+                              value={input.fee}
+                              onChange={(e) => handleChange(index, "fee", e.target.value)}
+                              className="delivery-input"
+                              disabled={freeDelivery}
+                            />
+                            <span className="text">원</span>
+                          </div>
+                        ))}
+
+                        <div className="button-group">
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={handleAddInput}
+                          >
+                            구간 추가
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={handleRemoveInput}
+                            disabled={amountInputs.length <= 1}
+                          >
+                            구간 삭제
+                          </button>
+                        </div>
+
+                        <label className="checkbox-item">
+                          <input
+                            type="checkbox"
+                            checked={freeDelivery}
+                            onChange={(e) => setFreeDelivery(e.target.checked)}
+                          />
+                          <span className="checkbox-label">무료 배달</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="form-field">
+                      <label className="label">배달 가능 지역</label>
+                      <input
+                        type="text"
+                        className="input"
+                        placeholder="예: 복현동, 원대동, 침산동"
+                        value={deliveryArea}
+                        onChange={(e) => setDeliveryArea(e.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            </section>
+
+            {/* 가게 공지 */}
+            <section className="card">
+              <div className="card-header">
+                <div className="card-title">
+                  <span className="icon">📢</span>
+                  <h3>가게 공지</h3>
+                </div>
+                <p className="card-subtitle">
+                  고객에게 전달하고 싶은 공지사항을 작성하세요
+                </p>
+              </div>
+
+              <div className="card-content">
+                <div className="image-grid">
+                  {noticeImages.map((img, index) => (
+                    <div
+                      key={index}
+                      className="image-upload-box"
+                      onClick={() =>
+                        document.getElementById(`notice-img-${index}`).click()
+                      }
+                    >
+                      <img src={img || seller_camera} alt="공지 사진" className="image" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id={`notice-img-${index}`}
+                        style={{ display: "none" }}
+                        onChange={(e) => handleNoticeImageChange(index, e)}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="button-group">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleAddNoticeImage}
+                    disabled={noticeImages.length >= 5}
+                  >
+                    사진 추가
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleRemoveNoticeImage}
+                    disabled={noticeImages.length === 0}
+                  >
+                    사진 삭제
+                  </button>
+                </div>
+
+                <div className="form-field full-width">
+                  <label className="label">공지 내용</label>
+                  <textarea
+                    className="textarea"
+                    placeholder="고객에게 알리고 싶은 내용을 500자 이내로 작성해주세요"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    maxLength="500"
+                    rows="4"
+                  />
+                  <div className="char-counter">{description.length}/500</div>
+                </div>
+              </div>
+            </section>
           </div>
 
-        {/* 저장 및 취소 */}
-        <div className="store-form-group-aa">
-          <button className="store-button-f">저장</button>
-          <button className="store-button-g">취소</button>
-        </div>        
-
+          {/* 액션 버튼 */}
+          <div className="actions">
+            <button
+              className={`btn btn-primary ${loading ? "loading" : ""}`}
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? "저장 중..." : "매장 정보 저장"}
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => window.history.back()}
+              disabled={loading}
+            >
+              취소
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
