@@ -333,27 +333,6 @@ const Header = () => {
                             </div>
                         </div>
                     </div>
-                // 🔹 카테고리 메뉴 핸들러 추가
-  const handleCategoryMenuToggle = () => {
-                        console.log('🔵 Header 카테고리 버튼 클릭');
-                    setIsCategoryMenuOpen(!isCategoryMenuOpen);
-  };
-
-  const handleCategoryMenuClose = () => {
-                        console.log('🔴 Header 카테고리 메뉴 닫기');
-                    setIsCategoryMenuOpen(false);
-  };
-
-  const handleCategorySelect = (categoryData) => {
-                        console.log('🎯 Header에서 선택된 카테고리:', categoryData);
-                    setSelectedCategoryData(categoryData);
-
-                    // 임시 알림
-                    alert(`카테고리 선택됨: ${categoryData.name} (ID: ${categoryData.id})`);
-
-                    // 메뉴 닫기
-                    setIsCategoryMenuOpen(false);
-  };
                     <div className="head-mid">
                         <div className="head-mid-menu">
                             <div className="title-logo">
