@@ -662,3 +662,40 @@
 }
 /* ---------- 채팅창 뷰 부분 ---------- */
 /* ---------- 채팅 모듈 부분 ---------- */
+.messageInfo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.messageReadStatus {
+  display: flex;
+  align-items: center;
+}
+
+.readStatus {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 4px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.readStatus.read {
+  color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.readStatus.unread {
+  color: #9E9E9E;
+  background-color: rgba(158, 158, 158, 0.1);
+}
+
+.myMessage .messageInfo {
+  justify-content: flex-end;
+}
+
+.otherMessage .messageInfo {
+  justify-content: flex-start;
+}

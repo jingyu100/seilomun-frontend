@@ -18,6 +18,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   const {
     subscribeToRoom,
     unsubscribeFromRoom,
+    leaveRoom,
     sendMessage,
     getRoomMessages,
     setRoomMessages,
@@ -78,6 +79,16 @@ export default function ChatRoomView({ chatRoom, onBack }) {
     }
   };
 
+  // 읽음 상태 텍스트 반환 함수
+  const getReadStatusText = (message) => {
+    // 내가 보낸 메시지만 읽음 상태 표시
+    const isMyMessage = message.senderType === (user.userType === "CUSTOMER" ? "C" : "S");
+
+    if (!isMyMessage) return null; // 상대방 메시지는 읽음 상태 표시 안함
+
+    return message.read === 'Y' ? '읽음' : '안읽음';
+  };
+
   // 메시지 전송 핸들러
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
@@ -106,13 +117,14 @@ export default function ChatRoomView({ chatRoom, onBack }) {
 
   // 뒤로가기 버튼 클릭 시 마지막 메시지 갱신 후 onBack 호출
   const handleBackWithUpdate = () => {
-    // 마지막 메시지 추출
+    // 1. 마지막 메시지 추출
     const lastMsgArr = getRoomMessages(chatRoom.id);
     const lastMsg =
         lastMsgArr && lastMsgArr.length > 0
             ? lastMsgArr[lastMsgArr.length - 1].content
             : "";
-    // chatRooms의 해당 방 lastMessage 갱신
+
+    // 2. chatRooms의 해당 방 lastMessage 갱신
     if (lastMsg && setChatRooms) {
       setChatRooms((prevRooms) =>
           prevRooms.map((room) =>
@@ -121,9 +133,12 @@ export default function ChatRoomView({ chatRoom, onBack }) {
       );
     }
 
+    leaveRoom(chatRoom.id);
+    // 3. 해당 채팅방 구독 해제 (추가)
     unsubscribeFromRoom(chatRoom.id);
     console.log(`채팅방 ${chatRoom.id} 구독 해제됨 (뒤로가기)`);
 
+    // 4. 뒤로가기
     onBack();
   };
 
@@ -188,11 +203,21 @@ export default function ChatRoomView({ chatRoom, onBack }) {
                     >
                       <div className="messageContent">
                         <div className="messageText">{message.content}</div>
-                        <div className="messageTime">
-                          {new Date(message.timestamp).toLocaleTimeString("ko-KR", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                        <div className="messageInfo">
+                          <div className="messageTime">
+                            {new Date(message.timestamp).toLocaleTimeString("ko-KR", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </div>
+                          {/* 읽음 상태 표시 - 내가 보낸 메시지만 */}
+                          {message.senderType === (user.userType === "CUSTOMER" ? "C" : "S") && (
+                              <div className="messageReadStatus">
+                              <span className={`readStatus ${message.read === 'Y' ? 'read' : 'unread'}`}>
+                                {getReadStatusText(message)}
+                              </span>
+                              </div>
+                          )}
                         </div>
                       </div>
                     </div>
