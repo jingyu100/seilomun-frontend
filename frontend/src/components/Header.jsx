@@ -1,17 +1,18 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {useEffect, useState, useRef} from "react";
-import {Link} from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import AlarmContents from "./AlarmContents.jsx";
 import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
 import useNotifications from "../Hooks/useNotifications";
 import SemiHeader from "./SemiHeader.jsx";
+import CategoryMenu from "./sideBtn/CategoryMenu.jsx";
 import "../css/header/header.css"
 
 const Header = () => {
-    const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
-    const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotifications(
+    const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications(
         "http://localhost",
         "customer"
     );
@@ -200,7 +201,7 @@ const Header = () => {
                 await axios.post(
                     `http://localhost/api/search/history?keyword=${encodeURIComponent(trimmed)}`,
                     {},
-                    {withCredentials: true}
+                    { withCredentials: true }
                 );
             } catch (err) {
                 console.error("검색 기록 저장 실패:", err);
@@ -264,7 +265,7 @@ const Header = () => {
         try {
             await axios.delete(
                 `http://localhost/api/search/history?keyword=${encodeURIComponent(keyword)}`,
-                {withCredentials: true}
+                { withCredentials: true }
             );
 
             // 검색 기록 다시 불러오기
@@ -332,7 +333,27 @@ const Header = () => {
                             </div>
                         </div>
                     </div>
+                // 🔹 카테고리 메뉴 핸들러 추가
+  const handleCategoryMenuToggle = () => {
+                        console.log('🔵 Header 카테고리 버튼 클릭');
+                    setIsCategoryMenuOpen(!isCategoryMenuOpen);
+  };
 
+  const handleCategoryMenuClose = () => {
+                        console.log('🔴 Header 카테고리 메뉴 닫기');
+                    setIsCategoryMenuOpen(false);
+  };
+
+  const handleCategorySelect = (categoryData) => {
+                        console.log('🎯 Header에서 선택된 카테고리:', categoryData);
+                    setSelectedCategoryData(categoryData);
+
+                    // 임시 알림
+                    alert(`카테고리 선택됨: ${categoryData.name} (ID: ${categoryData.id})`);
+
+                    // 메뉴 닫기
+                    setIsCategoryMenuOpen(false);
+  };
                     <div className="head-mid">
                         <div className="head-mid-menu">
                             <div className="title-logo">
@@ -420,10 +441,10 @@ const Header = () => {
                                                         <div className="search-section-header">
                                                             <h4 className="search-section-title">
                                                                 <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                     fill="none" className="search-icon-small">
+                                                                    fill="none" className="search-icon-small">
                                                                     <path
                                                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                                                                        fill="currentColor"/>
+                                                                        fill="currentColor" />
                                                                 </svg>
                                                                 최근 검색어
                                                             </h4>
@@ -447,8 +468,8 @@ const Header = () => {
                                                                             onMouseDown={() => handleSearchTermClick(typeof item === "string" ? item : item.keyword)}
                                                                         >
                                                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="history-icon">
-                                                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                                                                                <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
+                                                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                                                                                <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2" />
                                                                             </svg>
                                                                             {typeof item === "string" ? item : item.keyword}
                                                                         </span>
@@ -458,10 +479,10 @@ const Header = () => {
                                                                             title="삭제"
                                                                         >
                                                                             <svg width="12" height="12" viewBox="0 0 24 24"
-                                                                                 fill="none">
+                                                                                fill="none">
                                                                                 <path d="M18 6L6 18M6 6l12 12"
-                                                                                      stroke="currentColor" strokeWidth="2"
-                                                                                      strokeLinecap="round"/>
+                                                                                    stroke="currentColor" strokeWidth="2"
+                                                                                    strokeLinecap="round" />
                                                                             </svg>
                                                                         </button>
                                                                     </li>
@@ -478,8 +499,8 @@ const Header = () => {
                                                                 fontSize: '14px'
                                                             }}>
                                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ marginBottom: '8px', opacity: '0.5' }}>
-                                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                                                                    <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
+                                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                                                                    <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2" />
                                                                 </svg>
                                                                 <p style={{ margin: '0' }}>
                                                                     {!isLoggedIn ? '로그인 후 검색기록을 확인하세요' : '검색기록이 없습니다'}
@@ -500,10 +521,10 @@ const Header = () => {
                                                         <div className="search-section-header">
                                                             <h4 className="search-section-title">
                                                                 <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                     fill="none" className="search-icon-small">
+                                                                    fill="none" className="search-icon-small">
                                                                     <polygon
                                                                         points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-                                                                        fill="currentColor"/>
+                                                                        fill="currentColor" />
                                                                 </svg>
                                                                 인기 검색어
                                                             </h4>
@@ -521,10 +542,10 @@ const Header = () => {
                                                                         <span
                                                                             className="search-item-text popular-text">{item.keyword}</span>
                                                                         <svg width="12" height="12" viewBox="0 0 24 24"
-                                                                             fill="none" className="trending-icon">
+                                                                            fill="none" className="trending-icon">
                                                                             <path d="M7 17L17 7M17 7H8M17 7V16"
-                                                                                  stroke="currentColor" strokeWidth="2"
-                                                                                  strokeLinecap="round"/>
+                                                                                stroke="currentColor" strokeWidth="2"
+                                                                                strokeLinecap="round" />
                                                                         </svg>
                                                                     </li>
                                                                 ))}
@@ -537,7 +558,7 @@ const Header = () => {
                                                                 fontSize: '14px'
                                                             }}>
                                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ marginBottom: '8px', opacity: '0.5' }}>
-                                                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor"/>
+                                                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor" />
                                                                 </svg>
                                                                 <p style={{ margin: '0' }}>인기 검색어가 없습니다</p>
                                                             </div>
@@ -555,11 +576,11 @@ const Header = () => {
                                                             <div className="search-section-header">
                                                                 <h4 className="search-section-title">
                                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                                                         className="search-icon-small">
+                                                                        className="search-icon-small">
                                                                         <circle cx="10.412" cy="10.412" r="7.482"
-                                                                                stroke="currentColor" strokeWidth="1.5"/>
+                                                                            stroke="currentColor" strokeWidth="1.5" />
                                                                         <path d="M16.706 16.706L21 21" stroke="currentColor"
-                                                                              strokeWidth="1.5"/>
+                                                                            strokeWidth="1.5" />
                                                                     </svg>
                                                                     자동완성
                                                                 </h4>
@@ -575,9 +596,9 @@ const Header = () => {
                                                                             {typeof s === "string" ? s : s.keyword}
                                                                         </span>
                                                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                                                                             className="arrow-icon">
+                                                                            className="arrow-icon">
                                                                             <path d="M7 13L12 18L17 13M7 6L12 11L17 6"
-                                                                                  stroke="currentColor" strokeWidth="2"/>
+                                                                                stroke="currentColor" strokeWidth="2" />
                                                                         </svg>
                                                                     </li>
                                                                 ))}
@@ -594,14 +615,14 @@ const Header = () => {
                                                                 color: '#6b7280'
                                                             }}>
                                                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
-                                                                     className="empty-icon" style={{
-                                                                    color: '#d1d5db',
-                                                                    marginBottom: '12px'
-                                                                }}>
+                                                                    className="empty-icon" style={{
+                                                                        color: '#d1d5db',
+                                                                        marginBottom: '12px'
+                                                                    }}>
                                                                     <circle cx="10.412" cy="10.412" r="7.482"
-                                                                            stroke="currentColor" strokeWidth="1.5"/>
+                                                                        stroke="currentColor" strokeWidth="1.5" />
                                                                     <path d="M16.706 16.706L21 21" stroke="currentColor"
-                                                                          strokeWidth="1.5"/>
+                                                                        strokeWidth="1.5" />
                                                                 </svg>
                                                                 <p style={{
                                                                     fontSize: '14px',
@@ -648,9 +669,9 @@ const Header = () => {
                                                 <div className="search-section-header">
                                                     <h4 className="search-section-title">
                                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                                             className="search-icon-small">
+                                                            className="search-icon-small">
                                                             <path d="M20 6L9 17L4 12" stroke="currentColor"
-                                                                  strokeWidth="2" strokeLinecap="round"/>
+                                                                strokeWidth="2" strokeLinecap="round" />
                                                         </svg>
                                                         검색 결과
                                                     </h4>
@@ -672,24 +693,24 @@ const Header = () => {
                                                             >
                                                                 <div className="result-content">
                                                                     <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                         fill="none" className="product-icon">
+                                                                        fill="none" className="product-icon">
                                                                         <rect x="2" y="3" width="20" height="14"
-                                                                              rx="2" ry="2" stroke="currentColor"
-                                                                              strokeWidth="2"/>
+                                                                            rx="2" ry="2" stroke="currentColor"
+                                                                            strokeWidth="2" />
                                                                         <line x1="8" y1="21" x2="16" y2="21"
-                                                                              stroke="currentColor"
-                                                                              strokeWidth="2"/>
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2" />
                                                                         <line x1="12" y1="17" x2="12" y2="21"
-                                                                              stroke="currentColor"
-                                                                              strokeWidth="2"/>
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2" />
                                                                     </svg>
                                                                     <span
                                                                         className="result-name">{product.name}</span>
                                                                     <svg width="12" height="12" viewBox="0 0 24 24"
-                                                                         fill="none" className="arrow-icon">
+                                                                        fill="none" className="arrow-icon">
                                                                         <path d="M9 18L15 12L9 6"
-                                                                              stroke="currentColor"
-                                                                              strokeWidth="2"/>
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2" />
                                                                     </svg>
                                                                 </div>
                                                             </Link>
@@ -785,7 +806,7 @@ const Header = () => {
                                                     <li>장바구니에 담긴 상품이 없습니다.</li>
                                                     <li>
                                                         <a href="">
-                                                            <img src="" alt=""/>
+                                                            <img src="" alt="" />
                                                             <p>
                                                                 <span>
                                                                     <span>상품 이름</span>
