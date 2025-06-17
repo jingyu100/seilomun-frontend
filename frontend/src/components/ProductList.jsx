@@ -65,7 +65,7 @@ const ProductList = () => {
             <div className="product_text">
               <h3 className="product_name">{product.name}</h3>
               <div className="product_info">
-                <span className="product_price">{product.discountPrice?.toLocaleString()}원</span>
+                <span className="product_price">{product.discountedPrice?.toLocaleString()}원</span>
                 <div className="product_price_container">
                   <span className="product_regularprice">{product.originalPrice?.toLocaleString()}원</span>
                   {product.discountRate && (

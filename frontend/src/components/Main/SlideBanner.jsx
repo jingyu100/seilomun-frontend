@@ -5,14 +5,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "../../css/customer/Banner.css";
 
-const bannerData = [
+const rawBannerData = [
   { src: "../image/banner/BannerSP1.jpg", link: "#" },
   { src: "../image/banner/BannerSP2.jfif", link: "#" },
   { src: "../image/banner/BannerSP3.jfif", link: "#" },
-  { src: "../image/banner/BannerSP3.jfif", link: "#" },
 ];
 
-export default function SlideBanner() {
+const extendedBannerData = [
+  rawBannerData[rawBannerData.length - 2],
+  ...rawBannerData,
+];
+
+export default function SlideBannerPerfectLoop() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
@@ -28,41 +32,14 @@ export default function SlideBanner() {
 
   return (
     <div className="bannerWrapper">
-      {/* 왼쪽 버튼 */}
-      <div
-        className="bannerNav-left"
-        ref={prevRef}
-        onClick={() => swiperRef.current?.slidePrev()}
-        onMouseEnter={() => swiperRef.current?.autoplay.stop()}
-        onMouseLeave={() => swiperRef.current?.autoplay.start()}
-      >
+      <div className="bannerNav-left" ref={prevRef}>
         <svg width="25" height="35" viewBox="0 0 10 18" fill="none">
-          <path
-            stroke="#ffffff"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M8.5 16.5L1 9l7.5-7.5"
-          ></path>
+          <path d="M8.5 16.5L1 9l7.5-7.5" stroke="#ffffff" strokeWidth="2" />
         </svg>
       </div>
-
-      {/* 오른쪽 버튼 */}
-      <div
-        className="bannerNav-right"
-        ref={nextRef}
-        onClick={() => swiperRef.current?.slideNext()}
-        onMouseEnter={() => swiperRef.current?.autoplay.stop()}
-        onMouseLeave={() => swiperRef.current?.autoplay.start()}
-      >
+      <div className="bannerNav-right" ref={nextRef}>
         <svg width="25" height="35" viewBox="0 0 10 18" fill="none">
-          <path
-            stroke="#ffffff"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M1.5 16.5L9 9 1.5 1.5"
-          ></path>
+          <path d="M1.5 16.5L9 9 1.5 1.5" stroke="#ffffff" strokeWidth="2" />
         </svg>
       </div>
 
@@ -70,12 +47,13 @@ export default function SlideBanner() {
         modules={[Navigation, Autoplay]}
         loop={true}
         centeredSlides={true}
+        loopedSlides={extendedBannerData.length}
         slidesPerView={1.5}
         spaceBetween={20}
         autoplay={{ delay: 3500, disableOnInteraction: false }}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
       >
-        {bannerData.map((banner, index) => (
+        {extendedBannerData.map((banner, index) => (
           <SwiperSlide key={index} className="bannerSlide">
             <a href={banner.link}>
               <img src={banner.src} alt={`배너 ${index}`} />

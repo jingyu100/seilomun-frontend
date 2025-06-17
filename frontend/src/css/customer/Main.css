@@ -255,6 +255,7 @@
 }
 
 .product_name {
+  display: flex;
   width: 190px;
   font-size: 15px;
   font-weight: bold;
@@ -341,6 +342,7 @@
 }
 
 .NM_product_name {
+  display: flex;
   width: 230px;
   font-size: 18px;
   font-weight: bold;

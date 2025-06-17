@@ -277,3 +277,19 @@
     transform: scale(1.05);
   }
 /* ---------- 스토어 제품 카드 부분 ---------- */
+
+
+
+/* ---------- 스토어 제품 카드 부분 ---------- */
+.storeInfo-inner {
+    margin: 15px 25px;
+}
+
+.notification-images {
+    display: grid;
+    width: auto;
+    gap: 15px;
+    margin: 15px;
+    /* justify-items: center; */
+}
+/* ---------- 스토어 제품 카드 부분 ---------- */

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useNotifications from "../../Hooks/useNotifications";
 import AlarmViewModule from "./AlarmViewModule";
 import SideAlarmBtn from './SideAlarmBtn.jsx';
 import SideCartBtn from './SideCartBtn.jsx';
@@ -7,6 +8,11 @@ import SideChatBtn from './SideChatBtn.jsx';
 function SideMenuBtn () {
    const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
    const [isChatModalOpen, setIsModalOpen] = useState(false);
+
+   const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotifications(
+           "http://localhost",
+           "customer"
+       );
 
    const toggleAlarmModal = () => {
       setIsAlarmModalOpen(isAlarmModalOpen => !isAlarmModalOpen);
@@ -47,7 +53,11 @@ function SideMenuBtn () {
             <img src="/image/icon/icon-up-arrow.png" alt="up" className="sideBtnIcon" />
          </a>
 
-         <SideAlarmBtn />
+         <SideAlarmBtn
+            notifications={notifications}
+            markAllAsRead={markAllAsRead}
+            markAsRead={markAsRead}
+          />
          <SideCartBtn />
          <SideChatBtn />
       </div>

@@ -32,7 +32,7 @@ function MainLastSP() {
 
 
   const getThumbnailUrl = (product) => {
-    const url = product.imageUrl || product.photoUrl?.[0];
+    const url = product.thumbnailUrl;
   
     if (!url) return "/image/product1.jpg";
   
@@ -44,9 +44,9 @@ function MainLastSP() {
   const ProductCard = ({ product }) => {
     return (
       <Link
-        to={`/sellers/${product.sellerId}/products/${product.id}`}
-        className="product_card"
-        style={{ textDecoration: "none", color: "inherit" }}
+          to={`/sellers/${product.sellerId}/products/${product.id}`}
+          className="product_card"
+          style={{ textDecoration: "none", color: "inherit" }}
       >
         <img
           src={getThumbnailUrl(product)}
@@ -56,7 +56,7 @@ function MainLastSP() {
         <div className="product_text">
           <h3 className="product_name">{product.name}</h3>
           <div className="product_info">
-            <span className="product_price">{product.discountPrice?.toLocaleString()}원</span>
+            <span className="product_price">{product.discountedPrice?.toLocaleString()}원</span>
             <div className="product_price_container">
               <span className="product_regularprice">{product.originalPrice?.toLocaleString()}원</span>
               {product.discountRate && (
