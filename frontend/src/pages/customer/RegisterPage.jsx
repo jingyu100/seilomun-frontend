@@ -118,7 +118,7 @@ function RegisterPage() {
   const handleVerifyPhoneCode = () => {
     if (phoneAuthCode.trim().length > 0) {
       alert("휴대폰 인증이 완료되었습니다.");
-      setIsPhoneVerified(true);
+      setIsPhoneVerified(true); // ✅ 별도 서버 요청 없이 검증 완료 처리
       setPhoneTimeLeft(0);
     } else {
       alert("인증번호를 입력해주세요.");
@@ -230,8 +230,7 @@ function RegisterPage() {
       phone,
       address: `${address} ${addressDetail}`,
       birthdate: birth,
-      postCode,
-      verificationCode: authCode,
+      verificationCode: phoneAuthCode, // ✅ 휴대폰 인증번호를 여기 포함
     };
 
     try {
