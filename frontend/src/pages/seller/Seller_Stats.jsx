@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
+import Seller_Header from "../../components/seller/Seller_Header.jsx";
+import "../../css/seller/Seller_stats.css";
 
 // Chart.js 전역 등록
 Chart.register(...registerables);
@@ -369,200 +371,177 @@ const Seller_Stats = () => {
     const summaryData = getSummaryData();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-purple-600 p-5">
-            <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8 text-center">
-                    <h1 className="text-4xl font-bold mb-3">📊 판매자 통계 대시보드</h1>
-                    <p className="text-lg opacity-90">매출 및 주문 현황을 다양한 기간별로 확인하세요</p>
-                </div>
+        <div>
+            {/* Seller Header */}
+            <Seller_Header />
 
-                {/* Controls */}
-                <div className="p-8 bg-slate-50 border-b border-slate-200">
-                    {/* View Toggle */}
-                    <div className="flex flex-wrap justify-center gap-3 mb-6">
-                        <button
-                            onClick={() => handleViewModeChange('daily')}
-                            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
-                                currentViewMode === 'daily'
-                                    ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
-                                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-red-300'
-                            }`}
-                        >
-                            📅 일별 보기
-                        </button>
-                        <button
-                            onClick={() => handleViewModeChange('weekly')}
-                            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
-                                currentViewMode === 'weekly'
-                                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
-                                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-purple-300'
-                            }`}
-                        >
-                            📈 주간별 보기
-                        </button>
-                        <button
-                            onClick={() => handleViewModeChange('monthly')}
-                            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
-                                currentViewMode === 'monthly'
-                                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-lg'
-                                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-indigo-300'
-                            }`}
-                        >
-                            📊 월별 보기
-                        </button>
-                        <button
-                            onClick={() => handleViewModeChange('quarterly')}
-                            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
-                                currentViewMode === 'quarterly'
-                                    ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
-                                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'
-                            }`}
-                        >
-                            📋 분기별 보기
-                        </button>
-                        <button
-                            onClick={() => handleViewModeChange('yearly')}
-                            className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-sm ${
-                                currentViewMode === 'yearly'
-                                    ? 'bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg'
-                                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-orange-300'
-                            }`}
-                        >
-                            🎯 연도별 보기
-                        </button>
+            {/* 메인 통계 컨텐츠 */}
+            <div className="seller-stats">
+                <div className="stats-container">
+                    {/* Header */}
+                    <div className="stats-header">
+                        <h1 className="stats-title">📊 판매자 통계 대시보드</h1>
+                        <p className="stats-subtitle">매출 및 주문 현황을 다양한 기간별로 확인하세요</p>
                     </div>
 
-                    {/* Filter Controls */}
-                    <div className="flex flex-wrap justify-center items-center gap-5">
-                        <div className="flex flex-col gap-2">
-                            <label className="font-semibold text-gray-700 text-sm">연도</label>
-                            <select
-                                value={selectedYear || ''}
-                                onChange={(e) => setSelectedYear(e.target.value ? parseInt(e.target.value) : '')}
-                                className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors min-w-36"
+                    {/* Controls */}
+                    <div className="stats-controls">
+                        {/* View Toggle */}
+                        <div className="view-toggle">
+                            <button
+                                onClick={() => handleViewModeChange('daily')}
+                                className={`toggle-btn ${currentViewMode === 'daily' ? 'active daily' : ''}`}
                             >
-                                <option value="">전체</option>
-                                {yearOptions().map(year => (
-                                    <option key={year} value={year}>{year}년</option>
-                                ))}
-                            </select>
+                                📅 일별 보기
+                            </button>
+                            <button
+                                onClick={() => handleViewModeChange('weekly')}
+                                className={`toggle-btn ${currentViewMode === 'weekly' ? 'active weekly' : ''}`}
+                            >
+                                📈 주간별 보기
+                            </button>
+                            <button
+                                onClick={() => handleViewModeChange('monthly')}
+                                className={`toggle-btn ${currentViewMode === 'monthly' ? 'active monthly' : ''}`}
+                            >
+                                📊 월별 보기
+                            </button>
+                            <button
+                                onClick={() => handleViewModeChange('quarterly')}
+                                className={`toggle-btn ${currentViewMode === 'quarterly' ? 'active quarterly' : ''}`}
+                            >
+                                📋 분기별 보기
+                            </button>
+                            <button
+                                onClick={() => handleViewModeChange('yearly')}
+                                className={`toggle-btn ${currentViewMode === 'yearly' ? 'active yearly' : ''}`}
+                            >
+                                🎯 연도별 보기
+                            </button>
                         </div>
 
-                        {shouldShowMonthSelector() && (
-                            <div className="flex flex-col gap-2">
-                                <label className="font-semibold text-gray-700 text-sm">월</label>
+                        {/* Filter Controls */}
+                        <div className="filter-controls">
+                            <div className="filter-group">
+                                <label className="filter-label">연도</label>
                                 <select
-                                    value={selectedMonth}
-                                    onChange={(e) => setSelectedMonth(e.target.value)}
-                                    className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors min-w-36"
+                                    value={selectedYear || ''}
+                                    onChange={(e) => setSelectedYear(e.target.value ? parseInt(e.target.value) : '')}
+                                    className="filter-select"
                                 >
                                     <option value="">전체</option>
-                                    {monthOptions.map(month => (
-                                        <option key={month.value} value={month.value}>{month.label}</option>
+                                    {yearOptions().map(year => (
+                                        <option key={year} value={year}>{year}년</option>
                                     ))}
                                 </select>
                             </div>
-                        )}
 
-                        <button
-                            onClick={loadStats}
-                            disabled={loading}
-                            className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? '📊 로딩중...' : '📊 통계 조회'}
-                        </button>
+                            {shouldShowMonthSelector() && (
+                                <div className="filter-group">
+                                    <label className="filter-label">월</label>
+                                    <select
+                                        value={selectedMonth}
+                                        onChange={(e) => setSelectedMonth(e.target.value)}
+                                        className="filter-select"
+                                    >
+                                        <option value="">전체</option>
+                                        {monthOptions.map(month => (
+                                            <option key={month.value} value={month.value}>{month.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+
+                            <button
+                                onClick={loadStats}
+                                disabled={loading}
+                                className="load-stats-btn"
+                            >
+                                {loading ? '📊 로딩중...' : '📊 통계 조회'}
+                            </button>
+                        </div>
                     </div>
+
+                    {/* Loading */}
+                    {loading && (
+                        <div className="loading-section">
+                            <p>📊 데이터를 불러오는 중...</p>
+                        </div>
+                    )}
+
+                    {/* Error */}
+                    {error && (
+                        <div className="error-section">
+                            <div className="error-box">
+                                <p>❌ 데이터를 불러오는 중 오류가 발생했습니다.</p>
+                                <p className="error-detail">백엔드 서버 연결을 확인해주세요.</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* No Data */}
+                    {showStats && statsData.length === 0 && (
+                        <div className="no-data-section">
+                            <div className="no-data-box">
+                                <p className="no-data-title">📊 해당 조건의 판매 데이터가 없습니다.</p>
+                                <p className="no-data-detail">다른 기간을 선택해보세요.</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Stats Content */}
+                    {showStats && statsData.length > 0 && (
+                        <>
+                            {/* Period Info */}
+                            <div className="period-info">
+                                <div className="period-box">
+                                    <h4 className="period-title">{getPeriodText()} 조회</h4>
+                                    <span className="period-count">총 {statsData.length}개 데이터</span>
+                                </div>
+                            </div>
+
+                            {/* Summary Cards */}
+                            <div className="summary-section">
+                                <div className="summary-cards">
+                                    <div className="summary-card">
+                                        <h3 className="card-title">💰 총 매출</h3>
+                                        <p className="card-value">{formatCurrency(summaryData.totalSales)}</p>
+                                        <div className="card-subtitle">{getPeriodText()}</div>
+                                    </div>
+
+                                    <div className="summary-card">
+                                        <h3 className="card-title">📦 총 주문수</h3>
+                                        <p className="card-value">{summaryData.totalOrders.toLocaleString()}건</p>
+                                        <div className="card-subtitle">{getPeriodText()}</div>
+                                    </div>
+
+                                    <div className="summary-card">
+                                        <h3 className="card-title">💳 평균 주문금액</h3>
+                                        <p className="card-value">{formatCurrency(summaryData.avgOrderValue)}</p>
+                                        <div className="card-subtitle">주문당 평균</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Charts */}
+                            <div className="charts-section">
+                                <div className="chart-container">
+                                    <div className="chart-title">💰 {getPeriodText()} 매출 현황</div>
+                                    <div className="chart-wrapper">
+                                        <canvas ref={salesChartRef}></canvas>
+                                    </div>
+                                </div>
+
+                                <div className="chart-container">
+                                    <div className="chart-title">📦 {getPeriodText()} 주문 현황</div>
+                                    <div className="chart-wrapper">
+                                        <canvas ref={orderChartRef}></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
-
-                {/* Loading */}
-                {loading && (
-                    <div className="text-center py-12 text-gray-600 text-lg">
-                        <p>📊 데이터를 불러오는 중...</p>
-                    </div>
-                )}
-
-                {/* Error */}
-                {error && (
-                    <div className="text-center py-8 mx-5">
-                        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-600">
-                            <p>❌ 데이터를 불러오는 중 오류가 발생했습니다.</p>
-                            <p className="text-sm mt-2">백엔드 서버 연결을 확인해주세요.</p>
-                        </div>
-                    </div>
-                )}
-
-                {/* No Data */}
-                {showStats && statsData.length === 0 && (
-                    <div className="text-center py-12 mx-5">
-                        <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 text-gray-600">
-                            <p className="text-lg mb-2">📊 해당 조건의 판매 데이터가 없습니다.</p>
-                            <p className="text-sm">다른 기간을 선택해보세요.</p>
-                        </div>
-                    </div>
-                )}
-
-                {/* Stats Content */}
-                {showStats && statsData.length > 0 && (
-                    <>
-                        {/* Period Info */}
-                        <div className="px-8 pt-5">
-                            <div className="flex justify-between items-center mb-5 p-4 bg-slate-100 rounded-xl border-l-4 border-indigo-500">
-                                <h4 className="text-lg font-semibold text-gray-800">
-                                    {getPeriodText()} 조회
-                                </h4>
-                                <span className="text-gray-600 text-sm">총 {statsData.length}개 데이터</span>
-                            </div>
-                        </div>
-
-                        {/* Summary Cards */}
-                        <div className="px-8 pb-8 bg-slate-50">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 to-purple-600"></div>
-                                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">💰 총 매출</h3>
-                                    <p className="text-3xl font-bold text-gray-800 mb-2">{formatCurrency(summaryData.totalSales)}</p>
-                                    <div className="text-sm text-gray-500">{getPeriodText()}</div>
-                                </div>
-
-                                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 to-purple-600"></div>
-                                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">📦 총 주문수</h3>
-                                    <p className="text-3xl font-bold text-gray-800 mb-2">{summaryData.totalOrders.toLocaleString()}건</p>
-                                    <div className="text-sm text-gray-500">{getPeriodText()}</div>
-                                </div>
-
-                                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 to-purple-600"></div>
-                                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">💳 평균 주문금액</h3>
-                                    <p className="text-3xl font-bold text-gray-800 mb-2">{formatCurrency(summaryData.avgOrderValue)}</p>
-                                    <div className="text-sm text-gray-500">주문당 평균</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Charts */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-                            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-                                <div className="text-xl font-bold text-gray-800 mb-5 text-center pb-4 border-b-2 border-gray-100">
-                                    💰 {getPeriodText()} 매출 현황
-                                </div>
-                                <div className="relative h-80">
-                                    <canvas ref={salesChartRef}></canvas>
-                                </div>
-                            </div>
-
-                            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-                                <div className="text-xl font-bold text-gray-800 mb-5 text-center pb-4 border-b-2 border-gray-100">
-                                    📦 {getPeriodText()} 주문 현황
-                                </div>
-                                <div className="relative h-80">
-                                    <canvas ref={orderChartRef}></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                )}
             </div>
         </div>
     );
