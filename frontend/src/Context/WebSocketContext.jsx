@@ -127,6 +127,34 @@ export function WebSocketProvider({ children }) {
                 const chatMessage = JSON.parse(message.body);
                 console.log("수신된 메시지:", chatMessage);
 
+                // 상대방 입장 알림 처리
+                if (chatMessage.type === "JOIN" && chatMessage.content === "USER_ENTER") {
+                  console.log("상대방이 채팅방에 입장했습니다!");
+
+                  // 내가 보낸 안읽은 메시지들을 읽음으로 변경
+                  const myUserType = user.userType === "CUSTOMER" ? "C" : "S";
+
+                  setMessages((prev) => {
+                    const currentMessages = prev[chatRoomId] || [];
+                    const updatedMessages = currentMessages.map(msg => {
+                      // 내가 보낸 메시지이면서 안읽음인 경우 읽음으로 변경
+                      if (msg.senderType === myUserType && msg.read === 'N') {
+                        return { ...msg, read: 'Y' };
+                      }
+                      return msg;
+                    });
+
+                    return {
+                      ...prev,
+                      [chatRoomId]: updatedMessages,
+                    };
+                  });
+
+                  // 입장 알림은 채팅 목록에 추가하지 않음 (알림만 처리)
+                  return;
+                }
+
+                //  일반 채팅 메시지 처리
                 setMessages((prev) => ({
                   ...prev,
                   [chatRoomId]: [...(prev[chatRoomId] || []), chatMessage],
