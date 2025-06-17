@@ -10,6 +10,7 @@ import SemiHeader from "./SemiHeader.jsx";
 import CategoryMenu from "./sideBtn/CategoryMenu.jsx";
 import "../css/header/header.css"
 import {useSearchParams} from "react-router-dom";
+import { useCart } from "../Context/CartContext";
 
 const Header = () => {
     const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
@@ -17,41 +18,150 @@ const Header = () => {
         "http://localhost",
         "customer"
     );
+    const { cartItems, setCartItems, removeFromCart } = useCart();
 
     const [searchParams] = useSearchParams();
     const keywordFromURL = searchParams.get("keyword") || "";
-    // const [searchTerm, setSearchTerm] = useState("");
     const [searchTerm, setSearchTerm] = useState(keywordFromURL);
 
     const navigate = useNavigate();
-    const location = useLocation(); // 🔹 현재 위치 정보 가져오기
+    const location = useLocation();
 
     const [suggestions, setSuggestions] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-    // 🔹 검색 기록과 인기 검색어를 별도 상태로 분리
     const [searchHistory, setSearchHistory] = useState([]);
     const [popularKeywords, setPopularKeywords] = useState([]);
 
     const [searchResults, setSearchResults] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
 
-    // 🔹 카테고리 메뉴 상태 추가
     const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
     const [selectedCategoryData, setSelectedCategoryData] = useState(null);
     const categoryButtonRef = useRef(null);
 
-    // 🔹 현재 활성 메뉴를 판별하는 함수
+    // 🛒 장바구니 관련 상태 추가
+    const [cartLoading, setCartLoading] = useState(false);
+    const [cartError, setCartError] = useState(null);
+
+    // 🛒 장바구니 데이터 로딩 함수
+    const loadCartData = async () => {
+        if (!isLoggedIn) {
+            setCartItems([]);
+            return;
+        }
+
+        setCartLoading(true);
+        setCartError(null);
+
+        try {
+            // 1단계: 장바구니 목록 조회
+            const cartResponse = await axios.get('http://localhost/api/carts', {
+                withCredentials: true
+            });
+
+            const cartData = cartResponse.data?.data;
+
+            if (!cartData || !cartData.products || Object.keys(cartData.products).length === 0) {
+                setCartItems([]);
+                return;
+            }
+
+            // 2단계: 각 상품의 상세 정보 조회
+            const productPromises = Object.entries(cartData.products).map(async ([productId, quantity]) => {
+                try {
+                    const productResponse = await axios.get(`http://localhost/api/products/${productId}`, {
+                        withCredentials: true
+                    });
+
+                    const product = productResponse.data?.data?.Products;
+
+                    if (!product) {
+                        return null;
+                    }
+
+                    return {
+                        productId: parseInt(productId),
+                        name: product.name || '상품명 없음',
+                        description: product.description || '',
+                        originalPrice: product.originalPrice || 0,
+                        discountPrice: product.discountPrice || product.originalPrice || 0,
+                        currentDiscountRate: product.currentDiscountRate || 0,
+                        quantity: quantity,
+                        stockQuantity: product.stockQuantity || 0,
+                        expiryDate: product.expiryDate || '',
+                        thumbnailUrl: product.photoUrl && product.photoUrl.length > 0 ? product.photoUrl[0] : null,
+                        photoUrls: product.photoUrl || [],
+                        seller: product.seller || {},
+                        categoryId: product.categoryId || 0,
+                        status: product.status || '1'
+                    };
+                } catch (error) {
+                    console.error(`상품 ${productId} 조회 실패:`, error);
+                    return null;
+                }
+            });
+
+            const productDetails = await Promise.all(productPromises);
+            const validProducts = productDetails.filter(item => item !== null);
+            setCartItems(validProducts);
+
+        } catch (error) {
+            console.error("장바구니 데이터 로딩 실패:", error);
+            setCartError("장바구니 데이터를 불러오는데 실패했습니다.");
+        } finally {
+            setCartLoading(false);
+        }
+    };
+
+    // 🛒 컴포넌트 마운트 시와 로그인 상태 변경 시 장바구니 데이터 로딩
+    useEffect(() => {
+        loadCartData();
+    }, [isLoggedIn]);
+
+    // 🛒 장바구니에서 상품 삭제
+    const handleRemoveFromCart = async (productId) => {
+        try {
+            // 1. 낙관적 업데이트: 먼저 UI에서 제거
+            const updatedCartItems = cartItems.filter(item => item.productId !== productId);
+            setCartItems(updatedCartItems);
+
+            // 2. 서버에서 삭제 API 호출
+            await axios.delete(`http://localhost/api/carts/${productId}`, {
+                withCredentials: true
+            });
+
+            console.log(`상품 ${productId} 삭제 완료`);
+        } catch (error) {
+            console.error("서버 삭제 실패:", error);
+
+            // 서버 삭제 실패 시 원래 상태로 복구
+            await loadCartData();
+
+            // 사용자에게 알림
+            alert("상품 삭제에 실패했습니다. 다시 시도해주세요.");
+        }
+    };
+
+    // 🛒 유효기간 포맷팅 함수
+    const formatExpiryDate = (expiryDate) => {
+        if (!expiryDate) return '';
+        try {
+            return new Date(expiryDate).toLocaleDateString('ko-KR');
+        } catch (error) {
+            return '';
+        }
+    };
+
+    // 현재 활성 메뉴를 판별하는 함수
     const getActiveMenu = () => {
         const { pathname, search } = location;
 
-        // 홈 페이지
         if (pathname === '/') {
             return 'home';
         }
 
-        // NEW 페이지 (filterType=RECENT 또는 keyword가 있는 /new 페이지)
         if (pathname === '/new') {
             const urlParams = new URLSearchParams(search);
             const filterType = urlParams.get('filterType');
@@ -63,16 +173,13 @@ const Header = () => {
             if (filterType === 'EXPIRING_SOON') {
                 return 'expiring';
             }
-            // filterType이 없는 경우도 NEW로 간주
             return 'new';
         }
 
-        // 주문 목록
         if (pathname === '/OrderList') {
             return 'orders';
         }
 
-        // 위시리스트
         if (pathname === '/wish') {
             return 'wishlist';
         }
@@ -82,7 +189,6 @@ const Header = () => {
 
     const activeMenu = getActiveMenu();
 
-    // 🔹 메뉴 스타일을 동적으로 적용하는 함수
     const getMenuStyle = (menuType) => {
         if (activeMenu === menuType) {
             return {
@@ -93,8 +199,7 @@ const Header = () => {
         return {};
     };
 
-
-    // 🔹 검색 기록 로드 (로그인된 사용자만)
+    // 검색 기록 로드
     useEffect(() => {
         if (isLoggedIn && isDropdownVisible && searchTerm.trim() === "") {
             const fetchSearchHistory = async () => {
@@ -115,12 +220,11 @@ const Header = () => {
 
             fetchSearchHistory();
         } else if (!isLoggedIn) {
-            // 비로그인 상태에서는 검색 기록 초기화
             setSearchHistory([]);
         }
     }, [isLoggedIn, isDropdownVisible, searchTerm]);
 
-    // 🔹 인기 검색어 로드 (모든 사용자)
+    // 인기 검색어 로드
     useEffect(() => {
         if (isDropdownVisible && searchTerm.trim() === "") {
             const fetchPopularKeywords = async () => {
@@ -139,15 +243,14 @@ const Header = () => {
         }
     }, [isDropdownVisible, searchTerm]);
 
-    // 🔹 자동완성 (입력값이 있을 때만) - 성능 최적화
+    // 자동완성
     useEffect(() => {
         if (searchTerm.trim() === "") {
-            setSuggestions([]); // 입력값이 없으면 자동완성 초기화
-            setSearchResults([]); // 🔥 검색 결과도 초기화
+            setSuggestions([]);
+            setSearchResults([]);
             return;
         }
 
-        // 🔥 최소 글자 수 제한 (1글자 이상일 때만 자동완성)
         if (searchTerm.trim().length < 1) {
             setSuggestions([]);
             return;
@@ -155,17 +258,16 @@ const Header = () => {
 
         const fetchSuggestions = async () => {
             try {
-                // 🔥 AbortController로 이전 요청 취소 지원
                 const controller = new AbortController();
 
                 const [autoRes, fuzzyRes] = await Promise.all([
                     axios.get(`http://localhost/api/search/autocomplete?prefix=${searchTerm}`, {
                         withCredentials: true,
-                        signal: controller.signal, // 요청 취소 지원
+                        signal: controller.signal,
                     }),
                     axios.get(`http://localhost/api/search/fuzzy?term=${searchTerm}`, {
                         withCredentials: true,
-                        signal: controller.signal, // 요청 취소 지원
+                        signal: controller.signal,
                     }),
                 ]);
 
@@ -174,18 +276,15 @@ const Header = () => {
 
                 const normalize = (item) => (typeof item === "string" ? item : item.keyword);
 
-                // 🔥 최대 결과 수 제한 (성능 향상)
                 const merged = [...autoSuggestions, ...fuzzySuggestions]
                     .map(normalize)
                     .filter((v, i, self) => self.indexOf(v) === i)
-                    .slice(0, 8); // 최대 8개만 표시
+                    .slice(0, 8);
 
                 setSuggestions(merged);
 
-                // 🔥 요청 취소 정리
                 return () => controller.abort();
             } catch (err) {
-                // 🔥 요청 취소된 경우는 에러 로그 제외
                 if (err.name !== 'AbortError') {
                     console.error("자동완성 API 호출 실패", err);
                 }
@@ -193,7 +292,6 @@ const Header = () => {
             }
         };
 
-        // 🔥 디바운싱 시간 단축 (200ms로 더 빠른 반응)
         const delayDebounce = setTimeout(fetchSuggestions, 100);
         return () => clearTimeout(delayDebounce);
     }, [searchTerm]);
@@ -237,18 +335,15 @@ const Header = () => {
             if (!isMouseInsideDropdown.current) {
                 setIsFocused(false);
                 setIsDropdownVisible(false);
-                // 🔥 드롭다운이 닫힐 때 검색 결과 초기화
                 setSearchResults([]);
             }
         }, 100);
     };
 
-    // 🔥 검색어 입력값 변경 핸들러 추가
     const handleSearchTermChange = (e) => {
         const newValue = e.target.value;
         setSearchTerm(newValue);
 
-        // 🔥 검색어가 비워지면 검색 결과 즉시 초기화
         if (newValue.trim() === "") {
             setSearchResults([]);
         }
@@ -271,26 +366,15 @@ const Header = () => {
             }
         }
 
-        // 검색 상태 초기화
         setSearchResults([]);
         setIsDropdownVisible(false);
         setIsFocused(false);
 
-        // 상품검색 페이지로 이동 (검색어를 쿼리 파라미터로 전달)
         navigate(`/new?keyword=${encodeURIComponent(trimmed)}`);
-
     };
 
-    // 검색어 클릭 핸들러 개선
     const handleSearchTermClick = (term) => {
         navigate(`/new?keyword=${encodeURIComponent(term)}`);
-        // setSearchTerm(term);
-        // 검색어를 클릭했을 때는 검색 결과를 초기화하지 않고 유지
-        // 대신 포커스를 검색창에 맞춤
-        // const searchInput = document.querySelector('.search-input');
-        // if (searchInput) {
-        //     searchInput.focus();
-        // }
     };
 
     const handleDeleteHistoryItem = async (e, keyword) => {
@@ -303,7 +387,6 @@ const Header = () => {
                 {withCredentials: true}
             );
 
-            // 검색 기록 다시 불러오기
             const res = await axios.get("http://localhost/api/search/history?page=0&size=10", {
                 withCredentials: true,
             });
@@ -336,7 +419,6 @@ const Header = () => {
         }
     };
 
-    // 🔹 카테고리 메뉴 핸들러 추가
     const handleCategoryMenuToggle = () => {
         console.log('🔵 Header 카테고리 버튼 클릭');
         setIsCategoryMenuOpen(!isCategoryMenuOpen);
@@ -351,10 +433,8 @@ const Header = () => {
         console.log('🎯 Header에서 선택된 카테고리:', categoryData);
         setSelectedCategoryData(categoryData);
 
-        // 임시 알림
         alert(`카테고리 선택됨: ${categoryData.name} (ID: ${categoryData.id})`);
 
-        // 메뉴 닫기
         setIsCategoryMenuOpen(false);
     };
 
@@ -460,7 +540,7 @@ const Header = () => {
                                             </div>
                                         </form>
 
-                                        {/* 🔹 검색 드롭다운 - 항상 표시 */}
+                                        {/* 검색 드롭다운 */}
                                         {isFocused && (
                                             <div
                                                 className="search-dropdown main-search-box"
@@ -471,11 +551,11 @@ const Header = () => {
                                                     isMouseInsideDropdown.current = false;
                                                 }}
                                             >
-                                                {/* 🔹 검색어가 없을 때: 검색기록 + 인기검색어 */}
+                                                {/* 검색어가 없을 때: 검색기록 + 인기검색어 */}
                                                 {searchTerm.trim() === "" && (
                                                     <div className="search-sections-container"
                                                          style={{display: 'flex'}}>
-                                                        {/* 🔹 검색 기록 영역 */}
+                                                        {/* 검색 기록 영역 */}
                                                         <div className="search-section"
                                                              style={{flex: '1', paddingRight: '8px'}}>
                                                             <div className="search-section-header">
@@ -498,7 +578,6 @@ const Header = () => {
                                                                 )}
                                                             </div>
 
-                                                            {/* 로그인된 사용자이고 검색 기록이 있는 경우 */}
                                                             {isLoggedIn && searchHistory.length > 0 && (
                                                                 <ul className="search-list">
                                                                     {searchHistory.map((item, i) => (
@@ -538,7 +617,6 @@ const Header = () => {
                                                                 </ul>
                                                             )}
 
-                                                            {/* 비로그인 상태이거나 검색 기록이 없는 경우 */}
                                                             {(!isLoggedIn || (isLoggedIn && searchHistory.length === 0)) && (
                                                                 <div className="empty-history-state" style={{
                                                                     textAlign: 'center',
@@ -562,14 +640,14 @@ const Header = () => {
                                                             )}
                                                         </div>
 
-                                                        {/* 🔹 구분선 */}
+                                                        {/* 구분선 */}
                                                         <div className="search-divider" style={{
                                                             width: '1px',
                                                             backgroundColor: '#e0e0e0',
                                                             margin: '8px 0'
                                                         }}></div>
 
-                                                        {/* 🔹 인기 검색어 영역 */}
+                                                        {/* 인기 검색어 영역 */}
                                                         <div className="search-section"
                                                              style={{flex: '1', paddingLeft: '8px'}}>
                                                             <div className="search-section-header">
@@ -628,10 +706,9 @@ const Header = () => {
                                                     </div>
                                                 )}
 
-                                                {/* 🔹 검색어가 있을 때: 자동완성만 표시 */}
+                                                {/* 검색어가 있을 때: 자동완성만 표시 */}
                                                 {searchTerm.trim() !== "" && (
                                                     <div>
-                                                        {/* 🔹 자동완성 영역만 표시 */}
                                                         {suggestions.length > 0 && (
                                                             <div className="search-section">
                                                                 <div className="search-section-header">
@@ -673,7 +750,6 @@ const Header = () => {
                                                             </div>
                                                         )}
 
-                                                        {/* 🔹 자동완성이 없을 때 빈 상태 표시 */}
                                                         {suggestions.length === 0 && (
                                                             <div className="search-section">
                                                                 <div className="empty-state" style={{
@@ -712,7 +788,7 @@ const Header = () => {
                                             </div>
                                         )}
 
-                                        {/* 🔹 검색 결과는 메인 드롭다운 내부에 추가 */}
+                                        {/* 검색 결과는 메인 드롭다운 내부에 추가 */}
                                         {searchTerm.trim() !== "" && isFocused && searchResults.length > 0 && (
                                             <div
                                                 className="search-dropdown search-results-overlay"
@@ -755,7 +831,6 @@ const Header = () => {
                                                                     to={`/sellers/${product.sellerId}/products/${product.id}`}
                                                                     className="result-link"
                                                                     onClick={() => {
-                                                                        // 🔥 링크 클릭 시 검색 상태 초기화
                                                                         setSearchResults([]);
                                                                         setSearchTerm("");
                                                                         setIsDropdownVisible(false);
@@ -791,7 +866,7 @@ const Header = () => {
                                             </div>
                                         )}
 
-                                        {/* 🔹 검색 로딩 상태 - 오버레이로 표시 */}
+                                        {/* 검색 로딩 상태 - 오버레이로 표시 */}
                                         {searchLoading && (
                                             <div
                                                 className="search-dropdown loading-overlay"
@@ -855,7 +930,7 @@ const Header = () => {
                                             </div>
                                         </li>
                                         <li className="icon-Btn shopping-bag-icon">
-                                            <a href="" className="myBag myIcon">
+                                            <div className="myBag myIcon">
                                                 <div>
                                                     <img
                                                         src="/image/icon/icon-shopping-bag.png"
@@ -867,24 +942,169 @@ const Header = () => {
                                                     />
                                                 </div>
                                                 <em className="headIconCount" id="shopping-bag-cnt">
-                                                    0
+                                                    {cartItems.length}
                                                 </em>
-                                            </a>
+                                            </div>
                                             <div className="alarm-frame">
                                                 <span className="cart-contents">
-                                                    <ul className="cart-inner">
-                                                        <li>장바구니에 담긴 상품이 없습니다.</li>
-                                                        <li>
-                                                            <a href="">
-                                                                <img src="" alt=""/>
-                                                                <p>
-                                                                    <span>
-                                                                        <span>상품 이름</span>
-                                                                    </span>
+                                                    <div className="cart-inner" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                                        {cartLoading ? (
+                                                            <div style={{ padding: '20px', textAlign: 'center' }}>
+                                                                <p>장바구니 로딩 중...</p>
+                                                            </div>
+                                                        ) : cartError ? (
+                                                            <div style={{ padding: '20px', textAlign: 'center' }}>
+                                                                <p style={{ color: 'red', fontSize: '14px' }}>{cartError}</p>
+                                                                <button
+                                                                    onClick={loadCartData}
+                                                                    style={{
+                                                                        padding: '6px 12px',
+                                                                        fontSize: '12px',
+                                                                        marginTop: '8px'
+                                                                    }}
+                                                                >
+                                                                    다시 시도
+                                                                </button>
+                                                            </div>
+                                                        ) : cartItems.length === 0 ? (
+                                                            <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+                                                                <svg
+                                                                    width="32"
+                                                                    height="32"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    style={{ marginBottom: '8px', opacity: '0.5' }}
+                                                                >
+                                                                    <path
+                                                                        d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 18.1 17.9 19 19 19S21 18.1 21 17V13M9 19.5C9.8 19.5 10.5 20.2 10.5 21S9.8 22.5 9 22.5 7.5 21.8 7.5 21 8.2 19.5 9 19.5ZM20 19.5C20.8 19.5 21.5 20.2 21.5 21S20.8 22.5 20 22.5 18.5 21.8 18.5 21 19.2 19.5 20 19.5Z"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="2"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                </svg>
+                                                                <p style={{ margin: '0', fontSize: '14px' }}>
+                                                                    {!isLoggedIn ? '로그인 후 장바구니를 확인하세요' : '장바구니에 담긴 상품이 없습니다.'}
                                                                 </p>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                {cartItems.map((item) => (
+                                                                    <div
+                                                                        key={item.productId}
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            padding: '12px',
+                                                                            borderBottom: '1px solid #f0f0f0',
+                                                                            fontSize: '13px'
+                                                                        }}
+                                                                    >
+                                                                        {item.thumbnailUrl && (
+                                                                            <img
+                                                                                src={item.thumbnailUrl}
+                                                                                alt={item.name}
+                                                                                style={{
+                                                                                    width: '40px',
+                                                                                    height: '40px',
+                                                                                    objectFit: 'cover',
+                                                                                    marginRight: '8px',
+                                                                                    borderRadius: '4px'
+                                                                                }}
+                                                                            />
+                                                                        )}
+                                                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                                                            <p style={{
+                                                                                margin: '0 0 4px 0',
+                                                                                fontWeight: '500',
+                                                                                overflow: 'hidden',
+                                                                                textOverflow: 'ellipsis',
+                                                                                whiteSpace: 'nowrap'
+                                                                            }}>
+                                                                                {item.name}
+                                                                            </p>
+                                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                                                <span style={{
+                                                                                    color: '#e74c3c',
+                                                                                    fontWeight: '600',
+                                                                                    fontSize: '12px'
+                                                                                }}>
+                                                                                    {item.discountPrice?.toLocaleString()}원
+                                                                                </span>
+                                                                                {item.originalPrice !== item.discountPrice && (
+                                                                                    <span style={{
+                                                                                        textDecoration: 'line-through',
+                                                                                        color: '#999',
+                                                                                        fontSize: '11px'
+                                                                                    }}>
+                                                                                        {item.originalPrice?.toLocaleString()}원
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                            <p style={{
+                                                                                margin: '2px 0 0 0',
+                                                                                color: '#666',
+                                                                                fontSize: '11px'
+                                                                            }}>
+                                                                                수량: {item.quantity}개
+                                                                            </p>
+                                                                            {item.expiryDate && (
+                                                                                <p style={{
+                                                                                    margin: '2px 0 0 0',
+                                                                                    color: '#666',
+                                                                                    fontSize: '11px'
+                                                                                }}>
+                                                                                    {formatExpiryDate(item.expiryDate)}
+                                                                                </p>
+                                                                            )}
+                                                                        </div>
+                                                                        <button
+                                                                            onClick={() => handleRemoveFromCart(item.productId)}
+                                                                            style={{
+                                                                                border: 'none',
+                                                                                background: 'transparent',
+                                                                                cursor: 'pointer',
+                                                                                padding: '4px',
+                                                                                marginLeft: '8px'
+                                                                            }}
+                                                                            title="상품 삭제"
+                                                                        >
+                                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                                                                <path
+                                                                                    d="M18 6L6 18M6 6l12 12"
+                                                                                    stroke="currentColor"
+                                                                                    strokeWidth="2"
+                                                                                    strokeLinecap="round"
+                                                                                />
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                ))}
+                                                                <div style={{
+                                                                    padding: '12px',
+                                                                    borderTop: '2px solid #f0f0f0',
+                                                                    textAlign: 'center'
+                                                                }}>
+                                                                    <button
+                                                                        onClick={() => navigate('/cart')}
+                                                                        style={{
+                                                                            width: '100%',
+                                                                            padding: '8px 16px',
+                                                                            backgroundColor: '#e74c3c',
+                                                                            color: 'white',
+                                                                            border: 'none',
+                                                                            borderRadius: '4px',
+                                                                            cursor: 'pointer',
+                                                                            fontSize: '13px',
+                                                                            fontWeight: '500'
+                                                                        }}
+                                                                    >
+                                                                        장바구니 상세보기
+                                                                    </button>
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </span>
                                             </div>
                                         </li>
@@ -904,7 +1124,6 @@ const Header = () => {
                                         padding: "0 0px 3px 3px",
                                     }}
                                 >
-                                    {/* 🔹 카테고리 버튼에 ref와 onClick 추가 */}
                                     <button
                                         ref={categoryButtonRef}
                                         className="menu-font-st"
@@ -956,7 +1175,7 @@ const Header = () => {
                                     <li className="">
                                         <a href="/" className="menu-font-st menu-under"
                                            onClick={(e) => {
-                                               e.preventDefault(); // 기본 링크 동작 방지
+                                               e.preventDefault();
                                                navigate(`/new?filterType=RECENT`);
                                            }}style={getMenuStyle('new')}>
                                             NEW
@@ -965,7 +1184,7 @@ const Header = () => {
                                     <li className="">
                                         <a href="/" className="menu-font-st menu-under"
                                            onClick={(e) => {
-                                               e.preventDefault(); // 기본 링크 동작 방지
+                                               e.preventDefault();
                                                navigate(`/new?filterType=EXPIRING_SOON`);
                                            }}style={getMenuStyle('expiring')}>
                                             임박특가
@@ -990,7 +1209,6 @@ const Header = () => {
                 </header>
             </div>
 
-            {/* 🔹 카테고리 메뉴 - buttonRef 전달 */}
             <CategoryMenu
                 isOpen={isCategoryMenuOpen}
                 onClose={handleCategoryMenuClose}
@@ -998,7 +1216,6 @@ const Header = () => {
                 buttonRef={categoryButtonRef}
             />
 
-            {/* 🔹 선택된 카테고리 표시 (헤더 하단에 표시) */}
             {selectedCategoryData && (
                 <div style={{
                     backgroundColor: '#dbeafe',
