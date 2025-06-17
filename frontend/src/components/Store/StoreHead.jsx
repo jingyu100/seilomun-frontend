@@ -16,9 +16,7 @@ export default function StoreHead({ store, sellerId }) {
     <div className="storeHead">
       <div className="storeName">
         <Link to={`/sellers/${sellerId}`}>
-          <h1
-            className="storeName"          
-          >{sellerInformationDto?.storeName || "상호 없음"}</h1>
+          <h1 className="storeName">{sellerInformationDto?.storeName || "상호 없음"}</h1>
         </Link>
       </div>
       <div className="storeHead-inner">
