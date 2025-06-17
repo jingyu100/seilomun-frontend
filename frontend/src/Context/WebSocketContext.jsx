@@ -208,6 +208,29 @@ export function WebSocketProvider({ children }) {
       [messages]
   );
 
+  const leaveRoom = useCallback((chatRoomId) => {
+    if (!stompClient || !connected) return;
+
+    try {
+      // 채팅방 나가기 메시지 전송
+      const leaveMessage = {
+        type: "LEAVE",
+        chatRoomId: parseInt(chatRoomId),
+        senderId: user.id,
+        senderType: user.userType === "CUSTOMER" ? "C" : "S",
+      };
+
+      stompClient.publish({
+        destination: "/app/chat.leaveRoom", // 새로운 엔드포인트
+        body: JSON.stringify(leaveMessage),
+      });
+
+      console.log(`채팅방 ${chatRoomId} 나가기 메시지 전송됨`);
+    } catch (error) {
+      console.error("채팅방 나가기 메시지 전송 실패:", error);
+    }
+  }, [stompClient, connected, user]);
+
   const setRoomMessages = useCallback((chatRoomId, messageList) => {
     setMessages((prev) => ({
       ...prev,
@@ -257,6 +280,7 @@ export function WebSocketProvider({ children }) {
     disconnectWebSocket,
     subscribeToRoom,
     unsubscribeFromRoom,
+    leaveRoom,
     sendMessage,
     getRoomMessages,
     setRoomMessages,
