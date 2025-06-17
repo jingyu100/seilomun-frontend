@@ -132,7 +132,6 @@ function Customer_modify() {
       updateDto: {
         email: (email || "").toLowerCase(),
         name: name || "",
-        currentPassword: currentPassword || "",
         nickname: nickname || "",
         phone: currentPhone,
         gender: gender || "",
@@ -147,7 +146,7 @@ function Customer_modify() {
     };
 
     try {
-      await axios.put("http://localhost:80/api/customers/local/profile", requestData, {
+      await axios.put("http://localhost:80/api/customers/mypage/local", requestData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
