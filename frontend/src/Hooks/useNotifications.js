@@ -7,13 +7,17 @@ export default function useNotifications(apiUrl, userType) {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [connectionStatus, setConnectionStatus] = useState('disconnected');
-  const [sseConnection, setSseConnection] = useState(null);
 
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   const [maxReconnectAttempts] = useState(5);
+
+  // ref로 관리하여 재렌더링 방지
+  const sseConnectionRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
   const isUnmountedRef = useRef(false);
   const heartbeatTimeoutRef = useRef(null);
+  const isConnectingRef = useRef(false);
+  const localStorageTimeoutRef = useRef(null);
 
   const userRole = userType;
 
@@ -21,40 +25,60 @@ export default function useNotifications(apiUrl, userType) {
     console.log(`[${userRole}] ${new Date().toLocaleTimeString()} - ${msg}`);
   }, [userRole]);
 
+  // localStorage 비동기 저장
+  const saveToLocalStorage = useCallback((key, data) => {
+    if (localStorageTimeoutRef.current) {
+      clearTimeout(localStorageTimeoutRef.current);
+    }
+
+    localStorageTimeoutRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (e) {
+        addLog(`로컬 저장 실패: ${e.message}`, 'error');
+      }
+    }, 100); // 100ms 지연으로 메인 스레드 블록킹 방지
+  }, [addLog]);
+
   const startHeartbeatCheck = useCallback(() => {
     if (heartbeatTimeoutRef.current) {
       clearTimeout(heartbeatTimeoutRef.current);
     }
 
     heartbeatTimeoutRef.current = setTimeout(() => {
-      if (sseConnection && sseConnection.readyState === EventSource.OPEN) {
+      if (sseConnectionRef.current && sseConnectionRef.current.readyState === EventSource.OPEN) {
         addLog('⚠️ 장시간 무응답으로 재연결 시도', 'warning');
-        sseConnection.close();
+        sseConnectionRef.current.close();
         connectSSE();
       }
     }, 90000);
-  }, [sseConnection, addLog]);
+  }, [addLog]); // connectSSE는 의존성에서 제거
 
-  // 로컬 저장된 알림 불러오기
+  // 로컬 저장된 알림 불러오기 (초기화 시 한 번만)
   useEffect(() => {
     if (!userRole) return;
-    const stored = localStorage.getItem(`notifications-${userRole}`);
-    if (stored) {
+
+    const loadStoredNotifications = async () => {
       try {
-        const parsedNotifications = JSON.parse(stored);
-        setNotifications(parsedNotifications);
+        const stored = localStorage.getItem(`notifications-${userRole}`);
+        if (stored) {
+          const parsedNotifications = JSON.parse(stored);
+          setNotifications(parsedNotifications);
+        }
       } catch (e) {
         addLog(`로컬 알림 복원 실패: ${e.message}`, 'error');
       }
-    }
+    };
+
+    loadStoredNotifications();
   }, [userRole, addLog]);
 
-  // 알림 상태 localStorage 저장
+  // 알림 상태 localStorage 저장 (비동기)
   useEffect(() => {
     if (userRole && notifications.length > 0) {
-      localStorage.setItem(`notifications-${userRole}`, JSON.stringify(notifications));
+      saveToLocalStorage(`notifications-${userRole}`, notifications);
     }
-  }, [notifications, userRole]);
+  }, [notifications, userRole, saveToLocalStorage]);
 
   // 읽지 않은 알림 개수 계산
   useEffect(() => {
@@ -63,13 +87,15 @@ export default function useNotifications(apiUrl, userType) {
   }, [notifications]);
 
   const connectSSE = useCallback(() => {
-    if (!isLoggedIn || !userRole || isUnmountedRef.current) {
+    // 중복 연결 방지
+    if (!isLoggedIn || !userRole || isUnmountedRef.current || isConnectingRef.current) {
       return;
     }
 
-    if (sseConnection) {
-      sseConnection.close();
-      setSseConnection(null);
+    // 기존 연결 정리
+    if (sseConnectionRef.current) {
+      sseConnectionRef.current.close();
+      sseConnectionRef.current = null;
     }
 
     const sseUrl = userRole === 'SELLER'
@@ -78,34 +104,22 @@ export default function useNotifications(apiUrl, userType) {
 
     addLog(`SSE 연결 시도 (${reconnectAttempts + 1}/${maxReconnectAttempts})`);
     setConnectionStatus('connecting');
+    isConnectingRef.current = true;
 
     try {
       const eventSource = new EventSource(sseUrl, { withCredentials: true });
 
       eventSource.onopen = () => {
         if (isUnmountedRef.current) return;
+
+        isConnectingRef.current = false;
         setConnectionStatus('connected');
         setReconnectAttempts(0);
         addLog('SSE 연결 성공', 'success');
         startHeartbeatCheck();
       };
 
-      eventSource.onmessage = (event) => {
-        if (isUnmountedRef.current) return;
-        startHeartbeatCheck();
-
-        try {
-          const notification = JSON.parse(event.data);
-          setNotifications(prev => {
-            const filtered = prev.filter(n => n.id !== notification.id);
-            return [notification, ...filtered];
-          });
-        } catch (e) {
-          addLog(`메시지 파싱 실패: ${e.message}`, 'error');
-        }
-      };
-
-      eventSource.addEventListener('notification', (event) => {
+      const handleNotification = (event) => {
         if (isUnmountedRef.current) return;
         startHeartbeatCheck();
 
@@ -118,7 +132,10 @@ export default function useNotifications(apiUrl, userType) {
         } catch (e) {
           addLog(`알림 파싱 실패: ${e.message}`, 'error');
         }
-      });
+      };
+
+      eventSource.onmessage = handleNotification;
+      eventSource.addEventListener('notification', handleNotification);
 
       eventSource.addEventListener('heartbeat', () => {
         if (isUnmountedRef.current) return;
@@ -133,6 +150,7 @@ export default function useNotifications(apiUrl, userType) {
       eventSource.onerror = () => {
         if (isUnmountedRef.current) return;
 
+        isConnectingRef.current = false;
         addLog('SSE 연결 오류', 'error');
         setConnectionStatus('error');
 
@@ -145,6 +163,8 @@ export default function useNotifications(apiUrl, userType) {
 
           if (reconnectAttempts < maxReconnectAttempts) {
             const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+            addLog(`${delay}ms 후 재연결 시도`);
+
             reconnectTimeoutRef.current = setTimeout(() => {
               if (!isUnmountedRef.current) {
                 setReconnectAttempts(prev => prev + 1);
@@ -157,15 +177,16 @@ export default function useNotifications(apiUrl, userType) {
         }
       };
 
-      setSseConnection(eventSource);
+      sseConnectionRef.current = eventSource;
 
     } catch (error) {
+      isConnectingRef.current = false;
       addLog(`SSE 연결 생성 실패: ${error.message}`, 'error');
       setConnectionStatus('error');
     }
-  }, [isLoggedIn, userRole, apiUrl, reconnectAttempts, maxReconnectAttempts, addLog, sseConnection, startHeartbeatCheck]);
+  }, [isLoggedIn, userRole, apiUrl, reconnectAttempts, maxReconnectAttempts, addLog, startHeartbeatCheck]);
 
-  // 알림 목록 로딩
+  // 알림 목록 로딩 (초기화 시 한 번만)
   useEffect(() => {
     if (!isLoggedIn || !userRole) return;
 
@@ -195,14 +216,30 @@ export default function useNotifications(apiUrl, userType) {
     fetchNotifications();
   }, [isLoggedIn, userRole, apiUrl, addLog]);
 
-  // SSE 연결 관리
+  // SSE 연결 관리 (로그인 상태와 userRole 변경 시에만)
   useEffect(() => {
     isUnmountedRef.current = false;
 
     if (isLoggedIn && userRole) {
-      connectSSE();
+      // 약간의 지연을 두어 다른 초기화가 완료된 후 연결
+      const connectDelay = setTimeout(() => {
+        if (!isUnmountedRef.current) {
+          connectSSE();
+        }
+      }, 100);
+
+      return () => {
+        clearTimeout(connectDelay);
+      };
     }
 
+    return () => {
+      // cleanup 로직은 그대로 유지
+    };
+  }, [isLoggedIn, userRole]); // connectSSE 의존성 제거
+
+  // 컴포넌트 언마운트 시 정리
+  useEffect(() => {
     return () => {
       isUnmountedRef.current = true;
 
@@ -214,16 +251,20 @@ export default function useNotifications(apiUrl, userType) {
         clearTimeout(heartbeatTimeoutRef.current);
       }
 
-      if (sseConnection) {
-        sseConnection.close();
-        setSseConnection(null);
+      if (localStorageTimeoutRef.current) {
+        clearTimeout(localStorageTimeoutRef.current);
+      }
+
+      if (sseConnectionRef.current) {
+        sseConnectionRef.current.close();
+        sseConnectionRef.current = null;
       }
 
       setConnectionStatus('disconnected');
     };
-  }, [isLoggedIn, userRole]);
+  }, []);
 
-  const markAsRead = async (id) => {
+  const markAsRead = useCallback(async (id) => {
     try {
       const res = await fetch(`${apiUrl}/api/notifications/${id}/read`, {
         method: 'PUT',
@@ -239,9 +280,9 @@ export default function useNotifications(apiUrl, userType) {
     } catch (err) {
       addLog(`읽음 처리 실패: ${err.message}`, 'error');
     }
-  };
+  }, [apiUrl, addLog]);
 
-  const markAllAsRead = async () => {
+  const markAllAsRead = useCallback(async () => {
     try {
       const res = await fetch(`${apiUrl}/api/notifications/read-all`, {
         method: 'PUT',
@@ -257,11 +298,12 @@ export default function useNotifications(apiUrl, userType) {
     } catch (err) {
       addLog(`전체 읽음 처리 실패: ${err.message}`, 'error');
     }
-  };
+  }, [apiUrl, addLog]);
 
   const reconnect = useCallback(() => {
     addLog('수동 재연결 시도');
     setReconnectAttempts(0);
+    isConnectingRef.current = false; // 연결 상태 초기화
     connectSSE();
   }, [connectSSE, addLog]);
 
