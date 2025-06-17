@@ -1,3 +1,4 @@
+/* 기존 스타일 유지 */
 .main-container {
   display: flex;
   flex-direction: column;
@@ -5,4 +6,132 @@
 
 .inner {
   display: flex;
+}
+
+/* 새로 추가된 검색 결과 컨테이너 */
+.search-results-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 40px에서 20px로 줄임 */
+}
+
+/* 판매자 결과 섹션 */
+.seller-results-section {
+  width: 100%;
+}
+
+.seller-list-section {
+  margin-bottom: 20px; /* 40px에서 20px로 줄임 */
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.view-all-link {
+  color: #77ca80;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.view-all-link:hover {
+  color: #69b371;
+  text-decoration: underline;
+}
+
+/* 미니 로딩 상태 */
+.loading-container-mini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* 빈 상태 미니 */
+.empty-state-mini {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.loading-spinner-mini {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #77ca80;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 미니 더보기 버튼 */
+.seller-mini-more-btn {
+  width: 100%;
+  max-width: 300px;
+  height: 40px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 20px auto 0;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.seller-mini-more-btn:hover {
+  background: linear-gradient(135deg, #e9ecef, #dee2e6);
+  color: #495057;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 상품 결과 섹션 */
+.product-results-section {
+  width: 100%;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .search-results-container {
+    gap: 15px; /* 30px에서 15px로 줄임 */
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
 }
