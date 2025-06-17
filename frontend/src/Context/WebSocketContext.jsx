@@ -127,10 +127,25 @@ export function WebSocketProvider({ children }) {
                 const chatMessage = JSON.parse(message.body);
                 console.log("수신된 메시지:", chatMessage);
 
-                setMessages((prev) => ({
-                  ...prev,
-                  [chatRoomId]: [...(prev[chatRoomId] || []), chatMessage],
-                }));
+                // 🔥 새로 추가: 읽음 상태 업데이트 메시지 처리
+                if (data.type === 'READ_STATUS_UPDATE') {
+                  // 읽음 상태 업데이트
+                  setMessages((prev) => ({
+                    ...prev,
+                    [chatRoomId]: (prev[chatRoomId] || []).map(msg =>
+                        msg.senderId === data.senderId && msg.senderType === data.senderType
+                            ? { ...msg, read: 'Y' }
+                            : msg
+                    )
+                  }));
+                  console.log(`채팅방 ${chatRoomId}의 읽음 상태 업데이트됨`);
+                } else {
+                  // 기존 채팅 메시지 처리
+                  setMessages((prev) => ({
+                    ...prev,
+                    [chatRoomId]: [...(prev[chatRoomId] || []), data],
+                  }));
+                }
               },
               {
                 userId: user.id.toString(),
