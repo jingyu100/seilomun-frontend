@@ -10,26 +10,32 @@ const Seller_reviewPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const sellerId = localStorage.getItem("sellerId");
+      console.log("📌 sellerId:", sellerId); // 0단계: sellerId 확인
       if (!sellerId) return;
-
+  
       try {
-        // 가게명 불러오기
-        const sellerRes = await axios.get("/api/sellers/me", {
+        const sellerRes = await axios.get(`http://localhost/api/sellers/${sellerId}`, {
           withCredentials: true,
         });
+        console.log("🏪 가게 응답:", sellerRes.data);
         setStoreName(sellerRes.data.data?.storeName || "내 가게");
-
-        // 리뷰 목록 불러오기
-        const reviewsRes = await axios.get(`/api/reviews/${sellerId}`, {
+  
+        const reviewsRes = await axios.get(`http://localhost/api/review/${sellerId}`, {
           params: { page: 0, size: 10 },
           withCredentials: true,
         });
-        setReviews(reviewsRes.data["리뷰 조회"]?.reviews || []);
+  
+        console.log("📦 리뷰 전체 응답:", reviewsRes.data);// 이게 무조건 찍혀야 함
+  
+        const reviewsData = reviewsRes.data.data?.["리뷰 조회"]?.reviews || [];
+        setReviews(reviewsData);
+  
+        console.log("✅ 최종 저장된 리뷰:", reviewsData);
       } catch (error) {
-        console.error("리뷰 또는 가게 정보 불러오기 실패:", error);
+        console.error("❌ 에러:", error.response?.data || error.message || error);
       }
     };
-
+  
     fetchData();
   }, []);
 
