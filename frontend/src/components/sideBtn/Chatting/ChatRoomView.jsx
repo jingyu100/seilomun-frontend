@@ -120,6 +120,10 @@ export default function ChatRoomView({ chatRoom, onBack }) {
           )
       );
     }
+
+    unsubscribeFromRoom(chatRoom.id);
+    console.log(`채팅방 ${chatRoom.id} 구독 해제됨 (뒤로가기)`);
+
     onBack();
   };
 
