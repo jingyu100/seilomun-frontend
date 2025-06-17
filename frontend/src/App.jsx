@@ -22,6 +22,7 @@ import PaymentPage from "./pages/customer/PaymentPage.jsx";
 import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import OrderListPage from "./pages/customer/OrderListPage.jsx";
 import PostcodePopup from "./components/PostcodePopup";
+import OrderDetailPage from "./pages/customer/OrderDetailPage.jsx";
 
 /* 소비자 마이페이지 */
 import MyPage from "./pages/customer_mypage/MyPage.jsx";
@@ -75,39 +76,46 @@ function App() {
     <CartProvider>
       <ChatRoomsProvider>
         <WebSocketProvider>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/new" element={<NewPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/mypage" element={<MyPage />} />
-              <Route path="/Delivery_destination" element={<Delivery_destination />} />
-              <Route path="/Change_dataPage" element={<Change_dataPage />} />
-              <Route path="/selogin" element={<SeloginPage />} />
-              <Route path="/sail" element={<SailPage />} />
-              <Route path="/wish" element={<WishListPage />} />
-              <Route path="/Business_numberPage" element={<Business_numberPage />} />
-              <Route path="/SeRegister" element={<SeRegisterPage />} />
-              <Route path="/sellers/:sellerId" element={<StorePage />} />
-              <Route path="/postcode-popup" element={<PostcodePopup />} />
-              <Route
-                path="/sellers/:sellerId/products/:productId"
-                element={<ProductPage />}
-              />
-              <Route path="/oauth-success" element={<NaverLoginCallback />} />
-              <Route path="/Customer_modify" element={<Customer_modify />} />
-              <Route path="/Customer_point" element={<Customer_point />} />
-              <Route path="/Customer_refund" element={<Customer_refund />} />
-              <Route path="/Customer_review" element={<Customer_review />} />
-              <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/OrderList" element={<OrderListPage />} />
-              <Route path="/Seller_Main" element={<Seller_Main />} />
-              <Route path="/Seller_newstoreRegistration" element={<Seller_newstoreRegistration />} /> 
-              <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
-              <Route path="/seller/product/management" element={<Seller_ProductManagement />} />
-              <Route path="/seller/product/register" element={<Seller_ProductRegister />} />
-              <Route path="/seller/stats" element={<Seller_Stats />} />
-              </Routes>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/new" element={<NewPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/Delivery_destination" element={<Delivery_destination />} />
+            <Route path="/Change_dataPage" element={<Change_dataPage />} />
+            <Route path="/selogin" element={<SeloginPage />} />
+            <Route path="/sail" element={<SailPage />} />
+            <Route path="/wish" element={<WishListPage />} />
+            <Route path="/Business_numberPage" element={<Business_numberPage />} />
+            <Route path="/SeRegister" element={<SeRegisterPage />} />
+            <Route path="/sellers/:sellerId" element={<StorePage />} />
+            <Route path="/postcode-popup" element={<PostcodePopup />} />
+            <Route
+              path="/sellers/:sellerId/products/:productId"
+              element={<ProductPage />}
+            />
+            <Route path="/oauth-success" element={<NaverLoginCallback />} />
+            <Route path="/Customer_modify" element={<Customer_modify />} />
+            <Route path="/Customer_point" element={<Customer_point />} />
+            <Route path="/Customer_refund" element={<Customer_refund />} />
+            <Route path="/Customer_review" element={<Customer_review />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/OrderList" element={<OrderListPage />} />
+            <Route path="/OrderDetail" element={<OrderDetailPage />} />
+            <Route path="/Seller_Main" element={<Seller_Main />} />
+            <Route
+              path="/Seller_newstoreRegistration"
+              element={<Seller_newstoreRegistration />}
+            />
+            <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
+            <Route
+              path="/seller/product/management"
+              element={<Seller_ProductManagement />}
+            />
+            <Route path="/seller/product/register" element={<Seller_ProductRegister />} />
+            <Route path="/seller/stats" element={<Seller_Stats />} />
+          </Routes>
         </WebSocketProvider>
       </ChatRoomsProvider>
     </CartProvider>
