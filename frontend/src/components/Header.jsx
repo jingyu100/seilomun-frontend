@@ -363,27 +363,31 @@ const Header = () => {
                                                 isMouseInsideDropdown.current = false;
                                             }}
                                         >
-                                            <div className="search-sections-container">
-                                                {/* 🔹 검색 기록 (로그인된 사용자만) */}
-                                                {isLoggedIn && searchHistory.length > 0 && (
-                                                    <div className="search-section">
-                                                        <div className="search-section-header">
-                                                            <h4 className="search-section-title">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                     fill="none" className="search-icon-small">
-                                                                    <path
-                                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                                                                        fill="currentColor"/>
-                                                                </svg>
-                                                                최근 검색어
-                                                            </h4>
+                                            <div className="search-sections-container" style={{ display: 'flex' }}>
+                                                {/* 🔹 검색 기록 영역 (항상 표시, 반반) */}
+                                                <div className="search-section" style={{ flex: '1', paddingRight: '8px' }}>
+                                                    <div className="search-section-header">
+                                                        <h4 className="search-section-title">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24"
+                                                                 fill="none" className="search-icon-small">
+                                                                <path
+                                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                                                                    fill="currentColor"/>
+                                                            </svg>
+                                                            최근 검색어
+                                                        </h4>
+                                                        {isLoggedIn && searchHistory.length > 0 && (
                                                             <button
                                                                 className="clear-all-btn"
                                                                 onClick={handleClearAllHistory}
                                                             >
                                                                 전체삭제
                                                             </button>
-                                                        </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* 로그인된 사용자이고 검색 기록이 있는 경우 */}
+                                                    {isLoggedIn && searchHistory.length > 0 && (
                                                         <ul className="search-list">
                                                             {searchHistory.map((item, i) => (
                                                                 <li key={i} className="search-item">
@@ -412,27 +416,49 @@ const Header = () => {
                                                                 </li>
                                                             ))}
                                                         </ul>
-                                                    </div>
-                                                )}
+                                                    )}
 
-                                                {/* 🔹 인기 검색어 (모든 사용자) */}
-                                                {popularKeywords.length > 0 && (
-                                                    <div className="search-section">
-                                                        {/* 검색 기록이 있을 때만 구분선 */}
-                                                        {isLoggedIn && searchHistory.length > 0 &&
-                                                            <div className="search-divider"></div>}
-
-                                                        <div className="search-section-header">
-                                                            <h4 className="search-section-title">
-                                                                <svg width="16" height="16" viewBox="0 0 24 24"
-                                                                     fill="none" className="search-icon-small">
-                                                                    <polygon
-                                                                        points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-                                                                        fill="currentColor"/>
-                                                                </svg>
-                                                                인기 검색어
-                                                            </h4>
+                                                    {/* 비로그인 상태이거나 검색 기록이 없는 경우 */}
+                                                    {(!isLoggedIn || (isLoggedIn && searchHistory.length === 0)) && (
+                                                        <div className="empty-history-state" style={{
+                                                            textAlign: 'center',
+                                                            padding: '20px 10px',
+                                                            color: '#666',
+                                                            fontSize: '14px'
+                                                        }}>
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ marginBottom: '8px', opacity: '0.5' }}>
+                                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                                                                <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2"/>
+                                                            </svg>
+                                                            <p style={{ margin: '0' }}>
+                                                                {!isLoggedIn ? '로그인 후 검색기록을 확인하세요' : '검색기록이 없습니다'}
+                                                            </p>
                                                         </div>
+                                                    )}
+                                                </div>
+
+                                                {/* 🔹 구분선 */}
+                                                <div className="search-divider" style={{
+                                                    width: '1px',
+                                                    backgroundColor: '#e0e0e0',
+                                                    margin: '8px 0'
+                                                }}></div>
+
+                                                {/* 🔹 인기 검색어 영역 (항상 표시, 반반) */}
+                                                <div className="search-section" style={{ flex: '1', paddingLeft: '8px' }}>
+                                                    <div className="search-section-header">
+                                                        <h4 className="search-section-title">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24"
+                                                                 fill="none" className="search-icon-small">
+                                                                <polygon
+                                                                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                                                                    fill="currentColor"/>
+                                                            </svg>
+                                                            인기 검색어
+                                                        </h4>
+                                                    </div>
+
+                                                    {popularKeywords.length > 0 ? (
                                                         <ul className="search-list popular-list">
                                                             {popularKeywords.map((item, i) => (
                                                                 <li
@@ -452,8 +478,20 @@ const Header = () => {
                                                                 </li>
                                                             ))}
                                                         </ul>
-                                                    </div>
-                                                )}
+                                                    ) : (
+                                                        <div className="empty-popular-state" style={{
+                                                            textAlign: 'center',
+                                                            padding: '20px 10px',
+                                                            color: '#666',
+                                                            fontSize: '14px'
+                                                        }}>
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ marginBottom: '8px', opacity: '0.5' }}>
+                                                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor"/>
+                                                            </svg>
+                                                            <p style={{ margin: '0' }}>인기 검색어가 없습니다</p>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
