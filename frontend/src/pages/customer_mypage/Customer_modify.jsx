@@ -8,6 +8,7 @@ import defaultProfile from "../../image/logo/spLogo.png";
 
 function Customer_modify() {
   const [previewImage, setPreviewImage] = useState(defaultProfile);
+  const [profileFile, setProfileFile] = useState(null);
   const fileInputRef = useRef(null);
 
   const [email, setEmail] = useState("");
@@ -23,8 +24,7 @@ function Customer_modify() {
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
 
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const userIdFromStorage = storedUser?.id;
+  const [initialInfo, setInitialInfo] = useState({});
 
   useEffect(() => {
     axios.get("http://localhost:80/api/customers", { withCredentials: true })
@@ -32,24 +32,43 @@ function Customer_modify() {
         const data = res.data?.data?.customer;
         if (!data) return;
 
-        setEmail((data.email || "").toLowerCase()); 
+        setEmail((data.email || "").toLowerCase());
         setName(data.name || "");
         setNickname(data.nickname || "");
+
         if (data.phone) {
           setPhone1(data.phone.slice(0, 3));
           setPhone2(data.phone.slice(3, 7));
           setPhone3(data.phone.slice(7));
         }
+
         setGender(data.gender || "");
+
         if (data.birthDate) {
           setBirthMonth(data.birthDate.slice(0, 2));
           setBirthDay(data.birthDate.slice(2));
         }
+
+        const profileImageFileName = data.profileImageUrl;
+        if (profileImageFileName) {
+          const fullUrl = profileImageFileName.startsWith("http")
+            ? profileImageFileName
+            : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${profileImageFileName}`;
+          setPreviewImage(fullUrl);
+        }
+
+        setInitialInfo({
+          name: data.name || "",
+          nickname: data.nickname || "",
+          phone: data.phone || "",
+          gender: data.gender || "",
+          birthDate: data.birthDate || ""
+        });
       })
       .catch((err) => {
         console.error("회원 정보 불러오기 실패:", err);
       });
-  }, [userIdFromStorage]);
+  }, []);
 
   const handleImageClick = () => fileInputRef.current.click();
 
@@ -57,11 +76,57 @@ function Customer_modify() {
     const file = e.target.files[0];
     if (file) {
       setPreviewImage(URL.createObjectURL(file));
+      setProfileFile(file);
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!profileFile) {
+      alert("변경할 프로필 이미지를 선택해주세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("profileImage", profileFile);
+
+    try {
+      const res = await axios.put("http://localhost:80/api/customers/mypage/local/profile", formData, {
+        withCredentials: true,
+      });
+
+      const newImageUrl = res.data?.data?.profileImageUrl;
+      if (newImageUrl) {
+        const fullUrl = newImageUrl.startsWith("http")
+          ? newImageUrl
+          : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${newImageUrl}`;
+        setPreviewImage(fullUrl);
+      }
+
+      alert("프로필 이미지가 성공적으로 변경되었습니다!");
+    } catch (error) {
+      console.error("프로필 이미지 변경 실패:", error);
+      alert("이미지 변경 중 오류가 발생했습니다.");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const currentPhone = `${phone1}${phone2}${phone3}`;
+    const currentBirth = `${birthMonth}${birthDay}`;
+
+    const isModified =
+      name !== initialInfo.name ||
+      nickname !== initialInfo.nickname ||
+      currentPhone !== initialInfo.phone ||
+      gender !== initialInfo.gender ||
+      currentBirth !== initialInfo.birthDate ||
+      newPassword !== "" || confirmPassword !== "";
+
+    if (!isModified) {
+      alert("변경된 정보가 없습니다.");
+      return;
+    }
 
     const requestData = {
       updateDto: {
@@ -69,21 +134,20 @@ function Customer_modify() {
         name: name || "",
         currentPassword: currentPassword || "",
         nickname: nickname || "",
-        phone: `${phone1}${phone2}${phone3}` || "",
+        phone: currentPhone,
         gender: gender || "",
-        birthDate: `${birthMonth}${birthDay}`,
+        birthDate: currentBirth,
         profileImageUrl: ""
-
       },
       passwordChangeDto: {
-        currentPassword: currentPassword || "", 
+        currentPassword: currentPassword || "",
         newPassword: newPassword || "",
         confirmPassword: confirmPassword || ""
       }
     };
 
     try {
-      await axios.put("http://localhost:80/api/customers/mypage/local", requestData, {
+      await axios.put("http://localhost:80/api/customers/local/profile", requestData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -154,9 +218,9 @@ function Customer_modify() {
                 onClick={handleImageClick}
               />
               <div className="profile-buttons">
-                <button className="black-btn" type="button">
-                  변경
-                </button>
+              <button className="black-btn" type="button" onClick={handleImageUpload}>
+                변경
+              </button>
                 <button className="white-btn" type="button">
                   삭제
                 </button>
