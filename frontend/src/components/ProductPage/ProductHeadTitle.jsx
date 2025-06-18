@@ -14,6 +14,7 @@ export default function ProductHeadTitle({
   originalPrice,
   discountPrice,
   currentDiscountRate,
+  stockQuantity,
 }) {
   
   const navigate = useNavigate();
@@ -24,7 +25,13 @@ export default function ProductHeadTitle({
   // 수량 상태 추가
   const [quantity, setQuantity] = useState(1);
 
-  const increaseQuantity = () => setQuantity((q) => q + 1);
+  const increaseQuantity = () => {
+    if (quantity >= stockQuantity) {
+      alert("최대 수량입니다.");
+      return;
+    }
+    setQuantity((q) => q + 1);
+  };  
   const decreaseQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
 
   // 총 가격 계산
@@ -51,6 +58,7 @@ export default function ProductHeadTitle({
           currentDiscountRate: discountRate,
           quantity: quantity,
           totalPrice: totalPrice,
+          stockQuantity: stockQuantity,
         },
       },
     });
@@ -68,7 +76,8 @@ export default function ProductHeadTitle({
         originalPrice,
         discountPrice,
         currentDiscountRate,
-        totalPrice
+        totalPrice,
+        stockQuantity,
       );
   
       console.log("🛒 장바구니 추가 요청:", {
@@ -81,6 +90,7 @@ export default function ProductHeadTitle({
         discountPrice,
         currentDiscountRate,
         totalPrice,
+        stockQuantity,
       });
   
       alert(`장바구니에 ${name} ${quantity}개 추가되었습니다.`);
@@ -103,6 +113,9 @@ export default function ProductHeadTitle({
           </div>
           <div className="productDesc">
             <p>{description}</p>
+          </div>
+          <div className="productStockQuantity">
+            <p>남은 수량 : {stockQuantity}</p>
           </div>
           <div className="productPrice">
             <div className="price productFlex">

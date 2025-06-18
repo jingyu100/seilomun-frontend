@@ -163,6 +163,7 @@ li {
 .productTitle .productTitle-head .productName,
 .product-expiryDate,
 .productDesc,
+.productStockQuantity,
 .productPrice {
   padding: 10px 0;
 }
@@ -184,6 +185,10 @@ li {
 }
 
 .productTitle .productTitle-head .productDesc > p {
+  font-size: 15px;
+}
+
+.productTitle .productTitle-head .productStockQuantity > p {
   font-size: 15px;
 }
 

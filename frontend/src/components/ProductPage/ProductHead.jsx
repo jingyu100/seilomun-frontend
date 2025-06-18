@@ -169,6 +169,7 @@ export default function ProductHead() {
                         minDiscountRate={product.minDiscountRate || "최소 할인 없음"}
                         currentDiscountRate={product.currentDiscountRate || "현재 할인 없음"}
                         discountPrice={product.discountPrice || "할인 가격 없음"}
+                        stockQuantity={product.stockQuantity || "수량 정보 없음"}
                     />
                 </div>
             </div>
