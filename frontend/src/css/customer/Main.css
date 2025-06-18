@@ -304,7 +304,7 @@
 /* ---------- 임박특가 추천 ---------- */
 
 
-/* ---------- New 맞춤 추천 ---------- */
+/* ---------- New 추천 부분 ---------- */
 .NM_ProductList {
   display: flex;
   flex-direction: column;
@@ -388,5 +388,40 @@
   font-size: 16px;
   text-align: left;
 }
-/* ---------- New 맞춤 추천 ---------- */
+/* ---------- New 추천 부분 ---------- */
 
+
+/* ---------- 맞춤 추천 슬라이드 버튼 ---------- */
+.LSP_Scroll_Area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* 버튼 크기 및 간격 */
+.LSP_nav_button {
+  background-color: transparent;
+  border: none;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 10px;
+  color: #333;
+}
+
+.LSP_nav_button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 기존 리스트 설정 유지 */
+.LSP_ProductList_Container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  gap: 28px;
+  padding: 16px 0;
+  width: 100%;
+}
+/* ---------- 맞춤 추천 슬라이드 버튼 ---------- */

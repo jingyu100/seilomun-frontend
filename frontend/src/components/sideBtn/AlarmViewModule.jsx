@@ -39,8 +39,9 @@ export default function AlarmViewModule({
                                 <div key={noti.id} className="sideAlarm-main">
                                     <div className="sideAlarm-content">
                                         <a href="#">
-                                            <div>
-                                                <li
+                                            <div className=''>
+                                                <li 
+                                                    className='sideAlarm-title'
                                                     style={{
                                                         fontWeight:
                                                             noti.isRead === "N"
@@ -50,14 +51,14 @@ export default function AlarmViewModule({
                                                 >
                                                     {noti.content}
                                                 </li>
-                                                <small>
+                                                <small className='sideAlarm-date'>
                                                     {new Date(noti.createdAt).toLocaleString()}
                                                 </small>
                                             </div>
                                         </a>
                                     </div>
                                     <div
-                                        className="headAlarm-read"
+                                        className="sideAlarm-read"
                                         onClick={() => markAsRead(noti.id)}
                                     >
                                         읽음
