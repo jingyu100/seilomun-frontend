@@ -215,10 +215,10 @@
   background-color: #b6b6b6;
 }
 
-.delete-btn {
+.address-delete-btn {
   background: none;
   border: none;
-  font-size: 50px;
+  font-size: 40px;
   color: black;
   position: absolute;
   top: 10px;
@@ -234,3 +234,5 @@
   font-weight: bold;
   font-size: 14px;
 }
+
+
