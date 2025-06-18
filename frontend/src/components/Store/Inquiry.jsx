@@ -3,7 +3,7 @@ import useLogin from "../../Hooks/useLogin.js";
 import axios from "axios";
 import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
 
-export default function Inquiry({ sellerId }) {
+export default function Inquiry({ sellerId, onOpenChat }) {
   const { user } = useLogin();
   const { addChatRoom } = useChatRooms();
 
@@ -29,7 +29,7 @@ export default function Inquiry({ sellerId }) {
 
       // Context 업데이트: 응답 데이터를 그대로 사용해 새 채팅방 추가
       const roomData = response.data.data;
-      addChatRoom({
+      const newChatRoom = {
         id: roomData.chatRoomId,
         customerId: roomData.customerId,
         customerNickname: roomData.customerNickname,
@@ -39,7 +39,14 @@ export default function Inquiry({ sellerId }) {
         lastMessage: roomData.lastMessage,
         lastMessageTime: roomData.lastMessageTime,
         unreadCount: 0,
-      });
+      };
+
+      addChatRoom(newChatRoom);
+
+      // 채팅방 생성 후 사이드 채팅 모듈 열기
+      if (onOpenChat) {
+        onOpenChat(newChatRoom);
+      }
     } catch (error) {
       console.error("채팅방 생성 실패:", error);
       alert("채팅방 생성에 실패했습니다.");
@@ -47,30 +54,30 @@ export default function Inquiry({ sellerId }) {
   };
 
   return (
-    <div
-      className="inquiry storeRight-ui"
-      onClick={handleNewChatRoom}
-      style={{ cursor: user ? "pointer" : "not-allowed", opacity: user ? 1 : 0.5 }}
-      title={user ? "1:1 문의" : "로그인 후 이용 가능합니다"}
-    >
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "8px",
-        }}
+          className="inquiry storeRight-ui"
+          onClick={handleNewChatRoom}
+          style={{ cursor: user ? "pointer" : "not-allowed", opacity: user ? 1 : 0.5 }}
+          title={user ? "1:1 문의" : "로그인 후 이용 가능합니다"}
       >
-        <p style={{ paddingTop: "3px" }}>1:1문의</p>
-        <img
-          src="/image/icon/icon-chat2.png"
-          alt=""
-          style={{
-            width: "20%",
-            height: "auto",
-          }}
-        />
+        <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "8px",
+            }}
+        >
+          <p style={{ paddingTop: "3px" }}>1:1문의</p>
+          <img
+              src="/image/icon/icon-chat2.png"
+              alt=""
+              style={{
+                width: "20%",
+                height: "auto",
+              }}
+          />
+        </div>
       </div>
-    </div>
   );
 }
