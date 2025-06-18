@@ -17,6 +17,7 @@
   align-items: center;
   color: white;
   z-index: 99;
+  gap: 20px;
 }
 
 /* 사이드 메뉴 아이템 */
@@ -111,7 +112,7 @@
 .status-option {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 50px;
   padding: 10px 16px;
   cursor: pointer;
 }
