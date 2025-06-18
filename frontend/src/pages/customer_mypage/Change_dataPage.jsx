@@ -41,7 +41,7 @@ const handlePasswordCheck = async () => {
 
   try {
     const res = await axios.post(
-      "http://localhost/api/customers/mypage/password",
+      "http://3.36.70.70/api/customers/mypage/password",
       { currentPassword: password },
       { withCredentials: true }
     );
