@@ -66,7 +66,7 @@ const MyPage = () => {
         <SideMenuBtn />
         <div className="mypage-area">
           <aside className="mypage-sidebar22">
-            <div className="title-xl">마이페이지</div>
+            <div onClick={() => (window.location.href = "/mypage")} className="title-xl">마이페이지</div>
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
               <ul>

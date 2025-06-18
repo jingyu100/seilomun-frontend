@@ -18,6 +18,7 @@
     font-size: 26px;
     font-weight: 900;
     margin-bottom: 24px;
+    cursor: pointer;
   }
   
   .title-lg {
@@ -118,7 +119,7 @@
   
   /* 리스트 */
   .mypage-list-box-mypage {
-    margin-top: 100px;
+    margin-top: 30px;
     display: flex;
     gap: 60px;
   }
