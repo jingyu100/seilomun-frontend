@@ -8,22 +8,74 @@
     width: 100%;
 }
 
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9); /* 흰색 반투명으로 변경 */
+    color: #333; /* 텍스트 색상을 어두운 회색으로 */
+    border: 2px solid rgba(0, 0, 0, 0.1); /* 연한 테두리 추가 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* 부드러운 그림자 추가 */
+    font-size: 32px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover {
+    background-color: #d7f7af; /* 페이지에서 사용하는 연한 녹색으로 */
+    color: #333;
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.prev-btn {
+    left: 30px; /* 20px에서 30px로 조정 */
+}
+
+.next-btn {
+    right: 30px; /* 20px에서 30px로 조정 */
+}
+
+.autoplay-indicator {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 15px;
+    font-size: 12px;
+    z-index: 10;
+    opacity: 0.7;
+}
+
 .storeBanner {
     position: fixed;
     width: 100% !important;
-    height: 210px;
+    height: 320px; /* 280px에서 320px로 높이 추가 증가 */
     overflow: hidden;
+    display: flex;
+    justify-content: center; /* 중앙 정렬 추가 */
 }
 
 .storeImage {
-    width: 100%;
+    width: 80%; /* 100%에서 80%로 폭 감소 */
     height: 100%;
     object-fit: cover; /* 넘치는 부분 자르기 */
     object-position: center; /* 중앙 기준으로 자르기 */
+    border-radius: 0 0 12px 12px; /* 하단 모서리 둥글게 */
 }
 
 .storeUI {
-    padding-top: var(--store-header-height);
+    padding-top: calc(var(--store-header-height) + 110px); /* 높이 증가에 맞춰 패딩 조정 */
 }
 
 .storeUI .storeInner {
@@ -61,14 +113,14 @@
     flex-flow: wrap;
 }
 
-.storeUI .storeInner .storeMargin .storeHead .storeHead-inner 
+.storeUI .storeInner .storeMargin .storeHead .storeHead-inner
 .storeHead-half {
     flex-basis: 50%;
     flex-grow: 0;
     max-width: 50%;
 }
 
-.storeUI .storeInner .storeMargin .storeHead .storeHead-inner 
+.storeUI .storeInner .storeMargin .storeHead .storeHead-inner
 .storeHead-right {
     display: flex;
     flex-direction: column;
@@ -188,21 +240,21 @@
 
 @media (max-width: 1200px) {
     .productList {
-      grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .productList {
-      grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
-  }
-  
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     .productList {
-      grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
-  }
+}
 /* ---------- 스토어 바디 부분 ---------- */
 
 
@@ -275,7 +327,7 @@
 
 .productItem:hover .store-product-image {
     transform: scale(1.05);
-  }
+}
 /* ---------- 스토어 제품 카드 부분 ---------- */
 
 
