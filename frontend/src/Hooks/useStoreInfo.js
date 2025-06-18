@@ -22,8 +22,16 @@ export default function useStoreInfo() {
           return;
         }
 
+        //이미지 URL 생성
+        const sellerPhotoUrls = sellerInformationDto.sellerPhotos
+            ?.filter(photo => !photo.endsWith('.txt')) // .txt 파일 제외
+            ?.map(photo => `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo}`) || [];
+
         setStore({
-          sellerInformationDto,
+          sellerInformationDto: {
+            ...sellerInformationDto,
+            sellerPhotoUrls // URL 배열 추가
+          },
           sellerPhotoDto: null,
           sellerRegisterDto: null, // 필요한 경우 백에서 받아서 넣기
         });
