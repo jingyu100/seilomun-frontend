@@ -15,7 +15,7 @@ import { useNotificationContext } from "../Context/NotificationContext";
 const Header = () => {
     const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
     const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotificationContext(
-        "http://localhost",
+        "http://3.36.70.70",
         "customer"
     );
     const { cartItems, setCartItems, removeFromCart } = useCart();

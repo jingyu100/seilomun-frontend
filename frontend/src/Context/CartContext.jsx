@@ -9,7 +9,7 @@ export const CartProvider = ({ children }) => {
     // 장바구니 목록 조회
     const fetchCart = async () => {
         try {
-            const res = await axios.get("http://localhost/api/carts", {
+            const res = await axios.get("http://3.36.70.70/api/carts", {
                 withCredentials: true,
             });
             const items = res?.data?.data?.products || {};
@@ -51,7 +51,7 @@ export const CartProvider = ({ children }) => {
     ) => {
         try {
             await axios.post(
-                "http://localhost/api/carts",
+                "http://3.36.70.70/api/carts",
                 { productId, quantity },
                 { withCredentials: true }
             );
@@ -98,7 +98,7 @@ export const CartProvider = ({ children }) => {
     // 상품 삭제
     const removeFromCart = async (productId) => {
         try {
-            await axios.delete(`http://localhost/api/carts/${productId}`, {
+            await axios.delete(`http://3.36.70.70/api/carts/${productId}`, {
                 withCredentials: true,
             });
             // fetchCart();
@@ -112,7 +112,7 @@ export const CartProvider = ({ children }) => {
     const updateQuantity = async (productId, quantity) => {
         try {
             await axios.put(
-                `http://localhost/api/carts/${productId}`,
+                `http://3.36.70.70/api/carts/${productId}`,
                 { productId, quantity },
                 { withCredentials: true }
             );
@@ -125,7 +125,7 @@ export const CartProvider = ({ children }) => {
     // 장바구니 비우기
     const clearCart = async () => {
         try {
-            await axios.delete("http://localhost/api/carts", {
+            await axios.delete("http://3.36.70.70/api/carts", {
                 withCredentials: true,
             });
             setCartItems([]);

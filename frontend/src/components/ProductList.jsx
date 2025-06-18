@@ -58,7 +58,7 @@ const ProductList = () => {
 
         console.log("검색 파라미터:", { keyword, categoryId, filterType, sortType });
 
-        const res = await axios.get("http://localhost/api/products/search", {
+        const res = await axios.get("http://3.36.70.70/api/products/search", {
           params: {
             keyword: keyword || undefined,
             categoryId: categoryId || undefined,
