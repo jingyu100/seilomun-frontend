@@ -23,17 +23,14 @@ export default function useProductInfo() {
           return;
         }
 
-        const productPhotoUrls = productDto.productPhoto.photoUrl || [];
-
 
         setProduct({
           productDto,
-          productPhoto: productPhotoUrls, // 🔥 실제 사진 URL 배열로 설정
+          productPhoto: null, // 🔥 실제 사진 URL 배열로 설정
           productDocument: null,
         });
 
         console.log("✅ product 상태 설정 완료");
-        console.log("✅ 설정된 상품 사진:", productPhotoUrls);
 
       } catch (error) {
         console.error("API 요청 실패:", error);
