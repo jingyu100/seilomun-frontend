@@ -42,9 +42,9 @@ export default function StoreHead({ store, sellerId, onOpenChat }) {
                         notification={sellerInformationDto?.notification || ""}
                         notificationPhotos={
                             (sellerInformationDto?.notificationPhotos || []).map(url =>
-                                url.startsWith("http")
+                                url.photoUrl.startsWith("http")
                                     ? url
-                                    : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`
+                                    : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url.photoUrl}`
                             )
                         }
                     />

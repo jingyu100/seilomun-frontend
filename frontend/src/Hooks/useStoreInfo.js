@@ -16,7 +16,7 @@ export default function useStoreInfo() {
         console.log("API 응답:", response.data);
 
         const sellerInformationDto = response.data.data.seller;
-
+        console.log(sellerInformationDto);
         if (!sellerInformationDto) {
           navigate("/404", { replace: true });
           return;
@@ -24,8 +24,8 @@ export default function useStoreInfo() {
 
         //이미지 URL 생성
         const sellerPhotoUrls = sellerInformationDto.sellerPhotos
-            ?.filter(photo => !photo.endsWith('.txt')) // .txt 파일 제외
-            ?.map(photo => `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo}`) || [];
+            ?.filter(photo => !photo.photoUrl.endsWith('.txt')) // .txt 파일 제외
+            ?.map(photo => `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`) || [];
 
         setStore({
           sellerInformationDto: {
