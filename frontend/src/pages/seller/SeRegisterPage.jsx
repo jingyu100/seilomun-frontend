@@ -123,6 +123,7 @@ function SeRegisterPage() {
       storeName,
       categoryId,
       phone,
+      address,
       addressDetail,
     };
 
