@@ -9,10 +9,18 @@ import statistics from "../../image/icon/seller_icon/seller_statistics.png";
 import store from "../../image/icon/seller_icon/seller_store.png";
 import red from "../../image/icon/seller_icon/seller_red.png";
 import green from "../../image/icon/seller_icon/seller_green.png";
+import blue from "../../image/icon/seller_icon/seller_blue.png";
 import list from "../../image/icon/seller_icon/seller_list.png";
 import SellerChatBtn from "./SellerChatBtn";
-import useLogin from "../../Hooks/useLogin"; // ✅ 추가
-import axios from "axios"; // ✅ 추가
+import useLogin from "../../Hooks/useLogin";
+import axios from "axios";
+
+// 현재 가게 상태
+const statusMap = {
+  '0': { text: "영업종료", color: red },
+  '1': { text: "영업중", color: green },
+  '2': { text: "브레이크타임", color: blue },
+};
 
 // 왼쪽 메뉴바
 const menuItems = [
@@ -20,18 +28,19 @@ const menuItems = [
   { icon: order, label: "주문접수" },
   { icon: menu, label: "상품관리", path: "/seller/product/management" },
   { icon: alarm, label: "알림" },
-  { icon: review, label: "리뷰관리" },
+  { icon: review, label: "리뷰관리", path: "/Seller_reviewPage" },
   { icon: statistics, label: "통계보기", path: "/seller/stats" },
 ];
 
 const Seller_Header = () => {
   const navigate = useNavigate();
-  const { setUser, setIsLoggedIn, user } = useLogin(); // ✅ user 추가
+  const { setUser, setIsLoggedIn, user } = useLogin();
 
   const [hoverIndex, setHoverIndex] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState("0"); // 기본값: 영업종료
   const [storeName, setStoreName] = useState("");
+  const [showStatusOptions, setShowStatusOptions] = useState(false);
 
   // storeName 불러오기
   useEffect(() => {
@@ -41,27 +50,39 @@ const Seller_Header = () => {
           withCredentials: true,
         });
 
-        console.log("✅ /me 응답 데이터:", response.data);
         const store = response.data.data?.storeName;
-        if (store) {
-          setStoreName(store);
-        } else {
-          console.warn("⚠ storeName이 응답에 없습니다.");
-        }
+        const sellerInfo = response.data.data?.sellerInformationDto;
+
+        if (store) setStoreName(store);
+        if (sellerInfo?.isOpen) setIsOpen(sellerInfo.isOpen);
       } catch (err) {
         console.error("❌ 판매자 정보 불러오기 실패:", err);
+        setIsOpen("0"); // 실패 시 영업종료로 설정
       }
     };
 
     fetchSellerInfo();
   }, []);
 
-  // 영업중/영업종료 toggle
-  const toggleOpenStatus = () => {
-    setIsOpen((prev) => !prev);
+  const handleStatusClick = () => {
+    setShowStatusOptions((prev) => !prev);
   };
 
-  // ✅ 로그아웃 핸들러 수정 (소비자 방식과 동일하게 axios 사용)
+  const handleChangeStatus = async (newStatus) => {
+    try {
+      await axios.put(
+        "http://localhost/api/sellers/me/status",
+        { isOpen: newStatus },
+        { withCredentials: true }
+      );
+      setIsOpen(newStatus);
+      setShowStatusOptions(false);
+    } catch (err) {
+      console.error("❌ 상태 변경 실패:", err);
+      alert("상태 변경에 실패했습니다.");
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await axios.post(
@@ -78,19 +99,13 @@ const Seller_Header = () => {
       console.warn("⚠ 로그아웃 실패 (무시하고 진행):", err);
     }
 
-    // ✅ LoginContext 상태 초기화 (웹소켓 연결 해제됨)
     setUser(null);
     setIsLoggedIn(false);
-
-    // ✅ localStorage 정리
-    localStorage.removeItem("user");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("username");
-    localStorage.removeItem("sellerId");
-
-    // ✅ navigate 사용
+    localStorage.clear();
     navigate("/selogin");
   };
+
+  const { text, color } = statusMap[isOpen] || statusMap['0'];
 
   return (
     <>
@@ -100,12 +115,32 @@ const Seller_Header = () => {
           {/* 좌측: 영업 상태 */}
           <div
             className="left-header"
-            onClick={toggleOpenStatus}
-            style={{ cursor: "pointer" }}
+            onClick={handleStatusClick}
+            style={{ cursor: "pointer", position: "relative" }}
           >
             <img src={list} alt="menu" className="seller_icon" />
-            <span className="status-text">{isOpen ? "영업종료" : "영업중"}</span>
-            <img src={isOpen ? red : green} alt="status-dot" className="red-dot" />
+            <span className="status-text">{text}</span>
+            <img src={color} alt="status-dot" className="red-dot" />
+
+            {showStatusOptions && (
+              <div className="status-dropdown">
+                {Object.entries(statusMap)
+                  .filter(([key]) => key !== isOpen)
+                  .map(([key, val]) => (
+                    <div
+                      key={key}
+                      className="status-option"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleChangeStatus(key);
+                      }}
+                    >
+                      <img src={val.color} alt="dot" className="red-dot" />
+                      <span>{val.text}</span>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* 우측: 사용자 정보 */}
