@@ -96,7 +96,7 @@
 }
 
 .storeHead .storeName h1 {
-    width: 100%;
+    width: auto;
     max-width: 260px;
     height: auto;
     max-height: 80px;
