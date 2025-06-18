@@ -4,59 +4,32 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const OrderSubmitBar = ({
-  products = [],
-  deliveryFee,
-  totalProductPrice,
-  isPickup = false,
-  finalAmount, // 부모에서 계산된 최종 금액
-  deliveryInfo, // ✨ 새로 추가: 배송 정보
-  pickupInfo, // ✨ 새로 추가: 픽업 정보
-  pointsToUse = 0, // ✨ 새로 추가: 사용할 포인트
-}) => {
+                          products = [],
+                          deliveryFee,
+                          totalProductPrice,
+                          isPickup = false,
+                          finalAmount, // 부모에서 계산된 최종 금액
+                          deliveryInfo, // ✨ 새로 추가: 배송 정보
+                          pickupInfo, // ✨ 새로 추가: 픽업 정보
+                          pointsToUse = 0, // ✨ 새로 추가: 사용할 포인트
+                        }) => {
   const tossPaymentsRef = useRef(null);
   const currentOrderIdRef = useRef(null); // 현재 주문 ID를 저장할 ref
   const navigate = useNavigate();
 
   // 최종 결제 금액 계산 (부모에서 전달받은 값 우선 사용)
   const calculatedFinalAmount =
-    finalAmount || totalProductPrice + (isPickup ? 0 : deliveryFee);
+      finalAmount || totalProductPrice + (isPickup ? 0 : deliveryFee);
 
   useEffect(() => {
     if (window.TossPayments) {
       tossPaymentsRef.current = window.TossPayments(
-        "test_ck_d46qopOB896A1WOwGApY3ZmM75y0"
+          "test_ck_d46qopOB896A1WOwGApY3ZmM75y0"
       );
     } else {
       console.error("TossPayments SDK가 로드되지 않았습니다.");
     }
   }, []);
-
-  // 주문 취소 API 호출 함수
-  // const cancelOrder = async (orderId) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `http://localhost/api/orders/cancel/${orderId}`,
-  //       {},
-  //       {
-  //         withCredentials: true,
-  //         headers: { "Content-Type": "application/json" },
-  //       }
-  //     );
-
-  //     console.log("주문 취소 완료:", response.data);
-  //     alert("주문이 취소되었습니다.");
-
-  //     // 필요에 따라 페이지 리다이렉트 또는 상태 업데이트
-  //     // window.location.href = "/orders"; // 주문 목록으로 이동
-  //   } catch (error) {
-  //     console.error("주문 취소 실패:", error);
-  //     if (error.response) {
-  //       alert(`주문 취소 실패: ${error.response.data.message || "오류가 발생했습니다"}`);
-  //     } else {
-  //       alert("네트워크 오류가 발생했습니다.");
-  //     }
-  //   }
-  // };
 
   // SDK 창 닫기 처리 함수
   const handlePaymentClose = async (orderId) => {
@@ -64,12 +37,12 @@ const OrderSubmitBar = ({
       console.log("🔄 결제창 닫기 처리 시작:", orderId);
 
       const response = await axios.post(
-        `http://localhost/api/orders/close-payment/${orderId}`,
-        {},
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
+          `http://localhost/api/orders/close-payment/${orderId}`,
+          {},
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
       );
 
       console.log("✅ 결제창 닫기 처리 완료:", response.data);
@@ -99,9 +72,9 @@ const OrderSubmitBar = ({
         return false;
       }
       if (
-        !deliveryInfo.phoneFirst ||
-        !deliveryInfo.phoneMiddle ||
-        !deliveryInfo.phoneLast
+          !deliveryInfo.phoneFirst ||
+          !deliveryInfo.phoneMiddle ||
+          !deliveryInfo.phoneLast
       ) {
         alert("휴대전화 번호를 모두 입력해주세요.");
         return false;
@@ -122,41 +95,45 @@ const OrderSubmitBar = ({
       console.log("전체 products 배열:", products);
       console.log("products 길이:", products?.length);
 
-      // 실제 상품 데이터 사용
-      const firstProduct = products[0]; // 첫 번째 상품 기준 (여러 상품일 경우 수정 필요)
-      console.log("첫 번째 상품 (firstProduct):", firstProduct);
-
-      if (!firstProduct) {
-        console.error("❌ firstProduct가 없습니다!");
+      if (!products || products.length === 0) {
+        console.error("❌ 주문할 상품이 없습니다!");
         alert("주문할 상품이 없습니다.");
         return;
       }
 
-      // ✨ 실제 사용자 데이터로 구성
+      // 🆕 여러 상품 처리를 위한 주문명 생성
+      const firstProduct = products[0];
+      const orderName = products.length === 1
+          ? `${firstProduct.name} ${firstProduct.quantity || 1}개`
+          : `${firstProduct.name} 외 ${products.length - 1}건`;
+
+      console.log("생성된 주문명:", orderName);
+
+      // ✨ 여러 상품을 모두 포함하는 주문 데이터 구성
       const orderData = {
         usedPoints: pointsToUse || 0, // 기본값 보장
         memo: isPickup
-          ? pickupInfo.pickupRequest || "픽업 주문"
-          : deliveryInfo.deliveryRequest || "배송 주문",
+            ? pickupInfo.pickupRequest || "픽업 주문"
+            : deliveryInfo.deliveryRequest || "배송 주문",
         isDelivery: isPickup ? "N" : "Y", // ✅ Character로 수정
         deliveryAddress: isPickup
-          ? "매장 픽업"
-          : `${deliveryInfo.mainAddress} ${deliveryInfo.detailAddress}`.trim(),
-        orderProducts: [
-          {
-            productId: firstProduct.id,
-            quantity: firstProduct.quantity || 1,
-            price: firstProduct.discountPrice || firstProduct.originalPrice,
-            currentDiscountRate: firstProduct.currentDiscountRate || 0,
-          },
-        ],
+            ? "매장 픽업"
+            : `${deliveryInfo.mainAddress} ${deliveryInfo.detailAddress}`.trim(),
+        // 🆕 모든 상품을 orderProducts 배열에 포함
+        orderProducts: products.map(product => ({
+          productId: product.id || product.productId,
+          quantity: product.quantity || 1,
+          price: product.discountPrice || product.originalPrice,
+          currentDiscountRate: product.currentDiscountRate || 0,
+        })),
         payType: "CARD",
-        orderName: `${firstProduct.name} ${firstProduct.quantity || 1}개`,
+        orderName: orderName, // 🆕 동적 주문명 사용
         yourSuccessUrl: "http://localhost/api/orders/toss/success",
         yourFailUrl: "http://localhost/api/orders/toss/fail",
       };
 
       console.log("📦 최종 주문 데이터:", orderData);
+      console.log("📦 주문 상품들:", orderData.orderProducts);
       console.log("📦 배송 정보:", deliveryInfo);
       console.log("📦 픽업 정보:", pickupInfo);
       console.log("📦 사용 포인트:", pointsToUse);
@@ -221,22 +198,22 @@ const OrderSubmitBar = ({
   };
 
   return (
-    <div className="order-submit-bar">
-      <div className="payment-summary">
-        <span>최종 결제 금액</span>
-        <span className="final-amount">
+      <div className="order-submit-bar">
+        <div className="payment-summary">
+          <span>최종 결제 금액</span>
+          <span className="final-amount">
           {finalAmount ? `${finalAmount.toLocaleString()}원` : "계산 중..."}
         </span>
+        </div>
+        <div className="button-group">
+          <button onClick={handleCancel} className="cancel-button">
+            취소하기
+          </button>
+          <button onClick={handlePaymentClick} className="submit-button">
+            결제하기
+          </button>
+        </div>
       </div>
-      <div className="button-group">
-        <button onClick={handleCancel} className="cancel-button">
-          취소하기
-        </button>
-        <button onClick={handlePaymentClick} className="submit-button">
-          결제하기
-        </button>
-      </div>
-    </div>
   );
 };
 
