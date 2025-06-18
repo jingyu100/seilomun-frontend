@@ -5,6 +5,7 @@ import { setupAxiosInterceptor } from "./utils/AxiosInterceptor";
 import { ChatRoomsProvider } from "../src/Context/ChatRoomsContext.jsx";
 import { WebSocketProvider } from "../src/Context/WebSocketContext.jsx";
 import { CartProvider } from "../src/Context/CartContext";
+import { NotificationProvider } from "../src/Context/NotificationContext";
 
 import useLogin from "./Hooks/useLogin";
 import "./App.css";
@@ -75,60 +76,62 @@ function App() {
   }, [navigate, setIsLoggedIn, setUser]);
 
   return (
-    <CartProvider>
-      <ChatRoomsProvider>
-        <WebSocketProvider>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/new" element={<NewPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/Delivery_destination" element={<Delivery_destination />} />
-            <Route path="/Change_dataPage" element={<Change_dataPage />} />
-            <Route path="/selogin" element={<SeloginPage />} />
-            <Route path="/sail" element={<SailPage />} />
-            <Route path="/wish" element={<WishListPage />} />
-            <Route path="/Business_numberPage" element={<Business_numberPage />} />
-            <Route path="/SeRegister" element={<SeRegisterPage />} />
-            <Route path="/sellers/:sellerId" element={<StorePage />} />
-            <Route path="/postcode-popup" element={<PostcodePopup />} />
-            <Route
-              path="/sellers/:sellerId/products/:productId"
-              element={<ProductPage />}
-            />
-            <Route path="/oauth-success" element={<NaverLoginCallback />} />
-            <Route path="/Customer_modify" element={<Customer_modify />} />
-            <Route path="/Customer_point" element={<Customer_point />} />
-            <Route path="/Customer_refund" element={<Customer_refund />} />
-            <Route path="/Customer_review" element={<Customer_review />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/OrderList" element={<OrderListPage />} />
-            {/* ✅ 기존 라우트와 새로운 파라미터 라우트 모두 유지 */}
-            <Route path="/OrderDetail" element={<OrderDetailPage />} />
-            <Route path="/OrderDetail/:orderId" element={<OrderDetailPage />} />
-            <Route path="/Seller_Main" element={<Seller_Main />} />
-            <Route
-              path="/Seller_newstoreRegistration"
-              element={<Seller_newstoreRegistration />}
-            />
-            <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
-            <Route
-              path="/seller/product/management"
-              element={<Seller_ProductManagement />}
-            />
-            <Route path="/seller/product/register" element={<Seller_ProductRegister />} />
-            <Route path="/seller/stats" element={<Seller_Stats />} />
+    <NotificationProvider>
+      <CartProvider>
+        <ChatRoomsProvider>
+          <WebSocketProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/new" element={<NewPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/Delivery_destination" element={<Delivery_destination />} />
+              <Route path="/Change_dataPage" element={<Change_dataPage />} />
+              <Route path="/selogin" element={<SeloginPage />} />
+              <Route path="/sail" element={<SailPage />} />
+              <Route path="/wish" element={<WishListPage />} />
+              <Route path="/Business_numberPage" element={<Business_numberPage />} />
+              <Route path="/SeRegister" element={<SeRegisterPage />} />
+              <Route path="/sellers/:sellerId" element={<StorePage />} />
+              <Route path="/postcode-popup" element={<PostcodePopup />} />
+              <Route
+                path="/sellers/:sellerId/products/:productId"
+                element={<ProductPage />}
+              />
+              <Route path="/oauth-success" element={<NaverLoginCallback />} />
+              <Route path="/Customer_modify" element={<Customer_modify />} />
+              <Route path="/Customer_point" element={<Customer_point />} />
+              <Route path="/Customer_refund" element={<Customer_refund />} />
+              <Route path="/Customer_review" element={<Customer_review />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/OrderList" element={<OrderListPage />} />
+              {/* ✅ 기존 라우트와 새로운 파라미터 라우트 모두 유지 */}
+              <Route path="/OrderDetail" element={<OrderDetailPage />} />
+              <Route path="/OrderDetail/:orderId" element={<OrderDetailPage />} />
+              <Route path="/Seller_Main" element={<Seller_Main />} />
+              <Route
+                path="/Seller_newstoreRegistration"
+                element={<Seller_newstoreRegistration />}
+              />
+              <Route path="/Seller_reviewPage" element={<Seller_reviewPage />} />
+              <Route
+                path="/seller/product/management"
+                element={<Seller_ProductManagement />}
+              />
+              <Route path="/seller/product/register" element={<Seller_ProductRegister />} />
+              <Route path="/seller/stats" element={<Seller_Stats />} />
 
-            {/* 판매자 주문 관리 */}
-            <Route path="/seller/orders/number/:orderNumber" element={<Seller_OrderDetail />} />
-            <Route path="/seller/orders/:orderId" element={<Seller_OrderDetail />} />
-            <Route path="/seller/refunds/:refundId" element={<Seller_RefundDetail />} />
+              {/* 판매자 주문 관리 */}
+              <Route path="/seller/orders/number/:orderNumber" element={<Seller_OrderDetail />} />
+              <Route path="/seller/orders/:orderId" element={<Seller_OrderDetail />} />
+              <Route path="/seller/refunds/:refundId" element={<Seller_RefundDetail />} />
 
-          </Routes>
-        </WebSocketProvider>
-      </ChatRoomsProvider>
-    </CartProvider>
+            </Routes>
+          </WebSocketProvider>
+        </ChatRoomsProvider>
+      </CartProvider>
+    </NotificationProvider>
   );
 }
 

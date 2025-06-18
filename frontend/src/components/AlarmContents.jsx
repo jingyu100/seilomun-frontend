@@ -19,7 +19,7 @@ export default function AlarmContents({
                 <main>
                 {!isLoggedIn ? (
                     <div className="noAlarm">
-                    <li>로그인 후 알림을 확인할 수 있습니다.</li>
+                        <li>로그인 후 알림을 확인할 수 있습니다.</li>
                     </div>
                 ) : (
                     <>

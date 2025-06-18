@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import useNotifications from "../../Hooks/useNotifications";
 import useLogin from '../../Hooks/useLogin.js';
 import AlarmViewModule from "./AlarmViewModule";
 import SideAlarmBtn from './SideAlarmBtn.jsx';
 import SideCartBtn from './SideCartBtn.jsx';
 import SideChatBtn from './SideChatBtn.jsx';
+import { useNotificationContext } from "../../Context/NotificationContext.jsx";
 
 function SideMenuBtn () {
    const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
    const [isChatModalOpen, setIsModalOpen] = useState(false);
    const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
 
-   const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotifications(
+   const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotificationContext(
            "http://localhost",
            "customer"
        );
