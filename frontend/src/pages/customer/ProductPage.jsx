@@ -1,17 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import useProductInfo from "../../Hooks/useProductInfo.js";
-import "../../css/customer/Store.css";
-import "../../css/customer/Product.css";
-import Header from "../../components/Header.jsx";
-import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import Footer from "../../components/Footer.jsx";
-import StoreHead from "../../components/Store/StoreHead.jsx";
-import StoreBody from "../../components/Store/StoreBody.jsx";
-import ProductHead from "../../components/ProductPage/ProductHead.jsx";
-import ChatViewModule from "../../components/sideBtn/Chatting/ChatViewModule.jsx";
-import ChatRoomView from "../../components/sideBtn/Chatting/ChatRoomView.jsx";
+// ... 기타 imports
 
 export default function ProductPage() {
     const { product } = useProductInfo();
@@ -26,14 +17,61 @@ export default function ProductPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
 
-    // 데이터 추출
-    const sellerPhotoDto = store?.sellerPhotoDto;
+    console.log("상품 데이터:", product);
 
-    // 가게 사진: store에서 가져옴 (기존 로직 유지)
-    const sellerInformationDto = store?.sellerInformationDto;
-    const imageList = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
+    // 🔥 상품 사진 처리
+    const productImages = useMemo(() => {
+        if (!product || !product.productPhoto) {
+            console.log("🔍 ProductPage - product 또는 productPhoto가 없음");
+            return [];
+        }
 
-    console.log("preddc", product);
+        const photoUrls = product.productPhoto; // useProductInfo에서 이미 배열로 설정됨
+
+        console.log("🔍 ProductPage - 원본 상품 사진 URLs:", photoUrls);
+
+        if (Array.isArray(photoUrls) && photoUrls.length > 0) {
+            const processedImages = photoUrls.map(url => {
+                if (!url) return null;
+
+                // 이미 완전한 URL인 경우 그대로 사용
+                if (url.startsWith("http")) {
+                    return url;
+                }
+
+                // S3 URL로 변환 (필요한 경우)
+                return `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
+            }).filter(url => url !== null);
+
+            console.log("✅ ProductPage - 처리된 상품 이미지:", processedImages);
+            return processedImages;
+        }
+
+        console.log("❌ ProductPage - 상품 이미지가 빈 배열");
+        return [];
+    }, [product]);
+
+    // 🔥 가게 사진 처리 (기존 로직)
+    const storeImages = useMemo(() => {
+        const sellerInformationDto = store?.sellerInformationDto;
+        const urls = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
+
+        return urls.filter(url => url && typeof url === 'string' && url.trim() !== '');
+    }, [store]);
+
+    // 🔥 메인 배너에 표시할 이미지 결정 (상품 사진 우선, 없으면 가게 사진)
+    const imageList = useMemo(() => {
+        if (productImages.length > 0) {
+            console.log("✅ 상품 사진을 배너에 표시:", productImages);
+            return productImages;
+        }
+        console.log("✅ 가게 사진을 배너에 표시:", storeImages);
+        return storeImages;
+    }, [productImages, storeImages]);
+
+    console.log("🔍 ProductPage - 상품 사진:", productImages);
+    console.log("🔍 ProductPage - 가게 사진:", storeImages);
+    console.log("🔍 ProductPage - 메인 배너 이미지:", imageList);
 
     // 이미지가 변경될 때 인덱스 초기화
     useEffect(() => {
@@ -53,7 +91,7 @@ export default function ProductPage() {
         return () => clearInterval(interval);
     }, [imageList.length, isAutoPlay]);
 
-    // 슬라이더 함수들
+    // 나머지 함수들은 기존과 동일...
     const goToNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
@@ -70,7 +108,6 @@ export default function ProductPage() {
         setCurrentImageIndex(index);
     };
 
-    // 마우스 이벤트 핸들러
     const handleMouseEnter = () => {
         setIsAutoPlay(false);
     };
@@ -79,7 +116,7 @@ export default function ProductPage() {
         setIsAutoPlay(true);
     };
 
-    // 채팅 모듈 열기 함수
+    // 채팅 관련 함수들도 기존과 동일...
     const handleOpenChat = (chatRoom = null) => {
         if (chatRoom) {
             setSelectedChatRoom(chatRoom);
@@ -87,18 +124,15 @@ export default function ProductPage() {
         setIsChatOpen(true);
     };
 
-    // 채팅 모듈 닫기 함수
     const handleCloseChat = () => {
         setIsChatOpen(false);
         setSelectedChatRoom(null);
     };
 
-    // 채팅방 목록으로 돌아가기
     const handleBackToList = () => {
         setSelectedChatRoom(null);
     };
 
-    // 바깥 클릭 시 채팅 모듈 닫기
     const handleOutsideClick = (e) => {
         if (chatModalRef.current && !chatModalRef.current.contains(e.target)) {
             handleCloseChat();
@@ -117,6 +151,7 @@ export default function ProductPage() {
         };
     }, [isChatOpen]);
 
+    // JSX는 기존과 동일 (imageList만 변경됨)
     return (
         <div className="storeMain">
             <div className="header">
@@ -130,7 +165,7 @@ export default function ProductPage() {
             >
                 <img
                     src={imageList[currentImageIndex]}
-                    alt={`가게 이미지 ${currentImageIndex + 1}`}
+                    alt={`${productImages.length > 0 ? '상품' : '가게'} 이미지 ${currentImageIndex + 1}`}
                     className="storeImage"
                 />
 
@@ -174,6 +209,7 @@ export default function ProductPage() {
                 )}
             </div>
 
+            {/* 나머지 JSX는 기존과 동일... */}
             <div className="storeUI">
                 <SideMenuBtn />
                 <div className="storeInner">
@@ -201,14 +237,14 @@ export default function ProductPage() {
                                 </div>
 
                                 <div className="productBody">
-                                   
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* 채팅 모듈 - SideChatBtn과 동일한 스타일 */}
+                {/* 채팅 모듈 - 기존과 동일 */}
                 {isChatOpen && (
                     <div
                         ref={chatModalRef}
