@@ -1,8 +1,10 @@
 // src/components/sideBtn/CategoryMenu.jsx
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CategoryMenu = ({ isOpen, onClose, onCategorySelect, buttonRef }) => {
     const menuRef = useRef(null);
+    const navigate = useNavigate();
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
     const categoryData = {
@@ -55,13 +57,26 @@ const CategoryMenu = ({ isOpen, onClose, onCategorySelect, buttonRef }) => {
     }, [isOpen, onClose]);
 
     const handleSelect = (mainCat, item) => {
-        const payload = {
-            type: mainCat === '매장' ? 'SELLER_CATEGORY' : 'PRODUCT_CATEGORY',
-            id: item.id,
-            name: item.name,
-            enum: item.enum,
-        };
-        onCategorySelect && onCategorySelect(payload);
+        // 기존 콜백 호출 (부모 컴포넌트에서 필요한 경우)
+        if (onCategorySelect) {
+            const payload = {
+                type: mainCat === '매장' ? 'SELLER_CATEGORY' : 'PRODUCT_CATEGORY',
+                id: item.id,
+                name: item.name,
+                enum: item.enum,
+            };
+            onCategorySelect(payload);
+        }
+
+        // 카테고리에 따라 적절한 페이지로 navigate
+        if (mainCat === '매장') {
+            // 매장 카테고리 선택 시 - 판매자 검색 페이지로 이동
+            navigate(`/sellers?category=${item.enum}`);
+        } else {
+            // 식품 카테고리 선택 시 - 상품 검색 페이지로 이동
+            navigate(`/new?categoryId=${item.id}&filterType=ALL`);
+        }
+
         onClose();
     };
 
@@ -110,7 +125,10 @@ const CategoryMenu = ({ isOpen, onClose, onCategorySelect, buttonRef }) => {
                         {categoryData.매장.map((item) => (
                             <div
                                 key={`매장-${item.id}`}
-                                onClick={() => handleSelect('매장', item)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleSelect('매장', item);
+                                }}
                                 style={{
                                     cursor: 'pointer',
                                     padding: '8px 12px',
@@ -162,7 +180,10 @@ const CategoryMenu = ({ isOpen, onClose, onCategorySelect, buttonRef }) => {
                         {categoryData.식품.map((item) => (
                             <div
                                 key={`식품-${item.id}`}
-                                onClick={() => handleSelect('식품', item)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleSelect('식품', item);
+                                }}
                                 style={{
                                     cursor: 'pointer',
                                     padding: '8px 12px',
