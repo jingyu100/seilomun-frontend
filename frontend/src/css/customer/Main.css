@@ -238,8 +238,16 @@
   justify-content: center;
   /* align-items: center; */
   border-radius: 8px;
+  padding: 10px 13px;
   text-align: center;
   cursor: pointer;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product_card:hover {
+  transform: scale(1.009);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .product_image {
@@ -324,9 +332,17 @@
   flex-direction: column;
   justify-content: center;
   /* align-items: center; */
+  padding: 10px 13px;
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.NM_product_card:hover {
+  transform: scale(1.009);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .NM_product_image {

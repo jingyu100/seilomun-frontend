@@ -325,13 +325,17 @@
     width: 100%;
     height: auto;
     border-radius: 8px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
 }
 
-.productItem:hover .store-product-image {
-    transform: scale(1.05);
-}
+.productItem {
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  
+  .productItem:hover {
+    transform: scale(1.009);
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  }
 /* ---------- 스토어 제품 카드 부분 ---------- */
 
 
