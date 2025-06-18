@@ -1,74 +1,80 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import ChatViewModule from "./Chatting/ChatViewModule.jsx";
-import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
+import {useChatRooms} from "../../Context/ChatRoomsContext.jsx";
 import useLogin from "../../Hooks/useLogin.js";
+import { useNavigate } from "react-router-dom";
 
 const SideChatBtn = () => {
-  const [isChatModal, setisChatModal] = useState(false);
-  const modalRef = useRef(null);
-  const buttonRef = useRef(null);
+    const [isChatModal, setisChatModal] = useState(false);
+    const modalRef = useRef(null);
+    const buttonRef = useRef(null);
+    const navigate = useNavigate();
 
-  const { user } = useLogin();
-  const { chatRooms } = useChatRooms();
+    const {user, isLoggedIn} = useLogin();
+    const {chatRooms} = useChatRooms();
 
-  const toggleAlarmModal = () => {
-    setisChatModal((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const closeModal = (e) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(e.target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(e.target)
-      ) {
-        setisChatModal(false);
-      }
+    const toggleAlarmModal = () => {
+        setisChatModal((prev) => !prev);
     };
 
-    if (isChatModal) {
-      document.addEventListener("mousedown", closeModal);
-    } else {
-      document.removeEventListener("mousedown", closeModal);
-    }
+    useEffect(() => {
+        const closeModal = (e) => {
+            if (
+                modalRef.current &&
+                !modalRef.current.contains(e.target) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(e.target)
+            ) {
+                setisChatModal(false);
+            }
+        };
 
-    return () => document.removeEventListener("mousedown", closeModal);
-  }, [isChatModal]);
+        if (isChatModal) {
+            document.addEventListener("mousedown", closeModal);
+        } else {
+            document.removeEventListener("mousedown", closeModal);
+        }
 
-  const unreadCount = user
-    ? chatRooms.reduce((acc, room) => acc + (room.unreadCount || 0), 0)
-    : 0;
+        return () => document.removeEventListener("mousedown", closeModal);
+    }, [isChatModal]);
 
-  return (
-    <div>
-      <a
-        href="#"
-        role="button"
-        className="sideMenuBtn"
-        ref={buttonRef}
-        onClick={(e) => {
-          e.preventDefault();
-          toggleAlarmModal();
-        }}
-      >
-        <em className="iconCount" id="chat-cnt">
-          {unreadCount}
-        </em>
-        <img
-          src="/image/icon/icon-chat2.png"
-          alt="chat"
-          className="sideBtnIcon"
-          id="chatIcon"
-        />
-      </a>
-      {isChatModal && (
-        <div ref={modalRef}>
-          <ChatViewModule />
+    const unreadCount = user
+        ? chatRooms.reduce((acc, room) => acc + (room.unreadCount || 0), 0)
+        : 0;
+
+    return (
+        <div>
+            <a
+                href="#"
+                role="button"
+                className="sideMenuBtn"
+                ref={buttonRef}
+                onClick={(e) => {
+                    if(isLoggedIn) {
+                        e.preventDefault();
+                        toggleAlarmModal();
+                    } else {
+                        navigate("/login");
+                    }
+                }}
+            >
+                <em className="iconCount" id="chat-cnt">
+                    {unreadCount}
+                </em>
+                <img
+                    src="/image/icon/icon-chat2.png"
+                    alt="chat"
+                    className="sideBtnIcon"
+                    id="chatIcon"
+                />
+            </a>
+            {isChatModal && (
+                <div ref={modalRef}>
+                    <ChatViewModule/>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default SideChatBtn;
