@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../css/customer/ProductList.css";
 
 const ProductList = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const keyword = searchParams.get("keyword") || "";
   const categoryId = searchParams.get("categoryId") || "";
-  const filterType = searchParams.get("filterType") || "ALL"; // filterType도 추가
-  const sortType = searchParams.get("sortType") || "LATEST"; // sortType도 추가
+  const filterType = searchParams.get("filterType") || "ALL";
+  const sortType = searchParams.get("sortType") || "LATEST";
 
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false); // 로딩 상태 추가
-  const [error, setError] = useState(null); // 에러 상태 추가
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // 화면에 표시할 상품 개수 (기본: 12개)
   const [visibleCount, setVisibleCount] = useState(12);
+
+  // 정렬 옵션 정의
+  const sortOptions = [
+    { value: "LATEST", label: "최신 순", icon: "🆕" },
+    { value: "HIGHEST_RATING", label: "별점 높은 순", icon: "⭐" },
+    { value: "LOWEST_RATING", label: "별점 낮은 순", icon: "📉" },
+    { value: "HIGHEST_PRICE", label: "가격 높은 순", icon: "💰" },
+    { value: "LOWEST_PRICE", label: "가격 낮은 순", icon: "💸" },
+    { value: "EXPIRING", label: "유통기한 임박순", icon: "⏰" }
+  ];
 
   // "더보기" 버튼 클릭 시 8개씩 추가 표시
   const handleLoadMore = () => {
@@ -26,6 +38,15 @@ const ProductList = () => {
   // 새로운 검색 시 visibleCount 초기화
   const resetVisibleCount = () => {
     setVisibleCount(12);
+  };
+
+  // 정렬 변경 핸들러
+  const handleSortChange = (newSortType) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('sortType', newSortType);
+
+    // navigate를 사용하여 부드럽게 URL 변경 (페이지 새로고침 없음)
+    navigate(`${window.location.pathname}?${newParams.toString()}`, { replace: true });
   };
 
   useEffect(() => {
@@ -39,8 +60,8 @@ const ProductList = () => {
 
         const res = await axios.get("http://localhost/api/products/search", {
           params: {
-            keyword: keyword || undefined, // 빈 문자열이면 undefined로 전송
-            categoryId: categoryId || undefined, // 빈 문자열이면 undefined로 전송
+            keyword: keyword || undefined,
+            categoryId: categoryId || undefined,
             filterType: filterType,
             sortType: sortType,
             page: 0,
@@ -62,7 +83,7 @@ const ProductList = () => {
     };
 
     fetchProducts();
-  }, [keyword, categoryId, filterType, sortType]); // 모든 검색 파라미터를 의존성에 추가
+  }, [keyword, categoryId, filterType, sortType]);
 
   const getThumbnailUrl = (product) => {
     const url = product.thumbnailUrl;
@@ -118,7 +139,10 @@ const ProductList = () => {
             fontSize: '16px',
             color: '#666'
           }}>
-            상품을 불러오는 중...
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', marginBottom: '8px' }}>⏳</div>
+              <div>상품을 불러오는 중...</div>
+            </div>
           </div>
         </div>
     );
@@ -136,7 +160,10 @@ const ProductList = () => {
             fontSize: '16px',
             color: '#ef4444'
           }}>
-            {error}
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '24px', marginBottom: '8px' }}>❌</div>
+              <div>{error}</div>
+            </div>
           </div>
         </div>
     );
@@ -147,24 +174,101 @@ const ProductList = () => {
         <div className="product-header">
           <div className="product-number-container">
             <h1 className="product-number">총 {products.length}개 상품</h1>
+
+            {/* 현재 적용된 필터 정보 표시 */}
+            <div style={{
+              fontSize: '13px',
+              color: '#666',
+              marginTop: '4px',
+              display: 'flex',
+              gap: '8px',
+              flexWrap: 'wrap'
+            }}>
+              {keyword && (
+                  <span style={{
+                    background: '#e3f2fd',
+                    padding: '2px 8px',
+                    borderRadius: '12px',
+                    color: '#1976d2'
+                  }}>
+                  🔍 "{keyword}"
+                </span>
+              )}
+              {categoryId && (
+                  <span style={{
+                    background: '#f3e5f5',
+                    padding: '2px 8px',
+                    borderRadius: '12px',
+                    color: '#7b1fa2'
+                  }}>
+                  📂 카테고리 {categoryId}
+                </span>
+              )}
+              {filterType !== 'ALL' && (
+                  <span style={{
+                    background: '#e8f5e8',
+                    padding: '2px 8px',
+                    borderRadius: '12px',
+                    color: '#2e7d32'
+                  }}>
+                  🔧 {filterType === 'RECENT' ? '신상품' : filterType === 'EXPIRING_SOON' ? '임박특가' : filterType}
+                </span>
+              )}
+            </div>
           </div>
+
           <div className="product-filter-container">
+            {/* 기본 select 드롭다운 */}
             <select
                 className="product-filter"
                 value={sortType}
-                onChange={(e) => {
-                  const newParams = new URLSearchParams(searchParams);
-                  newParams.set('sortType', e.target.value);
-                  window.location.search = newParams.toString(); // 페이지 새로고침으로 정렬 변경
+                onChange={(e) => handleSortChange(e.target.value)}
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: '6px',
+                  border: '1px solid #ddd',
+                  fontSize: '14px',
+                  backgroundColor: 'white',
+                  cursor: 'pointer'
                 }}
             >
-              <option value="LATEST">최신 순</option>
-              <option value="HIGHEST_RATING">별점높은 순</option>
-              <option value="LOWEST_RATING">별점낮은 순</option>
-              <option value="HIGHEST_PRICE">가격높은 순</option>
-              <option value="LOWEST_PRICE">가격낮은 순</option>
-              <option value="EXPIRING">유통기한 임박순</option>
+              {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+              ))}
             </select>
+
+            {/* 추가: 버튼 스타일 정렬 옵션 (모바일 친화적) */}
+            <div className="sort-buttons" style={{
+              display: 'none', // 기본적으로 숨김, CSS에서 모바일에서 보이도록 설정 가능
+              gap: '4px',
+              flexWrap: 'wrap'
+            }}>
+              {sortOptions.map((option) => (
+                  <button
+                      key={option.value}
+                      onClick={() => handleSortChange(option.value)}
+                      className={`sort-button ${sortType === option.value ? 'active' : ''}`}
+                      style={{
+                        padding: '6px 12px',
+                        fontSize: '12px',
+                        border: sortType === option.value ? '2px solid #007bff' : '1px solid #ddd',
+                        borderRadius: '16px',
+                        backgroundColor: sortType === option.value ? '#e3f2fd' : 'white',
+                        color: sortType === option.value ? '#007bff' : '#666',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                  >
+                    <span>{option.icon}</span>
+                    <span>{option.label}</span>
+                  </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -177,10 +281,16 @@ const ProductList = () => {
               alignItems: 'center',
               height: '300px',
               fontSize: '16px',
-              color: '#666'
+              color: '#666',
+              textAlign: 'center'
             }}>
-              <div style={{ marginBottom: '8px' }}>😔</div>
-              <div>해당 조건에 맞는 상품이 없습니다.</div>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📦</div>
+              <div style={{ fontSize: '18px', fontWeight: '500', marginBottom: '8px' }}>
+                상품이 없습니다
+              </div>
+              <div style={{ fontSize: '14px', color: '#999' }}>
+                다른 조건으로 검색해보세요
+              </div>
             </div>
         )}
 
@@ -193,11 +303,35 @@ const ProductList = () => {
             </div>
         )}
 
-        {/* 상품이 12개 이상일 때만 "더보기" 버튼 표시 */}
+        {/* "더보기" 버튼 */}
         {products.length > 12 && visibleCount < products.length && (
-            <button className="product-list-moreBtn" onClick={handleLoadMore}>
-              더보기 ({products.length - visibleCount}개 더 있음)
-            </button>
+            <div style={{ textAlign: 'center', marginTop: '32px' }}>
+              <button
+                  className="product-list-moreBtn"
+                  onClick={handleLoadMore}
+                  style={{
+                    padding: '12px 24px',
+                    fontSize: '14px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontWeight: '500'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#0056b3';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = '#007bff';
+                    e.target.style.transform = 'translateY(0)';
+                  }}
+              >
+                더보기 ({products.length - visibleCount}개 더 있음)
+              </button>
+            </div>
         )}
       </div>
   );
