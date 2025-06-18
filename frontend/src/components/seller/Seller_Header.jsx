@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/seller/Seller_Header.css";
+import "../../css/seller/Seller_notification.css"; // 🔥 알림 스타일 통합
 import alarm from "../../image/icon/seller_icon/seller_alarm.png";
 import menu from "../../image/icon/seller_icon/seller_menu.png";
 import order from "../../image/icon/seller_icon/seller_order.png";
@@ -13,16 +14,16 @@ import blue from "../../image/icon/seller_icon/seller_blue.png";
 import list from "../../image/icon/seller_icon/seller_list.png";
 import SellerChatBtn from "./SellerChatBtn";
 import useLogin from "../../Hooks/useLogin";
+import useNotifications from "../../Hooks/useNotifications";
 import axios from "axios";
 
-// 현재 가게 상태
+// 상태 색상 매핑
 const statusMap = {
   '0': { text: "영업종료", color: red },
   '1': { text: "영업중", color: green },
   '2': { text: "브레이크타임", color: blue },
 };
 
-// 왼쪽 메뉴바
 const menuItems = [
   { icon: store, label: "매장관리", path: "/Seller_newstoreRegistration" },
   { icon: order, label: "주문접수" },
@@ -32,41 +33,40 @@ const menuItems = [
   { icon: statistics, label: "통계보기", path: "/seller/stats" },
 ];
 
-const Seller_Header = () => {
+export default function Seller_Header() {
   const navigate = useNavigate();
   const { setUser, setIsLoggedIn, user } = useLogin();
-
   const [hoverIndex, setHoverIndex] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [isOpen, setIsOpen] = useState("0"); // 기본값: 영업종료
+  const [isOpen, setIsOpen] = useState("0");
   const [storeName, setStoreName] = useState("");
   const [showStatusOptions, setShowStatusOptions] = useState(false);
 
-  // storeName 불러오기
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    connectionStatus,
+  } = useNotifications("http://localhost", "SELLER");
+
   useEffect(() => {
     const fetchSellerInfo = async () => {
       try {
         const response = await axios.get("http://localhost/api/sellers/me", {
           withCredentials: true,
         });
-
         const store = response.data.data?.storeName;
         const sellerInfo = response.data.data?.sellerInformationDto;
-
         if (store) setStoreName(store);
         if (sellerInfo?.isOpen) setIsOpen(sellerInfo.isOpen);
       } catch (err) {
         console.error("❌ 판매자 정보 불러오기 실패:", err);
-        setIsOpen("0"); // 실패 시 영업종료로 설정
+        setIsOpen("0");
       }
     };
-
     fetchSellerInfo();
   }, []);
-
-  const handleStatusClick = () => {
-    setShowStatusOptions((prev) => !prev);
-  };
 
   const handleChangeStatus = async (newStatus) => {
     try {
@@ -91,37 +91,75 @@ const Seller_Header = () => {
           username: user?.email || localStorage.getItem("username"),
           userType: "SELLER",
         },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
     } catch (err) {
-      console.warn("⚠ 로그아웃 실패 (무시하고 진행):", err);
+      console.warn("⚠ 로그아웃 실패:", err);
     }
-
     setUser(null);
     setIsLoggedIn(false);
     localStorage.clear();
     navigate("/selogin");
   };
 
+  const handleNotificationClick = async (notification) => {
+    await markAsRead(notification.id);
+    const content = notification.content || '';
+  
+    const orderMatch = content.match(/주문번호:\s*([A-Z0-9]+)/);
+    const refundMatch = content.match(/환불번호:\s*(\d+)/);
+  
+    if (refundMatch) {
+      const refundId = refundMatch[1];
+      navigate(`/seller/refunds/${refundId}`);
+    } else if (orderMatch) {
+      const orderNumber = orderMatch[1];
+      navigate(`/seller/orders/number/${orderNumber}`);
+    } else if (content.includes("리뷰")) {
+      navigate("/Seller_reviewPage");
+    } else if (content.includes("상품")) {
+      navigate("/seller/product/management");
+    } else {
+      navigate("/Seller_Main");
+    }
+  };
+
   const { text, color } = statusMap[isOpen] || statusMap['0'];
+
+  const getNotificationIcon = (content) => {
+    if (content.includes("주문")) return "📦";
+    if (content.includes("환불")) return "💰";
+    if (content.includes("리뷰")) return "⭐";
+    if (content.includes("상품")) return "🛍️";
+    return "🔔";
+  };
+
+  const getConnectionStatusText = () => {
+    switch (connectionStatus) {
+      case "connected":
+        return "🟢 연결됨";
+      case "connecting":
+        return "🟡 연결중...";
+      case "error":
+        return "🔴 연결 오류";
+      default:
+        return "⚪ 연결 안됨";
+    }
+  };
 
   return (
     <>
       <div className="seller-container">
-        {/* 상단 헤더 */}
+        {/* 헤더 */}
         <div className="top-header">
-          {/* 좌측: 영업 상태 */}
           <div
             className="left-header"
-            onClick={handleStatusClick}
+            onClick={() => setShowStatusOptions(!showStatusOptions)}
             style={{ cursor: "pointer", position: "relative" }}
           >
             <img src={list} alt="menu" className="seller_icon" />
             <span className="status-text">{text}</span>
             <img src={color} alt="status-dot" className="red-dot" />
-
             {showStatusOptions && (
               <div className="status-dropdown">
                 {Object.entries(statusMap)
@@ -142,8 +180,6 @@ const Seller_Header = () => {
               </div>
             )}
           </div>
-
-          {/* 우측: 사용자 정보 */}
           <div className="right-header">
             <span>{storeName ? `${storeName} 님` : "판매자"}</span>
             <span>|</span>
@@ -173,24 +209,73 @@ const Seller_Header = () => {
               onMouseLeave={() => setHoverIndex(null)}
               onClick={() => {
                 setSelectedIndex(index);
-                if (item.path) {
-                  navigate(item.path);
-                }
-
-                if (item.label === "리뷰관리") {
-                  navigate("/Seller_reviewPage");
-                }
+                if (item.path) navigate(item.path);
               }}
             >
               <img src={item.icon} alt={item.label} />
               <span>{item.label}</span>
             </div>
           ))}
+
+          {/* 🔔 알림 고정 UI 바로 붙이기 */}
+          <div className="seller-notification-bar">
+            <div className="seller-notification-header">
+              <h3>알림</h3>
+              <div className="seller-notification-status">
+                {getConnectionStatusText()}
+              </div>
+            </div>
+            <div className="seller-notification-list">
+              {notifications.length === 0 ? (
+                <div className="seller-notification-empty">
+                  <div className="seller-notification-empty-icon">🔔</div>
+                  <p className="seller-notification-empty-text">
+                    알림이 없습니다
+                  </p>
+                </div>
+              ) : (
+                notifications.map((noti) => (
+                  <div
+                    key={noti.id}
+                    className={`seller-notification-item ${
+                      noti.isRead === "Y" ? "read" : "unread"
+                    }`}
+                    onClick={() => handleNotificationClick(noti)}
+                  >
+                    <div className="seller-notification-icon">
+                      {getNotificationIcon(noti.content)}
+                    </div>
+                    <div className="seller-notification-content">
+                      {noti.content}
+                    </div>
+                    <div className="seller-notification-meta">
+                      <span>
+                        {new Date(noti.createdAt).toLocaleString()}
+                      </span>
+                      {noti.isRead !== "Y" && (
+                        <span className="seller-notification-new-badge">
+                          NEW
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            {unreadCount > 0 && (
+              <div className="seller-notification-actions">
+                <button
+                  onClick={markAllAsRead}
+                  className="seller-notification-mark-all-btn"
+                >
+                  모두 읽음 처리 ({unreadCount})
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <SellerChatBtn />
     </>
   );
-};
-
-export default Seller_Header;
+}

@@ -1,26 +1,41 @@
 .seller-review-page {
-    background-color: (135deg, #f8fafc 0%, #e2e8f0 100%);
-    min-height: 100vh;
+    min-height: calc(100vh - 100px);
     padding-bottom: 50px;
-    margin-top: 70px;
-    margin-left: 290px;
+    margin-left: 390px; /* 사이드메뉴 너비에 맞춰 조정 */
+    margin-top: 80px;   /* 상단 헤더 높이에 맞춰 조정 */
   }
-  
+
   .review-content-wrapper {
+    max-width: calc(100vw - 220px); /* 사이드메뉴를 고려한 최대 너비 */
     width: 100%;
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 40px;
+    max-width: 1150px;
+    margin: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 20px;
   }
+
+  .status-review-header {
+    color: balck;
+    padding: 30px;
+    border-bottom: 2px solid #000000;
+    margin-bottom: 40px;
+    font-family: 'paybooc-Bold', sans-serif;
+}
   
   .review-title {
-    font-size: 25px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    border-bottom: 3px solid #000000;
-    padding-bottom: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    font-family: 'paybooc-Bold', sans-serif;
     text-align: center;
+    background-color: #fcfcfc;
   }
+
+  .review-subtitle {
+    font-size: 1rem;
+    text-align: center;
+}
   
   .review-card {
     border-radius: 50px; 

@@ -109,8 +109,9 @@
             <div>
                 <Seller_Header />
                 <div className="seller-product-management">
-                    <div className="management-header">
-                        <h2 className="seller-product-form-title">상품 관리</h2>
+                    <div className="status-product-header">
+                    <h1 className="stauts-product-title-11"> 상품관리</h1>
+                    <p className="status-product-subtitle">상품의 현재 상태에 대해 확인 및 수정해보세요</p>
                     </div>
 
                     <div className="product-stats">
@@ -220,8 +221,9 @@
                                 ))}
                             </div>
                         )}
+                                        </div>
                     </div>
-                </div>
+
 
                 {/* 플로팅 상품 등록 버튼 - 우측 하단 */}
                 <div
