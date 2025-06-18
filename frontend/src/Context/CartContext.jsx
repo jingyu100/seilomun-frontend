@@ -1,32 +1,27 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import useLogin from "../Hooks/useLogin.js";
 
 const CartContext = createContext();
 
-export const CartProvider = ({children}) => {
+export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
-    const {isLoggedin} = useLogin();
 
     // 장바구니 목록 조회
     const fetchCart = async () => {
-        if (isLoggedin) {
-            try {
-                const res = await axios.get("http://localhost/api/carts", {
-                    withCredentials: true,
-                });
-                const items = res?.data?.data?.products || {};
-                const formatted = Object.entries(items).map(([productId, quantity]) => ({
-                    productId: parseInt(productId),
-                    quantity,
-                }));
-                setCartItems(formatted);
-            } catch (e) {
-                console.error("장바구니 조회 실패", e);
-            }
+        try {
+            const res = await axios.get("http://localhost/api/carts", {
+                withCredentials: true,
+            });
+            const items = res?.data?.data?.products || {};
+            const formatted = Object.entries(items).map(([productId, quantity]) => ({
+                productId: parseInt(productId),
+                quantity,
+            }));
+            setCartItems(formatted);
+        } catch (e) {
+            console.error("장바구니 조회 실패", e);
         }
-        ;
-    }
+    };
 
     // 컴포넌트 마운트(새로고침) 시 로컬 캐시 우선 사용, 이후 서버 동기화
     useEffect(() => {
@@ -57,8 +52,8 @@ export const CartProvider = ({children}) => {
         try {
             await axios.post(
                 "http://localhost/api/carts",
-                {productId, quantity},
-                {withCredentials: true}
+                { productId, quantity },
+                { withCredentials: true }
             );
 
             // 서버 동기화
@@ -100,7 +95,6 @@ export const CartProvider = ({children}) => {
         }
     };
 
-
     // 상품 삭제
     const removeFromCart = async (productId) => {
         try {
@@ -118,8 +112,8 @@ export const CartProvider = ({children}) => {
         try {
             await axios.put(
                 `http://localhost/api/carts/${productId}`,
-                {productId, quantity},
-                {withCredentials: true}
+                { productId, quantity },
+                { withCredentials: true }
             );
             fetchCart();
         } catch (e) {
@@ -134,8 +128,18 @@ export const CartProvider = ({children}) => {
                 withCredentials: true,
             });
             setCartItems([]);
+            // 로컬스토리지도 비우기
+            localStorage.removeItem("cartItems");
         } catch (e) {
             console.error("장바구니 초기화 실패", e);
+        }
+    };
+
+    // 🆕 결제 성공 후 장바구니 비우기 (장바구니에서 구매한 경우만)
+    const clearCartAfterPurchase = async (fromCart = false) => {
+        if (fromCart) {
+            console.log("장바구니에서 구매 완료 - 장바구니 비우기");
+            await clearCart();
         }
     };
 
@@ -149,6 +153,7 @@ export const CartProvider = ({children}) => {
                 removeFromCart,
                 updateQuantity,
                 clearCart,
+                clearCartAfterPurchase, // 🆕 새로 추가
             }}
         >
             {children}

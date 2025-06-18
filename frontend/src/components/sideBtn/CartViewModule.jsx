@@ -48,6 +48,7 @@ function CartViewModule() {
 
                     // 장바구니 아이템 형태로 변환
                     return {
+                        id: parseInt(productId), // Payment.jsx에서 사용하는 id 필드 추가
                         productId: parseInt(productId),
                         name: product.name || '상품명 없음',
                         description: product.description || '',
@@ -59,9 +60,13 @@ function CartViewModule() {
                         expiryDate: product.expiryDate || '',
                         thumbnailUrl: product.photoUrl && product.photoUrl.length > 0 ? product.photoUrl[0] : null,
                         photoUrls: product.photoUrl || [],
+                        photoUrl: product.photoUrl || [], // OrderItemsSection에서 사용
                         seller: product.seller || {},
+                        // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
+                        sellerId: product.sellerId || product.seller?.id || product.seller?.sellerId,
                         categoryId: product.categoryId || 0,
-                        status: product.status || '1'
+                        status: product.status || '1',
+                        totalPrice: (product.discountPrice || product.originalPrice || 0) * quantity // 총 가격 계산
                     };
                 } catch (error) {
                     console.error(`상품 ${productId} 조회 실패:`, error);
@@ -118,9 +123,6 @@ function CartViewModule() {
     // 장바구니에서 상품 삭제
     const handleRemoveFromCart = async (productId) => {
         try {
-            // 필요시 서버에서 장바구니 아이템 삭제 API 호출
-            // await axios.delete(`/api/carts/${productId}`, { withCredentials: true });
-
             console.log("상품 삭제:", productId);
             removeFromCart(productId);
         } catch (error) {
@@ -128,24 +130,78 @@ function CartViewModule() {
         }
     };
 
-    // 구매하기 버튼 클릭
-    const handleBuyNow = () => {
-        const orderProducts = cartItems.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            name: item.name,
-            originalPrice: item.originalPrice,
-            discountPrice: item.discountPrice,
-            currentDiscountRate: item.currentDiscountRate,
-            thumbnailUrl: item.thumbnailUrl,
-            expiryDate: item.expiryDate,
-        }));
+    // 🆕 장바구니에서 구매하기 버튼 클릭
+    const handleBuyFromCart = async () => {
+        if (cartItems.length === 0) {
+            alert("장바구니에 상품이 없습니다.");
+            return;
+        }
 
-        console.log("주문할 상품들:", orderProducts);
+        try {
+            console.log("장바구니 구매 요청 시작");
 
-        navigate("/payment", {
-            state: { orderProducts },
-        });
+            // 백엔드 API에 맞는 형태로 데이터 변환
+            const cartItemsForAPI = cartItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity
+            }));
+
+            console.log("API 요청 데이터:", cartItemsForAPI);
+
+            // 백엔드에서 주문 정보 가져오기
+            const response = await axios.post('http://localhost/api/orders/cart/buy', cartItemsForAPI, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log("백엔드 응답:", response.data);
+
+            // 🆕 응답에서 주문 상품 정보와 판매자 ID 추출
+            const responseData = response.data?.data;
+            const orderProducts = responseData?.orderProducts || responseData?.["주문페이지로 갑니다"] || [];
+            const sellerId = responseData?.sellerId;
+
+            console.log("주문 상품들:", orderProducts);
+            console.log("판매자 ID:", sellerId);
+
+            // 프론트엔드용 상품 정보와 백엔드 주문 정보 매핑
+            const productsWithDetails = cartItems.map(cartItem => {
+                // 백엔드에서 받은 주문 정보 찾기
+                const orderProduct = orderProducts.find(op => op.productId === cartItem.productId);
+
+                return {
+                    ...cartItem,
+                    // 백엔드에서 계산된 할인가격으로 업데이트
+                    discountPrice: orderProduct?.price || cartItem.discountPrice,
+                    currentDiscountRate: orderProduct?.currentDiscountRate || cartItem.currentDiscountRate,
+                    // Payment 컴포넌트에서 필요한 추가 필드들
+                    totalPrice: (orderProduct?.price || cartItem.discountPrice) * cartItem.quantity,
+                    // 🆕 판매자 ID 추가
+                    sellerId: sellerId || cartItem.sellerId
+                };
+            });
+
+            console.log("결제 페이지로 전달할 상품들:", productsWithDetails);
+
+            // 장바구니에서 온 것임을 표시하고 결제 페이지로 이동
+            navigate("/payment", {
+                state: {
+                    products: productsWithDetails, // 복수형으로 변경
+                    fromCart: true, // 장바구니에서 왔음을 표시
+                    sellerId: sellerId // 🆕 판매자 ID 직접 전달
+                },
+            });
+
+        } catch (error) {
+            console.error("장바구니 구매 처리 실패:", error);
+            if (error.response?.data?.message) {
+                alert(error.response.data.message);
+            } else {
+                alert("구매 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
+        }
     };
 
     // 유효기간 포맷팅 함수
@@ -326,7 +382,7 @@ function CartViewModule() {
 
             {cartItems.length > 0 && (
                 <div className='cartBuy moduleFrame1 moduleFrame2'>
-                    <button className='cartBuyBtn' onClick={handleBuyNow}>
+                    <button className='cartBuyBtn' onClick={handleBuyFromCart}>
                         {cartItems.length}개 상품 구매하기
                     </button>
                 </div>

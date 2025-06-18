@@ -32,23 +32,68 @@ const Payment = () => {
     pickupRequest: "",
   });
 
-  // 상품 상세페이지에서 전달받은 데이터
-  const { product } = location.state || {};
-  const products = product ? [product] : [];
+  // 🆕 단일 상품과 장바구니 상품들을 모두 처리
+  const { product, products: cartProducts, fromCart, sellerId: directSellerId } = location.state || {};
 
-  // 판매자 정보 가져오기 (한 번의 API 호출로 모든 정보 조회)
+  // 상품 배열 통합 처리
+  const products = React.useMemo(() => {
+    if (fromCart && cartProducts) {
+      // 장바구니에서 온 경우
+      console.log("장바구니에서 온 상품들:", cartProducts);
+      return cartProducts;
+    } else if (product) {
+      // 단일 상품에서 온 경우
+      console.log("단일 상품:", product);
+      return [product];
+    }
+    return [];
+  }, [product, cartProducts, fromCart]);
+
+  console.log("최종 처리된 상품들:", products);
+
+  // 🆕 판매자 정보 가져오기 (첫 번째 상품의 판매자 기준)
   useEffect(() => {
     const fetchSellerInfo = async () => {
-      if (!product?.sellerId) {
-        console.log("sellerId가 없습니다:", product);
+      if (!products || products.length === 0) {
+        console.log("상품 정보가 없습니다:", products);
+        return;
+      }
+
+      // 첫 번째 상품의 판매자 ID 가져오기
+      const firstProduct = products[0];
+      let sellerId = directSellerId || firstProduct?.sellerId || firstProduct?.seller?.id;
+
+      console.log("직접 전달받은 sellerId:", directSellerId);
+      console.log("상품에서 추출한 sellerId:", firstProduct?.sellerId || firstProduct?.seller?.id);
+      console.log("최종 사용할 sellerId:", sellerId);
+
+      // sellerId가 없으면 상품 정보를 다시 조회해서 sellerId 얻기
+      if (!sellerId && firstProduct?.productId) {
+        try {
+          console.log("sellerId가 없어서 상품 정보 재조회:", firstProduct.productId);
+          const productResponse = await axios.get(`http://localhost/api/products/${firstProduct.productId}`, {
+            withCredentials: true
+          });
+
+          const productData = productResponse.data?.data?.Products;
+          sellerId = productData?.sellerId || productData?.seller?.id;
+          console.log("재조회로 얻은 sellerId:", sellerId);
+        } catch (error) {
+          console.error("상품 정보 재조회 실패:", error);
+        }
+      }
+
+      if (!sellerId) {
+        console.log("sellerId를 찾을 수 없습니다:", firstProduct);
         return;
       }
 
       try {
-        console.log("판매자 정보 조회 시작. sellerId:", product.sellerId);
+        console.log("판매자 정보 조회 시작. sellerId:", sellerId);
 
         const response = await axios.get(
-          `http://localhost/api/sellers/${product.sellerId}`
+            `http://localhost/api/sellers/${sellerId}`,
+            { withCredentials: true }
         );
         console.log("판매자 정보 응답:", response.data);
 
@@ -66,14 +111,31 @@ const Payment = () => {
     };
 
     fetchSellerInfo();
-  }, [product?.sellerId]);
+  }, [products]);
+
+  // 🆕 장바구니 상품들의 판매자가 모두 동일한지 확인
+  useEffect(() => {
+    if (products && products.length > 1) {
+      const firstSellerId = products[0]?.sellerId || products[0]?.seller?.id;
+      const allSameSeller = products.every(product => {
+        const sellerId = product?.sellerId || product?.seller?.id;
+        return sellerId === firstSellerId;
+      });
+
+      if (!allSameSeller) {
+        alert("서로 다른 판매자의 상품들은 함께 주문할 수 없습니다.");
+        // 필요시 이전 페이지로 리다이렉트
+        // navigate(-1);
+      }
+    }
+  }, [products]);
 
   // 주문 상품 총액 계산
   const totalProductPrice = products.reduce((total, product) => {
     return (
-      total +
-      (product.totalPrice ||
-        (product.discountPrice || product.originalPrice) * (product.quantity || 1))
+        total +
+        (product.totalPrice ||
+            (product.discountPrice || product.originalPrice) * (product.quantity || 1))
     );
   }, 0);
 
@@ -95,8 +157,8 @@ const Payment = () => {
 
     // 중복 제거를 위해 ordersMoney 기준으로 고유한 규칙만 필터링
     const uniqueRules = deliveryRules.filter(
-      (rule, index, self) =>
-        index === self.findIndex((r) => r.ordersMoney === rule.ordersMoney)
+        (rule, index, self) =>
+            index === self.findIndex((r) => r.ordersMoney === rule.ordersMoney)
     );
 
     // 주문 금액 기준으로 오름차순 정렬
@@ -112,7 +174,7 @@ const Payment = () => {
       if (orderAmount >= rule.ordersMoney) {
         applicableFee = rule.deliveryTip;
         console.log(
-          `✅ 적용된 배송비: ${applicableFee}원 (${rule.ordersMoney}원 이상 조건)`
+            `✅ 적용된 배송비: ${applicableFee}원 (${rule.ordersMoney}원 이상 조건)`
         );
       }
     }
@@ -123,7 +185,7 @@ const Payment = () => {
 
   // 실제 배달비 계산 (배송 탭일 때만)
   const deliveryFee =
-    activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
+      activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
 
   // 최종 결제 금액 계산 (포인트 포함)
   const finalAmount = totalProductPrice + deliveryFee - pointsToUse;
@@ -136,6 +198,7 @@ const Payment = () => {
   console.log("최종 결제 금액:", finalAmount);
   console.log("배송 정보:", deliveryInfo);
   console.log("픽업 정보:", pickupInfo);
+  console.log("장바구니에서 온 것인가:", fromCart);
   console.log("======================");
 
   const handleTabChange = (tab) => {
@@ -149,50 +212,50 @@ const Payment = () => {
   const isDeliveryAvailable = seller ? seller.deliveryAvailable === "Y" : false;
 
   return (
-    <div className="payment-wrapper">
-      <div className="payment-container">
-        <StepTabs
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          isDeliveryAvailable={isDeliveryAvailable}
-        />
-
-        {/* 탭에 따른 컴포넌트 렌더링 */}
-        {activeTab === "delivery" && (
-          <DeliverySection
-            deliveryInfo={deliveryInfo}
-            setDeliveryInfo={setDeliveryInfo}
+      <div className="payment-wrapper">
+        <div className="payment-container">
+          <StepTabs
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              isDeliveryAvailable={isDeliveryAvailable}
           />
-        )}
-        {activeTab === "pickup" && (
-          <PickupSection
-            seller={seller}
-            pickupInfo={pickupInfo}
-            setPickupInfo={setPickupInfo}
-          />
-        )}
 
-        <OrderItemsSection products={products} deliveryFee={deliveryFee} />
-        <PaymentInfoSection
-          totalProductPrice={totalProductPrice}
-          deliveryFee={deliveryFee}
-          seller={seller}
-          isPickup={activeTab === "pickup"}
-          pointsToUse={pointsToUse}
-          setPointsToUse={setPointsToUse}
-          finalAmount={finalAmount}
-        />
-        <OrderSubmitBar
-          products={products}
-          deliveryFee={deliveryFee}
-          isPickup={activeTab === "pickup"}
-          finalAmount={finalAmount}
-          deliveryInfo={deliveryInfo}
-          pickupInfo={pickupInfo}
-          pointsToUse={pointsToUse}
-        />
+          {/* 탭에 따른 컴포넌트 렌더링 */}
+          {activeTab === "delivery" && (
+              <DeliverySection
+                  deliveryInfo={deliveryInfo}
+                  setDeliveryInfo={setDeliveryInfo}
+              />
+          )}
+          {activeTab === "pickup" && (
+              <PickupSection
+                  seller={seller}
+                  pickupInfo={pickupInfo}
+                  setPickupInfo={setPickupInfo}
+              />
+          )}
+
+          <OrderItemsSection products={products} deliveryFee={deliveryFee} />
+          <PaymentInfoSection
+              totalProductPrice={totalProductPrice}
+              deliveryFee={deliveryFee}
+              seller={seller}
+              isPickup={activeTab === "pickup"}
+              pointsToUse={pointsToUse}
+              setPointsToUse={setPointsToUse}
+              finalAmount={finalAmount}
+          />
+          <OrderSubmitBar
+              products={products}
+              deliveryFee={deliveryFee}
+              isPickup={activeTab === "pickup"}
+              finalAmount={finalAmount}
+              deliveryInfo={deliveryInfo}
+              pickupInfo={pickupInfo}
+              pointsToUse={pointsToUse}
+          />
+        </div>
       </div>
-    </div>
   );
 };
 
