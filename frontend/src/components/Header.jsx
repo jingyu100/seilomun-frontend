@@ -441,9 +441,6 @@ const Header = () => {
     const handleCategorySelect = (categoryData) => {
         console.log('🎯 Header에서 선택된 카테고리:', categoryData);
         setSelectedCategoryData(categoryData);
-
-        alert(`카테고리 선택됨: ${categoryData.name} (ID: ${categoryData.id})`);
-
         setIsCategoryMenuOpen(false);
     };
 
