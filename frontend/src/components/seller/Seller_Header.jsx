@@ -85,6 +85,14 @@ export default function Seller_Header() {
 
   const handleLogout = async () => {
     try {
+      // 1. 영업 상태를 '0'(영업종료)로 먼저 업데이트
+      await axios.put(
+        "http://localhost/api/sellers/me/status",
+        { isOpen: "0" },
+        { withCredentials: true }
+      );
+  
+      // 2. 로그아웃 요청
       await axios.post(
         "http://localhost/api/auth/logout",
         {
@@ -94,8 +102,10 @@ export default function Seller_Header() {
         { withCredentials: true }
       );
     } catch (err) {
-      console.warn("⚠ 로그아웃 실패:", err);
+      console.warn("⚠ 로그아웃 또는 상태 변경 실패:", err);
     }
+  
+    // 3. 로컬 상태 정리 및 이동
     setUser(null);
     setIsLoggedIn(false);
     localStorage.clear();
