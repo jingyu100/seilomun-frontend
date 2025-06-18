@@ -124,7 +124,10 @@ function App() {
                 path="/seller/product/register"
                 element={<Seller_ProductRegister />}
               />
-              <Route path="/seller/product/update" element={<Seller_ProductUpdate />} />
+              <Route
+                path="/seller/product/update/:productId"
+                element={<Seller_ProductUpdate />}
+              />
               <Route path="/seller/stats" element={<Seller_Stats />} />
 
               {/* 판매자 주문 관리 */}

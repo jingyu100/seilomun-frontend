@@ -77,7 +77,7 @@ const Seller_ProductManagement = () => {
 
   // 상품 수정 - 레지스터 페이지로 이동
   const handleEditProduct = (productId) => {
-    navigate("/seller/product/register");
+    navigate(`/seller/product/update/${productId}`);
   };
 
   const formatDate = (dateString) => {

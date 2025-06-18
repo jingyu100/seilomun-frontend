@@ -399,7 +399,7 @@ const Seller_ProductUpdate = () => {
               취소
             </button>
             <button type="submit" className="submit-btn" disabled={isSubmitting}>
-              {isSubmitting ? "등록 중..." : "상품 등록"}
+              {isSubmitting ? "수정 중..." : "상품 수정"}
             </button>
           </div>
         </form>
