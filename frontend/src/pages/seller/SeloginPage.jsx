@@ -32,15 +32,16 @@ function SeloginPage() {
       });
 
       console.log("API 응답 데이터:", response.data);
-      const { sellerId, sellerName } = response.data.data.seller;
+      const { sellerId, sellerName , sellerEmail} = response.data.data.seller;
       const userType = "SELLER";
       console.log("추출한 값들:", { sellerId, sellerName, userType });
 
       // 4. userData를 localStorage에 저장
       const userData = {
         id: sellerId,
+        email: sellerEmail,
         nickname: sellerName,
-        userType,
+        userType: userType,
       };
       localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("isLoggedIn", "true");
