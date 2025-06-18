@@ -151,8 +151,6 @@ function CartViewModule() {
                     deliveryFee = rule.deliveryTip;
                 }
             }
-    
-            console.log("🚚 배송비 계산:", deliveryFee, "원 적용됨");
         } else {
             console.log("📦 배달 불가 매장이거나 seller 정보 없음");
         }

@@ -909,7 +909,7 @@ const Header = () => {
                                         <li className="icon-Btn alarm-icon">
                                             <div className="myAlarm myIcon">
                                                 <img
-                                                    src="../image/icon/icon-bell.png"
+                                                    src="/image/icon/icon-bell.png"
                                                     alt="alarm"
                                                     style={{
                                                         width: "35px",
@@ -1045,7 +1045,7 @@ const Header = () => {
                                     >
                                         <span>
                                             <img
-                                                src="../../image/icon/icon_nav.svg"
+                                                src="/image/icon/icon_nav.svg"
                                                 alt="category"
                                                 style={{
                                                     marginRight: "8px",

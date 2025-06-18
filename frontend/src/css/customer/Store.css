@@ -278,6 +278,7 @@
     flex-direction: column;
     padding: 18px 0 10px;
     width: 500px;
+    align-items: center;
 }
 
 .storeMainInfo .storeInfoTable .storeInfoTable-ui {
@@ -293,9 +294,9 @@
 
 .storeInfoTable-right, .storeInfoTable-left {
     position: relative;
-    margin-right: auto;
+    margin-right: 30px;
     font-weight: bold;
-    font-size: 23px;
+    font-size: 15px;
     z-index: 10;
 }
 
@@ -369,7 +370,7 @@
   
   .store-review-content {
     max-width: 900px;
-    margin: 30px auto;
+    /* margin: 30px auto; */
     padding: 40px;
   }
   
@@ -383,13 +384,15 @@
   }
   
   .store-review-card {
-    border-radius: 50px; 
     width: auto;
     height: auto;
-    padding: 30px;
+    padding: 20px 30px;
     margin: 0 auto 30px;
     background-color: #ffffff;
-    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.2); */
+    border-radius: 50px; 
+    border-top: 1px solid #b0b0b0;
+    border-bottom: 1px solid #b0b0b0;
   }
   
   .store-review-header {
@@ -399,50 +402,46 @@
   }
   
   .store-customer-photo {
-    width: 65px;
-    height: 65px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid #ccc;
   }
   
   .store-customer-name {
-    margin-bottom: 35px;
     font-weight: 700;
-    font-size: 23px;
+    font-size: 15px;
   }
   
-  .review-date {
-    font-size: 15px;
+  .store-review-date {
+    font-size: 13px;
     color: #777;
   }
   
-  .review-rating {
-    margin-top: 10px;
-    margin-left: -593px;
-    margin-bottom: 10px;
-    font-size: 19px;
+  .store-review-rating {
+    font-size: 14px;
     color: #ff9900;
   }
 
-  .review-products {
+  .store-review-products {
     margin: 8px 0;
-    font-size: 18px;
+    font-size: 14px;
     color: #929292;
   }
   
-  .review-content {
-    font-size: 18px;
+  .store-review-comment {
+    font-size: 14px;
     margin: 10px 0;
   }
   
-  .review-images {
+  .store-review-images {
     display: flex;
     gap: 10px;
-    margin-top: 25px;
+    margin-top: 15px;
   }
   
-  .review-images img {
+  .store-review-images img {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -457,42 +456,8 @@
     padding: 40px 0;
   }
   
-  /* 답글기능 */
-  .comment-section {
-    margin-top: 15px;
-    display: flex;
-    gap: 5px;
-  }
-  
-  .comment-input {
-    width: 85%;
-    min-height: 80px;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    resize: vertical;
-  }
-  
-  .comment-submit-btn {
-    align-self: flex-end;
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .comment-submit-btn:hover {
-    background-color: #45a049;
-  }
-
   /* 등록된 답글 표시 */
-
-  .seller-comment-box {
+  .sellerStore-comment-box {
     margin-top: 15px;
     background-color: #fcfcfc;
     padding: 10px 14px;
@@ -500,18 +465,18 @@
     border-radius: 6px;
   }
   
-  .seller-comment-box strong {
+  .sellerStore-comment-box strong {
     font-size: 14px;
     color: #333;
   }
   
-  .seller-comment-text {
+  .sellerStore-comment-text {
     margin-top: 6px;
     font-size: 14px;
     color: #000000;
   }
   
-  .seller-comment-date-aa {
+  .sellerStore-comment-date-aa {
     font-size: 12px;
     color:#777;
   }

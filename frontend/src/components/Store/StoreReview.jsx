@@ -63,21 +63,21 @@ export default function StoreReview() {
                   className="store-customer-photo"
                 />
                 <div className="store-customer-name">{review.customerName}님</div>
-                <div>
-                  <div className="review-date">
+                <div style={{ display: "flex", }}>
+                  <div className="store-review-date">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </div>
-                  <div className="review-rating">⭐ {review.rating} / 5</div>
                 </div>
+                <div className="store-review-rating">⭐ {review.rating} / 5</div>
               </div>
 
-              <div className="review-products">
+              <div className="store-review-products">
                 <strong>구매 상품:</strong> {review.orderItems.join(", ")}
               </div>
 
-              <div className="review-content">{review.reviewContent}</div>
+              <div className="store-review-comment">{review.reviewContent}</div>
               {review.reviewPhotoUrls.length > 0 && (
-                <div className="review-images">
+                <div className="store-review-images">
                   {review.reviewPhotoUrls.map((url, i) => (
                     <img key={i} src={getFullUrl(url)} alt="리뷰 이미지" />
                   ))}
@@ -85,10 +85,10 @@ export default function StoreReview() {
               )}
 
               {review.comment?.content && (
-                <div className="seller-comment-box">
+                <div className="sellerStore-comment-box">
                   <strong>사장님 답글:</strong>
-                  <p className="seller-comment-text">{review.comment.content}</p>
-                  <p className="seller-comment-date-aa">
+                  <p className="sellerStore-comment-text">{review.comment.content}</p>
+                  <p className="sellerStore-comment-date-aa">
                     {new Date(review.comment.createdAt).toLocaleDateString()}
                   </p>
                 </div>
