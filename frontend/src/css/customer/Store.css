@@ -98,7 +98,7 @@
 .storeHead .storeName h1 {
     width: 100%;
     max-width: 260px;
-    height: 100%;
+    height: auto;
     max-height: 80px;
     padding: 15px 0;
     aspect-ratio: 5 / 2; /* 가로:세로 비율 고정 */
@@ -385,7 +385,7 @@
   .store-review-card {
     border-radius: 50px; 
     width: auto;
-    height: 400px;
+    height: auto;
     padding: 30px;
     margin: 0 auto 30px;
     background-color: #ffffff;
