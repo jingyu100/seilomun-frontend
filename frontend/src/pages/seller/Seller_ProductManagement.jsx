@@ -25,6 +25,7 @@ const Seller_ProductManagement = () => {
       });
 
       const sellerId = sellerResponse.data.data.seller.sellerId;
+      console.log("판매자 ID:", sellerId);
 
       // 해당 판매자의 상품 목록 조회
       const productsResponse = await axios.get(
@@ -34,6 +35,9 @@ const Seller_ProductManagement = () => {
         }
       );
 
+      console.log("전체 응답 데이터:", productsResponse.data);
+
+      // 응답 데이터가 바로 배열 형태로 오므로 직접 설정
       setProducts(productsResponse.data || []);
     } catch (error) {
       console.error("상품 목록 조회 실패:", error);
@@ -77,6 +81,7 @@ const Seller_ProductManagement = () => {
 
   // 상품 수정 - 레지스터 페이지로 이동
   const handleEditProduct = (productId) => {
+    console.log("수정할 상품 ID:", productId);
     navigate(`/seller/product/update/${productId}`);
   };
 
@@ -175,73 +180,79 @@ const Seller_ProductManagement = () => {
                 <div className="col-actions">관리</div>
               </div>
 
-              {products.map((product) => (
-                <div key={product.id} className="table-row">
-                  <div className="col-image">
-                    <img
-                      src={
-                        product.photoUrl?.[0]
-                          ? `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${product.photoUrl[0]}`
-                          : "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png"
-                      }
-                      alt={product.name}
-                      className="product-image"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png";
-                      }}
-                    />
-                  </div>
-                  <div className="col-name">
-                    <div className="product-name">{product.name}</div>
-                    <div className="product-desc">{product.description}</div>
-                  </div>
-                  <div className="col-price">
-                    <div className="original-price">
-                      {product.originalPrice?.toLocaleString()}원
+              {products.map((product) => {
+                console.log("현재 상품 데이터:", product);
+                return (
+                  <div key={product.id} className="table-row">
+                    <div className="col-image">
+                      <img
+                        src={
+                          product.photoUrl?.[0]
+                            ? `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${product.photoUrl[0]}`
+                            : "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png"
+                        }
+                        alt={product.name}
+                        className="product-image"
+                        onError={(e) => {
+                          e.target.src =
+                            "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png";
+                        }}
+                      />
                     </div>
-                    <div className="discount-info">
-                      {product.minDiscountRate}~{product.maxDiscountRate}% 할인
+                    <div className="col-name">
+                      <div className="product-name">{product.name}</div>
+                      <div className="product-desc">{product.description}</div>
+                    </div>
+                    <div className="col-price">
+                      <div className="original-price">
+                        {product.originalPrice?.toLocaleString()}원
+                      </div>
+                      <div className="discount-info">
+                        {product.minDiscountRate}~{product.maxDiscountRate}% 할인
+                      </div>
+                    </div>
+                    <div className="col-stock">{product.stockQuantity}개</div>
+                    <div className="col-status">
+                      <span className={`status-badge ${getStatusClass(product.status)}`}>
+                        {getStatusText(product.status)}
+                      </span>
+                    </div>
+                    <div className="col-date">{formatDate(product.createdAt)}</div>
+                    <div className="col-actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => {
+                          console.log("수정 버튼 클릭한 상품:", product);
+                          handleEditProduct(product.id);
+                        }}
+                      >
+                        수정
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDeleteProduct(product.id)}
+                      >
+                        삭제
+                      </button>
+                      {product.status === "1" ? (
+                        <button
+                          className="status-btn inactive"
+                          onClick={() => handleStatusChange(product.id, "0")}
+                        >
+                          판매중지
+                        </button>
+                      ) : (
+                        <button
+                          className="status-btn active"
+                          onClick={() => handleStatusChange(product.id, "1")}
+                        >
+                          판매시작
+                        </button>
+                      )}
                     </div>
                   </div>
-                  <div className="col-stock">{product.stockQuantity}개</div>
-                  <div className="col-status">
-                    <span className={`status-badge ${getStatusClass(product.status)}`}>
-                      {getStatusText(product.status)}
-                    </span>
-                  </div>
-                  <div className="col-date">{formatDate(product.createdAt)}</div>
-                  <div className="col-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleEditProduct(product.id)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDeleteProduct(product.id)}
-                    >
-                      삭제
-                    </button>
-                    {product.status === "1" ? (
-                      <button
-                        className="status-btn inactive"
-                        onClick={() => handleStatusChange(product.id, "0")}
-                      >
-                        판매중지
-                      </button>
-                    ) : (
-                      <button
-                        className="status-btn active"
-                        onClick={() => handleStatusChange(product.id, "1")}
-                      >
-                        판매시작
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
