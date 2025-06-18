@@ -74,7 +74,7 @@ function SeRegisterPage() {
         return;
       }
       try {
-        await axios.post("http://localhost/api/auth/email", { email });
+        await axios.post("http://3.36.70.70/api/auth/email", { email });
         alert("인증번호가 전송되었습니다.");
         setAuthSent(true);
         setIsEmailVerified(false);
@@ -87,7 +87,7 @@ function SeRegisterPage() {
 
     const handleVerifyAuthCode = async () => {
       try {
-        const response = await axios.post("http://localhost/api/auth/verifyEmail", {
+        const response = await axios.post("http://3.36.70.70/api/auth/verifyEmail", {
           email,
           authNumber: authCode,
         });
@@ -128,7 +128,7 @@ function SeRegisterPage() {
     };
 
     try {
-      const res = await axios.post("http://localhost/api/sellers", payload);
+      const res = await axios.post("http://3.36.70.70/api/sellers", payload);
       const emailFromServer = res?.data?.data?.email;
 
       if (res.status === 200 && emailFromServer) {

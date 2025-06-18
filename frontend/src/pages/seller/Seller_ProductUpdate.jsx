@@ -59,7 +59,7 @@ const Seller_ProductUpdate = () => {
   useEffect(() => {
     const loadProductData = async () => {
       try {
-        const response = await axios.get(`http://localhost/api/products/${productId}`, {
+        const response = await axios.get(`http://3.36.70.70/api/products/${productId}`, {
           withCredentials: true,
         });
 
@@ -255,7 +255,7 @@ const Seller_ProductUpdate = () => {
       });
 
       // API 호출
-      const response = await axios.put(`http://localhost/api/products/${productId}`, submitData, {
+      const response = await axios.put(`http://3.36.70.70/api/products/${productId}`, submitData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

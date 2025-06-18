@@ -11,7 +11,7 @@ export default function useChatCheck() {
 
     const chattingCheck = async () => {
       try {
-        const response = await axios.get(`http://localhost/api/chat/rooms/${chatroomid}`);
+        const response = await axios.get(`http://3.36.70.70/api/chat/rooms/${chatroomid}`);
         console.log("API 응답:", response.data);
 
         const chatRoomDto = response.data.data.CUSTOMER;

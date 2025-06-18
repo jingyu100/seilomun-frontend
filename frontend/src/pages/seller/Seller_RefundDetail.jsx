@@ -18,7 +18,7 @@ const Seller_RefundDetail = () => {
     const fetchRefundDetail = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost/api/sellers/refunds/${refundId}`, {
+            const response = await axios.get(`http://3.36.70.70/api/sellers/refunds/${refundId}`, {
                 withCredentials: true,
             });
 
@@ -47,7 +47,7 @@ const Seller_RefundDetail = () => {
         try {
             setActionLoading(true);
             const response = await axios.post(
-                `http://localhost/api/orders/refund/acceptance/${refundId}`,
+                `http://loca3.36.70.70lhost/api/orders/refund/acceptance/${refundId}`,
                 {},
                 { withCredentials: true }
             );
@@ -68,7 +68,7 @@ const Seller_RefundDetail = () => {
         try {
             setActionLoading(true);
             const response = await axios.post(
-                `http://localhost/api/orders/refund/decline/${refundId}`,
+                `http://loca3.36.70.70lhost/api/orders/refund/decline/${refundId}`,
                 {},
                 { withCredentials: true }
             );

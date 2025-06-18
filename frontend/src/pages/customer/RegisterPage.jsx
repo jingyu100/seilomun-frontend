@@ -127,7 +127,7 @@ function RegisterPage() {
 
   const handleVerifyAuthCode = async () => {
     try {
-      const response = await axios.post("http://localhost/api/auth/verifyEmail", {
+      const response = await axios.post("http://3.36.70.70/api/auth/verifyEmail", {
         email,
         authNumber: authCode,
       });
@@ -166,7 +166,7 @@ function RegisterPage() {
 
    // 닉네임 중복 확인 기능
   //   try {
-  //     const response = await axios.get("http://localhost/api/customers/check-nickname", {
+  //     const response = await axios.get("http://3.36.70.70/api/customers/check-nickname", {
   //       params: { nickname }
   //     });
   

@@ -19,7 +19,7 @@ const Seller_notification = () => {
         connectionStatus,
         reconnect
     } = useNotifications(
-        "http://localhost",
+        "http://3.36.70.70",
         "SELLER"
     );
 

@@ -16,7 +16,7 @@ const Change_dataPage = () => {
 
   // 이메일 정보 불러오기
   useEffect(() => {
-    axios.get("http://localhost/api/customers", {
+    axios.get("http://3.36.70.70/api/customers", {
       withCredentials: true,
     })
       .then((res) => {

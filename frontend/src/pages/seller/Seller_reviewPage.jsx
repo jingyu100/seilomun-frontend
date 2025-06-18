@@ -23,7 +23,7 @@ const Seller_reviewPage = () => {
   // 리뷰 다시 불러오기
   const fetchReviews = async (sellerId) => {
     try {
-      const reviewsRes = await axios.get(`http://localhost/api/review/${sellerId}`, {
+      const reviewsRes = await axios.get(`http://3.36.70.70/api/review/${sellerId}`, {
         params: { page: 0, size: 10 },
         withCredentials: true,
       });
@@ -42,7 +42,7 @@ const Seller_reviewPage = () => {
       if (!content || content.trim() === "") return;
 
       const res = await axios.post(
-        `http://localhost/api/review/comment/${reviewId}`,
+        `http://3.36.70.70/api/review/comment/${reviewId}`,
         { reviewComment: content },
         { withCredentials: true }
       );
@@ -71,7 +71,7 @@ const Seller_reviewPage = () => {
       }
 
       try {
-        const sellerRes = await axios.get(`http://localhost/api/sellers/${sellerId}`, {
+        const sellerRes = await axios.get(`http://3.36.70.70/api/sellers/${sellerId}`, {
           withCredentials: true,
         });
         setStoreName(sellerRes.data.data?.storeName || "내 가게");

@@ -52,7 +52,7 @@ function App() {
   // const { isLoading } = useLogin();
   // useEffect(() => {
   //   const interval = setInterval(() => {
-  //     fetch("http://localhost/api/auth/ping", {
+  //     fetch("http://3.36.70.70/api/auth/ping", {
   //       method: "POST",
   //       credentials: "include",
   //     });

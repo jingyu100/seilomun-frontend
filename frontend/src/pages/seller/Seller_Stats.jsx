@@ -103,7 +103,7 @@ const Seller_Stats = () => {
         setShowStats(false);
 
         try {
-            let url = 'http://localhost/api/orders/stats';
+            let url = 'http://3.36.70.70/api/orders/stats';
             const params = new URLSearchParams();
 
             // period 파라미터 추가

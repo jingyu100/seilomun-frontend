@@ -18,7 +18,7 @@ const Seller_OrderDetail = () => {
     const fetchOrderDetail = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost/api/sellers/orders/number/${orderNumber}`, {
+            const response = await axios.get(`http://3.36.70.70/api/sellers/orders/number/${orderNumber}`, {
                 withCredentials: true,
             });
 
@@ -47,7 +47,7 @@ const Seller_OrderDetail = () => {
         try {
             setActionLoading(true);
             const response = await axios.post(
-                `http://localhost/api/orders/acceptance/${orderDetail.orderId}`,
+                `http://3.36.70.70/api/orders/acceptance/${orderDetail.orderId}`,
                 {},
                 { withCredentials: true }
             );
@@ -68,7 +68,7 @@ const Seller_OrderDetail = () => {
         try {
             setActionLoading(true);
             const response = await axios.post(
-                `http://localhost/api/orders/refuse/${orderDetail.orderId}`,
+                `http://3.36.70.70/api/orders/refuse/${orderDetail.orderId}`,
                 {},
                 { withCredentials: true }
             );

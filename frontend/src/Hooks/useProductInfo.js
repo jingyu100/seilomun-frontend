@@ -12,7 +12,7 @@ export default function useProductInfo() {
 
     const productInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost/api/products/${id}`);
+        const response = await axios.get(`http://3.36.70.70/api/products/${id}`);
         console.log("API 응답:", response.data);
 
         const productDto = response.data.data.Products;

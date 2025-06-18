@@ -20,7 +20,7 @@ export default function useSellerProducts() {
     const fetchProducts = async () => {
       setError(null);
       try {
-        const res = await axios.get(`http://localhost/api/products/seller/${sellerId}`);
+        const res = await axios.get(`http://3.36.70.70/api/products/seller/${sellerId}`);
 
         const transformed = res.data.map(product => ({
           ...product,

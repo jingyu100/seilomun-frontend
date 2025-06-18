@@ -92,7 +92,7 @@ const Seller_newstoreRegistration = () => {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await axios.get("http://localhost/api/sellers/me", {
+      const response = await axios.get("http://3.36.70.70/api/sellers/me", {
         headers,
         withCredentials: true,
       });
@@ -626,7 +626,7 @@ const Seller_newstoreRegistration = () => {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await axios.put("http://localhost/api/sellers", formData, {
+      const response = await axios.put("http://3.36.70.70/api/sellers", formData, {
         withCredentials: true,
         headers,
       });

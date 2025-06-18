@@ -18,7 +18,7 @@ export default function useStoreListByIds(sellerIds = [], maxCount = 12) {
     const fetchStores = async () => {
       try {
         const requests = sellerIds.map((id) =>
-          axios.get(`http://localhost/api/sellers/${id}`)
+          axios.get(`http://3.36.70.70/api/sellers/${id}`)
         );
 
         const responses = await Promise.allSettled(requests);
