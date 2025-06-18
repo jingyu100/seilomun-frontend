@@ -15,7 +15,6 @@ const NewPage = () => {
 
             <div className="body sideMargin">
                 <div className="sail-inner">
-                    <Filter/>
                     <div className="main-container">
                         <div className="search-results-container">
                             {/* 판매자 검색 결과 */}

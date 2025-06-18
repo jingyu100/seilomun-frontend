@@ -15,45 +15,45 @@ const Filter = () => {
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
 
-    return (
-        <div className="filter-container">
-            {/* 위치 필터 */}
-            <div className="filter-section">
-                <h3>위치</h3>
-                <p>서울특별시</p>
-                {locations.slice(0, showMoreLocations ? locations.length : 4).map((loc, index) => (
-                    <label key={index} className="filter-item">
-                        <input
-                            type="radio"
-                            name="location"
-                            value={loc}
-                            checked={selectedLocation === loc}
-                            onChange={(e) => setSelectedLocation(e.target.value)}
-                        />
-                        {loc}
-                    </label>
-                ))}
-                <button onClick={() => setShowMoreLocations(!showMoreLocations)} className="more-btn">
-                    {showMoreLocations ? "접기" : "더보기"}
-                </button>
-            </div>
-
-            {/* 카테고리 필터 (라디오 버튼 제거) */}
-            <div className="filter-section">
-                <h3>카테고리</h3>
-                <div className="category-list">
-                    {/*{categories.slice(0, showMoreCategories ? categories.length : 5).map((cat, index) => (*/}
-                    {/*    <div key={index} className={`category-item ${selectedCategory === cat ? "selected" : ""}`}  onClick={() => setSelectedCategory(cat)}>*/}
-                    {/*        {cat}*/}
-                    {/*    </div>*/}
-                    {/*))}*/}
-                </div>
-                <button onClick={() => setShowMoreCategories(!showMoreCategories)} className="more-btn">
-                    {showMoreCategories ? "접기" : "더보기"}
-                </button>
-            </div>
-        </div>
-    );
+    // return (
+    //     <div className="filter-container">
+    //         {/* 위치 필터 */}
+    //         <div className="filter-section">
+    //             <h3>위치</h3>
+    //             <p>서울특별시</p>
+    //             {locations.slice(0, showMoreLocations ? locations.length : 4).map((loc, index) => (
+    //                 <label key={index} className="filter-item">
+    //                     <input
+    //                         type="radio"
+    //                         name="location"
+    //                         value={loc}
+    //                         checked={selectedLocation === loc}
+    //                         onChange={(e) => setSelectedLocation(e.target.value)}
+    //                     />
+    //                     {loc}
+    //                 </label>
+    //             ))}
+    //             <button onClick={() => setShowMoreLocations(!showMoreLocations)} className="more-btn">
+    //                 {showMoreLocations ? "접기" : "더보기"}
+    //             </button>
+    //         </div>
+    //
+    //         {/* 카테고리 필터 (라디오 버튼 제거) */}
+    //         <div className="filter-section">
+    //             <h3>카테고리</h3>
+    //             <div className="category-list">
+    //                 {/*{categories.slice(0, showMoreCategories ? categories.length : 5).map((cat, index) => (*/}
+    //                 {/*    <div key={index} className={`category-item ${selectedCategory === cat ? "selected" : ""}`}  onClick={() => setSelectedCategory(cat)}>*/}
+    //                 {/*        {cat}*/}
+    //                 {/*    </div>*/}
+    //                 {/*))}*/}
+    //             </div>
+    //             <button onClick={() => setShowMoreCategories(!showMoreCategories)} className="more-btn">
+    //                 {showMoreCategories ? "접기" : "더보기"}
+    //             </button>
+    //         </div>
+    //     </div>
+    // );
 };
 
 export default Filter;
