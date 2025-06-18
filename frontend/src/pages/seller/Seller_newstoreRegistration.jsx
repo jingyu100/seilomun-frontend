@@ -13,7 +13,7 @@ const Seller_newstoreRegistration = () => {
   const [minOrderAmount, setMinOrderAmount] = useState("");
 
   // 배달 관련
-  const [deliveryStatus, setDeliveryStatus] = useState("DECLINE"); // 기본값 설정
+  const [deliveryStatus, setDeliveryStatus] = useState("DECLINE");
   const [amountInputs, setAmountInputs] = useState([{ min: "", fee: "" }]);
   const [freeDelivery, setFreeDelivery] = useState(false);
   const [deliveryArea, setDeliveryArea] = useState("");
@@ -27,14 +27,19 @@ const Seller_newstoreRegistration = () => {
   // 공지사항
   const [description, setDescription] = useState("");
 
-  // 이미지
+  // 이미지 - 개선된 상태 관리
   const [storeImages, setStoreImages] = useState([]);
   const [storeImageFiles, setStoreImageFiles] = useState([]);
+  const [setOriginalStoreImages] = useState([]); // 원본 URL 저장
+
   const [noticeImages, setNoticeImages] = useState([]);
   const [noticeImageFiles, setNoticeImageFiles] = useState([]);
+  const [setOriginalNoticeImages] = useState([]); // 원본 URL 저장
 
   // 로딩 및 에러 상태
   const [loading, setLoading] = useState(false);
+
+  const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
 
   // 카테고리 매핑
   const categories = [
@@ -49,65 +54,86 @@ const Seller_newstoreRegistration = () => {
     fetchSellerInfo();
   }, []);
 
-  // fetchSellerInfo 함수를 axios와 쿠키 방식으로 변경
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+
+    // 이미 완전한 URL인 경우 (http 또는 https로 시작)
+    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      return imageUrl;
+    }
+
+    // 상대 경로인 경우 S3 base URL 추가
+    return S3_BASE_URL + imageUrl;
+  };
+
+  // 3. fetchSellerInfo 함수에서 이미지 URL 처리 부분 수정
   const fetchSellerInfo = async () => {
     try {
       const response = await axios.get("http://localhost/api/sellers/me", {
-        withCredentials: true, // 쿠키를 포함하여 요청
+        withCredentials: true,
       });
 
       if (response.status === 200) {
-        console.log("API 응답 데이터:", response.data); // 디버깅용
+        console.log("API 응답 데이터:", response.data);
 
         const responseData = response.data;
-        // ⚠️ 응답 구조 수정: data.data.sellerInformationDto
         const sellerInfo = responseData.data?.sellerInformationDto;
 
         if (!sellerInfo) {
           console.warn("sellerInformationDto가 응답에 없습니다:", responseData);
-          console.log("실제 응답 구조:", JSON.stringify(responseData, null, 2));
           return;
         }
 
-        // 기존 데이터로 폼 초기화 (SellerInformationResponseDto 필드명에 맞게)
+        // 기본 정보 설정 (기존 코드와 동일)
         setStoreName(sellerInfo.storeName || "");
         setStoreDescription(sellerInfo.storeDescription || "");
         setPhone(sellerInfo.phone || "");
         setPickupTime(sellerInfo.pickupTime || "");
-        setMinOrderAmount(sellerInfo.minOrderAmount?.toString() || ""); // 숫자를 문자열로 변환
+        setMinOrderAmount(sellerInfo.minOrderAmount?.toString() || "");
         setDeliveryStatus(sellerInfo.deliveryAvailable === "Y" ? "ACCEPT" : "DECLINE");
         setDeliveryArea(sellerInfo.deliveryArea || "");
         setStoreTime(sellerInfo.operatingHours || "");
         setDescription(sellerInfo.notification || "");
 
-        // 카테고리 설정
+        // 카테고리 설정 (기존 코드와 동일)
         const category = categories.find((cat) => cat.id === sellerInfo.categoryId);
         if (category) {
           setSelectedCategory(category.name);
-          setCategoryId(sellerInfo.categoryId.toString()); // 숫자를 문자열로 변환
+          setCategoryId(sellerInfo.categoryId.toString());
         }
 
-        // 배달비 설정 - 기존 데이터를 완전히 교체 (누적되지 않도록)
+        // 배달비 설정 (기존 코드와 동일)
         if (sellerInfo.deliveryFeeDtos && sellerInfo.deliveryFeeDtos.length > 0) {
           const existingDeliveryFees = sellerInfo.deliveryFeeDtos.map((fee) => ({
             id: fee.id,
             min: fee.ordersMoney?.toString() || "",
             fee: fee.deliveryTip?.toString() || "",
           }));
-          setAmountInputs(existingDeliveryFees); // 기존 데이터로 완전히 교체
+          setAmountInputs(existingDeliveryFees);
         } else {
-          setAmountInputs([{ min: "", fee: "" }]); // 기본값으로 초기화
+          setAmountInputs([{ min: "", fee: "" }]);
         }
 
-        // 기존 이미지 URL 설정 (SellerInformationResponseDto 필드명에 맞게)
-        // sellerPhotos (not sellerPhotoUrls), notificationPhotos
-        setStoreImages(sellerInfo.sellerPhotos || []);
-        setNoticeImages(sellerInfo.notificationPhotos || []);
+        // 🔥 이미지 설정 - S3 URL 처리 추가
+        const existingStorePhotos = (sellerInfo.sellerPhotos || []).map(getImageUrl);
+        const existingNoticePhotos = (sellerInfo.notificationPhotos || []).map(
+          getImageUrl
+        );
+
+        // 원본 URL 저장 (백엔드 전송용 - 원본 그대로)
+        setOriginalStoreImages(sellerInfo.sellerPhotos || []);
+        setOriginalNoticeImages(sellerInfo.notificationPhotos || []);
+
+        // 화면 표시용 설정 (S3 URL 포함)
+        setStoreImages(existingStorePhotos);
+        setNoticeImages(existingNoticePhotos);
+
+        console.log("로딩된 매장 사진:", existingStorePhotos);
+        console.log("로딩된 공지 사진:", existingNoticePhotos);
       }
     } catch (error) {
       console.error("매장 정보 조회 실패:", error);
-
-      // 에러 타입별 처리
+      // 에러 처리 코드는 기존과 동일
       if (error.response?.status === 401) {
         alert("로그인이 필요합니다.");
         window.location.href = "/selogin";
@@ -119,13 +145,40 @@ const Seller_newstoreRegistration = () => {
     }
   };
 
-  // 매장 사진 관련 함수들
+  // 🔥 개별 매장 사진 삭제
+  const handleDeleteStoreImage = (index) => {
+    console.log(`매장 사진 ${index} 삭제 요청`);
+
+    const updatedImages = storeImages.filter((_, i) => i !== index);
+    const updatedFiles = storeImageFiles.filter((_, i) => i !== index);
+
+    setStoreImages(updatedImages);
+    setStoreImageFiles(updatedFiles);
+
+    console.log("삭제 후 매장 사진:", updatedImages);
+  };
+
+  // 🔥 개별 공지 사진 삭제
+  const handleDeleteNoticeImage = (index) => {
+    console.log(`공지 사진 ${index} 삭제 요청`);
+
+    const updatedImages = noticeImages.filter((_, i) => i !== index);
+    const updatedFiles = noticeImageFiles.filter((_, i) => i !== index);
+
+    setNoticeImages(updatedImages);
+    setNoticeImageFiles(updatedFiles);
+
+    console.log("삭제 후 공지 사진:", updatedImages);
+  };
+
+  // 매장 사진 추가 (슬롯 추가)
   const handleAddStoreImage = () => {
     if (storeImages.length < 5) {
       setStoreImages([...storeImages, null]);
     }
   };
 
+  // 매장 사진 마지막 제거 (기존 방식 유지)
   const handleRemoveStoreImage = () => {
     if (storeImages.length > 0) {
       setStoreImages(storeImages.slice(0, -1));
@@ -133,21 +186,30 @@ const Seller_newstoreRegistration = () => {
     }
   };
 
+  // 매장 사진 파일 변경
   const handleStoreImageChange = (index, e) => {
     const file = e.target.files[0];
     if (file) {
       const updatedImages = [...storeImages];
       const updatedFiles = [...storeImageFiles];
 
+      // 새 파일로 교체
       updatedImages[index] = URL.createObjectURL(file);
+
+      // 파일 배열 크기 맞추기
+      while (updatedFiles.length <= index) {
+        updatedFiles.push(null);
+      }
       updatedFiles[index] = file;
 
       setStoreImages(updatedImages);
       setStoreImageFiles(updatedFiles);
+
+      console.log(`매장 사진 ${index} 변경:`, file.name);
     }
   };
 
-  // 공지 사진 관련 함수들
+  // 공지 사진 관련 함수들 (동일한 패턴)
   const handleAddNoticeImage = () => {
     if (noticeImages.length < 5) {
       setNoticeImages([...noticeImages, null]);
@@ -168,14 +230,20 @@ const Seller_newstoreRegistration = () => {
       const updatedFiles = [...noticeImageFiles];
 
       updatedImages[index] = URL.createObjectURL(file);
+
+      while (updatedFiles.length <= index) {
+        updatedFiles.push(null);
+      }
       updatedFiles[index] = file;
 
       setNoticeImages(updatedImages);
       setNoticeImageFiles(updatedFiles);
+
+      console.log(`공지 사진 ${index} 변경:`, file.name);
     }
   };
 
-  // 배달 금액 입력 관련
+  // 배달 관련 함수들 (기존 유지)
   const handleAddInput = () => {
     setAmountInputs([...amountInputs, { min: "", fee: "" }]);
   };
@@ -192,18 +260,15 @@ const Seller_newstoreRegistration = () => {
     setAmountInputs(updated);
   };
 
-  // 카테고리 선택
   const handleSelect = (category) => {
     setSelectedCategory(category.name);
     setCategoryId(category.id);
     setIsOpen(false);
   };
 
-  // 폼 검증
   const validateForm = () => {
     const newErrors = {};
 
-    // @NotEmpty 필드들 체크 (백엔드 요구사항에 맞춤)
     if (!storeName || !storeName.trim()) newErrors.storeName = "매장이름은 필수입니다.";
     if (!phone || !phone.trim()) newErrors.phone = "전화번호는 필수입니다.";
     if (!pickupTime || !pickupTime.trim())
@@ -217,25 +282,15 @@ const Seller_newstoreRegistration = () => {
       newErrors.deliveryStatus = "배달 여부는 필수입니다.";
     }
 
-    // 에러가 있으면 로그로 확인
     if (Object.keys(newErrors).length > 0) {
       console.log("폼 검증 에러:", newErrors);
-      console.log("현재 상태값들:", {
-        storeName,
-        phone,
-        pickupTime,
-        storeTime,
-        categoryId,
-        deliveryStatus,
-      });
     }
 
     return Object.keys(newErrors).length === 0;
   };
 
-  // 매장 정보 저장
-  // 매장 정보 저장
-  // 매장 정보 저장
+  // 🔥 핵심: 매장 정보 저장 (삭제 기능 포함)
+  // 4. handleSubmit 함수에서 기존 이미지 URL 처리 부분 수정
   const handleSubmit = async () => {
     if (!validateForm()) {
       alert("필수 항목을 모두 입력해주세요.");
@@ -247,43 +302,51 @@ const Seller_newstoreRegistration = () => {
     try {
       const formData = new FormData();
 
-      // 백엔드 SellerInformationDto의 @NotEmpty 요구사항에 맞춤
+      // 🔥 남아있는 기존 이미지 URL들만 필터링 (원본 URL 사용)
+      const remainingStoreUrls = storeImages
+        .filter((img) => typeof img === "string" && img.startsWith(S3_BASE_URL))
+        .map((img) => img.replace(S3_BASE_URL, "")); // S3 base URL 제거하여 원본 경로만 전송
+
+      const remainingNoticeUrls = noticeImages
+        .filter((img) => typeof img === "string" && img.startsWith(S3_BASE_URL))
+        .map((img) => img.replace(S3_BASE_URL, "")); // S3 base URL 제거하여 원본 경로만 전송
+
+      console.log("전송할 매장 사진 URL:", remainingStoreUrls);
+      console.log("전송할 공지 사진 URL:", remainingNoticeUrls);
+
       const sellerInfo = {
-        // @NotEmpty 필수 필드들
-        storeName: storeName.trim(), // 공백 제거
-        deliveryAvailable: deliveryStatus === "ACCEPT" ? "Y" : "N", // Character - 필수
-        operatingHours: storeTime.trim(), // 공백 제거 - 필수
-        categoryId: categoryId ? parseInt(categoryId) : null, // categoryId 안전하게 변환
-        phone: phone.trim(), // 공백 제거 - 필수
-        pickupTime: pickupTime.trim(), // 공백 제거 - 필수
+        // 기존 필드들은 동일
+        storeName: storeName.trim(),
+        deliveryAvailable: deliveryStatus === "ACCEPT" ? "Y" : "N",
+        operatingHours: storeTime.trim(),
+        categoryId: categoryId ? parseInt(categoryId) : null,
+        phone: phone.trim(),
+        pickupTime: pickupTime.trim(),
+        storeDescription: storeDescription || "",
+        notification: description || "",
+        minOrderAmount: minOrderAmount || "0",
+        deliveryArea: deliveryArea || "",
 
-        // 선택적 필드들
-        storeDescription: storeDescription || "", // null 방지
-        notification: description || "", // null 방지
-        minOrderAmount: minOrderAmount || "0", // 빈 값일 경우 기본값
-        deliveryArea: deliveryArea || "", // 빈 값 허용
-
-        // 배달비 설정 - ID 확실히 전달
         deliveryFeeDtos: amountInputs
           .filter((input) => input.min && input.fee)
           .map((input) => ({
-            id: input.id || null, // 기존 ID 확실히 전달 (있으면 수정, 없으면 신규)
+            id: input.id || null,
             ordersMoney: parseInt(input.min) || 0,
             deliveryTip: freeDelivery ? 0 : parseInt(input.fee) || 0,
             deleted: false,
           })),
 
-        // 이미지 관련 (빈 배열로 초기화)
-        sellerPhotoUrls: [], // 기존 이미지 URL
-        notificationPhotos: [], // 기존 공지 이미지 URL
-        notificationPhotoIds: [], // 삭제할 이미지 ID들
+        // 🔥 원본 경로만 전송 (S3 base URL 제거된 상태)
+        sellerPhotoUrls: remainingStoreUrls,
+        notificationPhotos: remainingNoticeUrls,
+
+        sellerPhotoIds: [],
+        notificationPhotoIds: [],
       };
 
-      // 전송 전 데이터 검증
+      // 나머지 코드는 기존과 동일
       console.log("전송할 sellerInfo:", sellerInfo);
-      console.log("배달비 데이터:", sellerInfo.deliveryFeeDtos);
 
-      // 필수 필드 검증
       if (!sellerInfo.categoryId) {
         alert("매장 카테고리를 선택해주세요.");
         setLoading(false);
@@ -297,63 +360,22 @@ const Seller_newstoreRegistration = () => {
         })
       );
 
-      // 매장 이미지 처리 - 실제 파일이 있을 때만 전송
-      let hasStoreImages = false;
-      if (storeImageFiles && storeImageFiles.length > 0) {
-        storeImageFiles.forEach((file) => {
-          if (file && file instanceof File) {
-            formData.append("storeImage", file);
-            hasStoreImages = true;
-          }
+      // 새로 업로드된 파일들만 전송
+      const newStoreFiles = storeImageFiles.filter((file) => file instanceof File);
+      const newNoticeFiles = noticeImageFiles.filter((file) => file instanceof File);
+
+      if (newStoreFiles.length > 0) {
+        newStoreFiles.forEach((file) => {
+          formData.append("storeImage", file);
         });
+        console.log("새 매장 이미지 전송:", newStoreFiles.length, "개");
       }
 
-      // 공지 이미지 처리 - 실제 파일이 있을 때만 전송
-      let hasNoticeImages = false;
-      if (noticeImageFiles && noticeImageFiles.length > 0) {
-        noticeImageFiles.forEach((file) => {
-          if (file && file instanceof File) {
-            formData.append("notificationImage", file);
-            hasNoticeImages = true;
-          }
+      if (newNoticeFiles.length > 0) {
+        newNoticeFiles.forEach((file) => {
+          formData.append("notificationImage", file);
         });
-      }
-
-      // 이미지가 없는 경우에만 빈 파일 전송 (백엔드 호환성을 위해)
-      if (!hasStoreImages) {
-        const emptyStoreFile = new File([""], "empty_store.txt", { type: "text/plain" });
-        formData.append("storeImage", emptyStoreFile);
-        console.log("매장 이미지 없음 - 빈 파일 전송");
-      } else {
-        console.log(
-          "매장 이미지 전송:",
-          storeImageFiles.filter((f) => f instanceof File).length,
-          "개"
-        );
-      }
-
-      if (!hasNoticeImages) {
-        const emptyNoticeFile = new File([""], "empty_notice.txt", {
-          type: "text/plain",
-        });
-        formData.append("notificationImage", emptyNoticeFile);
-        console.log("공지 이미지 없음 - 빈 파일 전송");
-      } else {
-        console.log(
-          "공지 이미지 전송:",
-          noticeImageFiles.filter((f) => f instanceof File).length,
-          "개"
-        );
-      }
-
-      // FormData 내용 확인 (디버깅용)
-      console.log("FormData 내용:");
-      for (let pair of formData.entries()) {
-        if (pair[1] instanceof File) {
-          console.log(pair[0], "파일:", pair[1].name, pair[1].size + "bytes");
-        } else {
-          console.log(pair[0], pair[1]);
-        }
+        console.log("새 공지 이미지 전송:", newNoticeFiles.length, "개");
       }
 
       const response = await axios.put("http://localhost/api/sellers", formData, {
@@ -365,14 +387,11 @@ const Seller_newstoreRegistration = () => {
 
       if (response.status === 200) {
         alert("매장 정보가 성공적으로 업데이트되었습니다!");
-        // 성공 후 메인 페이지로 이동
         window.location.href = "/Seller_Main";
       }
     } catch (error) {
       console.error("매장 정보 업데이트 실패:", error);
-      console.error("에러 응답:", error.response?.data);
-
-      // 에러 타입별 처리
+      // 에러 처리는 기존과 동일
       if (error.response?.status === 401) {
         alert("로그인이 필요합니다.");
         window.location.href = "/selogin";
@@ -389,13 +408,13 @@ const Seller_newstoreRegistration = () => {
       setLoading(false);
     }
   };
+
   return (
     <>
       <Seller_Header />
 
       <div className="seller-store-registration">
         <div className="seller-store-container">
-          {/* 메인 폼 */}
           <div className="seller-form-container">
             {/* 기본 정보 */}
             <section className="seller-info-card">
@@ -447,17 +466,6 @@ const Seller_newstoreRegistration = () => {
                       placeholder="예: 30분"
                       value={pickupTime}
                       onChange={(e) => setPickupTime(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="seller-form-field">
-                    <label className="seller-label">최소 주문 금액</label>
-                    <input
-                      type="number"
-                      className="seller-input"
-                      placeholder="0"
-                      value={minOrderAmount}
-                      onChange={(e) => setMinOrderAmount(e.target.value)}
                     />
                   </div>
                 </div>
@@ -547,7 +555,7 @@ const Seller_newstoreRegistration = () => {
               </div>
             </section>
 
-            {/* 매장 사진 */}
+            {/* 🔥 매장 사진 - 개별 삭제 버튼 추가 */}
             <section className="seller-info-card">
               <div className="seller-card-header">
                 <div className="seller-card-title">
@@ -565,15 +573,48 @@ const Seller_newstoreRegistration = () => {
                     <div
                       key={index}
                       className="seller-image-upload-box"
-                      onClick={() =>
-                        document.getElementById(`seller-store-img-${index}`).click()
-                      }
+                      style={{ position: "relative" }}
                     >
                       <img
                         src={img || seller_camera}
                         alt="매장 사진"
                         className="seller-image"
+                        onClick={() =>
+                          document.getElementById(`seller-store-img-${index}`).click()
+                        }
+                        style={{ cursor: "pointer" }}
                       />
+
+                      {/* 🔥 개별 삭제 버튼 */}
+                      {img && img !== seller_camera && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteStoreImage(index);
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: "5px",
+                            right: "5px",
+                            background: "rgba(255, 0, 0, 0.8)",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: "25px",
+                            height: "25px",
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                          }}
+                        >
+                          ✕
+                        </button>
+                      )}
+
                       <input
                         type="file"
                         accept="image/*"
@@ -599,7 +640,7 @@ const Seller_newstoreRegistration = () => {
                     onClick={handleRemoveStoreImage}
                     disabled={storeImages.length === 0}
                   >
-                    사진 삭제
+                    마지막 사진 삭제
                   </button>
                 </div>
               </div>
@@ -656,8 +697,15 @@ const Seller_newstoreRegistration = () => {
                             <input
                               type="number"
                               placeholder="최소 주문금액"
-                              value={input.min}
-                              onChange={(e) => handleChange(index, "min", e.target.value)}
+                              value={index === 0 ? minOrderAmount : input.min}
+                              onChange={(e) => {
+                                if (index === 0) {
+                                  setMinOrderAmount(e.target.value);
+                                  handleChange(index, "min", e.target.value);
+                                } else {
+                                  handleChange(index, "min", e.target.value);
+                                }
+                              }}
                               className="seller-delivery-input"
                             />
                             <span className="seller-text">원 이상</span>
@@ -717,7 +765,7 @@ const Seller_newstoreRegistration = () => {
               </div>
             </section>
 
-            {/* 가게 공지 */}
+            {/* 🔥 가게 공지 - 개별 삭제 버튼 추가 */}
             <section className="seller-info-card">
               <div className="seller-card-header">
                 <div className="seller-card-title">
@@ -735,15 +783,48 @@ const Seller_newstoreRegistration = () => {
                     <div
                       key={index}
                       className="seller-image-upload-box"
-                      onClick={() =>
-                        document.getElementById(`seller-notice-img-${index}`).click()
-                      }
+                      style={{ position: "relative" }}
                     >
                       <img
                         src={img || seller_camera}
                         alt="공지 사진"
                         className="seller-image"
+                        onClick={() =>
+                          document.getElementById(`seller-notice-img-${index}`).click()
+                        }
+                        style={{ cursor: "pointer" }}
                       />
+
+                      {/* 🔥 개별 삭제 버튼 */}
+                      {img && img !== seller_camera && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteNoticeImage(index);
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: "5px",
+                            right: "5px",
+                            background: "rgba(255, 0, 0, 0.8)",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "50%",
+                            width: "25px",
+                            height: "25px",
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 10,
+                          }}
+                        >
+                          ✕
+                        </button>
+                      )}
+
                       <input
                         type="file"
                         accept="image/*"
@@ -769,7 +850,7 @@ const Seller_newstoreRegistration = () => {
                     onClick={handleRemoveNoticeImage}
                     disabled={noticeImages.length === 0}
                   >
-                    사진 삭제
+                    마지막 사진 삭제
                   </button>
                 </div>
 

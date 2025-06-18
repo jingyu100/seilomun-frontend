@@ -6,12 +6,12 @@ import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import FilterBar from "../../components/OrderList/FilterBar.jsx";
 import OrderCard from "../../components/OrderList/OrderCard.jsx";
+import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
 
@@ -57,7 +57,6 @@ const OrderListPage = () => {
       console.error("주문 목록 조회 실패:", err);
       setError("주문 목록을 불러오지 못했습니다.");
     } finally {
-      setLoading(false);
       setIsFetching(false);
     }
   };
@@ -65,7 +64,6 @@ const OrderListPage = () => {
   // 검색 함수
   const handleSearch = () => {
     setCurrentSearchTerm(searchTerm);
-    setLoading(true);
     setPage(0);
     fetchOrders(true, searchTerm);
   };
@@ -74,7 +72,6 @@ const OrderListPage = () => {
   const handleSearchReset = () => {
     setSearchTerm("");
     setCurrentSearchTerm("");
-    setLoading(true);
     setPage(0);
     fetchOrders(true, "");
   };
@@ -97,65 +94,65 @@ const OrderListPage = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasNext, isFetching, currentSearchTerm]);
-
-  if (loading && orders.length === 0) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-      <div className="OrderListPage">
-        <div className="header">
-          <Header />
-        </div>
-
-        <div className="body sideMargin">
-          <FilterBar
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              onSearch={handleSearch}
-              onReset={handleSearchReset}
-              isFetching={isFetching}
-              currentSearchTerm={currentSearchTerm}
-              orderCount={orders.length}
-          />
-
-          {/* 검색 결과가 없을 때 메시지 */}
-          {orders.length === 0 && !loading && (
-              <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-                {currentSearchTerm ?
-                    `"${currentSearchTerm}"에 대한 주문을 찾을 수 없습니다.` :
-                    "주문 내역이 없습니다."
-                }
-              </div>
-          )}
-
-          {orders.map((order, idx) => (
-              <OrderCard
-                  key={`${order.orderId}-${idx}`}
-                  order={{
-                    id: order.orderId,
-                    date: new Date(order.orderDate).toISOString().slice(0, 10),
-                    store: order.sellerName,
-                    name: order.orderItems[0],
-                    price: order.totalAmount,
-                    orderStatus: order.orderStatus,
-                    isReview: order.review,
-                    photoUrl: order.photoUrl,
-                  }}
-              />
-          ))}
-
-          {isFetching && <div style={{ textAlign: "center", padding: "20px" }}>불러오는 중...</div>}
-          {!hasNext && orders.length > 0 && (
-              <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                더 이상 데이터가 없습니다.
-              </div>
-          )}
-        </div>
-
-        <div className="footer">
-          <Footer />
-        </div>
+    <div className="OrderListPage">
+      <div className="header">
+        <Header />
       </div>
+
+      <div className="body sideMargin">
+        <SideMenuBtn />
+        <FilterBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onSearch={handleSearch}
+          onReset={handleSearchReset}
+          isFetching={isFetching}
+          currentSearchTerm={currentSearchTerm}
+          orderCount={orders.length}
+        />
+
+        {/* 검색 결과가 없을 때 메시지 */}
+        {orders.length === 0 && (
+          <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+            {currentSearchTerm
+              ? `"${currentSearchTerm}"에 대한 주문을 찾을 수 없습니다.`
+              : "주문 내역이 없습니다."}
+          </div>
+        )}
+
+        {orders.map((order, idx) => (
+          <OrderCard
+            key={`${order.orderId}-${idx}`}
+            order={{
+              id: order.orderId,
+              date: new Date(order.orderDate).toISOString().slice(0, 10),
+              store: order.sellerName,
+              name: order.orderItems[0],
+              price: order.totalAmount,
+              orderStatus: order.orderStatus,
+              isReview: order.review,
+              photoUrl: order.photoUrl,
+            }}
+          />
+        ))}
+
+        {isFetching && (
+          <div style={{ textAlign: "center", padding: "20px" }}>불러오는 중...</div>
+        )}
+        {!hasNext && orders.length > 0 && (
+          <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+            더 이상 데이터가 없습니다.
+          </div>
+        )}
+      </div>
+
+      <div className="footer">
+        <Footer />
+      </div>
+    </div>
   );
 };
 

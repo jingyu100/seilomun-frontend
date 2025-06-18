@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import useProductInfo from "../../Hooks/useProductInfo.js";
@@ -16,13 +16,66 @@ import ChatRoomView from "../../components/sideBtn/Chatting/ChatRoomView.jsx";
 export default function ProductPage() {
     const { product } = useProductInfo();
     const { store, sellerId } = useStoreInfo();
+
+    // 채팅 관련 상태
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [selectedChatRoom, setSelectedChatRoom] = useState(null);
     const chatModalRef = useRef(null);
 
+    // 슬라이더 관련 상태
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isAutoPlay, setIsAutoPlay] = useState(true);
+
+    // 데이터 추출
     const sellerPhotoDto = store?.sellerPhotoDto;
+    const sellerInformationDto = store?.sellerInformationDto;
+    const imageList = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
 
     console.log("preddc", product);
+
+    // 이미지가 변경될 때 인덱스 초기화
+    useEffect(() => {
+        setCurrentImageIndex(0);
+    }, [imageList]);
+
+    // 자동 슬라이더 기능
+    useEffect(() => {
+        if (imageList.length <= 1 || !isAutoPlay) return;
+
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) =>
+                prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
+            );
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [imageList.length, isAutoPlay]);
+
+    // 슬라이더 함수들
+    const goToNextImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
+    const goToPrevImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
+        );
+    };
+
+    const goToImage = (index) => {
+        setCurrentImageIndex(index);
+    };
+
+    // 마우스 이벤트 핸들러
+    const handleMouseEnter = () => {
+        setIsAutoPlay(false);
+    };
+
+    const handleMouseLeave = () => {
+        setIsAutoPlay(true);
+    };
 
     // 채팅 모듈 열기 함수
     const handleOpenChat = (chatRoom = null) => {
@@ -68,12 +121,55 @@ export default function ProductPage() {
                 <Header />
             </div>
 
-            <div className="storeBanner">
+            <div
+                className="storeBanner"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
                 <img
-                    src={sellerPhotoDto?.photoUrl || "/image/product1.jpg"}
-                    alt="가게 메인 이미지"
+                    src={imageList[currentImageIndex]}
+                    alt={`가게 이미지 ${currentImageIndex + 1}`}
                     className="storeImage"
                 />
+
+                {/* 이미지가 2개 이상일 때만 슬라이더 컨트롤 표시 */}
+                {imageList.length > 1 && (
+                    <>
+                        {/* 이전/다음 버튼 */}
+                        <button
+                            className="slider-btn prev-btn"
+                            onClick={goToPrevImage}
+                            aria-label="이전 이미지"
+                        >
+                            &#8249;
+                        </button>
+
+                        <button
+                            className="slider-btn next-btn"
+                            onClick={goToNextImage}
+                            aria-label="다음 이미지"
+                        >
+                            &#8250;
+                        </button>
+
+                        {/* 이미지 인디케이터 (점점점) */}
+                        <div className="slider-indicators">
+                            {imageList.map((_, index) => (
+                                <button
+                                    key={index}
+                                    className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
+                                    onClick={() => goToImage(index)}
+                                    aria-label={`${index + 1}번째 이미지로 이동`}
+                                />
+                            ))}
+                        </div>
+
+                        {/* 이미지 카운터 */}
+                        <div className="image-counter">
+                            {currentImageIndex + 1} / {imageList.length}
+                        </div>
+                    </>
+                )}
             </div>
 
             <div className="storeUI">
@@ -114,7 +210,7 @@ export default function ProductPage() {
                         style={{
                             position: "fixed",
                             top: "auto",
-                            bottom: "30px", // CSS와 동일한 위치
+                            bottom: "30px",
                             right: "53px",
                             zIndex: 9999,
                         }}

@@ -159,20 +159,25 @@
 
 /* 더보기 버튼 - SellerList와 동일, 좌측 정렬 */
 .product-list-moreBtn {
-  width: 100%;
-  max-width: 900px;
-  height: 50px;
-  color: #555;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 50px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  display: block;
+  width: auto;
+  padding: 12px 32px;
+  margin: 0px auto 20px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #77ca80;
+  color: white;
+  border: none;
+  border-radius: 9999px;
   cursor: pointer;
-  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.product-list-moreBtn:hover {
+  background-color: #69b371;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* 링크 스타일 - SellerList와 동일 */

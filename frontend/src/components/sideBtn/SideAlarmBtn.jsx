@@ -6,7 +6,7 @@ const SideAlarmBtn = ({
     markAllAsRead,
     markAsRead,
     unreadCount,
-    
+    isLoggedIn,
 }) => {
     const [isAlarmModal, setisAlarmModal] = useState(false);
     const modalRef = useRef(null);
@@ -47,7 +47,7 @@ const SideAlarmBtn = ({
                     toggleAlarmModal();
                 }}
             >
-                <em className="iconCount" id="alarm-cnt">{unreadCount}</em>
+                <em className="iconCount" id="alarm-cnt">{isLoggedIn ? unreadCount : 0}</em>
                 <img src="/image/icon/icon-bell.png" alt="alarm"
                     className="sideBtnIcon"
                 />
@@ -58,6 +58,7 @@ const SideAlarmBtn = ({
                         notifications={notifications}
                         markAllAsRead={markAllAsRead}
                         markAsRead={markAsRead}
+                        isLoggedIn={isLoggedIn}
                     />
                 </div>
             )}

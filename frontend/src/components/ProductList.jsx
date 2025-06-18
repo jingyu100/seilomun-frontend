@@ -311,25 +311,6 @@ const ProductList = () => {
               <button
                   className="product-list-moreBtn"
                   onClick={handleLoadMore}
-                  style={{
-                    padding: '12px 24px',
-                    fontSize: '14px',
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    fontWeight: '500'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#0056b3';
-                    e.target.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = '#007bff';
-                    e.target.style.transform = 'translateY(0)';
-                  }}
               >
                 더보기 ({products.length - visibleCount}개 더 있음)
               </button>

@@ -5,16 +5,16 @@ import {Link} from "react-router-dom";
 import AlarmContents from "./AlarmContents.jsx";
 import mainLogo from "../image/logo/mainLogo.png";
 import useLogin from "../Hooks/useLogin.js";
-import useNotifications from "../Hooks/useNotifications";
 import SemiHeader from "./SemiHeader.jsx";
 import CategoryMenu from "./sideBtn/CategoryMenu.jsx";
 import "../css/header/header.css"
 import {useSearchParams} from "react-router-dom";
 import { useCart } from "../Context/CartContext";
+import { useNotificationContext } from "../Context/NotificationContext";
 
 const Header = () => {
     const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
-    const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotifications(
+    const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotificationContext(
         "http://localhost",
         "customer"
     );
@@ -918,20 +918,17 @@ const Header = () => {
                                                 />
                                             </div>
                                             <em className="headIconCount" id="alarm-cnt">
-                                                {unreadCount}
+                                                {isLoggedIn ? unreadCount : 0}
                                             </em>
                                             <div className="alarm-frame">
                                                 <span className="alarm-contents">
                                                     <ul className="alarm-inner">
-                                                        {notifications.length === 0 ? (
-                                                            <li>알림 온 게 없습니다.</li>
-                                                        ) : (
                                                             <AlarmContents
                                                                 notifications={notifications}
                                                                 markAllAsRead={markAllAsRead}
                                                                 markAsRead={markAsRead}
+                                                                isLoggedIn={isLoggedIn}
                                                             />
-                                                        )}
                                                     </ul>
                                                 </span>
                                             </div>
