@@ -42,6 +42,98 @@ const Seller_notification = () => {
         );
     }
 
+    // 알림 내용에서 관련 정보 추출하는 함수
+    const extractInfoFromContent = (content) => {
+        const info = {
+            refundId: null,
+            orderNumber: null,
+            type: 'general'
+        };
+
+        if (!content) return info;
+
+        // 주문번호 추출
+        const orderNumberMatch = content.match(/주문번호:\s*([A-Z0-9]+)/);
+        if (orderNumberMatch) {
+            info.orderNumber = orderNumberMatch[1];
+        }
+
+        // 환불번호 추출 (환불ID → 환불번호로 변경)
+        const refundIdMatch = content.match(/환불번호:\s*(\d+)/);
+        if (refundIdMatch) {
+            info.refundId = refundIdMatch[1];
+        }
+
+        // 알림 타입 결정
+        if (content.includes('주문이 들어왔습니다') ||
+            content.includes('주문을 수락') ||
+            content.includes('주문을 거절')) {
+            info.type = 'order';
+        } else if (content.includes('환불')) {
+            info.type = 'refund';
+        } else if (content.includes('리뷰')) {
+            info.type = 'review';
+        } else if (content.includes('상품')) {
+            info.type = 'product';
+        }
+
+        return info;
+    };
+
+    // 알림 클릭 핸들러
+    const handleNotificationClick = async (notification) => {
+        try {
+            // 먼저 알림을 읽음 처리
+            await markAsRead(notification.id);
+
+            const content = notification.content || notification.message || '';
+            const info = extractInfoFromContent(content);
+
+            console.log('알림 클릭:', { notification, info });
+
+            // 타입별 라우팅
+            switch (info.type) {
+                case 'order':
+                    if (info.orderNumber) {
+                        navigate(`/seller/orders/number/${info.orderNumber}`);
+                    } else {
+                        console.warn('주문번호를 찾을 수 없습니다:', content);
+                        // 주문 목록 페이지로 이동
+                        navigate('/seller/orders');
+                    }
+                    break;
+
+                case 'refund':
+                    if (info.refundId) {
+                        navigate(`/seller/refunds/${info.refundId}`);
+                    } else {
+                        console.warn('환불번호를 찾을 수 없습니다:', content);
+                        // 환불 목록 페이지로 이동 (구현 필요)
+                        navigate('/seller/refunds');
+                    }
+                    break;
+
+                case 'review':
+                    // 리뷰 관리 페이지로 이동
+                    navigate('/Seller_reviewPage');
+                    break;
+
+                case 'product':
+                    // 상품 관리 페이지로 이동
+                    navigate('/seller/product/management');
+                    break;
+
+                default:
+                    // 기본적으로 메인 페이지로
+                    navigate('/Seller_Main');
+                    break;
+            }
+
+        } catch (error) {
+            console.error('알림 처리 중 오류:', error);
+        }
+    };
+
     // 연결 상태에 따른 스타일 결정
     const getConnectionStatusStyle = () => {
         switch (connectionStatus) {
@@ -69,11 +161,27 @@ const Seller_notification = () => {
         }
     };
 
+    // 알림 타입에 따른 아이콘 반환
+    const getNotificationIcon = (content) => {
+        if (content.includes('주문')) return '📦';
+        if (content.includes('환불')) return '💰';
+        if (content.includes('리뷰')) return '⭐';
+        if (content.includes('상품')) return '🛍️';
+        return '🔔';
+    };
+
     return (
         <div className="seller-notification-container">
             {/* 세로 긴 검은 직사각형 바 */}
             <div className="seller-notification-bar">
                 {/* 헤더 */}
+                <div className="seller-notification-header">
+                    <h3>알림</h3>
+                    <div className="seller-notification-status" style={getConnectionStatusStyle()}>
+                        {getConnectionStatusText()}
+                    </div>
+                </div>
+
                 {/* 알림 리스트 */}
                 <div className="seller-notification-list">
                     {notifications.length === 0 ? (
@@ -95,8 +203,14 @@ const Seller_notification = () => {
                             <div
                                 key={`${notification.id}-${index}`}
                                 className={`seller-notification-item ${notification.isRead === "Y" ? 'read' : 'unread'}`}
-                                onClick={() => markAsRead(notification.id)}
+                                onClick={() => handleNotificationClick(notification)}
+                                style={{ cursor: 'pointer' }}
                             >
+                                {/* 알림 타입 아이콘 */}
+                                <div className="seller-notification-icon">
+                                    {getNotificationIcon(notification.content || notification.message || '')}
+                                </div>
+
                                 {/* 읽지않음 점 */}
                                 {notification.isRead !== "Y" && (
                                     <div className="seller-notification-unread-dot"></div>
