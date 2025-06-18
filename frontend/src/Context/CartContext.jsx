@@ -101,7 +101,8 @@ export const CartProvider = ({ children }) => {
             await axios.delete(`http://localhost/api/carts/${productId}`, {
                 withCredentials: true,
             });
-            fetchCart();
+            // fetchCart();
+            setCartItems(prevItems => prevItems.filter(item => item.productId !== productId));
         } catch (e) {
             console.error("장바구니 삭제 실패", e);
         }
