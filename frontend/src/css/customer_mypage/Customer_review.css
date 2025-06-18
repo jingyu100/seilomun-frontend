@@ -41,3 +41,67 @@
   .sidebar-section li:hover {
     text-decoration: underline;
   }
+
+  /* 리뷰 페이지 */
+
+  .mypage-review {
+    width: 800px;
+    margin-bottom: 20px;
+  }
+
+  .mypage-review-text {
+    text-align: center;
+    padding: 10px;
+    font-family: "Noto Sans KR", sans-serif;
+    background-color: #e0faff;
+  }
+
+  .mypage-review-box {
+    width: 775px;
+    height: 280px;
+    border: 3px solid #fcfcfc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.12);
+    margin-bottom: 30px;
+    margin-top: 20px;
+  }
+  
+  .mypage-review-images {
+    width: 120px;
+    height: 100px;
+    margin-right: 8px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .customer-review-storename {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+
+  .customer-review-rating {
+    font-size: 19px;
+    color: #ff9900;
+  }
+
+  .customer-review-content {
+    font-size: 1.0em;
+    font-weight: bold;
+  }
+  
+  .mypage-review-comment {
+    background-color: #eef2f7;
+    padding: 10px;
+    margin-top: 50px;
+    border-left: 3px solid #0d8aff;
+  }
+
+  
+  .mypage-review-images img {
+    width: 100px;
+    height: 100px;
+    margin-right: 8px;
+    margin-top: 8px;
+    border-radius: 8px;
+  }
+  
