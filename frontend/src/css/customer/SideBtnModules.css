@@ -451,21 +451,21 @@
   padding: 8px 0 8px;
 }
 
-.order-area .order-inner .cartModuleMain .productItem {
+.order-area .order-inner .cartModuleMain .cartProduct {
   padding: 5px;
 }
 
-.order-area .order-inner .cartModuleMain .productItem .productUrl .productInfo {
+.order-area .order-inner .cartModuleMain .cartProduct .productUrl .productInfo {
   padding-left: 12px;
 }
 
-.order-area .order-inner .cartModuleMain .productItem .productUrl .productInfo span {
+.order-area .order-inner .cartModuleMain .cartProduct .productUrl .productInfo span {
   gap: 5px;
   margin-top: 2px;
   font-size: 14.5px;
 }
 
-.order-area .order-inner .cartModuleMain .productItem .productUrl .productImage {
+.order-area .order-inner .cartModuleMain .cartProduct .productUrl .productImage {
   width: 70px;
   height: 70px;
   border-radius: 5px;

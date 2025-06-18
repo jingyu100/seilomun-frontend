@@ -327,7 +327,7 @@ function CartViewModule() {
                             </div>
                         ) : (
                             cartItems.map((item) => (
-                                <div className="productItem displayFlex" key={item.productId}>
+                                <div className="cartProduct displayFlex" key={item.productId}>
                                     <div className="productUrl displayFlex">
                                         {item.thumbnailUrl && (
                                             <img
