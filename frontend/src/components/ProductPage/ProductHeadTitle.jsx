@@ -115,7 +115,11 @@ export default function ProductHeadTitle({
             <p>{description}</p>
           </div>
           <div className="productStockQuantity">
-            <p>남은 수량 : {stockQuantity}</p>
+            <p>
+              {stockQuantity > 0
+                ? `남은 수량 : ${stockQuantity}`
+                : "품절"}
+            </p>
           </div>
           <div className="productPrice">
             <div className="price productFlex">
@@ -214,12 +218,22 @@ export default function ProductHeadTitle({
             </div>
           </div>
           <div className="productBuy-btns productFlex">
-            <a href="#" className="buyBtn" onClick={handleBuyNow}>
+          <a
+              href="#"
+              className="buyBtn"
+              onClick={handleBuyNow}
+              style={{ pointerEvents: stockQuantity === 0 ? "none" : "auto", opacity: stockQuantity === 0 ? 0.5 : 1 }}
+            >
               <div className="btnStyle1">바로구매하기</div>
               <div className="btnStyle2">BUY IT NOW</div>
             </a>
 
-            <a href="#" className="cartBtn" onClick={handleAddCart}>
+            <a
+              href="#"
+              className="cartBtn"
+              onClick={handleAddCart}
+              style={{ pointerEvents: stockQuantity === 0 ? "none" : "auto", opacity: stockQuantity === 0 ? 0.5 : 1 }}
+            >
               <div className="btnStyle1">장바구니</div>
               <div className="btnStyle2">ADD CART</div>
             </a>
