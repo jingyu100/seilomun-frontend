@@ -60,7 +60,8 @@
 }
 
 .address-header {
-  background-color: #e0faff;
+  background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
+  color: white;
   font-size: 24px;
   font-weight: 700;
   padding: 16px; 
@@ -119,7 +120,8 @@
   font-size: 22px;
   font-weight: bold;
   margin-bottom: 10px;
-  background-color: #e0faff;
+  background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
+  color: white;
   padding: 10px;
   text-align: center;
 }
