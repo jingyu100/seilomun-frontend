@@ -83,10 +83,9 @@ export default function Customer_review() {
                         {review.reviewPhotoUrls.map((url, idx) => (
                           <img key={idx} src={`https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`} alt="리뷰 이미지" />
                         ))}
-                      <div className="customer-review-content">{review.reviewContent}</div>
                       </div>
-                      
-                    )}
+                    )}                      
+                    <div className="customer-review-content">{review.reviewContent}</div>
 
                     {review.comment && (
                       <div className="mypage-review-comment">

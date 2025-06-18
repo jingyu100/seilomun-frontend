@@ -198,3 +198,27 @@
     height: 50px;
     margin-bottom: 12px;
   }
+
+  /* 리뷰 내역 */
+.review-summary-section {
+  margin-top: 30px;
+  padding: 20px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.mypage-review-rating {
+  font-size: 15px;
+  color: #ff9900;
+  margin-right: 20px;
+}
+.mypage-review-storename {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 90px;
+}
+
+.mypage-review-content {
+  font-size: 14px;
+}
