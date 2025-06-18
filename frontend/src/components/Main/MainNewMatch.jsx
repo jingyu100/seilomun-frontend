@@ -81,7 +81,7 @@ function MainNewMatch() {
     <div className="homepageUI">
       <div className="homepageTitle">
         <span className="homepageTitleUI">
-          <h1>New 맞춤 추천 상품</h1>
+          <h1>New 추천 상품</h1>
         </span>
       </div>
 

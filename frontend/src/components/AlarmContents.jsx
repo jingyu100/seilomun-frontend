@@ -31,8 +31,9 @@ export default function AlarmContents({
                                 <div key={noti.id} className="headAlarm-main">
                                     <div className="headAlarm-content">
                                         <a href="#">
-                                            <div>
+                                            <div className="headAlarm-message">
                                                 <li
+                                                    className='headAlarm-title'
                                                     style={{
                                                         fontWeight:
                                                             noti.isRead === "N"
@@ -42,7 +43,7 @@ export default function AlarmContents({
                                                 >
                                                     {noti.content}
                                                 </li>
-                                                <small>
+                                                <small className='headAlarm-date'>
                                                     {new Date(noti.createdAt).toLocaleString()}
                                                 </small>
                                             </div>
