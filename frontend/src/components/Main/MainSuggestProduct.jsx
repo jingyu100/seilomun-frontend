@@ -90,7 +90,7 @@ export default function MainSuggestProduct() {
     <div className="homepageUI">
       <div className="homepageTitle">
         <span className="homepageTitleUI">
-          <h1>소비자 맞춤 가게 추천</h1>
+          <h1>소비자 맞춤 추천 상품</h1>
         </span>
       </div>
 

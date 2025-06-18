@@ -4,7 +4,6 @@ export default function StoreMainInfo({
     address,
     phone,
     operatingHours,
-
     storeDescription,
 }) {
 
