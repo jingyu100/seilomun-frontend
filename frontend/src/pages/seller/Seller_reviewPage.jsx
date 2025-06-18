@@ -101,16 +101,14 @@ const Seller_reviewPage = () => {
               <div key={idx} className="review-card">
                 <div className="review-header">
                 <img src={getFullUrl(review.customerPhoto)} alt="프로필" className="customer-photo" />
-
+                <div className="customer-name">{review.customerName}님</div> 
                   <div>
-                    <div className="customer-name">{review.customerName}님</div>
                     <div className="review-date">
                       {new Date(review.createdAt).toLocaleDateString()}
                     </div>
+                    <div className="review-rating">⭐ {review.rating} / 5</div>
                   </div>
                 </div>
-
-                <div className="review-rating">⭐ {review.rating} / 5</div>
 
                 <div className="review-products">
                   <strong>구매 상품:</strong> {review.orderItems.join(", ")}

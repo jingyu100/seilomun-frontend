@@ -1,8 +1,9 @@
 /* Seller_ProductManagement.css */
 .seller-product-management {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 930px;
+    margin-left: 420px;
     padding: 20px;
+    background-color: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
 .loading {
@@ -11,7 +12,6 @@
 
 .management-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-top: 100px;
     margin-bottom: 30px;
@@ -50,7 +50,7 @@
 
 .stat-item {
     background-color: #f8f9fa;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     text-align: center;
     flex: 1;
