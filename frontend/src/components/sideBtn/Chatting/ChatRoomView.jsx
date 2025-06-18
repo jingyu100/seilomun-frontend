@@ -31,6 +31,103 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
   };
+  const [otherUserStatus, setOtherUserStatus] = useState({
+    isAvailable: false,
+    status: 'OFFLINE'
+  });
+
+  // 상대방 정보 가져오기
+  const getOtherUserInfo = () => {
+    if (user.userType === "CUSTOMER") {
+      return {
+        userId: chatRoom.sellerId,
+        userType: "SELLER"
+      };
+    } else {
+      return {
+        userId: chatRoom.customerId,
+        userType: "CUSTOMER"
+      };
+    }
+  };
+
+  // 상대방 온라인 상태 확인
+  const checkOtherUserStatus = async () => {
+    try {
+      const { userId, userType } = getOtherUserInfo();
+      const response = await axios.get(
+          `http://localhost/api/users/status/${userType}/${userId}`,
+          { withCredentials: true }
+      );
+
+      if (response.data && response.data.data) {
+        setOtherUserStatus({
+          isAvailable: response.data.data.isAvailable,
+          status: response.data.data.status,
+        });
+      }
+    } catch (error) {
+      console.error("상대방 상태 확인 실패:", error);
+      setOtherUserStatus({
+        isAvailable: false,
+        status: 'OFFLINE',
+      });
+    }
+  };
+
+  // 컴포넌트 마운트 시 상태 확인
+  useEffect(() => {
+    checkOtherUserStatus();
+
+    // 30초마다 상태 업데이트
+    const statusInterval = setInterval(checkOtherUserStatus, 5000);
+
+    return () => clearInterval(statusInterval);
+  }, [chatRoom.id]);
+
+  // 상태 텍스트 반환
+  const getStatusText = () => {
+    const { userType } = getOtherUserInfo();
+
+    if (userType === "CUSTOMER") {
+      return otherUserStatus.isAvailable ? "온라인" : "오프라인";
+    } else {
+      // 판매자의 경우
+      switch (otherUserStatus.status) {
+        case "OPEN": return "영업중";
+        case "CLOSED": return "영업종료";
+        case "BREAK": return "브레이크타임";
+        default: return "상태 확인 불가";
+      }
+    }
+  };
+
+  // 상태 색상 반환
+  const getStatusColor = () => {
+    if (otherUserStatus.isAvailable) {
+      return "#28a745"; // 초록색
+    } else {
+      return "#6c757d"; // 회색
+    }
+  };
+
+  // JSX에서 사용할 상태 표시 컴포넌트
+  const StatusIndicator = () => (
+      <div className="userStatusIndicator" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div
+            className="statusDot"
+            style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: getStatusColor()
+            }}
+        />
+        <span style={{ fontSize: '12px', color: '#666' }}>
+        {getStatusText()}
+      </span>
+      </div>
+  );
 
   // 🔽 메시지가 변경될 때마다 스크롤을 최하단으로 이동
   useEffect(() => {
@@ -179,6 +276,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
             </div>
             <div className="chatHeaderCenter">
               <h3>{getOtherUserName()}</h3>
+              <StatusIndicator />
             </div>
             <div className="chatHeaderRight">{/* 빈 공간으로 균형 맞추기 */}</div>
           </div>
