@@ -14,7 +14,7 @@ export default function LikeButtonBox({productId}) {
                 try {
                     // 1) 전체 위시리스트 가져오기 (page=0, size=100 등의 여유 있는 값을 사용)
                     const response = await axios.get(
-                        "http://localhost/api/customers/wishes?page=0&size=100",
+                        "http://3.36.70.70/api/customers/wishes?page=0&size=100",
                         {
                             // 필요 시 JWT 쿠키 혹은 세션 기반 인증을 사용하는 경우 아래 옵션을 켜세요.
                             withCredentials: true,
@@ -44,7 +44,7 @@ export default function LikeButtonBox({productId}) {
     const handleLikeClick = async () => {
         try {
             const response = await axios.post(
-                `http://localhost/api/customers/wishes/${productId}`,
+                `http://3.36.70.70/api/customers/wishes/${productId}`,
                 {},
                 {
                     withCredentials: true,

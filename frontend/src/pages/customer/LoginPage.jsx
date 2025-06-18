@@ -23,7 +23,7 @@ function LoginPage() {
 
     try {
       await axios.post(
-        "http://localhost/api/auth/login",
+        "http://3.36.70.70/api/auth/login",
         {
           email: loginId,
           password: loginPassword,

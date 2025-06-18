@@ -10,7 +10,7 @@ const NaverLoginCallback = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get("http://localhost/api/customers/me", {
+        const response = await axios.get("http://3.36.70.70/api/customers/me", {
           withCredentials: true,
         });
 

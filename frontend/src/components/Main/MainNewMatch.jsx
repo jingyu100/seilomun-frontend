@@ -11,7 +11,7 @@ function MainNewMatch() {
   useEffect(() => {
     const fetchLatestProducts = async () => {
       try {
-        const res = await axios.get("http://localhost/api/products/search", {
+        const res = await axios.get("http://3.36.70.70/api/products/search", {
           params: {
             keyword: "",
             filterType: "RECENT",

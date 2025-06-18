@@ -74,7 +74,7 @@ function RegisterPage() {
       return;
     }
     try {
-      await axios.post("http://localhost/api/auth/email", { email });
+      await axios.post("http://3.36.70.70/api/auth/email", { email });
       alert("인증번호가 전송되었습니다.");
       setAuthSent(true);
       setIsEmailVerified(false);
@@ -102,7 +102,7 @@ function RegisterPage() {
       return;
     }
     try {
-      await axios.post("http://localhost/api/customers/verificationCode", {
+      await axios.post("http://3.36.70.70/api/customers/verificationCode", {
         phone,
       });
       alert("휴대폰 인증번호가 발송되었습니다.");
@@ -234,7 +234,7 @@ function RegisterPage() {
     };
 
     try {
-      const response = await axios.post("http://localhost/api/customers", requestData, {
+      const response = await axios.post("http://3.36.70.70/api/customers", requestData, {
         withCredentials: true,
       });
 
