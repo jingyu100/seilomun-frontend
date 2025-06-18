@@ -5,7 +5,7 @@ import "../../css/customer/Main.css";
 
 export default function MainSuggestStore() {
   const sellerIds = [1, 2, 3];
-  const { stores, loading, error } = useStoreListByIds(sellerIds, 12);
+  const { stores, loading, error } = useStoreListByIds(sellerIds, 4);
 
   const [visibleCount] = useState(4);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,7 +46,7 @@ export default function MainSuggestStore() {
   };
 
   if (loading) return <div className="homepageUI">로딩 중...</div>;
-  if (error) return <div className="homepageUI">가게 정보를 불러올 수 없습니다.</div>;
+  if (error) return ;
 
   return (
     <div className="homepageUI">
@@ -58,14 +58,6 @@ export default function MainSuggestStore() {
 
       <div className="LSP_ProductList">
         <div className="LSP_Scroll_Area">
-          <button
-            className="LSP_nav_button prev"
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-          >
-            ◀
-          </button>
-
           <div className="LSP_ProductList_Container">
             {stores
               .slice(currentIndex, currentIndex + visibleCount)
@@ -73,14 +65,6 @@ export default function MainSuggestStore() {
                 <StoreCard key={store.id} store={store} />
               ))}
           </div>
-
-          <button
-            className="LSP_nav_button next"
-            onClick={handleNext}
-            disabled={currentIndex + visibleCount >= stores.length}
-          >
-            ▶
-          </button>
         </div>
       </div>
     </div>

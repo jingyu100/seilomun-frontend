@@ -27,10 +27,10 @@ const HomePage = () => {
         {isLoggedIn && (
           <>
             <MainSuggestProduct />
-            <MainSuggestStore />
           </>
         )}
         <MainLastSP />
+        <MainSuggestStore />
         <MainNewMatch />
       </div>
 

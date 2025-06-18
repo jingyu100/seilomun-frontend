@@ -6,6 +6,7 @@ import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import FilterBar from "../../components/OrderList/FilterBar.jsx";
 import OrderCard from "../../components/OrderList/OrderCard.jsx";
+import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState([]);
@@ -108,6 +109,7 @@ const OrderListPage = () => {
         </div>
 
         <div className="body sideMargin">
+          <SideMenuBtn />
           <FilterBar
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
