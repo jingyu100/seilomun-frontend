@@ -26,41 +26,49 @@ export default function ProductPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAutoPlay, setIsAutoPlay] = useState(true);
 
-    // 데이터 추출
-    const sellerPhotoDto = store?.sellerPhotoDto;
-    const sellerInformationDto = store?.sellerInformationDto;
-    const imageList = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
+    // 🔥 상품 사진과 가게 사진 분리
+    // 상품 사진: product에서 가져옴
+    const productImages = product?.productPhoto || [];
 
-    console.log("preddc", product);
+    // 가게 사진: store에서 가져옴 (기존 로직 유지)
+    const sellerInformationDto = store?.sellerInformationDto;
+    const storeImages = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
+
+    // 메인 배너에 표시할 이미지 결정 (상품 사진 우선, 없으면 가게 사진)
+    const mainImages = productImages.length > 0 ? productImages : storeImages;
+
+    console.log("🔍 ProductPage - 상품 사진:", productImages);
+    console.log("🔍 ProductPage - 가게 사진:", storeImages);
+    console.log("🔍 ProductPage - 메인 배너 이미지:", mainImages);
 
     // 이미지가 변경될 때 인덱스 초기화
     useEffect(() => {
         setCurrentImageIndex(0);
-    }, [imageList]);
+    }, [mainImages]);
 
     // 자동 슬라이더 기능
     useEffect(() => {
-        if (imageList.length <= 1 || !isAutoPlay) return;
+        if (mainImages.length <= 1 || !isAutoPlay) return;
 
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) =>
-                prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
+                prevIndex === mainImages.length - 1 ? 0 : prevIndex + 1
             );
         }, 4000);
 
         return () => clearInterval(interval);
-    }, [imageList.length, isAutoPlay]);
+    }, [mainImages.length, isAutoPlay]);
 
     // 슬라이더 함수들
     const goToNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
-            prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
+            prevIndex === mainImages.length - 1 ? 0 : prevIndex + 1
         );
     };
 
     const goToPrevImage = () => {
         setCurrentImageIndex((prevIndex) =>
-            prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
+            prevIndex === 0 ? mainImages.length - 1 : prevIndex - 1
         );
     };
 
@@ -115,25 +123,50 @@ export default function ProductPage() {
         };
     }, [isChatOpen]);
 
+    // 로딩 상태 처리
+    if (!product || !store) {
+        return (
+            <div className="storeMain">
+                <div className="header">
+                    <Header />
+                </div>
+                <div className="loading-container" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '400px',
+                    fontSize: '18px',
+                    color: '#666'
+                }}>
+                    상품 정보를 불러오는 중...
+                </div>
+                <div className="footer">
+                    <Footer />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="storeMain">
             <div className="header">
                 <Header />
             </div>
 
+            {/* 🔥 메인 배너에 상품 사진 또는 가게 사진 표시 */}
             <div
                 className="storeBanner"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
                 <img
-                    src={imageList[currentImageIndex]}
-                    alt={`가게 이미지 ${currentImageIndex + 1}`}
+                    src={mainImages[currentImageIndex]}
+                    alt={`${productImages.length > 0 ? '상품' : '가게'} 이미지 ${currentImageIndex + 1}`}
                     className="storeImage"
                 />
 
                 {/* 이미지가 2개 이상일 때만 슬라이더 컨트롤 표시 */}
-                {imageList.length > 1 && (
+                {mainImages.length > 1 && (
                     <>
                         {/* 이전/다음 버튼 */}
                         <button
@@ -154,7 +187,7 @@ export default function ProductPage() {
 
                         {/* 이미지 인디케이터 (점점점) */}
                         <div className="slider-indicators">
-                            {imageList.map((_, index) => (
+                            {mainImages.map((_, index) => (
                                 <button
                                     key={index}
                                     className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
@@ -166,7 +199,7 @@ export default function ProductPage() {
 
                         {/* 이미지 카운터 */}
                         <div className="image-counter">
-                            {currentImageIndex + 1} / {imageList.length}
+                            {currentImageIndex + 1} / {mainImages.length}
                         </div>
                     </>
                 )}
@@ -191,13 +224,24 @@ export default function ProductPage() {
 
                         <div className="productDetail">
                             <div className="productUI">
+                                {/* 🔥 ProductHead 컴포넌트에 상품 정보 전달 */}
                                 <div className="productHead">
                                     <ProductHead product={product} />
                                 </div>
 
-                                <div className="productRec">{/* 제품 추천 */}</div>
+                                <div className="productRec">
+                                    {/* 제품 추천 영역 */}
+                                </div>
 
-                                <div className="productBody">{/* 제품 설명 */}</div>
+                                <div className="productBody">
+                                    {/* 제품 설명 영역 */}
+                                    <div className="product-description-section">
+                                        <h3>상품 상세 설명</h3>
+                                        <div className="product-description-content">
+                                            {product?.productDto?.description || "상품 설명이 없습니다."}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

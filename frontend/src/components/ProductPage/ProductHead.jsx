@@ -1,39 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import useSellerProducts from "../../Hooks/useSellerProducts";
 import ProductHeadTitle from "./ProductHeadTitle";
 
-export default function ProductHead() {
-    const { sellerId, productId } = useParams();
-    const { products } = useSellerProducts(sellerId);
+export default function ProductHead({ product }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [images, setImages] = useState([]);
 
-    // 디버깅을 위한 콘솔 로그
-    console.log("ProductHead 렌더링 - sellerId:", sellerId, "productId:", productId);
-    console.log("products:", products);
+    console.log("🔍 ProductHead - 받은 product prop:", product);
 
-    // 모든 hooks를 먼저 선언 (조건부 return 이전에)
+    // 두 가지 구조 모두 지원
+    const productData = product?.productDto || product;
+
+    // product가 없으면 로딩 표시
+    if (!productData) {
+        return <div>로딩 중...</div>;
+    }
+
+    console.log("🔍 ProductHead - productData:", productData);
+    console.log("🔍 ProductHead - productPhotoUrl:", productData.productPhotoUrl);
+
+    // 이미지 처리 useEffect
     useEffect(() => {
-        if (products) {
-            const product = products.find((p) => String(p.id) === String(productId));
-            console.log("찾은 product:", product);
+        // 여러 필드명 확인 (productPhotoUrl, photoUrl)
+        const photoUrls = productData.productPhotoUrl || productData.photoUrl;
 
-            if (product && product.photoUrl && Array.isArray(product.photoUrl)) {
-                // 이미지 URL 처리
-                const processedImages = product.photoUrl.map(url =>
-                    url.startsWith("http")
-                        ? url
-                        : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`
-                );
-                console.log("처리된 이미지들:", processedImages);
-                setImages(processedImages);
-            } else {
-                console.log("photoUrl이 없거나 배열이 아닙니다:", product?.photoUrl);
-                setImages([]);
-            }
+        if (photoUrls && Array.isArray(photoUrls)) {
+            // 이미지 URL 처리
+            const processedImages = photoUrls.map(url =>
+                url.startsWith("http")
+                    ? url
+                    : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`
+            );
+            console.log("✅ 처리된 이미지들:", processedImages);
+            setImages(processedImages);
+        } else {
+            console.log("❌ 이미지 URL이 없거나 배열이 아닙니다:", {
+                productPhotoUrl: productData?.productPhotoUrl,
+                photoUrl: productData?.photoUrl
+            });
+            setImages([]);
         }
-    }, [products, productId]);
+    }, [productData]);
 
     // 이미지 네비게이션 함수들
     const nextImage = () => {
@@ -64,50 +70,48 @@ export default function ProductHead() {
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
-    }, [prevImage, nextImage]);
-
-    // 조건부 return은 모든 hooks 이후에
-    if (!products) {
-        console.log("products가 아직 로드되지 않음");
-        return <div>로딩 중...</div>;
-    }
-
-    const product = products.find((p) => String(p.id) === String(productId));
-
-    if (!product) {
-        console.log("상품을 찾을 수 없음");
-        return <div>해당 상품을 찾을 수 없습니다.</div>;
-    }
+    }, [images.length]);
 
     // 기본 이미지 설정
     const defaultImage = "/image/product1.jpg";
     const displayImages = images.length > 0 ? images : [defaultImage];
 
-    console.log("displayImages:", displayImages);
-    console.log("currentImageIndex:", currentImageIndex);
+    console.log("🖼️ 최종 displayImages:", displayImages);
+    console.log("🖼️ currentImageIndex:", currentImageIndex);
 
     try {
         return (
             <div className="productHead-inner productFlex">
                 <div className="productHead-left">
                     {/* 메인 이미지 영역 */}
-                    <div className="productHead-image-container">
+                    <div className="productHead-image-container" style={{ position: 'relative', overflow: 'hidden' }}>
                         <img
                             className="productHead-image"
                             src={displayImages[currentImageIndex]}
-                            alt={`${product.name} - 이미지 ${currentImageIndex + 1}`}
+                            alt={`${productData.name} - 이미지 ${currentImageIndex + 1}`}
                             onError={(e) => {
-                                console.log("이미지 로드 실패:", e.target.src);
+                                console.log("❌ 이미지 로드 실패:", e.target.src);
                                 e.target.src = defaultImage;
                             }}
                             onLoad={() => {
-                                console.log("이미지 로드 성공:", displayImages[currentImageIndex]);
+                                console.log("✅ 이미지 로드 성공:", displayImages[currentImageIndex]);
                             }}
+                            style={{ width: '100%', height: 'auto', display: 'block' }}
                         />
 
                         {/* 이미지 카운터 */}
                         {displayImages.length > 1 && (
-                            <div className="image-counter">
+                            <div className="image-counter" style={{
+                                position: 'absolute',
+                                bottom: '10px',
+                                right: '10px',
+                                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                color: 'white',
+                                padding: '5px 10px',
+                                borderRadius: '15px',
+                                fontSize: '12px',
+                                zIndex: 2
+                            }}>
                                 {currentImageIndex + 1} / {displayImages.length}
                             </div>
                         )}
@@ -119,6 +123,36 @@ export default function ProductHead() {
                                     className="image-nav-btn prev"
                                     onClick={prevImage}
                                     aria-label="이전 이미지"
+                                    style={{
+                                        position: 'absolute',
+                                        left: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '50%',
+                                        width: '40px',
+                                        height: '40px',
+                                        fontSize: '20px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 2,
+                                        transition: 'all 0.2s ease',
+                                        opacity: 0.7
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.opacity = 1;
+                                        e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                                        e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.opacity = 0.7;
+                                        e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                                        e.target.style.transform = 'translateY(-50%) scale(1)';
+                                    }}
                                 >
                                     ‹
                                 </button>
@@ -126,6 +160,36 @@ export default function ProductHead() {
                                     className="image-nav-btn next"
                                     onClick={nextImage}
                                     aria-label="다음 이미지"
+                                    style={{
+                                        position: 'absolute',
+                                        right: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '50%',
+                                        width: '40px',
+                                        height: '40px',
+                                        fontSize: '20px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 2,
+                                        transition: 'all 0.2s ease',
+                                        opacity: 0.7
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.opacity = 1;
+                                        e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                                        e.target.style.transform = 'translateY(-50%) scale(1.1)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.opacity = 0.7;
+                                        e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                                        e.target.style.transform = 'translateY(-50%) scale(1)';
+                                    }}
                                 >
                                     ›
                                 </button>
@@ -144,9 +208,9 @@ export default function ProductHead() {
                                 >
                                     <img
                                         src={image}
-                                        alt={`${product.name} 썸네일 ${index + 1}`}
+                                        alt={`${productData.name} 썸네일 ${index + 1}`}
                                         onError={(e) => {
-                                            console.log("썸네일 이미지 로드 실패:", e.target.src);
+                                            console.log("❌ 썸네일 이미지 로드 실패:", e.target.src);
                                             e.target.src = defaultImage;
                                         }}
                                     />
@@ -158,24 +222,24 @@ export default function ProductHead() {
 
                 <div className="productHead-right">
                     <ProductHeadTitle
-                        sellerId={sellerId}
-                        productId={product.id}
-                        thumbnailUrl={product.thumbnailUrl || "사진 없음"}
-                        name={product.name || "제품명 없음"}
-                        expiryDate={product.expiryDate || "유통기한 없음"}
-                        description={product.description || "제품 설명 없음"}
-                        originalPrice={product.originalPrice || "상품 가격 없음"}
-                        maxDiscountRate={product.maxDiscountRate || "최대 할인 없음"}
-                        minDiscountRate={product.minDiscountRate || "최소 할인 없음"}
-                        currentDiscountRate={product.currentDiscountRate || "현재 할인 없음"}
-                        discountPrice={product.discountPrice || "할인 가격 없음"}
-                        stockQuantity={product.stockQuantity || "수량 정보 없음"}
+                        sellerId={productData.seller?.id || "알 수 없음"}
+                        productId={productData.id}
+                        thumbnailUrl={(productData.productPhotoUrl || productData.photoUrl)?.[0] || "사진 없음"}
+                        name={productData.name || "제품명 없음"}
+                        expiryDate={productData.expiryDate || "유통기한 없음"}
+                        description={productData.description || "제품 설명 없음"}
+                        originalPrice={productData.originalPrice || "상품 가격 없음"}
+                        maxDiscountRate={productData.maxDiscountRate || "최대 할인 없음"}
+                        minDiscountRate={productData.minDiscountRate || "최소 할인 없음"}
+                        currentDiscountRate={productData.currentDiscountRate || "현재 할인 없음"}
+                        discountPrice={productData.discountPrice || "할인 가격 없음"}
+                        stockQuantity={productData.stockQuantity || "수량 정보 없음"}
                     />
                 </div>
             </div>
         );
     } catch (error) {
-        console.error("ProductHead 렌더링 에러:", error);
+        console.error("❌ ProductHead 렌더링 에러:", error);
         return <div>오류가 발생했습니다: {error.message}</div>;
     }
 }
