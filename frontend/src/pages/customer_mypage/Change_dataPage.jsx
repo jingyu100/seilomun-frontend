@@ -68,7 +68,7 @@ const handlePasswordCheck = async () => {
 
         <div className="mypage-container22">
         <aside className="mypage-sidebar">
-        <div className="title-xl">마이페이지</div>
+        <div onClick={() => (window.location.href = "/mypage")} className="title-xl">마이페이지</div>
 
         <div className="sidebar-section">
           <div className="title-lg">쇼핑정보</div>

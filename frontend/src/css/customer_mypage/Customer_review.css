@@ -16,6 +16,7 @@
     font-size: 26px;
     font-weight: 900;
     margin-bottom: 24px;
+    cursor: pointer;
   }
   
   .title-lg {
@@ -54,7 +55,8 @@
     text-align: center;
     padding: 10px;
     font-family: "Noto Sans KR", sans-serif;
-    background-color: #e0faff;
+    color: white;
+    background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
   }
 
   .mypage-review-box {

@@ -18,6 +18,7 @@
     font-size: 26px;
     font-weight: 900;
     margin-bottom: 24px;
+    cursor: pointer;
   }
   
   .title-lg {
@@ -53,7 +54,7 @@
   
   /* 유저 정보 박스 */
   .user-info-box {
-    background-color: #000;
+    background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
     color: #fff;
     padding: 16px 28px;
     border-radius: 4px;
@@ -118,7 +119,7 @@
   
   /* 리스트 */
   .mypage-list-box-mypage {
-    margin-top: 100px;
+    margin-top: 30px;
     display: flex;
     gap: 60px;
   }
@@ -221,4 +222,11 @@
 
 .mypage-review-content {
   font-size: 14px;
+}
+
+/* 포인트 */
+
+.record-list-mypage li span {
+  width: 33%;
+  text-align: center;
 }

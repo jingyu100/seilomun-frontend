@@ -9,6 +9,30 @@ function CartViewModule() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [seller, setSeller] = useState(null);
+
+    // 판매자 정보 불러오기 (첫 상품 기준)
+    useEffect(() => {
+        const fetchSellerInfo = async () => {
+            if (!cartItems || cartItems.length === 0) return;
+
+            const firstSellerId =
+                cartItems[0]?.sellerId || cartItems[0]?.seller?.id;
+
+            if (!firstSellerId) return;
+
+            try {
+                const res = await axios.get(`http://localhost/api/sellers/${firstSellerId}`, {
+                    withCredentials: true,
+                });
+                setSeller(res.data.data.seller);
+            } catch (err) {
+                console.error("❌ 판매자 정보 조회 실패:", err);
+            }
+        };
+
+        fetchSellerInfo();
+    }, [cartItems]);
 
     // 장바구니 데이터 로딩 함수
     const loadCartData = async () => {
@@ -99,18 +123,42 @@ function CartViewModule() {
         const totalOriginalPrice = cartItems.reduce((total, item) =>
             total + (item.originalPrice * item.quantity), 0
         );
-
+    
         const totalDiscountPrice = cartItems.reduce((total, item) =>
             total + (item.discountPrice * item.quantity), 0
         );
-
+    
         const totalDiscountAmount = totalOriginalPrice - totalDiscountPrice;
-
-        // 배송비 계산 (5만원 이상 무료배송)
-        const deliveryFee = totalDiscountPrice >= 50000 || cartItems.length === 0 ? 0 : 3000;
-
+    
+        // seller 정보는 첫 번째 상품 기준
+        const firstItem = cartItems[0];
+        const sellerInfo = firstItem?.seller;
+    
+        let deliveryFee = 0;
+    
+        if (sellerInfo && sellerInfo.deliveryAvailable === "Y") {
+            const rules = (sellerInfo.deliveryFeeDtos || []).filter(
+                (rule, idx, self) =>
+                    idx === self.findIndex(r => r.ordersMoney === rule.ordersMoney)
+            );
+    
+            const sortedRules = [...rules].sort((a, b) => a.ordersMoney - b.ordersMoney);
+    
+            deliveryFee = sortedRules.length > 0 ? sortedRules[0].deliveryTip : 3000;
+    
+            for (const rule of sortedRules) {
+                if (totalDiscountPrice >= rule.ordersMoney) {
+                    deliveryFee = rule.deliveryTip;
+                }
+            }
+    
+            console.log("🚚 배송비 계산:", deliveryFee, "원 적용됨");
+        } else {
+            console.log("📦 배달 불가 매장이거나 seller 정보 없음");
+        }
+    
         const finalAmount = totalDiscountPrice + deliveryFee;
-
+    
         return {
             totalOriginalPrice,
             totalDiscountPrice,
@@ -119,6 +167,7 @@ function CartViewModule() {
             finalAmount
         };
     }, [cartItems]);
+    
 
     // 장바구니에서 상품 삭제
     const handleRemoveFromCart = async (productId) => {

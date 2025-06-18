@@ -43,7 +43,7 @@ const Customer_point = () => {
 
         <div className="mypage-container">
           <aside className="mypage-sidebar44">
-            <div className="title-xl">마이페이지</div>
+          <div onClick={() => (window.location.href = "/mypage")} className="title-xl">마이페이지</div>
 
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
