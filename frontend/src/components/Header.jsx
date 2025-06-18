@@ -922,16 +922,12 @@ const Header = () => {
                                             <div className="alarm-frame">
                                                 <span className="alarm-contents">
                                                     <ul className="alarm-inner">
-                                                        {notifications.length === 0 ? (
-                                                            <li>알림 온 게 없습니다.</li>
-                                                        ) : (
                                                             <AlarmContents
                                                                 notifications={notifications}
                                                                 markAllAsRead={markAllAsRead}
                                                                 markAsRead={markAsRead}
                                                                 isLoggedIn={isLoggedIn}
                                                             />
-                                                        )}
                                                     </ul>
                                                 </span>
                                             </div>
