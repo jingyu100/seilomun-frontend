@@ -6,6 +6,10 @@
   font-family: "Noto Sans KR", sans-serif;
   padding: 20px 0 40px;
   box-sizing: border-box;
+  /* 🔥 헤더와의 겹침 방지를 위한 여백 추가 */
+  margin-left: 280px; /* 사이드바 너비만큼 여백 */
+  padding-top: 100px; /* 상단 헤더 높이만큼 여백 */
+  width: calc(100% - 280px); /* 사이드바 제외한 너비 */
 }
 
 .seller-store-registration *,
@@ -108,7 +112,7 @@
   flex-direction: column;
   gap: 24px;
   margin-bottom: 32px;
-  margin-top: 100px;
+  /* 🔥 기존 margin-top 제거 */
 }
 
 /* 카드 */
@@ -553,8 +557,20 @@
   min-width: 160px;
 }
 
-/* 반응형 디자인 */
+/* 🔥 반응형 디자인 - 화면 크기별 여백 조정 */
+@media (max-width: 1024px) {
+  .seller-store-registration {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 120px; /* 모바일에서는 헤더 높이를 더 크게 */
+  }
+}
+
 @media (max-width: 768px) {
+  .seller-store-registration {
+    padding-top: 100px;
+  }
+
   .seller-store-container {
     padding: 0 16px;
   }
@@ -623,6 +639,10 @@
 }
 
 @media (max-width: 480px) {
+  .seller-store-registration {
+    padding-top: 80px;
+  }
+
   .seller-title {
     font-size: 20px;
   }
@@ -646,5 +666,17 @@
   .seller-image-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 8px;
+  }
+}
+
+/* 🔥 애니메이션 추가 */
+@keyframes seller-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
