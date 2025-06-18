@@ -35,7 +35,7 @@ function LoginPage() {
       );
 
       try {
-        const response = await axios.get("http://localhost/api/customers", {
+        const response = await axios.get("http://3.36.70.70/api/customers", {
           withCredentials: true,
         });
 
@@ -126,7 +126,7 @@ function LoginPage() {
                       backgroundImage: `url(${googleLogo})`,
                     }}
                     onClick={() =>
-                      window.open("http://localhost:80/oauth2/authorization/google")
+                      window.open("http://3.36.70.70/oauth2/authorization/google")
                     }
                   ></button>
 
@@ -136,7 +136,7 @@ function LoginPage() {
                       backgroundImage: `url(${naverLogo})`,
                     }}
                     onClick={() =>
-                      window.open("http://localhost:80/oauth2/authorization/naver")
+                      window.open("http://3.36.70.70/oauth2/authorization/naver")
                     }
                   ></button>
 
@@ -146,7 +146,7 @@ function LoginPage() {
                       backgroundImage: `url(${kakaoLogo})`,
                     }}
                     onClick={() =>
-                      window.open("http://localhost:80/oauth2/authorization/kakao")
+                      window.open("http://3.36.70.70/oauth2/authorization/kakao")
                     }
                   ></button>
                 </div>
