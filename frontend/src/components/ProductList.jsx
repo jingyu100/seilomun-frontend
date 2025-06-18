@@ -22,12 +22,12 @@ const ProductList = () => {
 
   // 정렬 옵션 정의
   const sortOptions = [
-    { value: "LATEST", label: "최신 순", icon: "🆕" },
-    { value: "HIGHEST_RATING", label: "별점 높은 순", icon: "⭐" },
-    { value: "LOWEST_RATING", label: "별점 낮은 순", icon: "📉" },
-    { value: "HIGHEST_PRICE", label: "가격 높은 순", icon: "💰" },
-    { value: "LOWEST_PRICE", label: "가격 낮은 순", icon: "💸" },
-    { value: "EXPIRING", label: "유통기한 임박순", icon: "⏰" }
+    { value: "LATEST", label: "최신순", icon: "🆕" },
+    { value: "HIGHEST_RATING", label: "별점높은순", icon: "⭐" },
+    { value: "LOWEST_RATING", label: "별점낮은순", icon: "📉" },
+    { value: "HIGHEST_PRICE", label: "가격높은순", icon: "💰" },
+    { value: "LOWEST_PRICE", label: "가격낮은순", icon: "💸" },
+    { value: "EXPIRING", label: "임박순", icon: "⏰" }
   ];
 
   // "더보기" 버튼 클릭 시 8개씩 추가 표시
@@ -229,7 +229,9 @@ const ProductList = () => {
                   border: '1px solid #ddd',
                   fontSize: '14px',
                   backgroundColor: 'white',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  minWidth: '120px', // 최소 너비 설정
+                  width: 'auto' // 자동 너비
                 }}
             >
               {sortOptions.map((option) => (
