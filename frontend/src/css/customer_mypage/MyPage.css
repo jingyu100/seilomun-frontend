@@ -117,17 +117,17 @@
   }
   
   /* 리스트 */
-  .mypage-list-box {
+  .mypage-list-box-mypage {
     margin-top: 100px;
     display: flex;
     gap: 60px;
   }
   
-  .list-section {
+  .list-section-mypage {
     flex: 1;
   }
   
-  .section-header {
+  .section-header-mypage {
     display: flex;
     justify-content: space-between;
     font-size: 21px;
@@ -137,19 +137,19 @@
     padding-bottom: 8px;
   }
   
-  .section-header a {
+  .section-header-mypage a {
     font-size: 16px;
     color: #777;
     text-decoration: none;
   }
   
-  .record-list {
+  .record-list-mypage {
     list-style: none;
     padding: 0;
     margin: 0;
   }
   
-  .record-list li {
+  .record-list-mypage li {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
@@ -187,7 +187,7 @@
   
   /* 내역이 없습니다 */
 
-  .empty-list-box {
+  .empty-list-box-mypage {
     text-align: center;
     padding: 40px 0;
     color: #333;

@@ -127,27 +127,27 @@ const MyPage = () => {
               세일로문 포인트 <span className="highlight">{point}</span> P &gt;
             </div>
 
-            <div className="mypage-list-box">
-              <div className="list-section">
-                <div className="section-header">
+            <div className="mypage-list-box-mypage">
+              <div className="list-section-mypage">
+                <div className="section-header-mypage">
                   <div>환불/입금 내역</div>
                   <a href="#">더보기 &gt;</a>
                 </div>
-                <ul className="record-list">
-                  <div className="empty-list-box">
+                <ul className="record-list-mypage">
+                  <div className="empty-list-box-mypage">
                     <img src={reading_glasses} alt="no data" className="empty-icon" />
                     <p>환불/입금내역이 없습니다.</p>
                   </div>
                 </ul>
               </div>
 
-              <div className="list-section">
-                <div className="section-header">
+              <div className="list-section-mypage">
+                <div className="section-header-mypage">
                   <div>상품 리뷰 내역</div>
                   <a href="#">더보기 &gt;</a>
                 </div>
-                <ul className="record-list">
-                  <div className="empty-list-box">
+                <ul className="record-list-mypage">
+                  <div className="empty-list-box-mypage">
                     <img src={reading_glasses} alt="no data" className="empty-icon" />
                     <p>리뷰 내역이 없습니다.</p>
                   </div>
