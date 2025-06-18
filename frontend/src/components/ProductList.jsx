@@ -8,6 +8,7 @@ const ProductList = () => {
 
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword") || "";
+  const categoryId = searchParams.get("categoryId") || "";
   const [products, setProducts] = useState([]);
   // 화면에 표시할 상품 개수 (기본: 12개)
   const [visibleCount, setVisibleCount] = useState(12);
@@ -24,6 +25,7 @@ const ProductList = () => {
         const res = await axios.get("http://localhost/api/products/search", {
           params: {
             keyword: keyword,
+            categoryId: categoryId,
             filterType: "",
             sortType: "",
             page: 0,
