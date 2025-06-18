@@ -40,12 +40,13 @@ function LoginPage() {
         });
 
         console.log("API 응답 데이터:", response.data);
-        const { id, nickname } = response.data.data.customer;
+        const { id, nickname, email} = response.data.data.customer;
         const userType = "CUSTOMER";
         console.log("추출한 값들:", { id, nickname, userType });
 
         const userData = {
           id,
+          email,
           nickname,
           userType,
         };

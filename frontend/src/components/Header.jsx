@@ -309,6 +309,7 @@ const Header = () => {
                 "http://localhost/api/auth/logout",
                 {
                     username: user?.email,
+                    userType: "CUSTOMER"
                 },
                 {
                     withCredentials: true,
