@@ -1,15 +1,20 @@
 /* Seller_OrderDetail.css */
 
 .seller-order-detail {
-    margin-left: 240px;
-    padding: 20px;
+    margin-left: 350px; /* 사이드바 고려한 여백 */
+    padding: 80px;
     background-color: #f8f9fa;
     min-height: 100vh;
+    box-sizing: border-box; /* padding 포함한 너비 계산 */
+    margin-top: 30px;
 }
 
 .order-detail-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;               /* 부모 기준으로 최대한 확장 */
+    max-width: 1200px;         /* 너무 커지지 않도록 제한 */
+    margin: 0 auto;            /* 가운데 정렬 */
+    box-sizing: border-box;    /* padding 등 포함한 너비 계산 */
+    padding: 0 16px; ;
 }
 
 /* 로딩 및 에러 상태 */

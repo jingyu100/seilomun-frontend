@@ -197,8 +197,9 @@ const Seller_ProductRegister = () => {
         <div>
             <Seller_Header />
             <div className="seller-product-register">
-                <div className="register-header">
-                    <h2>상품 등록</h2>
+                <div className="status-register-header">
+                    <h1 className="status-register-title">상품 등록</h1>
+                    <p className="status-register-subtitle">판매할 상품을 등록하고 매장을 활성화해보세요</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="register-form">

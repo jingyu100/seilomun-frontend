@@ -89,7 +89,10 @@ const Seller_reviewPage = () => {
     <div className="seller-review-page">
       <Seller_Header />
       <div className="review-content-wrapper">
-        <h2 className="review-title">리뷰 관리</h2>
+        <div className="status-review-header">
+        <h1 className="review-title">리뷰 관리</h1>
+        <p className="review-subtitle">소비자의 리뷰를 확인 및 답글을 등록해보세요</p>
+        </div>
 
         {reviews.length === 0 ? (
           <p className="no-reviews">아직 작성된 리뷰가 없습니다.</p>

@@ -1,18 +1,18 @@
 /* 메인 컨테이너 */
 .seller-stats {
-    margin-left: 440px; /* 사이드메뉴 너비에 맞춰 조정 */
+    margin-left: 390px; /* 사이드메뉴 너비에 맞춰 조정 */
     margin-top: 80px;   /* 상단 헤더 높이에 맞춰 조정 */
-    padding: 20px;
     min-height: calc(100vh - 100px);
-    background-color: #f8f9fa;
+    padding: 20px;
+    width: 100%;
+    max-width: 1100px;
 }
 
 .stats-container {
     max-width: calc(100vw - 220px); /* 사이드메뉴를 고려한 최대 너비 */
-    width: 80%;
-    margin: 0;
+    width: 100%;
+    max-width: 1200px;
     background: white;
-    border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
@@ -23,6 +23,7 @@
     padding: 30px;
     text-align: center;
     border-bottom: 2px solid #000000;
+    font-family: 'paybooc-Bold', sans-serif;
 }
 
 .stats-title {
@@ -41,7 +42,6 @@
 /* 컨트롤 영역 */
 .stats-controls {
     padding: 20px;
-    background-color: #f8f9fa;
     border-bottom: 1px solid #e9ecef;
 }
 
