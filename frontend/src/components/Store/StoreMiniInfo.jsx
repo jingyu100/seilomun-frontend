@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function StoreMiniInfo({ address, phone, minOrderAmount, deliveryFees }) {
+export default function StoreMiniInfo({ address, addressDetail, phone, minOrderAmount, deliveryFees }) {
   const validDeliveryFees = (deliveryFees || [])
     .filter((fee) => fee.deleted === false)
     .sort((a, b) => a.ordersMoney - b.ordersMoney);
@@ -16,7 +16,7 @@ export default function StoreMiniInfo({ address, phone, minOrderAmount, delivery
     >
       <ul>
         <p className="storeInfo-headtitle">매장 주소</p>
-        <li>{address}</li>
+        <li>{address} ({addressDetail})</li>
       </ul>
       <ul>
         <p className="storeInfo-headtitle">전화번호</p>
