@@ -36,6 +36,24 @@
 
 .headAlarm-title {
   display: flex;
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 400;
+  position: relative;
+  max-width: 1080px;
+  height: 50px;
+  margin: 0 auto;
+  padding: 0 15px;
+  font-size: 15px;
+  font-weight: bold;
+  align-items: center;
+}
+
+.headAlarm-subtitle {
   position: relative;
   max-width: 1080px;
   height: 50px;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useNotifications from "../../Hooks/useNotifications";
+import useLogin from '../../Hooks/useLogin.js';
 import AlarmViewModule from "./AlarmViewModule";
 import SideAlarmBtn from './SideAlarmBtn.jsx';
 import SideCartBtn from './SideCartBtn.jsx';
@@ -8,6 +9,7 @@ import SideChatBtn from './SideChatBtn.jsx';
 function SideMenuBtn () {
    const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
    const [isChatModalOpen, setIsModalOpen] = useState(false);
+   const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
 
    const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotifications(
            "http://localhost",
@@ -34,7 +36,7 @@ function SideMenuBtn () {
 
    useEffect(() => {
       const handleScroll = () => {
-        setIsVisible(window.scrollY > 240);
+        setIsVisible(window.scrollY > 300);
       };
   
       window.addEventListener('scroll', handleScroll);
@@ -77,6 +79,7 @@ function SideMenuBtn () {
         markAllAsRead={markAllAsRead}
         markAsRead={markAsRead}
         unreadCount={unreadCount}
+        isLoggedIn={isLoggedIn}
       />
       <SideCartBtn />
       <SideChatBtn />

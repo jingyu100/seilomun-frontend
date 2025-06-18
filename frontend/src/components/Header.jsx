@@ -917,7 +917,7 @@ const Header = () => {
                                                 />
                                             </div>
                                             <em className="headIconCount" id="alarm-cnt">
-                                                {unreadCount}
+                                                {isLoggedIn ? unreadCount : 0}
                                             </em>
                                             <div className="alarm-frame">
                                                 <span className="alarm-contents">
@@ -929,6 +929,7 @@ const Header = () => {
                                                                 notifications={notifications}
                                                                 markAllAsRead={markAllAsRead}
                                                                 markAsRead={markAsRead}
+                                                                isLoggedIn={isLoggedIn}
                                                             />
                                                         )}
                                                     </ul>
