@@ -25,6 +25,7 @@
     font-weight: 900;
     margin-bottom: 24px;
     cursor: pointer;
+    
   }
   
   .title-lg {   
@@ -90,8 +91,8 @@
   
   /* 아이디, 비밀번호 */
   .label-cell {
-    background-color: #E6FDFF;
-    color: #646464;
+    background: #e9f6fa;
+    color: black;
     font-weight: bold;
     width: 160px;
   }

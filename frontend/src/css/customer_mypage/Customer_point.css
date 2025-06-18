@@ -90,9 +90,10 @@
 }
 
 .point-table thead {
-  background-color: #f5f5f5;
+  background: #e9f6fa;
   font-weight: bold;
   height: 44px;
+  color: black;
 }
 
 .point-table th, .point-table td {

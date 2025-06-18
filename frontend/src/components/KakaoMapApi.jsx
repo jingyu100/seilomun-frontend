@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 export default function KakaoMapApi({
   address,
   width = "100%",
+  minWidth = "500px",
   height = "300px",
   containerId = "map",
 }) {
@@ -56,7 +57,7 @@ export default function KakaoMapApi({
         mapRef.current.relayout();
       }, 100);
     }
-  }, [width, height]);
+  }, [width, height, minWidth]);
 
   return (
     <div
@@ -64,6 +65,7 @@ export default function KakaoMapApi({
       style={{
         width: typeof width === "number" ? `${width}px` : width,
         height: typeof height === "number" ? `${height}px` : height,
+        minWidth: typeof minWidth === "number" ? `${minWidth}px` : minWidth,
         borderRadius: "8px",
         border: "1px solid #e2e2e2",
         overflow: "hidden",

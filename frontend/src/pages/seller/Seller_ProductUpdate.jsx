@@ -5,7 +5,7 @@ import "../../css/seller/Seller_ProductRegister.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
 
-const Seller_ProductRegister = () => {
+const Seller_ProductUpdate = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -202,7 +202,7 @@ const Seller_ProductRegister = () => {
       <Seller_Header />
       <div className="seller-product-register">
         <div className="status-register-header">
-          <h1 className="status-register-title">상품 등록</h1>
+          <h1 className="status-register-title">상품 수정</h1>
           <p className="status-register-subtitle">
             판매할 상품을 등록하고 매장을 활성화해보세요
           </p>
@@ -399,7 +399,7 @@ const Seller_ProductRegister = () => {
               취소
             </button>
             <button type="submit" className="submit-btn" disabled={isSubmitting}>
-              {isSubmitting ? "등록 중..." : "상품 등록"}
+              {isSubmitting ? "수정 중..." : "상품 수정"}
             </button>
           </div>
         </form>
@@ -408,4 +408,4 @@ const Seller_ProductRegister = () => {
   );
 };
 
-export default Seller_ProductRegister;
+export default Seller_ProductUpdate;

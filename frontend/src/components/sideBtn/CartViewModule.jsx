@@ -171,9 +171,16 @@ function CartViewModule() {
     const handleRemoveFromCart = async (productId) => {
         try {
             console.log("상품 삭제:", productId);
-            removeFromCart(productId);
+            // await removeFromCart(productId);
+            // await loadCartData();
+            // 1. 즉시 로컬 상태에서 제거 (UI 즉시 업데이트)
+            // setCartItems(prevItems => prevItems.filter(item => item.productId !== productId));
+
+            // 2. 백엔드에서 삭제 (백그라운드에서 처리)
+            await removeFromCart(productId);
         } catch (error) {
             console.error("장바구니 삭제 실패:", error);
+            loadCartData();
         }
     };
 

@@ -14,6 +14,7 @@ const MyPage = () => {
   const [point, setPoint] = useState(0);
   const [profileImage, setProfileImage] = useState(null);
   const [recentReviews, setRecentReviews] = useState([]);
+  const [recentPoints, setRecentPoints] = useState([]); // ✅ 포인트 내역
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -52,8 +53,24 @@ const MyPage = () => {
       }
     };
 
+    const fetchRecentPoints = async () => {
+      try {
+        const res = await axios.get("http://localhost/api/customers/points", {
+          withCredentials: true,
+        });
+        const data = res.data?.data?.pointHistory || [];
+        const sorted = [...data].sort(
+          (a, b) => new Date(b.createTime) - new Date(a.createTime)
+        );
+        setRecentPoints(sorted.slice(0, 8));
+      } catch (err) {
+        console.error("포인트 내역 조회 실패:", err);
+      }
+    };
+
     fetchCustomer();
     fetchRecentReviews();
+    fetchRecentPoints(); // ✅ 실행
   }, []);
 
   return (
@@ -125,19 +142,47 @@ const MyPage = () => {
             </div>
 
             <div className="mypage-list-box-mypage">
+              {/* ✅ 적립내역 */}
               <div className="list-section-mypage">
                 <div className="section-header-mypage">
-                  <div>환불/입금 내역</div>
-                  <a href="/Customer_refund">더보기 &gt;</a>
+                  <div>적립내역</div>
+                  <a href="/Customer_point">더보기 &gt;</a>
                 </div>
                 <ul className="record-list-mypage">
-                  <div className="empty-list-box-mypage">
-                    <img src={reading_glasses} alt="no data" className="empty-icon" />
-                    <p>환불/입금내역이 없습니다.</p>
-                  </div>
+                  {recentPoints.length === 0 ? (
+                    <div className="empty-list-box-mypage">
+                      <img src={reading_glasses} alt="no data" className="empty-icon" />
+                      <p>적립내역이 없습니다.</p>
+                    </div>
+                  ) : (
+                    recentPoints.map((item) => (
+                      <li key={item.pointId} style={{ marginTop: "3px", display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+                        <span>
+                          {new Date(item.createTime).toLocaleDateString("ko-KR", {
+                            year: "2-digit",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })}
+                        </span>
+                        <span style={{ color: item.pointType === 'C' || item.pointType === 'U' ? 'red' : 'black' }}>
+                          {item.pointAmount.toLocaleString()}P
+                        </span>
+                        <span>
+                          {item.pointType === 'A'
+                            ? '적립'
+                            : item.pointType === 'U'
+                            ? '사용'
+                            : item.pointType === 'C'
+                            ? '취소 환수'
+                            : '기타'}
+                        </span>
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
 
+              {/* ✅ 상품 리뷰 내역 */}
               <div className="list-section-mypage">
                 <div className="section-header-mypage">
                   <div>상품 리뷰 내역</div>
@@ -152,7 +197,6 @@ const MyPage = () => {
                   ) : (
                     recentReviews.map((review) => (
                       <li key={review.reviewId}>
-
                         <div>
                           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
                             <div className="mypage-review-storename">{review.storeName}</div>
@@ -171,7 +215,6 @@ const MyPage = () => {
                               : review.reviewContent}
                           </div>
                         </div>
-
                       </li>
                     ))
                   )}

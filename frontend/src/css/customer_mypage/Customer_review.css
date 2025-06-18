@@ -55,7 +55,8 @@
     text-align: center;
     padding: 10px;
     font-family: "Noto Sans KR", sans-serif;
-    background-color: #e0faff;
+    color: black;
+    background: #e9f6fa;
   }
 
   .mypage-review-box {

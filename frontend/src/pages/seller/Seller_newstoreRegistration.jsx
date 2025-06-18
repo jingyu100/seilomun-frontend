@@ -460,7 +460,20 @@ const Seller_newstoreRegistration = () => {
 
   const handleRemoveInput = () => {
     if (amountInputs.length > 1) {
-      setAmountInputs(amountInputs.slice(0, -1));
+      const lastIndex = amountInputs.length - 1;
+      const lastItem = amountInputs[lastIndex];
+
+      // 기존 데이터(ID가 있는)라면 deleted 플래그 설정
+      if (lastItem.id) {
+        const updated = [...amountInputs];
+        updated[lastIndex] = { ...lastItem, deleted: true };
+        setAmountInputs(updated);
+        console.log(`배달비 ${lastItem.id} 삭제 플래그 설정`);
+      } else {
+        // 새로 추가된 데이터라면 배열에서 제거
+        setAmountInputs(amountInputs.slice(0, -1));
+        console.log("새 배달비 항목 제거");
+      }
     }
   };
 
@@ -498,7 +511,7 @@ const Seller_newstoreRegistration = () => {
 
     return Object.keys(newErrors).length === 0;
   };
-
+  const visibleAmountInputs = amountInputs.filter(input => !input.deleted);
   // 🔥 수정된 handleSubmit 함수
   const handleSubmit = async () => {
     console.log("🚀 매장 정보 저장 시작");
@@ -547,7 +560,7 @@ const Seller_newstoreRegistration = () => {
               id: input.id || null,
               ordersMoney: parseInt(input.min) || 0,
               deliveryTip: freeDelivery ? 0 : parseInt(input.fee) || 0,
-              deleted: false,
+              deleted: input.deleted || false,
             })),
 
         // 🔥 삭제할 사진 ID 목록 전송
@@ -924,7 +937,7 @@ const Seller_newstoreRegistration = () => {
                         <div className="seller-delivery-section">
                           <label className="seller-label">배달비 설정</label>
                           <div className="seller-delivery-fee-container">
-                            {amountInputs.map((input, index) => (
+                            {visibleAmountInputs.map((input, index) => (
                                 <div key={index} className="seller-delivery-fee-row">
                                   <input
                                       type="number"
@@ -965,7 +978,7 @@ const Seller_newstoreRegistration = () => {
                                   type="button"
                                   className="seller-btn seller-btn-secondary"
                                   onClick={handleRemoveInput}
-                                  disabled={amountInputs.length <= 1}
+                                  disabled={visibleAmountInputs.length <= 1}
                               >
                                 구간 삭제
                               </button>
