@@ -55,7 +55,7 @@ const PickupSection = ({ seller, pickupInfo, setPickupInfo }) => {
             <KakaoMapApi
               address={storeAddress}
               width="100%"
-              height="100%"
+              height="300px;"
               containerId="pickup-map"
             />
           ) : (
