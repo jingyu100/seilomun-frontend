@@ -57,7 +57,7 @@ const Header = () => {
 
         try {
             // 1단계: 장바구니 목록 조회
-            const cartResponse = await axios.get('http://localhost/api/carts', {
+            const cartResponse = await axios.get('http://3.36.70.70/api/carts', {
                 withCredentials: true
             });
 
@@ -71,7 +71,7 @@ const Header = () => {
             // 2단계: 각 상품의 상세 정보 조회
             const productPromises = Object.entries(cartData.products).map(async ([productId, quantity]) => {
                 try {
-                    const productResponse = await axios.get(`http://localhost/api/products/${productId}`, {
+                    const productResponse = await axios.get(`http://3.36.70.70/api/products/${productId}`, {
                         withCredentials: true
                     });
 
@@ -134,7 +134,7 @@ const Header = () => {
             setCartItems(updatedCartItems);
 
             // 2. 서버에서 삭제 API 호출
-            await axios.delete(`http://localhost/api/carts/${productId}`, {
+            await axios.delete(`http://3.36.70.70/api/carts/${productId}`, {
                 withCredentials: true
             });
 
@@ -211,7 +211,7 @@ const Header = () => {
             const fetchSearchHistory = async () => {
                 try {
                     const res = await axios.get(
-                        "http://localhost/api/search/history?page=0&size=10",
+                        "http://3.36.70.70/api/search/history?page=0&size=10",
                         {
                             withCredentials: true,
                         }
@@ -235,7 +235,7 @@ const Header = () => {
         if (isDropdownVisible && searchTerm.trim() === "") {
             const fetchPopularKeywords = async () => {
                 try {
-                    const res = await axios.get("http://localhost/api/search/popular?limit=5", {
+                    const res = await axios.get("http://3.36.70.70/api/search/popular?limit=5", {
                         withCredentials: true,
                     });
                     setPopularKeywords(res.data?.data?.popularKeywords || []);
@@ -267,11 +267,11 @@ const Header = () => {
                 const controller = new AbortController();
 
                 const [autoRes, fuzzyRes] = await Promise.all([
-                    axios.get(`http://localhost/api/search/autocomplete?prefix=${searchTerm}`, {
+                    axios.get(`http://3.36.70.70/api/search/autocomplete?prefix=${searchTerm}`, {
                         withCredentials: true,
                         signal: controller.signal,
                     }),
-                    axios.get(`http://localhost/api/search/fuzzy?term=${searchTerm}`, {
+                    axios.get(`http://3.36.70.70/api/search/fuzzy?term=${searchTerm}`, {
                         withCredentials: true,
                         signal: controller.signal,
                     }),
@@ -306,7 +306,7 @@ const Header = () => {
         e.preventDefault();
         try {
             await axios.post(
-                "http://localhost/api/auth/logout",
+                "http://3.36.70.70/api/auth/logout",
                 {
                     username: user?.email,
                     userType: "CUSTOMER"
@@ -364,7 +364,7 @@ const Header = () => {
         if (isLoggedIn) {
             try {
                 await axios.post(
-                    `http://localhost/api/search/history?keyword=${encodeURIComponent(trimmed)}`,
+                    `http://3.36.70.70/api/search/history?keyword=${encodeURIComponent(trimmed)}`,
                     {},
                     {withCredentials: true}
                 );
@@ -393,11 +393,11 @@ const Header = () => {
 
         try {
             await axios.delete(
-                `http://localhost/api/search/history?keyword=${encodeURIComponent(keyword)}`,
+                `http://3.36.70.70/api/search/history?keyword=${encodeURIComponent(keyword)}`,
                 {withCredentials: true}
             );
 
-            const res = await axios.get("http://localhost/api/search/history?page=0&size=10", {
+            const res = await axios.get("http://3.36.70.70/api/search/history?page=0&size=10", {
                 withCredentials: true,
             });
             const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
@@ -416,7 +416,7 @@ const Header = () => {
         e.preventDefault();
 
         try {
-            await axios.delete("http://localhost/api/search/history/all", {
+            await axios.delete("http://3.36.70.70/api/search/history/all", {
                 withCredentials: true,
             });
             setSearchHistory([]);
