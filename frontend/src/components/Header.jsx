@@ -449,7 +449,7 @@ const Header = () => {
         <>
             <div className="head-area">
                 <header>
-                    <div className="head-menu sideMargin">
+                    <div className="head-menu sideMargin" style={{paddingTop: "15px"}}>
                         <div className="head-top-menu">
                             <div className="head-top-half">
                                 <div className="head-top-left"></div>
