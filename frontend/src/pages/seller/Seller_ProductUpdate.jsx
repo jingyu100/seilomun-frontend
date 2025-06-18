@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../css/seller/Seller_ProductRegister.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
@@ -7,13 +7,7 @@ import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
 
 const Seller_ProductUpdate = () => {
   const navigate = useNavigate();
-  const { productId } = useParams(); // URL에서 상품 ID 가져오기
   const fileInputRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
-
-  console.log(productId);
 
   // 폼 데이터 상태
   const [formData, setFormData] = useState({
@@ -30,55 +24,7 @@ const Seller_ProductUpdate = () => {
 
   const [productImages, setProductImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
-  const [existingImageUrls, setExistingImageUrls] = useState([]); // 기존 이미지 URL들
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // 상품 정보 로드
-  useEffect(() => {
-    const loadProductData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(`http://localhost/api/products/${productId}`, {
-          withCredentials: true,
-        });
-
-        const productData = response.data.data.Products;
-        console.log(productData.id);
-
-        // 날짜 형식 변환 (YYYY-MM-DDTHH:mm 형식으로)
-        const expiryDate = new Date(productData.expiryDate).toISOString().slice(0, 16);
-
-        setFormData({
-          name: productData.name,
-          description: productData.description,
-          originalPrice: productData.originalPrice.toString(),
-          stockQuantity: productData.stockQuantity.toString(),
-          expiryDate: expiryDate,
-          minDiscountRate: productData.minDiscountRate.toString(),
-          maxDiscountRate: productData.maxDiscountRate.toString(),
-          categoryId: productData.categoryId.toString(),
-          status: productData.status || "1",
-        });
-
-        // 기존 이미지 URL 설정
-        if (productData.productPhotos && productData.productPhotos.length > 0) {
-          const imageUrls = productData.productPhotos.map((photo) => photo.photoUrl);
-          setExistingImageUrls(imageUrls);
-          setPreviewImages(imageUrls);
-        }
-      } catch (error) {
-        console.error("상품 정보 로드 실패:", error);
-        alert("상품 정보를 불러오는데 실패했습니다.");
-        navigate("/seller/product/management");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (productId) {
-      loadProductData();
-    }
-  }, [productId, navigate]);
 
   // 카테고리 옵션 (실제 DB 데이터와 매칭)
   const categories = [
@@ -117,9 +63,8 @@ const Seller_ProductUpdate = () => {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const totalImages = productImages.length + existingImageUrls.length + files.length;
 
-    if (totalImages > 5) {
+    if (productImages.length + files.length > 5) {
       alert("이미지는 최대 5장까지만 업로드할 수 있습니다.");
       return;
     }
@@ -134,18 +79,11 @@ const Seller_ProductUpdate = () => {
 
   // 이미지 삭제 핸들러
   const handleImageRemove = (index) => {
-    // 기존 이미지인 경우
-    if (index < existingImageUrls.length) {
-      setExistingImageUrls((prev) => prev.filter((_, i) => i !== index));
-      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-    }
-    // 새로 추가된 이미지인 경우
-    else {
-      const adjustedIndex = index - existingImageUrls.length;
-      URL.revokeObjectURL(previewImages[index]);
-      setProductImages((prev) => prev.filter((_, i) => i !== adjustedIndex));
-      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-    }
+    // 미리보기 URL 해제
+    URL.revokeObjectURL(previewImages[index]);
+
+    setProductImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   // 폼 유효성 검사
@@ -173,8 +111,7 @@ const Seller_ProductUpdate = () => {
       return false;
     }
 
-    const totalImages = productImages.length + existingImageUrls.length;
-    if (totalImages === 0) {
+    if (productImages.length === 0) {
       alert("상품 이미지를 최소 1장 이상 업로드해주세요.");
       return false;
     }
@@ -196,7 +133,7 @@ const Seller_ProductUpdate = () => {
     return labels[field] || field;
   };
 
-  // 상품 수정 핸들러
+  // 상품 등록 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -211,14 +148,13 @@ const Seller_ProductUpdate = () => {
       // ProductDto 데이터를 JSON으로 추가
       const productDto = {
         ...formData,
-        id: parseInt(productId), // 상품 ID 추가
         originalPrice: parseInt(formData.originalPrice),
         stockQuantity: parseInt(formData.stockQuantity),
         minDiscountRate: parseInt(formData.minDiscountRate),
         maxDiscountRate: parseInt(formData.maxDiscountRate),
         categoryId: parseInt(formData.categoryId),
         expiryDate: new Date(formData.expiryDate).toISOString(),
-        existingImageUrls: existingImageUrls, // 기존 이미지 URL 목록 추가
+        createdAt: new Date().toISOString(),
       };
 
       submitData.append(
@@ -228,24 +164,24 @@ const Seller_ProductUpdate = () => {
         })
       );
 
-      // 새로 추가된 이미지 파일들 추가
+      // 이미지 파일들 추가
       productImages.forEach((file) => {
         submitData.append("photoImages", file);
       });
 
-      // API 호출 (PUT 메서드로 변경)
-      await axios.put(`http://localhost/api/products/${productId}`, submitData, {
+      // API 호출
+      const response = await axios.post("http://localhost/api/products", submitData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      alert("상품이 성공적으로 수정되었습니다!");
+      alert("상품이 성공적으로 등록되었습니다!");
       navigate("/seller/product/management");
     } catch (error) {
-      console.error("상품 수정 실패:", error);
-      const errorMessage = error.response?.data?.message || "상품 수정에 실패했습니다.";
+      console.error("상품 등록 실패:", error);
+      const errorMessage = error.response?.data?.message || "상품 등록에 실패했습니다.";
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -256,30 +192,10 @@ const Seller_ProductUpdate = () => {
   const handleCancel = () => {
     if (window.confirm("작성 중인 내용이 삭제됩니다. 정말 취소하시겠습니까?")) {
       // 미리보기 URL들 해제
-      previewImages.forEach((url) => {
-        if (!existingImageUrls.includes(url)) {
-          URL.revokeObjectURL(url);
-        }
-      });
+      previewImages.forEach((url) => URL.revokeObjectURL(url));
       navigate("/seller/product/management");
     }
   };
-
-  if (isLoading) {
-    return (
-      <div>
-        <Seller_Header />
-        <div className="seller-product-register">
-          <div
-            className="loading-container"
-            style={{ textAlign: "center", padding: "50px" }}
-          >
-            <p>상품 정보를 불러오는 중...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -287,7 +203,9 @@ const Seller_ProductUpdate = () => {
       <div className="seller-product-register">
         <div className="status-register-header">
           <h1 className="status-register-title">상품 수정</h1>
-          <p className="status-register-subtitle">판매할 상품 정보를 수정해보세요</p>
+          <p className="status-register-subtitle">
+            판매할 상품을 등록하고 매장을 활성화해보세요
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="register-form">
@@ -343,11 +261,11 @@ const Seller_ProductUpdate = () => {
                   </div>
                 ))}
 
-                {previewImages.length < 5 && (
+                {productImages.length < 5 && (
                   <div className="image-upload-box" onClick={handleImageSelect}>
                     <img src={seller_camera} alt="이미지 추가" className="camera-icon" />
                     <span>이미지 추가</span>
-                    <span className="image-count">({previewImages.length}/5)</span>
+                    <span className="image-count">({productImages.length}/5)</span>
                   </div>
                 )}
               </div>
