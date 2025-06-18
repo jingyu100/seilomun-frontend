@@ -147,12 +147,12 @@
 .storeInfoMini {
     position: absolute;
     right: 0px;
-    top: 83px;
+    top: 100px;
     background-color: #ffffff;
-    min-width: 27%;
-    max-width: auto;
-    min-height: 100%;
-    max-height: auto;
+    min-width: 25%;
+    max-width: 550px;
+    min-height: 25%;
+    max-height: 500px;
     border-radius: 8px;
     box-shadow: 0 0 0 1px #e3e5e8, 0px 3px 5px 0 rgba(0, 0, 0, 0.3);
     z-index: 20;
@@ -169,7 +169,7 @@
 }
 
 .storeInfo-head h3 {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
     color: #343a40;
 }
@@ -187,7 +187,11 @@
     position: relative;
 }
 
-
+.storeInfo-headtitle {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
 /* ---------- 스토어 바디 부분 ---------- */
 .storeBody {
     background-color: #fff;
@@ -334,7 +338,7 @@
 
 /* ---------- 스토어 제품 카드 부분 ---------- */
 .storeInfo-inner {
-    margin: 15px 25px;
+    margin: 15px 20px;
 }
 
 .notification-images {
@@ -344,4 +348,171 @@
     margin: 15px;
     /* justify-items: center; */
 }
+
+.notification-image {
+    width: 450px;
+    height: 180px;
+}
 /* ---------- 스토어 제품 카드 부분 ---------- */
+
+
+
+/* ---------- 스토어 리뷰 부분 ---------- */
+.store-review {
+    background-color: (135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    padding-bottom: 50px;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+  }
+  
+  .store-review-content {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 40px;
+  }
+  
+  .store-review-title {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #000000;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+  
+  .store-review-card {
+    border-radius: 50px; 
+    width: auto;
+    height: 400px;
+    padding: 30px;
+    margin: 0 auto 30px;
+    background-color: #ffffff;
+    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .store-review-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .store-customer-photo {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+  }
+  
+  .store-customer-name {
+    margin-bottom: 35px;
+    font-weight: 700;
+    font-size: 23px;
+  }
+  
+  .review-date {
+    font-size: 15px;
+    color: #777;
+  }
+  
+  .review-rating {
+    margin-top: 10px;
+    margin-left: -593px;
+    margin-bottom: 10px;
+    font-size: 19px;
+    color: #ff9900;
+  }
+
+  .review-products {
+    margin: 8px 0;
+    font-size: 18px;
+    color: #929292;
+  }
+  
+  .review-content {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .review-images {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+  }
+  
+  .review-images img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .no-reviews {
+    text-align: center;
+    color: #999;
+    font-size: 18px;
+    padding: 40px 0;
+  }
+  
+  /* 답글기능 */
+  .comment-section {
+    margin-top: 15px;
+    display: flex;
+    gap: 5px;
+  }
+  
+  .comment-input {
+    width: 85%;
+    min-height: 80px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+  
+  .comment-submit-btn {
+    align-self: flex-end;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .comment-submit-btn:hover {
+    background-color: #45a049;
+  }
+
+  /* 등록된 답글 표시 */
+
+  .seller-comment-box {
+    margin-top: 15px;
+    background-color: #fcfcfc;
+    padding: 10px 14px;
+    border-left: 4px solid #4CAF50;
+    border-radius: 6px;
+  }
+  
+  .seller-comment-box strong {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .seller-comment-text {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #000000;
+  }
+  
+  .seller-comment-date-aa {
+    font-size: 12px;
+    color:#777;
+  }
+/* ---------- 스토어 리뷰 부분 ---------- */

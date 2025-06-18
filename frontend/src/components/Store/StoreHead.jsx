@@ -23,10 +23,14 @@ export default function StoreHead({ store, sellerId, onOpenChat }) {
                 <div className="storeHead-half storeHead-left">
                     <Rating />
                     <StoreMiniInfo
-                        address={sellerInformationDto?.address || "가게 정보 없음"}
-                        phone={sellerInformationDto?.phone || "전화번호 없음"}
-                        minOrderAmount={sellerInformationDto?.minOrderAmount || "정보 없음"}
-                        deliveryFee={sellerInformationDto?.deliveryFeeDtos?.[0]?.deliveryTip || 0}
+                      address={sellerInformationDto?.address || "가게 정보 없음"}
+                      phone={sellerInformationDto?.phone || "전화번호 없음"}
+                      minOrderAmount={sellerInformationDto?.minOrderAmount || "배달 주문 X"}
+                      deliveryFees={
+                        (sellerInformationDto?.deliveryFeeDtos || [])
+                          .filter(fee => fee.deleted === false)
+                          .sort((a, b) => a.ordersMoney - b.ordersMoney)
+                      }
                     />
                 </div>
                 <div className="storeHead-half storeHead-right">

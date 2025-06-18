@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "../../css/customer/Store.css";
 import StoreMenu from "./StoreMenu";
 import StoreMainInfo from "./StoreMainInfo";
+import StoreReview from "./StoreReview.jsx";
 // 추후 만들 컴포넌트
 // import StoreReview from "./StoreReview";
 
@@ -48,7 +49,7 @@ export default function StoreBody({ store, sellerId }) {
                 storeDescription= {sellerInformationDto?.storeDescription || "설명 없음"}
             /> 
         },
-        { key: "review", label: "리뷰", content: <div>리뷰 내용 (StoreReview 자리)</div> },
+        { key: "review", label: "리뷰", content: <div><StoreReview /></div> },
     ];
 
     return (

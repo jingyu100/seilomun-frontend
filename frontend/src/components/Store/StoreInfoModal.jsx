@@ -18,8 +18,12 @@ export default function StoreMiniInfo ({
                 <div className="storeInfo-content">
                 {notificationPhotos.length > 0 && (
                     <div className="storeInfo-inner">
-                        <h2>공지사항</h2>
-                        <p>{notification}</p>
+                        <h2 style={{
+                            fontSize: "22px",                            
+                        }}>공지사항</h2>
+                        <p style={{
+                            fontSize: "16px",
+                        }}>{notification}</p>
                         <div className="notification-images">
                             {notificationPhotos.map((url, idx) => (
                             <img
