@@ -46,6 +46,7 @@ import Seller_ProductRegister from "./pages/seller/Seller_ProductRegister.jsx";
 import Seller_Stats from "./pages/seller/Seller_Stats.jsx";
 import Seller_OrderDetail from "./pages/seller/Seller_OrderDetail.jsx";
 import Seller_RefundDetail from "./pages/seller/Seller_RefundDetail.jsx";
+import Seller_ProductUpdate from "./pages/seller/Seller_ProductUpdate.jsx";
 
 function App() {
   // const { isLoading } = useLogin();
@@ -119,14 +120,20 @@ function App() {
                 path="/seller/product/management"
                 element={<Seller_ProductManagement />}
               />
-              <Route path="/seller/product/register" element={<Seller_ProductRegister />} />
+              <Route
+                path="/seller/product/register"
+                element={<Seller_ProductRegister />}
+              />
+              <Route path="/seller/product/update" element={<Seller_ProductUpdate />} />
               <Route path="/seller/stats" element={<Seller_Stats />} />
 
               {/* 판매자 주문 관리 */}
-              <Route path="/seller/orders/number/:orderNumber" element={<Seller_OrderDetail />} />
+              <Route
+                path="/seller/orders/number/:orderNumber"
+                element={<Seller_OrderDetail />}
+              />
               <Route path="/seller/orders/:orderId" element={<Seller_OrderDetail />} />
               <Route path="/seller/refunds/:refundId" element={<Seller_RefundDetail />} />
-
             </Routes>
           </WebSocketProvider>
         </ChatRoomsProvider>
