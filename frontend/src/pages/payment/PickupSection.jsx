@@ -4,7 +4,7 @@ import KakaoMapApi from "../../components/KakaoMapApi";
 
 const PickupSection = ({ seller, pickupInfo, setPickupInfo }) => {
   // 매장 정보 가져오기
-  const storeAddress = seller?.address;
+  const storeAddress = seller?.postCode;
   const storePhone = seller?.phone;
 
   // 전화번호 포맷팅 함수
