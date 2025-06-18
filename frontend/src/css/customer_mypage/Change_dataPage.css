@@ -91,8 +91,8 @@
   
   /* 아이디, 비밀번호 */
   .label-cell {
-    background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
-    color: white;
+    background: #e9f6fa;
+    color: black;
     font-weight: bold;
     width: 160px;
   }
