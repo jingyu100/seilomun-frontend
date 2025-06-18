@@ -9,10 +9,11 @@ import reading_glasses from "../../image/reading_glasses.png";
 import useLogin from "../../Hooks/useLogin.js";
 
 const MyPage = () => {
-  const { user } = useLogin(); // ✅ 전역 user 정보 가져오기
-  const userName = user?.nickname || "회원"; // ✅ fallback 이름 설정
-  const [point, setPoint] = useState(0); // ✅ 포인트 상태 추가
+  const { user } = useLogin();
+  const userName = user?.nickname || "회원";
+  const [point, setPoint] = useState(0);
   const [profileImage, setProfileImage] = useState(null);
+  const [recentReviews, setRecentReviews] = useState([]);
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -20,28 +21,40 @@ const MyPage = () => {
         const res = await axios.get("http://localhost/api/customers", {
           withCredentials: true,
         });
-  
+
         const customer = res.data?.data?.customer;
         const points = customer?.points ?? 0;
         const profileImageFileName = customer?.profileImageUrl;
-  
+
         setPoint(points);
-  
+
         if (profileImageFileName) {
           const fullUrl = profileImageFileName.startsWith("http")
             ? profileImageFileName
-            : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${profileImageFileName}`; // ✅ 실제 버킷 URL로 변경
-          console.log("📷 프로필 이미지 전체 URL:", fullUrl);
+            : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${profileImageFileName}`;
           setProfileImage(fullUrl);
         }
       } catch (error) {
         console.error("고객 정보 불러오기 실패:", error);
       }
     };
-  
-    fetchCustomer();
-  }, []);
 
+    const fetchRecentReviews = async () => {
+      try {
+        const res = await axios.get("http://localhost/api/review/myReviews", {
+          params: { page: 0, size: 5 },
+          withCredentials: true,
+        });
+        const data = res.data.data["내가 쓴 리뷰"];
+        setRecentReviews(data.myReviews || []);
+      } catch (err) {
+        console.error("최근 리뷰 불러오기 실패:", err);
+      }
+    };
+
+    fetchCustomer();
+    fetchRecentReviews();
+  }, []);
 
   return (
     <div>
@@ -54,46 +67,30 @@ const MyPage = () => {
         <div className="mypage-area">
           <aside className="mypage-sidebar22">
             <div className="title-xl">마이페이지</div>
-
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
               <ul>
-                <li onClick={() => (window.location.href = "/OrderList")}>
-                  주문목록
-                </li>
-                <li onClick={() => window.location.href = '/Customer_refund'}>
-                  환불/입금 내역
-                  </li>
+                <li onClick={() => (window.location.href = "/OrderList")}>주문목록</li>
+                <li onClick={() => (window.location.href = "/Customer_refund")}>환불/입금 내역</li>
               </ul>
             </div>
-
             <div className="sidebar-section">
               <div className="title-lg">회원정보</div>
               <ul>
-                <li onClick={() => (window.location.href = "/change_datapage")}>
-                  회원정보 변경
-                </li>
-                <li onClick={() => (window.location.href = "/Delivery_destination")}>
-                  배송지 관리
-                </li>
+                <li onClick={() => (window.location.href = "/change_datapage")}>회원정보 변경</li>
+                <li onClick={() => (window.location.href = "/Delivery_destination")}>배송지 관리</li>
               </ul>
             </div>
-
             <div className="sidebar-section">
               <div className="title-lg">혜택관리</div>
               <ul>
-              <li onClick={() => window.location.href = '/Customer_point'}>
-                  적립내역
-                </li>
+                <li onClick={() => (window.location.href = "/Customer_point")}>적립내역</li>
               </ul>
             </div>
-
             <div className="sidebar-section">
               <div className="title-lg">리뷰관리</div>
               <ul>
-              <li onClick={() => window.location.href = '/Customer_review'}>
-                  리뷰관리
-                  </li>
+                <li onClick={() => (window.location.href = "/Customer_review")}>리뷰관리</li>
               </ul>
             </div>
           </aside>
@@ -101,15 +98,15 @@ const MyPage = () => {
           <div className="mypage-center">
             <div className="user-info-box">
               <div className="user-left">
-              <img
-                src={profileImage ? profileImage : logo}
-                alt="프로필"
-                className="user-profile"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = logo;
-                }}
-              />
+                <img
+                  src={profileImage ? profileImage : logo}
+                  alt="프로필"
+                  className="user-profile"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = logo;
+                  }}
+                />
                 <h3>{userName} 고객님 반갑습니다.</h3>
               </div>
               <div className="user-right">
@@ -122,7 +119,7 @@ const MyPage = () => {
             <div
               className="point-box"
               onClick={() => (window.location.href = "/Customer_point")}
-              style={{ cursor: "pointer" }} 
+              style={{ cursor: "pointer" }}
             >
               세일로문 포인트 <span className="highlight">{point}</span> P &gt;
             </div>
@@ -131,7 +128,7 @@ const MyPage = () => {
               <div className="list-section-mypage">
                 <div className="section-header-mypage">
                   <div>환불/입금 내역</div>
-                  <a href="#">더보기 &gt;</a>
+                  <a href="/Customer_refund">더보기 &gt;</a>
                 </div>
                 <ul className="record-list-mypage">
                   <div className="empty-list-box-mypage">
@@ -144,13 +141,40 @@ const MyPage = () => {
               <div className="list-section-mypage">
                 <div className="section-header-mypage">
                   <div>상품 리뷰 내역</div>
-                  <a href="#">더보기 &gt;</a>
+                  <a href="/Customer_review">더보기 &gt;</a>
                 </div>
                 <ul className="record-list-mypage">
-                  <div className="empty-list-box-mypage">
-                    <img src={reading_glasses} alt="no data" className="empty-icon" />
-                    <p>리뷰 내역이 없습니다.</p>
-                  </div>
+                  {recentReviews.length === 0 ? (
+                    <div className="empty-list-box-mypage">
+                      <img src={reading_glasses} alt="no data" className="empty-icon" />
+                      <p>리뷰 내역이 없습니다.</p>
+                    </div>
+                  ) : (
+                    recentReviews.map((review) => (
+                      <li key={review.reviewId}>
+
+                        <div>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+                            <div className="mypage-review-storename">{review.storeName}</div>
+                            <div className="mypage-review-rating">⭐ {review.rating} / 5</div>
+                            <div className="date-number">
+                              {new Date(review.createdAt).toLocaleDateString("ko-KR", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              }).replace(/\./g, "-").replace(/\s/g, "")}
+                            </div>
+                          </div>
+                          <div className="mypage-review-content">
+                            {review.reviewContent.length > 10
+                              ? review.reviewContent.slice(0, 10) + "..."
+                              : review.reviewContent}
+                          </div>
+                        </div>
+
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
             </div>
