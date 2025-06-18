@@ -6,7 +6,7 @@ export const List = () => {
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
-      const url = "http://localhost:80/api/products/1";
+      const url = "http://3.36.70.70/api/products/1";
   
       axios
         .get(url)

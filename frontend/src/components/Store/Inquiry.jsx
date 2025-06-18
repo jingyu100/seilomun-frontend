@@ -17,7 +17,7 @@ export default function Inquiry({ sellerId, onOpenChat }) {
     const postData = { sellerId };
 
     try {
-      const response = await axios.post(`http://localhost/api/chat/rooms`, postData, {
+      const response = await axios.post(`http://3.36.70.70/api/chat/rooms`, postData, {
         withCredentials: true,
       });
 

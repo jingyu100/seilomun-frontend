@@ -7,6 +7,7 @@ export default function StoreProducts({
   productId,
   thumbnailUrl,
   name,
+  date,
   expiryDate,
   description,
   originalPrice,
@@ -35,11 +36,37 @@ export default function StoreProducts({
           alt={name}
         />
         <h3>{name}</h3>
-        <p>{description}</p>
-        <p>
-          <strong>{discountPrice.toLocaleString()}원</strong>
-        </p>
-        <p>{currentDiscountRate}%</p>
+        <p style={{
+              fontSize: "15px",
+            }}>{description}</p>
+        <div style={{
+          display: "flex",
+          gap: "5px",
+
+        }}>
+          <p>
+            <strong style={{
+              fontSize: "17px",
+              color: "red",
+            }}>{discountPrice.toLocaleString()}원</strong>
+          </p>
+          <p style={{
+              fontSize: "14.5px",
+              color: "gray",
+              textDecoration: "line-through",
+            }}>{originalPrice.toLocaleString()}원</p>
+          <p style={{
+              fontSize: "15px",
+              color: "red",
+              
+            }}>
+             <strong>{currentDiscountRate}%</strong>
+            </p>
+        </div>
+        <p style={{
+              fontSize: "14px",
+              color: "gray",
+            }}>{date}</p>
       </Link>
     </div>
   );

@@ -39,7 +39,7 @@ const Delivery_destination = () => {
       
       console.log("기본배송지 설정요청 payload:", payload);
       
-      await axios.put(`http://localhost/api/address/${id}`, payload, {
+      await axios.put(`http://3.36.70.70/api/address/${id}`, payload, {
         withCredentials: true,
       });
 
@@ -60,7 +60,7 @@ const Delivery_destination = () => {
   const handleDelete = async (id) => {
     try {
       // 1. 서버에 삭제 요청
-      await axios.delete(`http://localhost/api/address/${id}`, {
+      await axios.delete(`http://3.36.70.70/api/address/${id}`, {
         withCredentials: true,
       });
   
@@ -104,7 +104,7 @@ const Delivery_destination = () => {
         label: `배송지 ${deliveryList.length + 1}`,
       };
   
-      await axios.post("http://localhost/api/address", requestBody, {
+      await axios.post("http://3.36.70.70/api/address", requestBody, {
         withCredentials: true,
       });
   
@@ -116,7 +116,7 @@ const Delivery_destination = () => {
       setEditId(null);
   
       // 다시 주소 목록 조회
-      const res = await axios.get("http://localhost/api/address", {
+      const res = await axios.get("http://3.36.70.70/api/address", {
         withCredentials: true,
       });
       const addresses = res?.data?.data?.address || [];
@@ -160,7 +160,7 @@ const Delivery_destination = () => {
   
 
   useEffect(() => {
-    axios.get("http://localhost/api/address", {
+    axios.get("http://3.36.70.70/api/address", {
       withCredentials: true,
     })
       .then((res) => {

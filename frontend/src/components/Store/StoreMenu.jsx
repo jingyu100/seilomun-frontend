@@ -73,6 +73,7 @@ export default function StoreMenu() {
                               : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${prod.photoUrl?.[0]}`
                           }
                           name={prod.name}
+                          date={prod.expiryDate}
                           expiryDate={prod.expiryDate}
                           description={prod.description}
                           originalPrice={prod.originalPrice}

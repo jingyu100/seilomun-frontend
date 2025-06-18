@@ -27,7 +27,7 @@ export function ChatRoomsProvider({ children }) {
 
     const fetchChatRooms = async () => {
       try {
-        const res = await axios.get("http://localhost/api/chat/rooms", {
+        const res = await axios.get("http://3.36.70.70/api/chat/rooms", {
           withCredentials: true,
         });
 
