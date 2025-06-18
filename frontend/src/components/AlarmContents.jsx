@@ -12,9 +12,9 @@ export default function AlarmContents({
     return (
         <div className="headAlarm">
             <div className="headAlarm-inner">
-                <header className="headAlarm-head">
+                <div className="headAlarm-head">
                     <div className="headAlarm-title">알림</div>
-                </header>
+                </div>
                 <main>
                     {unreadNotifications.length > 0 && (
                         <div className="headAlarm-control" onClick={markAllAsRead}>

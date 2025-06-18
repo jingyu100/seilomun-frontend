@@ -57,6 +57,7 @@ function SideMenuBtn () {
             notifications={notifications}
             markAllAsRead={markAllAsRead}
             markAsRead={markAsRead}
+            unreadCount={unreadCount}
           />
          <SideCartBtn />
          <SideChatBtn />

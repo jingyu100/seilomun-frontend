@@ -954,167 +954,66 @@ const Header = () => {
                                                     {cartItems.length}
                                                 </em>
                                             </div>
-                                            <div className="alarm-frame">
-                                                <span className="cart-contents">
-                                                    <div className="cart-inner" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                                        {cartLoading ? (
-                                                            <div style={{ padding: '20px', textAlign: 'center' }}>
-                                                                <p>장바구니 로딩 중...</p>
-                                                            </div>
-                                                        ) : cartError ? (
-                                                            <div style={{ padding: '20px', textAlign: 'center' }}>
-                                                                <p style={{ color: 'red', fontSize: '14px' }}>{cartError}</p>
-                                                                <button
-                                                                    onClick={loadCartData}
-                                                                    style={{
-                                                                        padding: '6px 12px',
-                                                                        fontSize: '12px',
-                                                                        marginTop: '8px'
-                                                                    }}
-                                                                >
-                                                                    다시 시도
-                                                                </button>
-                                                            </div>
-                                                        ) : cartItems.length === 0 ? (
-                                                            <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
-                                                                <svg
-                                                                    width="32"
-                                                                    height="32"
-                                                                    viewBox="0 0 24 24"
-                                                                    fill="none"
-                                                                    style={{ marginBottom: '8px', opacity: '0.5' }}
-                                                                >
-                                                                    <path
-                                                                        d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 18.1 17.9 19 19 19S21 18.1 21 17V13M9 19.5C9.8 19.5 10.5 20.2 10.5 21S9.8 22.5 9 22.5 7.5 21.8 7.5 21 8.2 19.5 9 19.5ZM20 19.5C20.8 19.5 21.5 20.2 21.5 21S20.8 22.5 20 22.5 18.5 21.8 18.5 21 19.2 19.5 20 19.5Z"
-                                                                        stroke="currentColor"
-                                                                        strokeWidth="2"
-                                                                        strokeLinecap="round"
-                                                                        strokeLinejoin="round"
-                                                                    />
-                                                                </svg>
-                                                                <p style={{ margin: '0', fontSize: '14px' }}>
-                                                                    {!isLoggedIn ? '로그인 후 장바구니를 확인하세요' : '장바구니에 담긴 상품이 없습니다.'}
-                                                                </p>
-                                                            </div>
-                                                        ) : (
-                                                            <>
-                                                                {cartItems.map((item) => (
-                                                                    <div
-                                                                        key={item.productId}
-                                                                        style={{
-                                                                            display: 'flex',
-                                                                            alignItems: 'center',
-                                                                            padding: '12px',
-                                                                            borderBottom: '1px solid #f0f0f0',
-                                                                            fontSize: '13px'
-                                                                        }}
-                                                                    >
-                                                                        {item.thumbnailUrl && (
-                                                                            <img
-                                                                                src={item.thumbnailUrl}
-                                                                                alt={item.name}
-                                                                                style={{
-                                                                                    width: '40px',
-                                                                                    height: '40px',
-                                                                                    objectFit: 'cover',
-                                                                                    marginRight: '8px',
-                                                                                    borderRadius: '4px'
-                                                                                }}
-                                                                            />
-                                                                        )}
-                                                                        <div style={{ flex: 1, minWidth: 0 }}>
-                                                                            <p style={{
-                                                                                margin: '0 0 4px 0',
-                                                                                fontWeight: '500',
-                                                                                overflow: 'hidden',
-                                                                                textOverflow: 'ellipsis',
-                                                                                whiteSpace: 'nowrap'
-                                                                            }}>
-                                                                                {item.name}
-                                                                            </p>
-                                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                                                <span style={{
-                                                                                    color: '#e74c3c',
-                                                                                    fontWeight: '600',
-                                                                                    fontSize: '12px'
-                                                                                }}>
-                                                                                    {item.discountPrice?.toLocaleString()}원
-                                                                                </span>
-                                                                                {item.originalPrice !== item.discountPrice && (
-                                                                                    <span style={{
-                                                                                        textDecoration: 'line-through',
-                                                                                        color: '#999',
-                                                                                        fontSize: '11px'
-                                                                                    }}>
-                                                                                        {item.originalPrice?.toLocaleString()}원
-                                                                                    </span>
-                                                                                )}
-                                                                            </div>
-                                                                            <p style={{
-                                                                                margin: '2px 0 0 0',
-                                                                                color: '#666',
-                                                                                fontSize: '11px'
-                                                                            }}>
-                                                                                수량: {item.quantity}개
-                                                                            </p>
-                                                                            {item.expiryDate && (
-                                                                                <p style={{
-                                                                                    margin: '2px 0 0 0',
-                                                                                    color: '#666',
-                                                                                    fontSize: '11px'
-                                                                                }}>
-                                                                                    {formatExpiryDate(item.expiryDate)}
-                                                                                </p>
-                                                                            )}
-                                                                        </div>
-                                                                        <button
-                                                                            onClick={() => handleRemoveFromCart(item.productId)}
-                                                                            style={{
-                                                                                border: 'none',
-                                                                                background: 'transparent',
-                                                                                cursor: 'pointer',
-                                                                                padding: '4px',
-                                                                                marginLeft: '8px'
-                                                                            }}
-                                                                            title="상품 삭제"
-                                                                        >
-                                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                                                                <path
-                                                                                    d="M18 6L6 18M6 6l12 12"
-                                                                                    stroke="currentColor"
-                                                                                    strokeWidth="2"
-                                                                                    strokeLinecap="round"
-                                                                                />
-                                                                            </svg>
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                                <div style={{
-                                                                    padding: '12px',
-                                                                    borderTop: '2px solid #f0f0f0',
-                                                                    textAlign: 'center'
-                                                                }}>
-                                                                    <button
-                                                                        onClick={() => navigate('/cart')}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            padding: '8px 16px',
-                                                                            backgroundColor: '#e74c3c',
-                                                                            color: 'white',
-                                                                            border: 'none',
-                                                                            borderRadius: '4px',
-                                                                            cursor: 'pointer',
-                                                                            fontSize: '13px',
-                                                                            fontWeight: '500'
-                                                                        }}
-                                                                    >
-                                                                        장바구니 상세보기
-                                                                    </button>
+                                            <div className="alarm-frame cart-frame">
+                                            <span className="cart-contents">
+                                                <div className="cart-inner">
+                                                    <div className="headCart-title">장바구니</div>
+                                                    {cartLoading ? (
+                                                        <div className="headCart-loading">
+                                                        <p>장바구니 로딩 중...</p>
+                                                        </div>
+                                                    ) : cartError ? (
+                                                        <div className="headCart-error">
+                                                        <p>{cartError}</p>
+                                                        <button onClick={loadCartData} className="headCart-retry-btn">다시 시도</button>
+                                                        </div>
+                                                    ) : cartItems.length === 0 ? (
+                                                        <div className="noAlarm">                                                            
+                                                            <p>{!isLoggedIn ? '로그인 후 장바구니를 확인하세요' : '장바구니에 담긴 상품이 없습니다.'}</p>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                        {cartItems.map((item) => (
+                                                            <div key={item.productId} className="headCart-item">
+                                                            {item.thumbnailUrl && (
+                                                                <img src={item.thumbnailUrl} alt={item.name} />
+                                                            )}
+                                                            <div className="headCart-item-info">
+                                                                <p className="headCart-item-info-name">{item.name}</p>
+                                                                <div className="headCart-item-price">
+                                                                <span className="headCart-discount">{item.discountPrice?.toLocaleString()}원</span>
+                                                                {item.originalPrice !== item.discountPrice && (
+                                                                    <span className="headCart-original">{item.originalPrice?.toLocaleString()}원</span>
+                                                                )}
                                                                 </div>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </span>
+                                                                <p className="headCart-quantity">수량: {item.quantity}개</p>
+                                                                {item.expiryDate && (
+                                                                <p className="headCart-expiry">{formatExpiryDate(item.expiryDate)}</p>
+                                                                )}
+                                                            </div>
+                                                            <button
+                                                                className="headCart-remove-btn"
+                                                                onClick={() => handleRemoveFromCart(item.productId)}
+                                                                title="상품 삭제"
+                                                            >
+                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                                                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                                                </svg>
+                                                            </button>
+                                                            </div>
+                                                        ))}
+                                                        <div className="headCart-footer">
+                                                            <button
+                                                            onClick={() => navigate('/cart')}
+                                                            className="headCart-footer-btn"
+                                                            >
+                                                            장바구니 상세보기
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                </div>
+                                            </span>
                                             </div>
                                         </li>
                                     </ul>

@@ -232,7 +232,7 @@ header {
 
 .icon-menu .icon-menuInner li .alarm-frame {
   display: none;
-  position: fixed;
+  position: absolute;
   width: auto;
   z-index: 10;
 }

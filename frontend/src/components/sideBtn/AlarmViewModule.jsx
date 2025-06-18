@@ -18,26 +18,26 @@ export default function AlarmViewModule({
     const unreadNotifications = notifications.filter(noti => noti.isRead !== "Y");
 
     return (
-        <div className="headAlarm">
-            <div className="headAlarm-inner">
-                <header className="headAlarm-head">
-                    <div className="headAlarm-title">알림</div>
-                </header>
+        <div className="sideAlarmModule viewModule">
+            <div className="moduleFrame2">
+                <div className="sideModuleTitle">
+                    알림
+                </div>
                 <main>
                     {unreadNotifications.length > 0 && (
-                        <div className="headAlarm-control" onClick={markAllAsRead}>
+                        <div className="sideAlarm-control" onClick={markAllAsRead}>
                             전체 읽음 처리
                         </div>
                     )}
-                    <div>                        
+                    <div className='sideAlarm-list'>                        
                         {unreadNotifications.length === 0 ? (
                             <div className="noAlarm">
                                 <li>알림이 없습니다.</li>
                             </div>
                         ) : (
                             unreadNotifications.map((noti) => (
-                                <div key={noti.id} className="headAlarm-main">
-                                    <div className="headAlarm-content">
+                                <div key={noti.id} className="sideAlarm-main">
+                                    <div className="sideAlarm-content">
                                         <a href="#">
                                             <div>
                                                 <li

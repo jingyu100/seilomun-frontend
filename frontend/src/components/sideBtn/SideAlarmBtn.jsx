@@ -5,12 +5,12 @@ const SideAlarmBtn = ({
     notifications, 
     markAllAsRead,
     markAsRead,
+    unreadCount,
+    
 }) => {
     const [isAlarmModal, setisAlarmModal] = useState(false);
     const modalRef = useRef(null);
     const buttonRef = useRef(null); // 버튼 참조 추가
-
-    const unreadNotifications = notifications.filter(noti => noti.isRead !== "Y");
 
     const toggleAlarmModal = () => {
         setisAlarmModal(prev => !prev);
@@ -47,14 +47,18 @@ const SideAlarmBtn = ({
                     toggleAlarmModal();
                 }}
             >
-                <em className="iconCount" id="alarm-cnt">0</em>
+                <em className="iconCount" id="alarm-cnt">{unreadCount}</em>
                 <img src="/image/icon/icon-bell.png" alt="alarm"
                     className="sideBtnIcon"
                 />
             </a>
             {isAlarmModal && (
                 <div ref={modalRef}>
-                    <AlarmViewModule />
+                    <AlarmViewModule
+                        notifications={notifications}
+                        markAllAsRead={markAllAsRead}
+                        markAsRead={markAsRead}
+                    />
                 </div>
             )}
         </div>

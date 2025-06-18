@@ -113,7 +113,7 @@
 /* 가격 정보 - SellerList 별점과 동일한 스타일 */
 .product_info {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   margin: 4px 0;
 }
 
