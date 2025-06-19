@@ -17,30 +17,35 @@ export default function useStoreListByIds(sellerIds = [], maxCount = 12) {
 
     const fetchStores = async () => {
       try {
+        // 각 요청에 sellerId를 함께 전달
         const requests = sellerIds.map((id) =>
-          axios.get(`http://3.36.70.70/api/sellers/${id}`)
+            axios.get(`http://3.36.70.70/api/sellers/${id}`)
+                .then(response => ({
+                  success: true,
+                  sellerId: id, // ✅ 요청한 sellerId를 함께 저장
+                  data: response.data?.data?.seller
+                }))
+                .catch(error => ({
+                  success: false,
+                  sellerId: id,
+                  error
+                }))
         );
 
-        const responses = await Promise.allSettled(requests);
+        const responses = await Promise.all(requests);
+
         const validStores = responses
-          .map((res, idx) => {
-            if (res.status !== "fulfilled") return null;
+            .filter(res => res.success && res.data && typeof res.data === "object")
+            .map(res => ({
+              ...res.data,
+              sellerId: res.sellerId // ✅ 정확한 sellerId 매칭
+            }));
 
-            const sellerData = res.value?.data?.data?.seller;
-
-            if (!sellerData || typeof sellerData !== "object") return null;
-
-            // ✅ sellerId가 없다면 수동 주입
-            return {
-              ...sellerData,
-              sellerId: sellerIds[idx], // ✅ 요청 보낸 순서를 기준으로 매칭
-            };
-          })
-          .filter((s) => s !== null);
+        console.log("validStores : ", validStores); // 디버깅용
 
         const picked = shuffleAndPick(validStores, maxCount);
         setStores(picked);
-        initialized.current = true; // ✅ 한 번만 실행되도록 설정
+        initialized.current = true;
       } catch (err) {
         console.error("가게 리스트 로딩 실패", err);
         setError(err);
