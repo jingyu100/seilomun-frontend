@@ -55,7 +55,7 @@ const Seller_ProductUpdate = () => {
     { id: 17, name: "빵/베이커리" },
   ];
 
-  // 기존 상품 정보 로드
+  // 기존 상품 정보 로드하는 useEffect 부분에서 수정
   useEffect(() => {
     const loadProductData = async () => {
       try {
@@ -89,11 +89,13 @@ const Seller_ProductUpdate = () => {
           productPhotoIds: [], // 삭제할 이미지 ID들 (초기값은 빈 배열)
         });
 
-        // 기존 이미지 설정
+        // 기존 이미지 설정 - S3 버킷 경로 추가
         if (productData.productPhotoUrl && productData.productPhotoIds) {
+          const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
+
           const existingImageData = productData.productPhotoUrl.map((url, index) => ({
             id: productData.productPhotoIds[index],
-            url: url,
+            url: S3_BASE_URL + url, // S3 베이스 URL을 앞에 붙임
             isExisting: true,
           }));
           setExistingImages(existingImageData);
