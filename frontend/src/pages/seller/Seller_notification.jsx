@@ -134,33 +134,6 @@ const Seller_notification = () => {
         }
     };
 
-    // 연결 상태에 따른 스타일 결정
-    const getConnectionStatusStyle = () => {
-        switch (connectionStatus) {
-            case 'connected':
-                return { color: '#10b981', fontWeight: 'bold' };
-            case 'connecting':
-                return { color: '#f59e0b', fontWeight: 'bold' };
-            case 'error':
-                return { color: '#ef4444', fontWeight: 'bold' };
-            default:
-                return { color: '#6b7280', fontWeight: 'bold' };
-        }
-    };
-
-    const getConnectionStatusText = () => {
-        switch (connectionStatus) {
-            case 'connected':
-                return '🟢 연결됨';
-            case 'connecting':
-                return '🟡 연결중...';
-            case 'error':
-                return '🔴 연결 오류';
-            default:
-                return '⚪ 연결 안됨';
-        }
-    };
-
     // 알림 타입에 따른 아이콘 반환
     const getNotificationIcon = (content) => {
         if (content.includes('주문')) return '📦';
@@ -177,9 +150,6 @@ const Seller_notification = () => {
                 {/* 헤더 */}
                 <div className="seller-notification-header">
                     <h3>알림</h3>
-                    <div className="seller-notification-status" style={getConnectionStatusStyle()}>
-                        {getConnectionStatusText()}
-                    </div>
                 </div>
 
                 {/* 알림 리스트 */}
@@ -188,15 +158,6 @@ const Seller_notification = () => {
                         <div className="seller-notification-empty">
                             <div className="seller-notification-empty-icon">🔔</div>
                             <p className="seller-notification-empty-text">알림이 없습니다</p>
-                            {connectionStatus !== 'connected' && (
-                                <p style={{
-                                    fontSize: '12px',
-                                    color: '#ef4444',
-                                    marginTop: '8px'
-                                }}>
-                                    실시간 알림 연결이 끊어졌습니다. 페이지를 새로고침해주세요.
-                                </p>
-                            )}
                         </div>
                     ) : (
                         notifications.map((notification, index) => (
@@ -245,40 +206,6 @@ const Seller_notification = () => {
                             className="seller-notification-mark-all-btn"
                         >
                             모두 읽음 처리 ({unreadCount})
-                        </button>
-                    </div>
-                )}
-
-                {/* 연결 문제 시 재연결 버튼 */}
-                {connectionStatus === 'error' && (
-                    <div className="seller-notification-reconnect" style={{
-                        padding: '12px',
-                        textAlign: 'center',
-                        background: '#fef2f2',
-                        border: '1px solid #fecaca',
-                        borderRadius: '6px',
-                        margin: '10px 0'
-                    }}>
-                        <p style={{
-                            margin: '0 0 8px 0',
-                            color: '#dc2626',
-                            fontSize: '14px'
-                        }}>
-                            실시간 알림 연결에 문제가 발생했습니다.
-                        </p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            style={{
-                                background: '#dc2626',
-                                color: 'white',
-                                border: 'none',
-                                padding: '6px 12px',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                fontSize: '12px'
-                            }}
-                        >
-                            페이지 새로고침
                         </button>
                     </div>
                 )}
