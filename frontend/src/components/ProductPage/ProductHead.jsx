@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ProductHeadTitle from "./ProductHeadTitle";
 import { useParams } from "react-router-dom";
 import useSellerProducts from "../../Hooks/useSellerProducts";
-
+import ProductHeadTitle from "./ProductHeadTitle";
 
 export default function ProductHead() {
     const { sellerId, productId } = useParams();
@@ -19,19 +18,25 @@ export default function ProductHead() {
         if (products) {
             const product = products.find((p) => String(p.id) === String(productId));
             console.log("찾은 product:", product);
+            console.log("product 전체 데이터:", product);
+            console.log("product.photoUrl:", product?.photoUrl);
+            console.log("product.productPhotoUrl:", product?.productPhotoUrl);
 
-            if (product && product.photoUrl && Array.isArray(product.photoUrl)) {
+            // productPhotoUrl로 수정 (기존 photoUrl에서 변경)
+            if (product && product.productPhotoUrl && Array.isArray(product.productPhotoUrl)) {
                 // 이미지 URL 처리
-                const processedImages = product.photoUrl.map(url =>
+                const processedImages = product.productPhotoUrl.map(url =>
                     url.startsWith("http")
                         ? url
                         : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`
                 );
                 console.log("처리된 이미지들:", processedImages);
                 setImages(processedImages);
+                setCurrentImageIndex(0); // 새 이미지 로드 시 인덱스 초기화
             } else {
-                console.log("photoUrl이 없거나 배열이 아닙니다:", product?.photoUrl);
+                console.log("productPhotoUrl이 없거나 배열이 아닙니다:", product?.productPhotoUrl);
                 setImages([]);
+                setCurrentImageIndex(0);
             }
         }
     }, [products, productId]);
@@ -65,7 +70,7 @@ export default function ProductHead() {
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
-    }, [prevImage, nextImage]);
+    }, [images.length]); // dependency 수정
 
     // 조건부 return은 모든 hooks 이후에
     if (!products) {
