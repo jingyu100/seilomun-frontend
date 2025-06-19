@@ -41,7 +41,8 @@ const SellerList = () => {
     }, [keyword]);
 
     const getSellerImageUrl = (seller) => {
-        const url = seller.profileImageUrl || seller.storeImageUrl;
+        console.log("seller : ", seller);
+        const url = seller.profileImageUrl || seller.thumbnailUrl;
         if (!url) return "/image/default-store.jpg";
         return url.startsWith("http")
             ? url
