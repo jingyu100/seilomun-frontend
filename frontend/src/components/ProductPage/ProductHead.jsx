@@ -65,7 +65,7 @@ export default function ProductHead() {
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
-    }, [prevImage, nextImage]);
+    }, [images.length]);
 
     // 조건부 return은 모든 hooks 이후에
     if (!products) {
