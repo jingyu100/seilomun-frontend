@@ -154,36 +154,51 @@ function RegisterPage() {
     if (!nickname.trim()) {
       alert("닉네임을 입력해주세요.");
       return;
-
     }
-      // ✅ 임시로 항상 성공한 것처럼 처리
-      setNicknameMessage("사용가능한 닉네임입니다.");
+  
+    try {
+      await axios.post("http://3.36.70.70/api/customers/check-nickname", null, {
+        params: { nickname },
+      });
+  
+      setNicknameMessage("사용 가능한 닉네임입니다!");
       setNicknameMessageColor("blue");
       setIsNicknameAvailable(true);
-    };
+    } catch (error) {
+      console.error("❌ 닉네임 중복 체크 에러:", error);
+  
+      // 🔍 서버 응답 구조 확인용 디버깅
+      const resData = error.response?.data;
+      console.log("❗ error.response.data:", resData);
+  
+      // 가장 보편적으로 에러 메시지를 포함할 수 있는 필드들 체크
+      const errorMsg =
+        resData?.message ||
+        resData?.error ||
+        resData?.result?.message ||
+        resData?.result ||
+        JSON.stringify(resData); // fallback
+  
+      // 메시지로 분기
+      if (errorMsg.includes("존재") || errorMsg.includes("중복")) {
+        setNicknameMessage("중복된 닉네임입니다.");
+      } else if (errorMsg.includes("입력")) {
+        setNicknameMessage("닉네임을 입력해주세요.");
+      } else {
+        setNicknameMessage("중복된 닉네임입니다.");
+      }
+  
+      setNicknameMessageColor("red");
+      setIsNicknameAvailable(false);
+    }
+  };
+  
+  
+  
     
 
 
-   // 닉네임 중복 확인 기능
-  //   try {
-  //     const response = await axios.get("http://3.36.70.70/api/customers/check-nickname", {
-  //       params: { nickname }
-  //     });
-  
-  //     if (response.data.available) {
-  //       setNicknameMessage("사용 가능한 닉네임입니다!");
-  //       setNicknameMessageColor("blue");
-  //       setIsNicknameAvailable(true);
-  //     } else {
-  //       setNicknameMessage("중복된 닉네임입니다.");
-  //       setNicknameMessageColor("red");
-  //       setIsNicknameAvailable(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("닉네임 중복 체크 에러:", error);
-  //     alert("닉네임 중복 확인 중 오류가 발생했습니다.");
-  //   }
-  // };
+
   
 
   const handleRegister = async () => {
