@@ -39,7 +39,7 @@ const Seller_notification = () => {
                     </button>
                 </div>
             </div>
-            
+
         );
     }
 
