@@ -56,7 +56,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
     try {
       const { userId, userType } = getOtherUserInfo();
       const response = await axios.get(
-          `http://3.36.70.70/api/users/status/${userType}/${userId}`,
+          `http://3.39.239.179/api/users/status/${userType}/${userId}`,
           { withCredentials: true }
       );
 
@@ -138,7 +138,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   useEffect(() => {
     // 1. 과거 메시지 불러오기
     axios
-        .get(`http://3.36.70.70/api/chat/rooms/${chatRoom.id}`, { withCredentials: true })
+        .get(`http://3.39.239.179/api/chat/rooms/${chatRoom.id}`, { withCredentials: true })
         .then((res) => {
           const history = res.data.data.ok || [];
           setMessages(history);

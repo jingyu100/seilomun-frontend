@@ -46,12 +46,12 @@ export default function Seller_Header() {
     markAsRead,
     markAllAsRead,
     connectionStatus,
-  } = useNotifications("http://3.36.70.70", "SELLER");
+  } = useNotifications("http://3.39.239.179", "SELLER");
 
   useEffect(() => {
     const fetchSellerInfo = async () => {
       try {
-        const response = await axios.get("http://3.36.70.70/api/sellers/me", {
+        const response = await axios.get("http://3.39.239.179/api/sellers/me", {
           withCredentials: true,
         });
         const store = response.data.data?.storeName;
@@ -69,7 +69,7 @@ export default function Seller_Header() {
   const handleChangeStatus = async (newStatus) => {
     try {
       await axios.put(
-        "http://3.36.70.70/api/sellers/me/status",
+        "http://3.39.239.179/api/sellers/me/status",
         { isOpen: newStatus },
         { withCredentials: true }
       );
@@ -85,14 +85,14 @@ export default function Seller_Header() {
     try {
       // 1. 영업 상태를 '0'(영업종료)로 먼저 업데이트
       await axios.put(
-        "http://3.36.70.70/api/sellers/me/status",
+        "http://3.39.239.179/api/sellers/me/status",
         { isOpen: "0" },
         { withCredentials: true }
       );
   
       // 2. 로그아웃 요청
       await axios.post(
-        "http://3.36.70.70/api/auth/logout",
+        "http://3.39.239.179/api/auth/logout",
         {
           username: user?.email || localStorage.getItem("username"),
           userType: "SELLER",

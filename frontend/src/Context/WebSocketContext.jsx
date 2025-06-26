@@ -61,7 +61,7 @@ export function WebSocketProvider({ children }) {
     setConnectionStatus('connecting');
 
     try {
-      const socket = new SockJS("http://3.36.70.70/ws");
+      const socket = new SockJS("http://3.39.239.179/ws");
       const client = new Client({
         webSocketFactory: () => socket,
         reconnectDelay: 5000,

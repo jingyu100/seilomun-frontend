@@ -22,7 +22,7 @@ function Business_numberPage() {
     const openDate = `${year}${month.padStart(2, "0")}${day.padStart(2, "0")}`;
 
     try {
-      const response = await axios.post("http://3.36.70.70/api/auth/businessVerification", {
+      const response = await axios.post("http://3.39.239.179/api/auth/businessVerification", {
         bNo: bizNum,
         startDt: openDate,
         pNm: ownerName,

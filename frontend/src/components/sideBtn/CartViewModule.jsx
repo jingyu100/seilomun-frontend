@@ -22,7 +22,7 @@ function CartViewModule() {
             if (!firstSellerId) return;
 
             try {
-                const res = await axios.get(`http://3.36.70.70/api/sellers/${firstSellerId}`, {
+                const res = await axios.get(`http://3.39.239.179/api/sellers/${firstSellerId}`, {
                     withCredentials: true,
                 });
                 setSeller(res.data.data.seller);
@@ -41,7 +41,7 @@ function CartViewModule() {
 
         try {
             // 1단계: 장바구니 목록 조회
-            const cartResponse = await axios.get('http://3.36.70.70/api/carts', {
+            const cartResponse = await axios.get('http://3.39.239.179/api/carts', {
                 withCredentials: true
             });
 
@@ -59,7 +59,7 @@ function CartViewModule() {
             const productPromises = Object.entries(cartData.products).map(async ([productId, quantity]) => {
                 try {
                     console.log(`상품 ${productId} 조회 중... (수량: ${quantity})`);
-                    const productResponse = await axios.get(`http://3.36.70.70/api/products/${productId}`, {
+                    const productResponse = await axios.get(`http://3.39.239.179/api/products/${productId}`, {
                         withCredentials: true
                     });
 
@@ -203,7 +203,7 @@ function CartViewModule() {
             console.log("API 요청 데이터:", cartItemsForAPI);
 
             // 백엔드에서 주문 정보 가져오기
-            const response = await axios.post('http://3.36.70.70/api/orders/cart/buy', cartItemsForAPI, {
+            const response = await axios.post('http://3.39.239.179/api/orders/cart/buy', cartItemsForAPI, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json'

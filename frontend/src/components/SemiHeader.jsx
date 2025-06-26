@@ -17,7 +17,7 @@ export default function SemiHeader() {
         const fetchHistoryAndPopular = async () => {
           try {
             const res = await axios.get(
-              "http://3.36.70.70/api/search/history?page=0&size=10",
+              "http://3.39.239.179/api/search/history?page=0&size=10",
               {
                 withCredentials: true,
               }
@@ -30,7 +30,7 @@ export default function SemiHeader() {
           }
   
           try {
-            const res = await axios.get("http://3.36.70.70/api/search/popular?limit=10", {
+            const res = await axios.get("http://3.39.239.179/api/search/popular?limit=10", {
               withCredentials: true,
             });
             setPopularKeywords(res.data?.data?.popularKeywords || []);
@@ -52,10 +52,10 @@ export default function SemiHeader() {
       const fetchSuggestions = async () => {
         try {
           const [autoRes, fuzzyRes] = await Promise.all([
-            axios.get(`http://3.36.70.70/api/search/autocomplete?prefix=${searchTerm}`, {
+            axios.get(`http://3.39.239.179/api/search/autocomplete?prefix=${searchTerm}`, {
               withCredentials: true,
             }),
-            axios.get(`http://3.36.70.70/api/search/fuzzy?term=${searchTerm}`, {
+            axios.get(`http://3.39.239.179/api/search/fuzzy?term=${searchTerm}`, {
               withCredentials: true,
             }),
           ]);
@@ -83,7 +83,7 @@ export default function SemiHeader() {
       e.preventDefault();
       try {
         await axios.post(
-          "http://3.36.70.70/api/auth/logout",
+          "http://3.39.239.179/api/auth/logout",
           {
             username: user?.email,
           },
@@ -115,7 +115,7 @@ export default function SemiHeader() {
       if (isLoggedIn) {
         try {
           await axios.post(
-            `http://3.36.70.70/api/search/history?keyword=${encodeURIComponent(trimmed)}`,
+            `http://3.39.239.179/api/search/history?keyword=${encodeURIComponent(trimmed)}`,
             {},
             { withCredentials: true }
           );
@@ -126,7 +126,7 @@ export default function SemiHeader() {
     
       try {
         setSearchLoading(true);
-        const res = await axios.get("http://3.36.70.70/api/products/search", {
+        const res = await axios.get("http://3.39.239.179/api/products/search", {
           params: {
             keyword: trimmed,
             filterType: "ALL",
@@ -166,10 +166,10 @@ export default function SemiHeader() {
     const handleDeleteHistoryItem = async (keyword) => {
       try {
         await axios.delete(
-          `http://3.36.70.70/api/search/history?keyword=${encodeURIComponent(keyword)}`,
+          `http://3.39.239.179/api/search/history?keyword=${encodeURIComponent(keyword)}`,
           { withCredentials: true }
         );
-        const res = await axios.get("http://3.36.70.70/api/search/history?page=0&size=10", {
+        const res = await axios.get("http://3.39.239.179/api/search/history?page=0&size=10", {
           withCredentials: true,
         });
         const keywords = (res.data?.data?.histories || []).map((h) => h.keyword);
@@ -181,7 +181,7 @@ export default function SemiHeader() {
   
     const handleClearAllHistory = async () => {
       try {
-        await axios.delete("http://3.36.70.70/api/search/history/all", {
+        await axios.delete("http://3.39.239.179/api/search/history/all", {
           withCredentials: true,
         });
         setSuggestions([]); // 서버도 다 지웠으므로 프론트도 비움

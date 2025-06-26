@@ -99,7 +99,7 @@ export default function RefundForm({ order, onCancel }) {
       });
 
       // 환불 신청 API 호출
-      await axios.post(`http://3.36.70.70/api/orders/refund/${order.id}`, formData, {
+      await axios.post(`http://3.39.239.179/api/orders/refund/${order.id}`, formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

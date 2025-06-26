@@ -17,7 +17,7 @@ export default function StoreReview() {
 
   const fetchReviews = async () => {
     try {
-      const reviewsRes = await axios.get(`http://3.36.70.70/api/review/${sellerId}`, {
+      const reviewsRes = await axios.get(`http://3.39.239.179/api/review/${sellerId}`, {
         params: { page: 0, size: 10 },
         withCredentials: true,
       });
@@ -32,7 +32,7 @@ export default function StoreReview() {
   useEffect(() => {
     const fetchStoreName = async () => {
       try {
-        const res = await axios.get(`http://3.36.70.70/api/sellers/${sellerId}`, {
+        const res = await axios.get(`http://3.39.239.179/api/sellers/${sellerId}`, {
           withCredentials: true,
         });
         setStoreName(res.data.data?.storeName || "해당 가게");

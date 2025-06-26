@@ -76,7 +76,7 @@ export default function ReviewForm({ order, onCancel, onReviewComplete }) {
         }
       });
 
-      await axios.post(`http://3.36.70.70/api/review/${order.id}`, formData, {
+      await axios.post(`http://3.39.239.179/api/review/${order.id}`, formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

@@ -12,7 +12,7 @@ export default function useStoreInfo() {
 
     const storeInfo = async () => {
       try {
-        const response = await axios.get(`http://3.36.70.70/api/sellers/${sellerId}`);
+        const response = await axios.get(`http://3.39.239.179/api/sellers/${sellerId}`);
         console.log("API 응답:", response.data);
 
         const sellerInformationDto = response.data.data.seller;

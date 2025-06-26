@@ -19,7 +19,7 @@ const MyPage = () => {
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const res = await axios.get("http://3.36.70.70/api/customers", {
+        const res = await axios.get("http://3.39.239.179/api/customers", {
           withCredentials: true,
         });
 
@@ -42,7 +42,7 @@ const MyPage = () => {
 
     const fetchRecentReviews = async () => {
       try {
-        const res = await axios.get("http://3.36.70.70/api/review/myReviews", {
+        const res = await axios.get("http://3.39.239.179/api/review/myReviews", {
           params: { page: 0, size: 5 },
           withCredentials: true,
         });
@@ -55,7 +55,7 @@ const MyPage = () => {
 
     const fetchRecentPoints = async () => {
       try {
-        const res = await axios.get("http://3.36.70.70/api/customers/points", {
+        const res = await axios.get("http://3.39.239.179/api/customers/points", {
           withCredentials: true,
         });
         const data = res.data?.data?.pointHistory || [];

@@ -20,7 +20,7 @@ const Seller_ProductManagement = () => {
     try {
       setLoading(true);
       // 판매자 정보 먼저 조회
-      const sellerResponse = await axios.get("http://3.36.70.70/api/sellers", {
+      const sellerResponse = await axios.get("http://3.39.239.179/api/sellers", {
         withCredentials: true,
       });
 
@@ -28,7 +28,7 @@ const Seller_ProductManagement = () => {
 
       // 해당 판매자의 상품 목록 조회
       const productsResponse = await axios.get(
-        `http://3.36.70.70/api/products/seller/${sellerId}`,
+        `http://3.39.239.179/api/products/seller/${sellerId}`,
         {
           withCredentials: true,
         }
@@ -47,7 +47,7 @@ const Seller_ProductManagement = () => {
   const handleDeleteProduct = async (productId) => {
     if (window.confirm("정말로 이 상품을 삭제하시겠습니까?")) {
       try {
-        await axios.delete(`http://3.36.70.70/api/products/${productId}`, {
+        await axios.delete(`http://3.39.239.179/api/products/${productId}`, {
           withCredentials: true,
         });
         alert("상품이 삭제되었습니다.");
@@ -63,7 +63,7 @@ const Seller_ProductManagement = () => {
   const handleStatusChange = async (productId, newStatus) => {
     try {
       await axios.put(
-        `http://3.36.70.70/api/products/${productId}/status`,
+        `http://3.39.239.179/api/products/${productId}/status`,
         { status: newStatus },
         { withCredentials: true }
       );

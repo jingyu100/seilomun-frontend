@@ -34,7 +34,7 @@ const OrderListPage = () => {
         params.storeName = searchQuery.trim();
       }
 
-      const response = await axios.get("http://3.36.70.70/api/customers/orders", {
+      const response = await axios.get("http://3.39.239.179/api/customers/orders", {
         withCredentials: true,
         params,
       });

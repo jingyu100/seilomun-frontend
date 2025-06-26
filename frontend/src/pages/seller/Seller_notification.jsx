@@ -19,7 +19,7 @@ const Seller_notification = () => {
         connectionStatus,
         reconnect
     } = useNotifications(
-        "http://3.36.70.70",
+        "http://3.39.239.179",
         "SELLER"
     );
 

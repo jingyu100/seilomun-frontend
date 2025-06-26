@@ -27,7 +27,7 @@ function Customer_modify() {
   const [initialInfo, setInitialInfo] = useState({});
 
   useEffect(() => {
-    axios.get("http://3.36.70.70/api/customers", { withCredentials: true })
+    axios.get("http://3.39.239.179/api/customers", { withCredentials: true })
       .then((res) => {
         const data = res.data?.data?.customer;
         if (!data) return;
@@ -90,7 +90,7 @@ function Customer_modify() {
     formData.append("profileImage", profileFile);
 
     try {
-      const res = await axios.put("http://3.36.70.70/api/customers/mypage/local/profile", formData, {
+      const res = await axios.put("http://3.39.239.179/api/customers/mypage/local/profile", formData, {
         withCredentials: true,
       });
 
@@ -146,7 +146,7 @@ function Customer_modify() {
     };
 
     try {
-      await axios.put("http://3.36.70.70/api/customers/mypage/local", requestData, {
+      await axios.put("http://3.39.239.179/api/customers/mypage/local", requestData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });

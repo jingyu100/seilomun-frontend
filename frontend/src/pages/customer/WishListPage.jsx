@@ -25,7 +25,7 @@ const WishListPage = () => {
   const fetchWishes = async () => {
     try {
       const response = await axios.get(
-        "http://3.36.70.70/api/customers/wishes?page=0&size=10",
+        "http://3.39.239.179/api/customers/wishes?page=0&size=10",
         {
           withCredentials: true,
         }
@@ -41,7 +41,7 @@ const WishListPage = () => {
   const fetchFavorites = async () => {
     try {
       const response = await axios.get(
-        "http://3.36.70.70/api/customers/favorites?page=0&size=10",
+        "http://3.39.239.179/api/customers/favorites?page=0&size=10",
         {
           withCredentials: true,
         }
@@ -78,7 +78,7 @@ const WishListPage = () => {
   // 3) 관심상품 제거 (삭제) 핸들러
   const handleRemove = async (wishId) => {
     try {
-      await axios.delete(`http://3.36.70.70/api/customers/wishes/${wishId}`, {
+      await axios.delete(`http://3.39.239.179/api/customers/wishes/${wishId}`, {
         withCredentials: true,
       });
       // 로컬 상태에서 해당 항목만 제거
@@ -91,7 +91,7 @@ const WishListPage = () => {
   // 4) 즐겨찾기 제거 핸들러
   const handleRemoveFavorite = async (favoriteId) => {
     try {
-      await axios.delete(`http://3.36.70.70/api/customers/favorites/${favoriteId}`, {
+      await axios.delete(`http://3.39.239.179/api/customers/favorites/${favoriteId}`, {
         withCredentials: true,
       });
       // 로컬 상태에서 해당 항목만 제거
@@ -105,7 +105,7 @@ const WishListPage = () => {
   const handleAddToCart = async (productId) => {
     try {
       const response = await axios.post(
-        "http://3.36.70.70/api/carts",
+        "http://3.39.239.179/api/carts",
         {
           productId: productId,
           quantity: 1, // 기본 수량 1개

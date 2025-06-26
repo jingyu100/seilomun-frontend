@@ -18,7 +18,7 @@ export default function MainSuggestProduct() {
   useEffect(() => {
     const fetchExpiringProducts = async () => {
       try {
-        const res = await axios.get("http://3.36.70.70/api/products/search", {
+        const res = await axios.get("http://3.39.239.179/api/products/search", {
           params: {
             keyword: "",
             filterType: "EXPIRING_SOON",

@@ -16,7 +16,7 @@ function SeloginPage() {
 
     try {
       await axios.post(
-        "http://3.36.70.70/api/auth/login",
+        "http://3.39.239.179/api/auth/login",
         {
           email,
           password,
@@ -27,7 +27,7 @@ function SeloginPage() {
         }
       );
 
-      const response = await axios.get("http://3.36.70.70/api/sellers", {
+      const response = await axios.get("http://3.39.239.179/api/sellers", {
         withCredentials: true,
       });
 

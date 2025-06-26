@@ -12,7 +12,7 @@ function SideMenuBtn () {
    const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
 
    const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotificationContext(
-           "http://3.36.70.70",
+           "http://3.39.239.179",
            "customer"
        );
 

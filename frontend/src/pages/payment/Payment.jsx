@@ -71,7 +71,7 @@ const Payment = () => {
       if (!sellerId && firstProduct?.productId) {
         try {
           console.log("sellerId가 없어서 상품 정보 재조회:", firstProduct.productId);
-          const productResponse = await axios.get(`http://3.36.70.70/api/products/${firstProduct.productId}`, {
+          const productResponse = await axios.get(`http://3.39.239.179/api/products/${firstProduct.productId}`, {
             withCredentials: true
           });
 
@@ -92,7 +92,7 @@ const Payment = () => {
         console.log("판매자 정보 조회 시작. sellerId:", sellerId);
 
         const response = await axios.get(
-            `http://3.36.70.70/api/sellers/${sellerId}`,
+            `http://3.39.239.179/api/sellers/${sellerId}`,
             { withCredentials: true }
         );
         console.log("판매자 정보 응답:", response.data);

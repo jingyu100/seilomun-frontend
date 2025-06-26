@@ -19,7 +19,7 @@ export default function useStoreListByIds(sellerIds = [], maxCount = 12) {
       try {
         // 각 요청에 sellerId를 함께 전달
         const requests = sellerIds.map((id) =>
-            axios.get(`http://3.36.70.70/api/sellers/${id}`)
+            axios.get(`http://3.39.239.179/api/sellers/${id}`)
                 .then(response => ({
                   success: true,
                   sellerId: id, // ✅ 요청한 sellerId를 함께 저장

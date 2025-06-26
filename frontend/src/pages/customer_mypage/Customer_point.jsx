@@ -12,7 +12,7 @@ const Customer_point = () => {
   useEffect(() => {
     const fetchPoints = async () => {
       try {
-        const res = await axios.get("http://3.36.70.70/api/customers/points", {
+        const res = await axios.get("http://3.39.239.179/api/customers/points", {
           withCredentials: true,
         });
   

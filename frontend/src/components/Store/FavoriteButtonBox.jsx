@@ -17,7 +17,7 @@ export default function FavoriteButtonBox({ sellerId }) {
 
       try {
         const response = await axios.get(
-          "http://3.36.70.70/api/customers/favorites?page=0&size=100",
+          "http://3.39.239.179/api/customers/favorites?page=0&size=100",
           {
             withCredentials: true,
           }
@@ -46,7 +46,7 @@ export default function FavoriteButtonBox({ sellerId }) {
 
     try {
       const response = await axios.post(
-        `http://3.36.70.70/api/customers/favorites/${sellerId}`,
+        `http://3.39.239.179/api/customers/favorites/${sellerId}`,
         {},
         {
           withCredentials: true,

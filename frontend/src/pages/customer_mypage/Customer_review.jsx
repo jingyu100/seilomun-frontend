@@ -11,7 +11,7 @@ export default function Customer_review() {
   useEffect(() => {
     const fetchMyReviews = async () => {
       try {
-        const res = await axios.get("http://3.36.70.70/api/review/myReviews", {
+        const res = await axios.get("http://3.39.239.179/api/review/myReviews", {
           params: { page: 0, size: 10 },
           withCredentials: true,
         });

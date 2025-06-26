@@ -19,7 +19,7 @@ const SellerList = () => {
 
             setLoading(true);
             try {
-                const res = await axios.get("http://3.36.70.70/api/sellers/search", {
+                const res = await axios.get("http://3.39.239.179/api/sellers/search", {
                     params: {
                         keyword: keyword,
                         page: 0,

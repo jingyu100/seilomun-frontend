@@ -37,7 +37,7 @@ const OrderSubmitBar = ({
       console.log("🔄 결제창 닫기 처리 시작:", orderId);
 
       const response = await axios.post(
-          `http://3.36.70.70/api/orders/close-payment/${orderId}`,
+          `http://3.39.239.179/api/orders/close-payment/${orderId}`,
           {},
           {
             withCredentials: true,
@@ -128,8 +128,8 @@ const OrderSubmitBar = ({
         })),
         payType: "CARD",
         orderName: orderName, // 🆕 동적 주문명 사용
-        yourSuccessUrl: "http://3.36.70.70/api/orders/toss/success",
-        yourFailUrl: "http://3.36.70.70/api/orders/toss/fail",
+        yourSuccessUrl: "http://3.39.239.179/api/orders/toss/success",
+        yourFailUrl: "http://3.39.239.179/api/orders/toss/fail",
       };
 
       console.log("📦 최종 주문 데이터:", orderData);
@@ -138,7 +138,7 @@ const OrderSubmitBar = ({
       console.log("📦 픽업 정보:", pickupInfo);
       console.log("📦 사용 포인트:", pointsToUse);
 
-      const response = await axios.post("http://3.36.70.70/api/orders/buy", orderData, {
+      const response = await axios.post("http://3.39.239.179/api/orders/buy", orderData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });

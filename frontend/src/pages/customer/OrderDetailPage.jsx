@@ -26,10 +26,10 @@ const OrderDetailPage = () => {
 
       console.log("🌐 API 호출 시작 - orderId:", orderId);
       // ✅ 올바른 API 엔드포인트: /api/customers/orders/{orderId}
-      console.log("🌐 API URL:", `http://3.36.70.70/api/customers/orders/${orderId}`);
+      console.log("🌐 API URL:", `http://3.39.239.179/api/customers/orders/${orderId}`);
 
       const response = await axios.get(
-        `http://3.36.70.70/api/customers/orders/${orderId}`,
+        `http://3.39.239.179/api/customers/orders/${orderId}`,
         {
           withCredentials: true,
         }

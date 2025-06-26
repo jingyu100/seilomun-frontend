@@ -170,7 +170,7 @@ const Seller_ProductRegister = () => {
       });
 
       // API 호출
-      const response = await axios.post("http://3.36.70.70/api/products", submitData, {
+      const response = await axios.post("http://3.39.239.179/api/products", submitData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
