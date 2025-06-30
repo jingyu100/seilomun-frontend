@@ -1,5 +1,5 @@
 // API 기본 설정
-export const API_BASE_URL = "http://3.39.239.172"; // 여기서만 주소 변경하면 됨!
+export const API_BASE_URL = "http://3.39.239.173"; // 여기서만 주소 변경하면 됨!
 
 // axios 인스턴스 생성
 import axios from "axios";
