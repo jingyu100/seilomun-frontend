@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const useProductSearch = ({
   keyword = "",
@@ -19,7 +19,7 @@ const useProductSearch = ({
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://3.39.239.179/api/products/search", {
+        const res = await api.get("/api/products/search", {
           params: {
             keyword,
             filterType,

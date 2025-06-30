@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function useChatCheck() {
-   const {id} = useParams();
-   const [chatCheck, setchatCheck] = useState(null);
+  const { id } = useParams();
+  const [chatCheck, setchatCheck] = useState(null);
 
   useEffect(() => {
     if (!id) return;
 
     const chattingCheck = async () => {
       try {
-        const response = await axios.get(`http://3.39.239.179/api/chat/rooms/${chatroomid}`);
+        const response = await api.get(`/api/chat/rooms/${chatroomid}`);
         console.log("API 응답:", response.data);
 
         const chatRoomDto = response.data.data.CUSTOMER;
@@ -19,10 +19,9 @@ export default function useChatCheck() {
         if (!chatRoomDto) return;
 
         chattingCheck({
-            chatRoomDto,
-            chatMessageDto: null,
+          chatRoomDto,
+          chatMessageDto: null,
         });
-
       } catch (error) {
         console.error("API 요청 실패:", error);
         chattingCheck(null);

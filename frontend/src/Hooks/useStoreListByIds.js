@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function useStoreListByIds(sellerIds = [], maxCount = 12) {
   const [stores, setStores] = useState([]);
@@ -19,27 +19,28 @@ export default function useStoreListByIds(sellerIds = [], maxCount = 12) {
       try {
         // 각 요청에 sellerId를 함께 전달
         const requests = sellerIds.map((id) =>
-            axios.get(`http://3.39.239.179/api/sellers/${id}`)
-                .then(response => ({
-                  success: true,
-                  sellerId: id, // ✅ 요청한 sellerId를 함께 저장
-                  data: response.data?.data?.seller
-                }))
-                .catch(error => ({
-                  success: false,
-                  sellerId: id,
-                  error
-                }))
+          api
+            .get(`/api/sellers/${id}`)
+            .then((response) => ({
+              success: true,
+              sellerId: id, // ✅ 요청한 sellerId를 함께 저장
+              data: response.data?.data?.seller,
+            }))
+            .catch((error) => ({
+              success: false,
+              sellerId: id,
+              error,
+            }))
         );
 
         const responses = await Promise.all(requests);
 
         const validStores = responses
-            .filter(res => res.success && res.data && typeof res.data === "object")
-            .map(res => ({
-              ...res.data,
-              sellerId: res.sellerId // ✅ 정확한 sellerId 매칭
-            }));
+          .filter((res) => res.success && res.data && typeof res.data === "object")
+          .map((res) => ({
+            ...res.data,
+            sellerId: res.sellerId, // ✅ 정확한 sellerId 매칭
+          }));
 
         console.log("validStores : ", validStores); // 디버깅용
 

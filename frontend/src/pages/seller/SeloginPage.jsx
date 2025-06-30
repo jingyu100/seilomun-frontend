@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import "../../css/seller/Selogin.css";
 import logo from "../../image/logo/spLogo.png";
 import useLogin from "../../Hooks/useLogin";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function SeloginPage() {
   const navigate = useNavigate();
@@ -15,24 +15,16 @@ function SeloginPage() {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://3.39.239.179/api/auth/login",
-        {
-          email,
-          password,
-          userType: "SELLER",
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      const response = await axios.get("http://3.39.239.179/api/sellers", {
-        withCredentials: true,
+      await api.post("/api/auth/login", {
+        email,
+        password,
+        userType: "SELLER",
       });
 
+      const response = await api.get("/api/sellers");
+
       console.log("API 응답 데이터:", response.data);
-      const { sellerId, sellerName , sellerEmail} = response.data.data.seller;
+      const { sellerId, sellerName, sellerEmail } = response.data.data.seller;
       const userType = "SELLER";
       console.log("추출한 값들:", { sellerId, sellerName, userType });
 

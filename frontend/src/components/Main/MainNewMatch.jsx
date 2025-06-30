@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
+import api, { API_BASE_URL } from "../api/config.js";
 import "../../css/customer/Main.css";
 
 function MainNewMatch() {
-  
   const [products, setProducts] = useState([]);
   const [visibleCount, setVisibleCount] = useState(6);
 
   useEffect(() => {
     const fetchLatestProducts = async () => {
       try {
-        const res = await axios.get("http://3.39.239.179/api/products/search", {
+        const res = await api.get("/api/products/search", {
           params: {
             keyword: "",
             filterType: "RECENT",
@@ -33,9 +33,9 @@ function MainNewMatch() {
 
   const getThumbnailUrl = (product) => {
     const url = product.thumbnailUrl;
-  
+
     if (!url) return "/image/product1.jpg";
-  
+
     return url.startsWith("http")
       ? url
       : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
@@ -64,9 +64,7 @@ function MainNewMatch() {
                 {product.originalPrice?.toLocaleString()}원
               </span>
               {product.discountRate && (
-                <span className="NM_product_discount">
-                  {product.discountRate}%
-                </span>
+                <span className="NM_product_discount">{product.discountRate}%</span>
               )}
             </div>
           </div>

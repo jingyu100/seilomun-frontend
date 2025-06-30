@@ -1,7 +1,7 @@
 import React from "react";
 import useLogin from "../../Hooks/useLogin.js";
-import axios from "axios";
 import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function Inquiry({ sellerId, onOpenChat }) {
   const { user } = useLogin();
@@ -17,9 +17,7 @@ export default function Inquiry({ sellerId, onOpenChat }) {
     const postData = { sellerId };
 
     try {
-      const response = await axios.post(`http://3.39.239.179/api/chat/rooms`, postData, {
-        withCredentials: true,
-      });
+      const response = await api.post(`/api/chat/rooms`, postData);
 
       const roomId = response?.data?.data?.chatRoomId;
       if (!roomId) {
@@ -54,30 +52,30 @@ export default function Inquiry({ sellerId, onOpenChat }) {
   };
 
   return (
+    <div
+      className="inquiry storeRight-ui"
+      onClick={handleNewChatRoom}
+      style={{ cursor: user ? "pointer" : "not-allowed", opacity: user ? 1 : 0.5 }}
+      title={user ? "1:1 문의" : "로그인 후 이용 가능합니다"}
+    >
       <div
-          className="inquiry storeRight-ui"
-          onClick={handleNewChatRoom}
-          style={{ cursor: user ? "pointer" : "not-allowed", opacity: user ? 1 : 0.5 }}
-          title={user ? "1:1 문의" : "로그인 후 이용 가능합니다"}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "8px",
+        }}
       >
-        <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "8px",
-            }}
-        >
-          <p style={{ paddingTop: "3px" }}>1:1문의</p>
-          <img
-              src="/image/icon/icon-chat2.png"
-              alt=""
-              style={{
-                width: "20%",
-                height: "auto",
-              }}
-          />
-        </div>
+        <p style={{ paddingTop: "3px" }}>1:1문의</p>
+        <img
+          src="/image/icon/icon-chat2.png"
+          alt=""
+          style={{
+            width: "20%",
+            height: "auto",
+          }}
+        />
       </div>
+    </div>
   );
 }

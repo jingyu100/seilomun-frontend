@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "../../css/customer/Register.css";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api, { API_BASE_URL } from "../api/config.js";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -32,20 +32,18 @@ function RegisterPage() {
   const [phoneTimeLeft, setPhoneTimeLeft] = useState(0);
   const phoneTimerRef = useRef(null);
   const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
-  const [nicknameMessage, setNicknameMessage] = useState("*게시글 작성시 사용할 닉네임을 입력해주세요");
+  const [nicknameMessage, setNicknameMessage] = useState(
+    "*게시글 작성시 사용할 닉네임을 입력해주세요"
+  );
   const [nicknameMessageColor, setNicknameMessageColor] = useState("gray");
 
   const navigate = useNavigate();
 
   // 팝업 열기 함수
   const openAddressPopup = () => {
-    window.open(
-      "/postcode-popup",
-       "주소찾기", 
-       "width=500,height=600,scrollbars=yes"
-      );
+    window.open("/postcode-popup", "주소찾기", "width=500,height=600,scrollbars=yes");
   };
-// 주소 선택 결과 받기
+  // 주소 선택 결과 받기
   useEffect(() => {
     const receiveMessage = (event) => {
       if (event.data?.type === "ADDRESS_SELECTED") {
@@ -74,7 +72,7 @@ function RegisterPage() {
       return;
     }
     try {
-      await axios.post("http://3.39.239.179/api/auth/email", { email });
+      await api.post("/api/auth/email", { email });
       alert("인증번호가 전송되었습니다.");
       setAuthSent(true);
       setIsEmailVerified(false);
@@ -102,7 +100,7 @@ function RegisterPage() {
       return;
     }
     try {
-      await axios.post("http://3.39.239.179/api/customers/verificationCode", {
+      await api.post("/api/customers/verificationCode", {
         phone,
       });
       alert("휴대폰 인증번호가 발송되었습니다.");
@@ -127,7 +125,7 @@ function RegisterPage() {
 
   const handleVerifyAuthCode = async () => {
     try {
-      const response = await axios.post("http://3.39.239.179/api/auth/verifyEmail", {
+      const response = await api.post("/api/auth/verifyEmail", {
         email,
         authNumber: authCode,
       });
@@ -149,28 +147,28 @@ function RegisterPage() {
     setNicknameMessage("*게시글 작성시 사용할 닉네임을 입력해주세요");
     setNicknameMessageColor("gray");
   }, [nickname]);
-  
+
   const handleCheckNickname = async () => {
     if (!nickname.trim()) {
       alert("닉네임을 입력해주세요.");
       return;
     }
-  
+
     try {
-      await axios.post("http://3.39.239.179/api/customers/check-nickname", null, {
+      await api.post("/api/customers/check-nickname", null, {
         params: { nickname },
       });
-  
+
       setNicknameMessage("사용 가능한 닉네임입니다!");
       setNicknameMessageColor("blue");
       setIsNicknameAvailable(true);
     } catch (error) {
       console.error("❌ 닉네임 중복 체크 에러:", error);
-  
+
       // 🔍 서버 응답 구조 확인용 디버깅
       const resData = error.response?.data;
       console.log("❗ error.response.data:", resData);
-  
+
       // 가장 보편적으로 에러 메시지를 포함할 수 있는 필드들 체크
       const errorMsg =
         resData?.message ||
@@ -178,7 +176,7 @@ function RegisterPage() {
         resData?.result?.message ||
         resData?.result ||
         JSON.stringify(resData); // fallback
-  
+
       // 메시지로 분기
       if (errorMsg.includes("존재") || errorMsg.includes("중복")) {
         setNicknameMessage("중복된 닉네임입니다.");
@@ -187,19 +185,11 @@ function RegisterPage() {
       } else {
         setNicknameMessage("중복된 닉네임입니다.");
       }
-  
+
       setNicknameMessageColor("red");
       setIsNicknameAvailable(false);
     }
   };
-  
-  
-  
-    
-
-
-
-  
 
   const handleRegister = async () => {
     if (
@@ -217,7 +207,7 @@ function RegisterPage() {
       !birthMonth ||
       !birthDay ||
       !isEmailVerified ||
-      !isPhoneVerified 
+      !isPhoneVerified
     ) {
       alert("모든 필수 입력란을 채워주세요 (이메일 인증 포함).\n");
       return;
@@ -249,9 +239,7 @@ function RegisterPage() {
     };
 
     try {
-      const response = await axios.post("http://3.39.239.179/api/customers", requestData, {
-        withCredentials: true,
-      });
+      const response = await api.post("/api/customers", requestData);
 
       if (response.status === 200) {
         alert("회원가입이 완료되었습니다!");
@@ -267,7 +255,9 @@ function RegisterPage() {
   };
 
   const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
     const s = (seconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
@@ -296,10 +286,12 @@ function RegisterPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="이메일을 입력해주세요"
               />
-              <button id="id-check-btn" onClick={handleSendAuthCode}>인증번호 발송</button>
+              <button id="id-check-btn" onClick={handleSendAuthCode}>
+                인증번호 발송
+              </button>
             </div>
 
-          {/* 인증번호 확인 */}
+            {/* 인증번호 확인 */}
             <label id="id-label2">
               이메일 인증번호<span className="required">*</span>
             </label>
@@ -311,65 +303,139 @@ function RegisterPage() {
                 onChange={(e) => setAuthCode(e.target.value)}
                 placeholder="인증번호를 입력해주세요"
               />
-              <button id="id-check-btn22" onClick={handleVerifyAuthCode}>인증번호 확인</button>
+              <button id="id-check-btn22" onClick={handleVerifyAuthCode}>
+                인증번호 확인
+              </button>
             </div>
 
-          {/* 인증번호 남은 시간 */}
+            {/* 인증번호 남은 시간 */}
             {authSent && (
               <div className="auth-timer">남은 시간: {formatTime(timeLeft)}</div>
             )}
 
-          {/* 패스워드, 패스워드 확인 */}            
+            {/* 패스워드, 패스워드 확인 */}
             <div className="label-group">
-              <label id="password-label">패스워드
+              <label id="password-label">
+                패스워드
                 <span className="required">*</span>
               </label>
-              <label id="password-confirm-label">패스워드 확인<span className="required">*</span></label>
+              <label id="password-confirm-label">
+                패스워드 확인<span className="required">*</span>
+              </label>
             </div>
 
             <div className="input-row">
-              <input type="password" id="password-input" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호 입력" />
-              <input type="password" id="password-confirm-input" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} placeholder="비밀번호 재입력" />
+              <input
+                type="password"
+                id="password-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="비밀번호 입력"
+              />
+              <input
+                type="password"
+                id="password-confirm-input"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+                placeholder="비밀번호 재입력"
+              />
             </div>
-            <p id="password-info">*패스워드는 영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요</p>
+            <p id="password-info">
+              *패스워드는 영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요
+            </p>
 
-          {/* 닉네임, 닉네임 중복 체크 */}
+            {/* 닉네임, 닉네임 중복 체크 */}
             <div className="nick-label-group">
-              <label id="nickname-label">닉네임<span className="required">*</span></label>
+              <label id="nickname-label">
+                닉네임<span className="required">*</span>
+              </label>
             </div>
             <div className="input-nick">
-              <input type="text" 
-              id="nickname-input" 
-              value={nickname} 
-              onChange={(e) => setNickname(e.target.value)} 
-              placeholder="닉네임 입력" />
-              <button id="nickname-check-btn" onClick={handleCheckNickname}>닉네임 중복체크</button>
+              <input
+                type="text"
+                id="nickname-input"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                placeholder="닉네임 입력"
+              />
+              <button id="nickname-check-btn" onClick={handleCheckNickname}>
+                닉네임 중복체크
+              </button>
             </div>
-            <p id="nickname-info" style={{ color: nicknameMessageColor }}>{nicknameMessage}</p>
+            <p id="nickname-info" style={{ color: nicknameMessageColor }}>
+              {nicknameMessage}
+            </p>
 
-          {/* 이름 */}
-            <label id="name-label">이름<span className="required">*</span></label>
+            {/* 이름 */}
+            <label id="name-label">
+              이름<span className="required">*</span>
+            </label>
             <div className="input-name">
-              <input type="text" id="name-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="이름을 입력해주세요" />
+              <input
+                type="text"
+                id="name-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="이름을 입력해주세요"
+              />
             </div>
 
-          {/* 성별 */}
-            <label id="gender-label">성별<span className="required">*</span></label>
+            {/* 성별 */}
+            <label id="gender-label">
+              성별<span className="required">*</span>
+            </label>
             <div className="input-gender">
-              <label><input type="radio" name="gender" value="male" checked={gender === "male"} onChange={(e) => setGender(e.target.value)} /><span>남</span></label>
-              <label><input type="radio" name="gender" value="female" checked={gender === "female"} onChange={(e) => setGender(e.target.value)} /><span>여</span></label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  checked={gender === "male"}
+                  onChange={(e) => setGender(e.target.value)}
+                />
+                <span>남</span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  checked={gender === "female"}
+                  onChange={(e) => setGender(e.target.value)}
+                />
+                <span>여</span>
+              </label>
             </div>
 
-          {/* 휴대폰 */}
-            <label id="phone-label">휴대폰<span className="required">*</span></label>
+            {/* 휴대폰 */}
+            <label id="phone-label">
+              휴대폰<span className="required">*</span>
+            </label>
             <div className="phone-input">
-              <input type="text" id="phone-input-1" value={phonePart1} onChange={(e) => setPhonePart1(e.target.value)} />
+              <input
+                type="text"
+                id="phone-input-1"
+                value={phonePart1}
+                onChange={(e) => setPhonePart1(e.target.value)}
+              />
               <span>ㅡ</span>
-              <input type="text" id="phone-input-2" value={phonePart2} onChange={(e) => setPhonePart2(e.target.value)} />
+              <input
+                type="text"
+                id="phone-input-2"
+                value={phonePart2}
+                onChange={(e) => setPhonePart2(e.target.value)}
+              />
               <span>ㅡ</span>
-              <input type="text" id="phone-input-3" value={phonePart3} onChange={(e) => setPhonePart3(e.target.value)} />
+              <input
+                type="text"
+                id="phone-input-3"
+                value={phonePart3}
+                onChange={(e) => setPhonePart3(e.target.value)}
+              />
 
-              <button id="auth-check-btn" onClick={handleSendPhoneAuthCode}>인증번호 발송</button>
+              <button id="auth-check-btn" onClick={handleSendPhoneAuthCode}>
+                인증번호 발송
+              </button>
             </div>
 
             {/* 휴대폰 인증번호 확인 */}
@@ -384,42 +450,74 @@ function RegisterPage() {
                 onChange={(e) => setPhoneAuthCode(e.target.value)}
                 placeholder="인증번호를 입력해주세요"
               />
-              <button id="id-check-btn33" onClick={handleVerifyPhoneCode}>인증번호 확인</button>
+              <button id="id-check-btn33" onClick={handleVerifyPhoneCode}>
+                인증번호 확인
+              </button>
             </div>
 
-          {/* 인증번호 남은 시간 */}
-          {phoneAuthSent && (
-            <div className="auth-timer2">남은 시간: {formatTime(phoneTimeLeft)}</div>
-          )}
+            {/* 인증번호 남은 시간 */}
+            {phoneAuthSent && (
+              <div className="auth-timer2">남은 시간: {formatTime(phoneTimeLeft)}</div>
+            )}
 
-          {/* 주소 찾기, 상세주소 */}
-            <label id="address-main-label">주소<span className="required">*</span></label>
+            {/* 주소 찾기, 상세주소 */}
+            <label id="address-main-label">
+              주소<span className="required">*</span>
+            </label>
             <div className="address-group">
-              <button id="housecode-btn" onClick={openAddressPopup}>주소 찾기</button>
+              <button id="housecode-btn" onClick={openAddressPopup}>
+                주소 찾기
+              </button>
             </div>
             <div className="address-input-group">
               <input type="text" id="address-input" value={address} readOnly />
-              <input type="text" id="address-detail" value={addressDetail} onChange={(e) => setAddressDetail(e.target.value)} placeholder="상세주소를 입력해주세요." />
+              <input
+                type="text"
+                id="address-detail"
+                value={addressDetail}
+                onChange={(e) => setAddressDetail(e.target.value)}
+                placeholder="상세주소를 입력해주세요."
+              />
             </div>
 
-          {/* 생일 */}
-            <label id="birth-label">생일<span className="required">*</span></label>
+            {/* 생일 */}
+            <label id="birth-label">
+              생일<span className="required">*</span>
+            </label>
             <div className="birth-input">
-              <select id="birth-month" value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)}>
+              <select
+                id="birth-month"
+                value={birthMonth}
+                onChange={(e) => setBirthMonth(e.target.value)}
+              >
                 <option>선택</option>
-                {[...Array(12)].map((_, i) => (<option key={i + 1} value={i + 1}>{i + 1}</option>))}
+                {[...Array(12)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
               </select>
               <span className="date">월</span>
-              <select id="birth-day" value={birthDay} onChange={(e) => setBirthDay(e.target.value)}>
+              <select
+                id="birth-day"
+                value={birthDay}
+                onChange={(e) => setBirthDay(e.target.value)}
+              >
                 <option>선택</option>
-                {[...Array(31)].map((_, i) => (<option key={i + 1} value={i + 1}>{i + 1}</option>))}
+                {[...Array(31)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
               </select>
               <span className="date">일</span>
             </div>
 
-          {/* 회원가입 버튼 */}
+            {/* 회원가입 버튼 */}
             <div className="register-btn-container">
-              <button id="register-btn" onClick={handleRegister}>회원가입</button>
+              <button id="register-btn" onClick={handleRegister}>
+                회원가입
+              </button>
             </div>
           </div>
         </div>

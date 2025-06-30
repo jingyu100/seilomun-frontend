@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import "../../css/seller/Seller_ProductRegister.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const Seller_ProductUpdate = () => {
   const navigate = useNavigate();
@@ -16,15 +16,15 @@ const Seller_ProductUpdate = () => {
     name: "",
     description: "",
     originalPrice: "",
-    discountPrice:"",
+    discountPrice: "",
     stockQuantity: "",
     expiryDate: "",
     minDiscountRate: "",
     maxDiscountRate: "",
-    currentDiscountRate:"",
+    currentDiscountRate: "",
     categoryId: "",
     status: "1",
-    createdAt:"",
+    createdAt: "",
     productPhotoIds: [], // 삭제할 기존 이미지 ID들
   });
 
@@ -59,9 +59,7 @@ const Seller_ProductUpdate = () => {
   useEffect(() => {
     const loadProductData = async () => {
       try {
-        const response = await axios.get(`http://3.39.239.179/api/products/${productId}`, {
-          withCredentials: true,
-        });
+        const response = await api.get(`/api/products/${productId}`);
 
         const productData = response.data.data.Products;
 
@@ -155,13 +153,13 @@ const Seller_ProductUpdate = () => {
   // 기존 이미지 삭제 핸들러
   const handleExistingImageRemove = (imageId) => {
     // 삭제할 이미지 ID를 formData에 추가
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      productPhotoIds: [...prev.productPhotoIds, imageId]
+      productPhotoIds: [...prev.productPhotoIds, imageId],
     }));
 
     // 화면에서 제거
-    setExistingImages(prev => prev.filter(img => img.id !== imageId));
+    setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
   };
 
   // 폼 유효성 검사
@@ -234,7 +232,9 @@ const Seller_ProductUpdate = () => {
         stockQuantity: parseInt(formData.stockQuantity),
         minDiscountRate: parseInt(formData.minDiscountRate),
         maxDiscountRate: parseInt(formData.maxDiscountRate),
-        currentDiscountRate: formData.currentDiscountRate ? parseInt(formData.currentDiscountRate) : null,
+        currentDiscountRate: formData.currentDiscountRate
+          ? parseInt(formData.currentDiscountRate)
+          : null,
         categoryId: parseInt(formData.categoryId),
         expiryDate: new Date(formData.expiryDate).toISOString(),
         status: formData.status,
@@ -243,10 +243,10 @@ const Seller_ProductUpdate = () => {
       };
 
       submitData.append(
-          "productDto",
-          new Blob([JSON.stringify(productDto)], {
-            type: "application/json",
-          })
+        "productDto",
+        new Blob([JSON.stringify(productDto)], {
+          type: "application/json",
+        })
       );
 
       // 새로운 이미지 파일들 추가 (백엔드에서 기대하는 파라미터명 사용)
@@ -255,8 +255,7 @@ const Seller_ProductUpdate = () => {
       });
 
       // API 호출
-      const response = await axios.put(`http://3.39.239.179/api/products/${productId}`, submitData, {
-        withCredentials: true,
+      const response = await api.put(`/api/products/${productId}`, submitData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -284,240 +283,238 @@ const Seller_ProductUpdate = () => {
 
   if (isLoading) {
     return (
-        <div>
-          <Seller_Header />
-          <div className="seller-product-register">
-            <div className="loading">상품 정보를 불러오는 중...</div>
-          </div>
+      <div>
+        <Seller_Header />
+        <div className="seller-product-register">
+          <div className="loading">상품 정보를 불러오는 중...</div>
         </div>
+      </div>
     );
   }
 
   const totalImages = existingImages.length + productImages.length;
 
   return (
-      <div>
-        <Seller_Header />
-        <div className="seller-product-register">
-          <div className="status-register-header">
-            <h1 className="status-register-title">상품 수정</h1>
-            <p className="status-register-subtitle">
-              판매할 상품 정보를 수정하세요
-            </p>
+    <div>
+      <Seller_Header />
+      <div className="seller-product-register">
+        <div className="status-register-header">
+          <h1 className="status-register-title">상품 수정</h1>
+          <p className="status-register-subtitle">판매할 상품 정보를 수정하세요</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="register-form">
+          {/* 상품명 */}
+          <div className="form-group">
+            <label className="form-label">
+              상품명 <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="상품명을 입력해주세요"
+              className="form-input"
+              maxLength={20}
+            />
+            <div className="char-count">{formData.name.length}/20</div>
           </div>
 
-          <form onSubmit={handleSubmit} className="register-form">
-            {/* 상품명 */}
+          {/* 상품 설명 */}
+          <div className="form-group">
+            <label className="form-label">
+              상품 설명 <span className="required">*</span>
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="상품에 대한 상세한 설명을 입력해주세요"
+              className="form-textarea"
+              rows={4}
+            />
+          </div>
+
+          {/* 상품 이미지 */}
+          <div className="form-group">
+            <label className="form-label">
+              상품 이미지 <span className="required">*</span>
+            </label>
+            <div className="image-upload-section">
+              <div className="image-grid">
+                {/* 기존 이미지들 */}
+                {existingImages.map((image, index) => (
+                  <div key={`existing-${image.id}`} className="image-preview">
+                    <img src={image.url} alt={`기존 상품 이미지 ${index + 1}`} />
+                    <button
+                      type="button"
+                      className="image-remove-btn"
+                      onClick={() => handleExistingImageRemove(image.id)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                {/* 새로운 이미지들 */}
+                {previewImages.map((url, index) => (
+                  <div key={`new-${index}`} className="image-preview">
+                    <img src={url} alt={`새 상품 이미지 ${index + 1}`} />
+                    <button
+                      type="button"
+                      className="image-remove-btn"
+                      onClick={() => handleNewImageRemove(index)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                {totalImages < 5 && (
+                  <div className="image-upload-box" onClick={handleImageSelect}>
+                    <img src={seller_camera} alt="이미지 추가" className="camera-icon" />
+                    <span>이미지 추가</span>
+                    <span className="image-count">({totalImages}/5)</span>
+                  </div>
+                )}
+              </div>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                multiple
+                style={{ display: "none" }}
+              />
+
+              <div className="image-help-text">
+                * 이미지는 최대 5장까지 업로드 가능합니다.
+              </div>
+            </div>
+          </div>
+
+          {/* 가격 정보 */}
+          <div className="form-row">
             <div className="form-group">
               <label className="form-label">
-                상품명 <span className="required">*</span>
+                원가 <span className="required">*</span>
               </label>
               <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="상품명을 입력해주세요"
-                  className="form-input"
-                  maxLength={20}
-              />
-              <div className="char-count">{formData.name.length}/20</div>
-            </div>
-
-            {/* 상품 설명 */}
-            <div className="form-group">
-              <label className="form-label">
-                상품 설명 <span className="required">*</span>
-              </label>
-              <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="상품에 대한 상세한 설명을 입력해주세요"
-                  className="form-textarea"
-                  rows={4}
+                type="number"
+                name="originalPrice"
+                value={formData.originalPrice}
+                onChange={handleInputChange}
+                placeholder="원가를 입력해주세요"
+                className="form-input"
+                min="0"
               />
             </div>
 
-            {/* 상품 이미지 */}
             <div className="form-group">
               <label className="form-label">
-                상품 이미지 <span className="required">*</span>
+                재고 수량 <span className="required">*</span>
               </label>
-              <div className="image-upload-section">
-                <div className="image-grid">
-                  {/* 기존 이미지들 */}
-                  {existingImages.map((image, index) => (
-                      <div key={`existing-${image.id}`} className="image-preview">
-                        <img src={image.url} alt={`기존 상품 이미지 ${index + 1}`} />
-                        <button
-                            type="button"
-                            className="image-remove-btn"
-                            onClick={() => handleExistingImageRemove(image.id)}
-                        >
-                          ×
-                        </button>
-                      </div>
-                  ))}
+              <input
+                type="number"
+                name="stockQuantity"
+                value={formData.stockQuantity}
+                onChange={handleInputChange}
+                placeholder="재고 수량"
+                className="form-input"
+                min="0"
+              />
+            </div>
+          </div>
 
-                  {/* 새로운 이미지들 */}
-                  {previewImages.map((url, index) => (
-                      <div key={`new-${index}`} className="image-preview">
-                        <img src={url} alt={`새 상품 이미지 ${index + 1}`} />
-                        <button
-                            type="button"
-                            className="image-remove-btn"
-                            onClick={() => handleNewImageRemove(index)}
-                        >
-                          ×
-                        </button>
-                      </div>
-                  ))}
-
-                  {totalImages < 5 && (
-                      <div className="image-upload-box" onClick={handleImageSelect}>
-                        <img src={seller_camera} alt="이미지 추가" className="camera-icon" />
-                        <span>이미지 추가</span>
-                        <span className="image-count">({totalImages}/5)</span>
-                      </div>
-                  )}
-                </div>
-
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    multiple
-                    style={{ display: "none" }}
-                />
-
-                <div className="image-help-text">
-                  * 이미지는 최대 5장까지 업로드 가능합니다.
-                </div>
-              </div>
+          {/* 할인율 */}
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">
+                최소 할인율 <span className="required">*</span>
+              </label>
+              <input
+                type="number"
+                name="minDiscountRate"
+                value={formData.minDiscountRate}
+                onChange={handleInputChange}
+                placeholder="최소 할인율 (%)"
+                className="form-input"
+                min="0"
+                max="100"
+              />
             </div>
 
-            {/* 가격 정보 */}
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">
-                  원가 <span className="required">*</span>
-                </label>
-                <input
-                    type="number"
-                    name="originalPrice"
-                    value={formData.originalPrice}
-                    onChange={handleInputChange}
-                    placeholder="원가를 입력해주세요"
-                    className="form-input"
-                    min="0"
-                />
-              </div>
+            <div className="form-group">
+              <label className="form-label">
+                최대 할인율 <span className="required">*</span>
+              </label>
+              <input
+                type="number"
+                name="maxDiscountRate"
+                value={formData.maxDiscountRate}
+                onChange={handleInputChange}
+                placeholder="최대 할인율 (%)"
+                className="form-input"
+                min="0"
+                max="100"
+              />
+            </div>
+          </div>
 
-              <div className="form-group">
-                <label className="form-label">
-                  재고 수량 <span className="required">*</span>
-                </label>
-                <input
-                    type="number"
-                    name="stockQuantity"
-                    value={formData.stockQuantity}
-                    onChange={handleInputChange}
-                    placeholder="재고 수량"
-                    className="form-input"
-                    min="0"
-                />
-              </div>
+          {/* 유통기한 및 카테고리 */}
+          <div className="form-row">
+            <div className="form-group">
+              <label className="form-label">
+                유통기한 <span className="required">*</span>
+              </label>
+              <input
+                type="datetime-local"
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleInputChange}
+                className="form-input"
+              />
             </div>
 
-            {/* 할인율 */}
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">
-                  최소 할인율 <span className="required">*</span>
-                </label>
-                <input
-                    type="number"
-                    name="minDiscountRate"
-                    value={formData.minDiscountRate}
-                    onChange={handleInputChange}
-                    placeholder="최소 할인율 (%)"
-                    className="form-input"
-                    min="0"
-                    max="100"
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">
-                  최대 할인율 <span className="required">*</span>
-                </label>
-                <input
-                    type="number"
-                    name="maxDiscountRate"
-                    value={formData.maxDiscountRate}
-                    onChange={handleInputChange}
-                    placeholder="최대 할인율 (%)"
-                    className="form-input"
-                    min="0"
-                    max="100"
-                />
-              </div>
-            </div>
-
-            {/* 유통기한 및 카테고리 */}
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label">
-                  유통기한 <span className="required">*</span>
-                </label>
-                <input
-                    type="datetime-local"
-                    name="expiryDate"
-                    value={formData.expiryDate}
-                    onChange={handleInputChange}
-                    className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">
-                  카테고리 <span className="required">*</span>
-                </label>
-                <select
-                    name="categoryId"
-                    value={formData.categoryId}
-                    onChange={handleInputChange}
-                    className="form-select"
-                >
-                  <option value="">카테고리 선택</option>
-                  {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* 버튼 영역 */}
-            <div className="form-actions">
-              <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="cancel-btn"
-                  disabled={isSubmitting}
+            <div className="form-group">
+              <label className="form-label">
+                카테고리 <span className="required">*</span>
+              </label>
+              <select
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleInputChange}
+                className="form-select"
               >
-                취소
-              </button>
-              <button type="submit" className="submit-btn" disabled={isSubmitting}>
-                {isSubmitting ? "수정 중..." : "상품 수정"}
-              </button>
+                <option value="">카테고리 선택</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          </form>
-        </div>
+          </div>
+
+          {/* 버튼 영역 */}
+          <div className="form-actions">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="cancel-btn"
+              disabled={isSubmitting}
+            >
+              취소
+            </button>
+            <button type="submit" className="submit-btn" disabled={isSubmitting}>
+              {isSubmitting ? "수정 중..." : "상품 수정"}
+            </button>
+          </div>
+        </form>
       </div>
+    </div>
   );
 };
 

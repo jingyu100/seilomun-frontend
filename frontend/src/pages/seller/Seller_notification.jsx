@@ -1,218 +1,216 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlarmContents from "../../components/AlarmContents.jsx";
 import useLogin from "../../Hooks/useLogin.js";
 import useNotifications from "../../Hooks/useNotifications";
 import "../../css/seller/Seller_notification.css";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Seller_notification = () => {
-    const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
+  const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
 
-    // 판매자용 알림 SSE 연결 - "SELLER" 타입으로 설정
-    const {
-        notifications,
-        unreadCount,
-        markAsRead,
-        markAllAsRead,
-        connectionStatus,
-        reconnect
-    } = useNotifications(
-        "http://3.39.239.179",
-        "SELLER"
+  // 판매자용 알림 SSE 연결 - "SELLER" 타입으로 설정
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    connectionStatus,
+    reconnect,
+  } = useNotifications(API_BASE_URL, "SELLER");
+
+  const navigate = useNavigate();
+
+  // 로그인 체크
+  if (!isLoggedIn) {
+    return (
+      <div className="seller-notification-login-wrapper">
+        <div className="seller-notification-login-box">
+          <h2>로그인이 필요합니다</h2>
+          <button
+            onClick={() => navigate("/login")}
+            className="seller-notification-login-btn"
+          >
+            로그인하기
+          </button>
+        </div>
+      </div>
     );
+  }
 
-    const navigate = useNavigate();
+  // 알림 내용에서 관련 정보 추출하는 함수
+  const extractInfoFromContent = (content) => {
+    const info = {
+      refundId: null,
+      orderNumber: null,
+      type: "general",
+    };
 
-    // 로그인 체크
-    if (!isLoggedIn) {
-        return (
-            <div className="seller-notification-login-wrapper">
-                <div className="seller-notification-login-box">
-                    <h2>로그인이 필요합니다</h2>
-                    <button
-                        onClick={() => navigate('/login')}
-                        className="seller-notification-login-btn"
-                    >
-                        로그인하기
-                    </button>
-                </div>
-            </div>
+    if (!content) return info;
 
-        );
+    // 주문번호 추출
+    const orderNumberMatch = content.match(/주문번호:\s*([A-Z0-9]+)/);
+    if (orderNumberMatch) {
+      info.orderNumber = orderNumberMatch[1];
     }
 
-    // 알림 내용에서 관련 정보 추출하는 함수
-    const extractInfoFromContent = (content) => {
-        const info = {
-            refundId: null,
-            orderNumber: null,
-            type: 'general'
-        };
+    // 환불번호 추출 (환불ID → 환불번호로 변경)
+    const refundIdMatch = content.match(/환불번호:\s*(\d+)/);
+    if (refundIdMatch) {
+      info.refundId = refundIdMatch[1];
+    }
 
-        if (!content) return info;
+    // 알림 타입 결정
+    if (
+      content.includes("주문이 들어왔습니다") ||
+      content.includes("주문을 수락") ||
+      content.includes("주문을 거절")
+    ) {
+      info.type = "order";
+    } else if (content.includes("환불")) {
+      info.type = "refund";
+    } else if (content.includes("리뷰")) {
+      info.type = "review";
+    } else if (content.includes("상품")) {
+      info.type = "product";
+    }
 
-        // 주문번호 추출
-        const orderNumberMatch = content.match(/주문번호:\s*([A-Z0-9]+)/);
-        if (orderNumberMatch) {
-            info.orderNumber = orderNumberMatch[1];
-        }
+    return info;
+  };
 
-        // 환불번호 추출 (환불ID → 환불번호로 변경)
-        const refundIdMatch = content.match(/환불번호:\s*(\d+)/);
-        if (refundIdMatch) {
-            info.refundId = refundIdMatch[1];
-        }
+  // 알림 클릭 핸들러
+  const handleNotificationClick = async (notification) => {
+    try {
+      // 먼저 알림을 읽음 처리
+      await markAsRead(notification.id);
 
-        // 알림 타입 결정
-        if (content.includes('주문이 들어왔습니다') ||
-            content.includes('주문을 수락') ||
-            content.includes('주문을 거절')) {
-            info.type = 'order';
-        } else if (content.includes('환불')) {
-            info.type = 'refund';
-        } else if (content.includes('리뷰')) {
-            info.type = 'review';
-        } else if (content.includes('상품')) {
-            info.type = 'product';
-        }
+      const content = notification.content || notification.message || "";
+      const info = extractInfoFromContent(content);
 
-        return info;
-    };
+      console.log("알림 클릭:", { notification, info });
 
-    // 알림 클릭 핸들러
-    const handleNotificationClick = async (notification) => {
-        try {
-            // 먼저 알림을 읽음 처리
-            await markAsRead(notification.id);
+      // 타입별 라우팅
+      switch (info.type) {
+        case "order":
+          if (info.orderNumber) {
+            navigate(`/seller/orders/number/${info.orderNumber}`);
+          } else {
+            console.warn("주문번호를 찾을 수 없습니다:", content);
+            // 주문 목록 페이지로 이동
+            navigate("/seller/orders");
+          }
+          break;
 
-            const content = notification.content || notification.message || '';
-            const info = extractInfoFromContent(content);
+        case "refund":
+          if (info.refundId) {
+            navigate(`/seller/refunds/${info.refundId}`);
+          } else {
+            console.warn("환불번호를 찾을 수 없습니다:", content);
+            // 환불 목록 페이지로 이동 (구현 필요)
+            navigate("/seller/refunds");
+          }
+          break;
 
-            console.log('알림 클릭:', { notification, info });
+        case "review":
+          // 리뷰 관리 페이지로 이동
+          navigate("/Seller_reviewPage");
+          break;
 
-            // 타입별 라우팅
-            switch (info.type) {
-                case 'order':
-                    if (info.orderNumber) {
-                        navigate(`/seller/orders/number/${info.orderNumber}`);
-                    } else {
-                        console.warn('주문번호를 찾을 수 없습니다:', content);
-                        // 주문 목록 페이지로 이동
-                        navigate('/seller/orders');
-                    }
-                    break;
+        case "product":
+          // 상품 관리 페이지로 이동
+          navigate("/seller/product/management");
+          break;
 
-                case 'refund':
-                    if (info.refundId) {
-                        navigate(`/seller/refunds/${info.refundId}`);
-                    } else {
-                        console.warn('환불번호를 찾을 수 없습니다:', content);
-                        // 환불 목록 페이지로 이동 (구현 필요)
-                        navigate('/seller/refunds');
-                    }
-                    break;
+        default:
+          // 기본적으로 메인 페이지로
+          navigate("/Seller_Main");
+          break;
+      }
+    } catch (error) {
+      console.error("알림 처리 중 오류:", error);
+    }
+  };
 
-                case 'review':
-                    // 리뷰 관리 페이지로 이동
-                    navigate('/Seller_reviewPage');
-                    break;
+  // 알림 타입에 따른 아이콘 반환
+  const getNotificationIcon = (content) => {
+    if (content.includes("주문")) return "📦";
+    if (content.includes("환불")) return "💰";
+    if (content.includes("리뷰")) return "⭐";
+    if (content.includes("상품")) return "🛍️";
+    return "🔔";
+  };
 
-                case 'product':
-                    // 상품 관리 페이지로 이동
-                    navigate('/seller/product/management');
-                    break;
-
-                default:
-                    // 기본적으로 메인 페이지로
-                    navigate('/Seller_Main');
-                    break;
-            }
-
-        } catch (error) {
-            console.error('알림 처리 중 오류:', error);
-        }
-    };
-
-    // 알림 타입에 따른 아이콘 반환
-    const getNotificationIcon = (content) => {
-        if (content.includes('주문')) return '📦';
-        if (content.includes('환불')) return '💰';
-        if (content.includes('리뷰')) return '⭐';
-        if (content.includes('상품')) return '🛍️';
-        return '🔔';
-    };
-
-    return (
-        <div className="seller-notification-container">
-            {/* 세로 긴 검은 직사각형 바 */}
-            <div className="seller-notification-bar">
-                {/* 헤더 */}
-                <div className="seller-notification-header">
-                    <h3>알림</h3>
-                </div>
-
-                {/* 알림 리스트 */}
-                <div className="seller-notification-list">
-                    {notifications.length === 0 ? (
-                        <div className="seller-notification-empty">
-                            <div className="seller-notification-empty-icon">🔔</div>
-                            <p className="seller-notification-empty-text">알림이 없습니다</p>
-                        </div>
-                    ) : (
-                        notifications.map((notification, index) => (
-                            <div
-                                key={`${notification.id}-${index}`}
-                                className={`seller-notification-item ${notification.isRead === "Y" ? 'read' : 'unread'}`}
-                                onClick={() => handleNotificationClick(notification)}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                {/* 알림 타입 아이콘 */}
-                                <div className="seller-notification-icon">
-                                    {getNotificationIcon(notification.content || notification.message || '')}
-                                </div>
-
-                                {/* 읽지않음 점 */}
-                                {notification.isRead !== "Y" && (
-                                    <div className="seller-notification-unread-dot"></div>
-                                )}
-
-                                {/* 알림 내용 */}
-                                <div className={`seller-notification-content ${notification.isRead === "Y" ? 'read' : 'unread'}`}>
-                                    {notification.content || notification.message || '알림 내용'}
-                                </div>
-
-                                {/* 시간 */}
-                                <div className="seller-notification-meta">
-                                    <span>
-                                        {new Date(notification.createdAt).toLocaleString()}
-                                    </span>
-                                    {notification.isRead !== "Y" && (
-                                        <span className="seller-notification-new-badge">
-                                            NEW
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-
-                {/* 하단 액션 */}
-                {unreadCount > 0 && (
-                    <div className="seller-notification-actions">
-                        <button
-                            onClick={markAllAsRead}
-                            className="seller-notification-mark-all-btn"
-                        >
-                            모두 읽음 처리 ({unreadCount})
-                        </button>
-                    </div>
-                )}
-            </div>
+  return (
+    <div className="seller-notification-container">
+      {/* 세로 긴 검은 직사각형 바 */}
+      <div className="seller-notification-bar">
+        {/* 헤더 */}
+        <div className="seller-notification-header">
+          <h3>알림</h3>
         </div>
-    );
+
+        {/* 알림 리스트 */}
+        <div className="seller-notification-list">
+          {notifications.length === 0 ? (
+            <div className="seller-notification-empty">
+              <div className="seller-notification-empty-icon">🔔</div>
+              <p className="seller-notification-empty-text">알림이 없습니다</p>
+            </div>
+          ) : (
+            notifications.map((notification, index) => (
+              <div
+                key={`${notification.id}-${index}`}
+                className={`seller-notification-item ${
+                  notification.isRead === "Y" ? "read" : "unread"
+                }`}
+                onClick={() => handleNotificationClick(notification)}
+                style={{ cursor: "pointer" }}
+              >
+                {/* 알림 타입 아이콘 */}
+                <div className="seller-notification-icon">
+                  {getNotificationIcon(
+                    notification.content || notification.message || ""
+                  )}
+                </div>
+
+                {/* 읽지않음 점 */}
+                {notification.isRead !== "Y" && (
+                  <div className="seller-notification-unread-dot"></div>
+                )}
+
+                {/* 알림 내용 */}
+                <div
+                  className={`seller-notification-content ${
+                    notification.isRead === "Y" ? "read" : "unread"
+                  }`}
+                >
+                  {notification.content || notification.message || "알림 내용"}
+                </div>
+
+                {/* 시간 */}
+                <div className="seller-notification-meta">
+                  <span>{new Date(notification.createdAt).toLocaleString()}</span>
+                  {notification.isRead !== "Y" && (
+                    <span className="seller-notification-new-badge">NEW</span>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* 하단 액션 */}
+        {unreadCount > 0 && (
+          <div className="seller-notification-actions">
+            <button onClick={markAllAsRead} className="seller-notification-mark-all-btn">
+              모두 읽음 처리 ({unreadCount})
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Seller_notification;

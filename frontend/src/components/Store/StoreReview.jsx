@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../css/customer/Store.css";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function StoreReview() {
   const { sellerId } = useParams(); // ✅ URL에서 sellerId 받기
@@ -17,9 +17,8 @@ export default function StoreReview() {
 
   const fetchReviews = async () => {
     try {
-      const reviewsRes = await axios.get(`http://3.39.239.179/api/review/${sellerId}`, {
+      const reviewsRes = await api.get(`/api/review/${sellerId}`, {
         params: { page: 0, size: 10 },
-        withCredentials: true,
       });
 
       const reviewsData = reviewsRes.data.data?.["리뷰 조회"]?.reviews || [];
@@ -32,9 +31,7 @@ export default function StoreReview() {
   useEffect(() => {
     const fetchStoreName = async () => {
       try {
-        const res = await axios.get(`http://3.39.239.179/api/sellers/${sellerId}`, {
-          withCredentials: true,
-        });
+        const res = await api.get(`/api/sellers/${sellerId}`);
         setStoreName(res.data.data?.storeName || "해당 가게");
       } catch (error) {
         console.error("❌ 가게 이름 불러오기 실패:", error);
@@ -50,7 +47,6 @@ export default function StoreReview() {
   return (
     <div className="store-review">
       <div className="store-review-content">
-
         {reviews.length === 0 ? (
           <p className="no-reviews">아직 작성된 리뷰가 없습니다.</p>
         ) : (
@@ -63,7 +59,7 @@ export default function StoreReview() {
                   className="store-customer-photo"
                 />
                 <div className="store-customer-name">{review.customerName}님</div>
-                <div style={{ display: "flex", }}>
+                <div style={{ display: "flex" }}>
                   <div className="store-review-date">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </div>

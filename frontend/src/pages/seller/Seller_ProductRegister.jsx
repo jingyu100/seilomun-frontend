@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../../css/seller/Seller_ProductRegister.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const Seller_ProductRegister = () => {
   const navigate = useNavigate();
@@ -170,8 +170,7 @@ const Seller_ProductRegister = () => {
       });
 
       // API 호출
-      const response = await axios.post("http://3.39.239.179/api/products", submitData, {
-        withCredentials: true,
+      const response = await api.post("/api/products", submitData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

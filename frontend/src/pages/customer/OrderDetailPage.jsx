@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const OrderDetailPage = () => {
   const { orderId } = useParams();
@@ -26,14 +26,9 @@ const OrderDetailPage = () => {
 
       console.log("🌐 API 호출 시작 - orderId:", orderId);
       // ✅ 올바른 API 엔드포인트: /api/customers/orders/{orderId}
-      console.log("🌐 API URL:", `http://3.39.239.179/api/customers/orders/${orderId}`);
+      console.log("🌐 API URL:", `${API_BASE_URL}/api/customers/orders/${orderId}`);
 
-      const response = await axios.get(
-        `http://3.39.239.179/api/customers/orders/${orderId}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.get(`/api/customers/orders/${orderId}`);
 
       console.log("✅ 전체 API 응답:", response.data);
 

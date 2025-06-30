@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import StepTabs from "./StepTabs";
 import "./Payment.css"; // 클래식 CSS 연결
 import DeliverySection from "./DeliverySection";
@@ -8,6 +7,7 @@ import PickupSection from "./PickupSection";
 import OrderItemsSection from "./OrderItemsSection";
 import PaymentInfoSection from "./PaymentInfoSection";
 import OrderSubmitBar from "./OrderSubmitBar";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Payment = () => {
   const location = useLocation();
@@ -33,7 +33,12 @@ const Payment = () => {
   });
 
   // 🆕 단일 상품과 장바구니 상품들을 모두 처리
-  const { product, products: cartProducts, fromCart, sellerId: directSellerId } = location.state || {};
+  const {
+    product,
+    products: cartProducts,
+    fromCart,
+    sellerId: directSellerId,
+  } = location.state || {};
 
   // 상품 배열 통합 처리
   const products = React.useMemo(() => {
@@ -64,16 +69,19 @@ const Payment = () => {
       let sellerId = directSellerId || firstProduct?.sellerId || firstProduct?.seller?.id;
 
       console.log("직접 전달받은 sellerId:", directSellerId);
-      console.log("상품에서 추출한 sellerId:", firstProduct?.sellerId || firstProduct?.seller?.id);
+      console.log(
+        "상품에서 추출한 sellerId:",
+        firstProduct?.sellerId || firstProduct?.seller?.id
+      );
       console.log("최종 사용할 sellerId:", sellerId);
 
       // sellerId가 없으면 상품 정보를 다시 조회해서 sellerId 얻기
       if (!sellerId && firstProduct?.productId) {
         try {
           console.log("sellerId가 없어서 상품 정보 재조회:", firstProduct.productId);
-          const productResponse = await axios.get(`http://3.39.239.179/api/products/${firstProduct.productId}`, {
-            withCredentials: true
-          });
+          const productResponse = await api.get(
+            `/api/products/${firstProduct.productId}`
+          );
 
           const productData = productResponse.data?.data?.Products;
           sellerId = productData?.sellerId || productData?.seller?.id;
@@ -91,10 +99,7 @@ const Payment = () => {
       try {
         console.log("판매자 정보 조회 시작. sellerId:", sellerId);
 
-        const response = await axios.get(
-            `http://3.39.239.179/api/sellers/${sellerId}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/sellers/${sellerId}`);
         console.log("판매자 정보 응답:", response.data);
 
         const sellerData = response.data.data.seller;
@@ -117,7 +122,7 @@ const Payment = () => {
   useEffect(() => {
     if (products && products.length > 1) {
       const firstSellerId = products[0]?.sellerId || products[0]?.seller?.id;
-      const allSameSeller = products.every(product => {
+      const allSameSeller = products.every((product) => {
         const sellerId = product?.sellerId || product?.seller?.id;
         return sellerId === firstSellerId;
       });
@@ -133,9 +138,9 @@ const Payment = () => {
   // 주문 상품 총액 계산
   const totalProductPrice = products.reduce((total, product) => {
     return (
-        total +
-        (product.totalPrice ||
-            (product.discountPrice || product.originalPrice) * (product.quantity || 1))
+      total +
+      (product.totalPrice ||
+        (product.discountPrice || product.originalPrice) * (product.quantity || 1))
     );
   }, 0);
 
@@ -157,8 +162,8 @@ const Payment = () => {
 
     // 중복 제거를 위해 ordersMoney 기준으로 고유한 규칙만 필터링
     const uniqueRules = deliveryRules.filter(
-        (rule, index, self) =>
-            index === self.findIndex((r) => r.ordersMoney === rule.ordersMoney)
+      (rule, index, self) =>
+        index === self.findIndex((r) => r.ordersMoney === rule.ordersMoney)
     );
 
     // 주문 금액 기준으로 오름차순 정렬
@@ -174,7 +179,7 @@ const Payment = () => {
       if (orderAmount >= rule.ordersMoney) {
         applicableFee = rule.deliveryTip;
         console.log(
-            `✅ 적용된 배송비: ${applicableFee}원 (${rule.ordersMoney}원 이상 조건)`
+          `✅ 적용된 배송비: ${applicableFee}원 (${rule.ordersMoney}원 이상 조건)`
         );
       }
     }
@@ -185,7 +190,7 @@ const Payment = () => {
 
   // 실제 배달비 계산 (배송 탭일 때만)
   const deliveryFee =
-      activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
+    activeTab === "delivery" ? calculateDeliveryFee(totalProductPrice, seller) : 0;
 
   // 최종 결제 금액 계산 (포인트 포함)
   const finalAmount = totalProductPrice + deliveryFee - pointsToUse;
@@ -212,50 +217,50 @@ const Payment = () => {
   const isDeliveryAvailable = seller ? seller.deliveryAvailable === "Y" : false;
 
   return (
-      <div className="payment-wrapper">
-        <div className="payment-container">
-          <StepTabs
-              activeTab={activeTab}
-              onTabChange={handleTabChange}
-              isDeliveryAvailable={isDeliveryAvailable}
-          />
+    <div className="payment-wrapper">
+      <div className="payment-container">
+        <StepTabs
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          isDeliveryAvailable={isDeliveryAvailable}
+        />
 
-          {/* 탭에 따른 컴포넌트 렌더링 */}
-          {activeTab === "delivery" && (
-              <DeliverySection
-                  deliveryInfo={deliveryInfo}
-                  setDeliveryInfo={setDeliveryInfo}
-              />
-          )}
-          {activeTab === "pickup" && (
-              <PickupSection
-                  seller={seller}
-                  pickupInfo={pickupInfo}
-                  setPickupInfo={setPickupInfo}
-              />
-          )}
+        {/* 탭에 따른 컴포넌트 렌더링 */}
+        {activeTab === "delivery" && (
+          <DeliverySection
+            deliveryInfo={deliveryInfo}
+            setDeliveryInfo={setDeliveryInfo}
+          />
+        )}
+        {activeTab === "pickup" && (
+          <PickupSection
+            seller={seller}
+            pickupInfo={pickupInfo}
+            setPickupInfo={setPickupInfo}
+          />
+        )}
 
-          <OrderItemsSection products={products} deliveryFee={deliveryFee} />
-          <PaymentInfoSection
-              totalProductPrice={totalProductPrice}
-              deliveryFee={deliveryFee}
-              seller={seller}
-              isPickup={activeTab === "pickup"}
-              pointsToUse={pointsToUse}
-              setPointsToUse={setPointsToUse}
-              finalAmount={finalAmount}
-          />
-          <OrderSubmitBar
-              products={products}
-              deliveryFee={deliveryFee}
-              isPickup={activeTab === "pickup"}
-              finalAmount={finalAmount}
-              deliveryInfo={deliveryInfo}
-              pickupInfo={pickupInfo}
-              pointsToUse={pointsToUse}
-          />
-        </div>
+        <OrderItemsSection products={products} deliveryFee={deliveryFee} />
+        <PaymentInfoSection
+          totalProductPrice={totalProductPrice}
+          deliveryFee={deliveryFee}
+          seller={seller}
+          isPickup={activeTab === "pickup"}
+          pointsToUse={pointsToUse}
+          setPointsToUse={setPointsToUse}
+          finalAmount={finalAmount}
+        />
+        <OrderSubmitBar
+          products={products}
+          deliveryFee={deliveryFee}
+          isPickup={activeTab === "pickup"}
+          finalAmount={finalAmount}
+          deliveryInfo={deliveryInfo}
+          pickupInfo={pickupInfo}
+          pointsToUse={pointsToUse}
+        />
       </div>
+    </div>
   );
 };
 

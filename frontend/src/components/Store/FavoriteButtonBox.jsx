@@ -1,8 +1,8 @@
 // FavoriteButtonBox.jsx - 단순하고 깔끔한 버전
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import FavoriteButton from "./FavoriteButton.jsx";
 import useLogin from "../../Hooks/useLogin.js";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function FavoriteButtonBox({ sellerId }) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -16,12 +16,7 @@ export default function FavoriteButtonBox({ sellerId }) {
       }
 
       try {
-        const response = await axios.get(
-          "http://3.39.239.179/api/customers/favorites?page=0&size=100",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await api.get("/api/customers/favorites?page=0&size=100");
 
         const favoritesData = response.data.data.favorites;
         const found = favoritesData.some(
@@ -45,13 +40,7 @@ export default function FavoriteButtonBox({ sellerId }) {
     }
 
     try {
-      const response = await axios.post(
-        `http://3.39.239.179/api/customers/favorites/${sellerId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.post(`/api/customers/favorites/${sellerId}`, {});
 
       const isAdd = response.data.data.isAdd;
       setIsFavorite(isAdd);

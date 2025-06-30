@@ -2,8 +2,8 @@ import "../../../css/customer/SideBtnModules.css";
 import useLogin from "../../../Hooks/useLogin.js";
 import { useState, useEffect, useRef } from "react";
 import { useWebSocket } from "../../../Context/WebSocketContext.jsx";
-import axios from "axios";
 import { useChatRooms } from "../../../Context/ChatRoomsContext.jsx";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function ChatRoomView({ chatRoom, onBack }) {
   const { user } = useLogin();
@@ -33,7 +33,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   };
   const [otherUserStatus, setOtherUserStatus] = useState({
     isAvailable: false,
-    status: 'OFFLINE'
+    status: "OFFLINE",
   });
 
   // 상대방 정보 가져오기
@@ -41,12 +41,12 @@ export default function ChatRoomView({ chatRoom, onBack }) {
     if (user.userType === "CUSTOMER") {
       return {
         userId: chatRoom.sellerId,
-        userType: "SELLER"
+        userType: "SELLER",
       };
     } else {
       return {
         userId: chatRoom.customerId,
-        userType: "CUSTOMER"
+        userType: "CUSTOMER",
       };
     }
   };
@@ -55,10 +55,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   const checkOtherUserStatus = async () => {
     try {
       const { userId, userType } = getOtherUserInfo();
-      const response = await axios.get(
-          `http://3.39.239.179/api/users/status/${userType}/${userId}`,
-          { withCredentials: true }
-      );
+      const response = await api.get(`/api/users/status/${userType}/${userId}`);
 
       if (response.data && response.data.data) {
         setOtherUserStatus({
@@ -70,7 +67,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
       console.error("상대방 상태 확인 실패:", error);
       setOtherUserStatus({
         isAvailable: false,
-        status: 'OFFLINE',
+        status: "OFFLINE",
       });
     }
   };
@@ -94,10 +91,14 @@ export default function ChatRoomView({ chatRoom, onBack }) {
     } else {
       // 판매자의 경우
       switch (otherUserStatus.status) {
-        case "OPEN": return "영업중";
-        case "CLOSED": return "영업종료";
-        case "BREAK": return "브레이크타임";
-        default: return "상태 확인 불가";
+        case "OPEN":
+          return "영업중";
+        case "CLOSED":
+          return "영업종료";
+        case "BREAK":
+          return "브레이크타임";
+        default:
+          return "상태 확인 불가";
       }
     }
   };
@@ -113,20 +114,21 @@ export default function ChatRoomView({ chatRoom, onBack }) {
 
   // JSX에서 사용할 상태 표시 컴포넌트
   const StatusIndicator = () => (
-      <div className="userStatusIndicator" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-        <div
-            className="statusDot"
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: getStatusColor()
-            }}
-        />
-        <span style={{ fontSize: '12px', color: '#666' }}>
-        {getStatusText()}
-      </span>
-      </div>
+    <div
+      className="userStatusIndicator"
+      style={{ display: "flex", alignItems: "center", gap: "5px" }}
+    >
+      <div
+        className="statusDot"
+        style={{
+          width: "8px",
+          height: "8px",
+          borderRadius: "50%",
+          backgroundColor: getStatusColor(),
+        }}
+      />
+      <span style={{ fontSize: "12px", color: "#666" }}>{getStatusText()}</span>
+    </div>
   );
 
   // 🔽 메시지가 변경될 때마다 스크롤을 최하단으로 이동
@@ -137,20 +139,20 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   // 방 입장 시 과거 메시지 불러오고, 구독, 언마운트 시 구독 해제
   useEffect(() => {
     // 1. 과거 메시지 불러오기
-    axios
-        .get(`http://3.39.239.179/api/chat/rooms/${chatRoom.id}`, { withCredentials: true })
-        .then((res) => {
-          const history = res.data.data.ok || [];
-          setMessages(history);
-          setRoomMessages(chatRoom.id, history); // Context에도 저장
-          // 🔽 메시지 로드 후 스크롤을 최하단으로 이동
-          setTimeout(() => scrollToBottom(), 100);
-        })
-        .catch((err) => {
-          console.error("채팅 기록 불러오기 실패:", err);
-          setMessages([]);
-          setRoomMessages(chatRoom.id, []);
-        });
+    api
+      .get(`/api/chat/rooms/${chatRoom.id}`)
+      .then((res) => {
+        const history = res.data.data.ok || [];
+        setMessages(history);
+        setRoomMessages(chatRoom.id, history); // Context에도 저장
+        // 🔽 메시지 로드 후 스크롤을 최하단으로 이동
+        setTimeout(() => scrollToBottom(), 100);
+      })
+      .catch((err) => {
+        console.error("채팅 기록 불러오기 실패:", err);
+        setMessages([]);
+        setRoomMessages(chatRoom.id, []);
+      });
 
     // 2. 구독 시작
     subscribeToRoom(chatRoom.id);
@@ -183,7 +185,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
 
     if (!isMyMessage) return null; // 상대방 메시지는 읽음 상태 표시 안함
 
-    return message.read === 'Y' ? '읽음' : '안읽음';
+    return message.read === "Y" ? "읽음" : "안읽음";
   };
 
   // 메시지 전송 핸들러
@@ -192,7 +194,7 @@ export default function ChatRoomView({ chatRoom, onBack }) {
 
     // receiverId 결정 (상대방 ID)
     const receiverId =
-        user.userType === "CUSTOMER" ? chatRoom.sellerId : chatRoom.customerId;
+      user.userType === "CUSTOMER" ? chatRoom.sellerId : chatRoom.customerId;
 
     // 메시지 전송 (WebSocket)
     const success = sendMessage(chatRoom.id, messageInput, receiverId);
@@ -217,16 +219,16 @@ export default function ChatRoomView({ chatRoom, onBack }) {
     // 1. 마지막 메시지 추출
     const lastMsgArr = getRoomMessages(chatRoom.id);
     const lastMsg =
-        lastMsgArr && lastMsgArr.length > 0
-            ? lastMsgArr[lastMsgArr.length - 1].content
-            : "";
+      lastMsgArr && lastMsgArr.length > 0
+        ? lastMsgArr[lastMsgArr.length - 1].content
+        : "";
 
     // 2. chatRooms의 해당 방 lastMessage 갱신
     if (lastMsg && setChatRooms) {
       setChatRooms((prevRooms) =>
-          prevRooms.map((room) =>
-              room.id === chatRoom.id ? { ...room, lastMessage: lastMsg } : room
-          )
+        prevRooms.map((room) =>
+          room.id === chatRoom.id ? { ...room, lastMessage: lastMsg } : room
+        )
       );
     }
 
@@ -240,134 +242,139 @@ export default function ChatRoomView({ chatRoom, onBack }) {
   };
 
   return (
-      <div className="sideChattModule viewModule">
-        {/* 채팅방 헤더 */}
-        <div className="chatModuleHead">
-          <div className="chatModuleHead-inner">
-            <div className="chatHeaderLeft">
-              <button
-                  className="chatBackBtn"
-                  onClick={handleBackWithUpdate}
-                  title="채팅방 목록으로 돌아가기"
+    <div className="sideChattModule viewModule">
+      {/* 채팅방 헤더 */}
+      <div className="chatModuleHead">
+        <div className="chatModuleHead-inner">
+          <div className="chatHeaderLeft">
+            <button
+              className="chatBackBtn"
+              onClick={handleBackWithUpdate}
+              title="채팅방 목록으로 돌아가기"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                      d="M19 12H5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                  />
-                  <path
-                      d="m12 19-7-7 7-7"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div className="chatHeaderCenter">
-              <h3>{getOtherUserName()}</h3>
-              <StatusIndicator />
-            </div>
-            <div className="chatHeaderRight">{/* 빈 공간으로 균형 맞추기 */}</div>
+                <path
+                  d="M19 12H5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="m12 19-7-7 7-7"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
+          <div className="chatHeaderCenter">
+            <h3>{getOtherUserName()}</h3>
+            <StatusIndicator />
+          </div>
+          <div className="chatHeaderRight">{/* 빈 공간으로 균형 맞추기 */}</div>
+        </div>
+      </div>
+
+      {/* 메시지 목록 */}
+      <div className="chatModuleBody">
+        <div className="chatMessagesContainer" ref={messagesContainerRef}>
+          {messages.length === 0 ? (
+            <div className="noChatMessages">
+              <p>대화를 시작해보세요!</p>
+            </div>
+          ) : (
+            messages.map((message, index) => (
+              <div
+                key={message.id || `message-${chatRoom.id}-${index}`}
+                className={`chatMessage ${
+                  message.senderType === (user.userType === "CUSTOMER" ? "C" : "S")
+                    ? "myMessage"
+                    : "otherMessage"
+                }`}
+              >
+                <div className="messageContent">
+                  <div className="messageText">{message.content}</div>
+                  <div className="messageInfo">
+                    <div className="messageTime">
+                      {new Date(message.timestamp).toLocaleTimeString("ko-KR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                    {/* 읽음 상태 표시 - 내가 보낸 메시지만 */}
+                    {message.senderType ===
+                      (user.userType === "CUSTOMER" ? "C" : "S") && (
+                      <div className="messageReadStatus">
+                        <span
+                          className={`readStatus ${
+                            message.read === "Y" ? "read" : "unread"
+                          }`}
+                        >
+                          {getReadStatusText(message)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+          {/* 🔽 스크롤 타겟용 빈 div */}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* 메시지 목록 */}
-        <div className="chatModuleBody">
-          <div className="chatMessagesContainer" ref={messagesContainerRef}>
-            {messages.length === 0 ? (
-                <div className="noChatMessages">
-                  <p>대화를 시작해보세요!</p>
-                </div>
-            ) : (
-                messages.map((message, index) => (
-                    <div
-                        key={message.id || `message-${chatRoom.id}-${index}`}
-                        className={`chatMessage ${
-                            message.senderType === (user.userType === "CUSTOMER" ? "C" : "S")
-                                ? "myMessage"
-                                : "otherMessage"
-                        }`}
-                    >
-                      <div className="messageContent">
-                        <div className="messageText">{message.content}</div>
-                        <div className="messageInfo">
-                          <div className="messageTime">
-                            {new Date(message.timestamp).toLocaleTimeString("ko-KR", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </div>
-                          {/* 읽음 상태 표시 - 내가 보낸 메시지만 */}
-                          {message.senderType === (user.userType === "CUSTOMER" ? "C" : "S") && (
-                              <div className="messageReadStatus">
-                              <span className={`readStatus ${message.read === 'Y' ? 'read' : 'unread'}`}>
-                                {getReadStatusText(message)}
-                              </span>
-                              </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                ))
-            )}
-            {/* 🔽 스크롤 타겟용 빈 div */}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* 메시지 입력 */}
-          <div className="chatInputContainer">
-            <div className="chatInputWrapper">
+        {/* 메시지 입력 */}
+        <div className="chatInputContainer">
+          <div className="chatInputWrapper">
             <textarea
-                className="chatMessageInput"
-                value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="메시지를 입력하세요..."
-                rows="1"
+              className="chatMessageInput"
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="메시지를 입력하세요..."
+              rows="1"
             />
-              <button
-                  className="chatSendBtn"
-                  onClick={handleSendMessage}
-                  disabled={messageInput.trim() === ""}
-                  title="메시지 전송"
+            <button
+              className="chatSendBtn"
+              onClick={handleSendMessage}
+              disabled={messageInput.trim() === ""}
+              title="메시지 전송"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                      d="m22 2-7 20-4-9-9-4z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                  />
-                  <path
-                      d="m22 2-11 11"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
+                <path
+                  d="m22 2-7 20-4-9-9-4z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="m22 2-11 11"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
+    </div>
   );
 }

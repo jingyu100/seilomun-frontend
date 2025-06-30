@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../../css/seller/Business_number.css";
 import logo from "../../image/logo/spLogo.png";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function Business_numberPage() {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ function Business_numberPage() {
     const openDate = `${year}${month.padStart(2, "0")}${day.padStart(2, "0")}`;
 
     try {
-      const response = await axios.post("http://3.39.239.179/api/auth/businessVerification", {
+      const response = await api.post("/api/auth/businessVerification", {
         bNo: bizNum,
         startDt: openDate,
         pNm: ownerName,
@@ -31,7 +31,7 @@ function Business_numberPage() {
         corpNo: "",
         bSector: "",
         bType: "",
-        bAdr: ""
+        bAdr: "",
       });
 
       const isValid = response.data?.data?.isValid;
@@ -42,15 +42,15 @@ function Business_numberPage() {
           state: {
             businessNumber: bizNum,
             ownerName,
-            openDate
-          }
+            openDate,
+          },
         });
       } else {
         alert("사업자 인증 실패: 정보가 일치하지 않습니다.");
         console.log("요청 값:", {
           bNo: bizNum,
           startDt: openDate,
-          pNm: ownerName
+          pNm: ownerName,
         });
         console.log("응답 데이터:", response.data);
       }
@@ -100,29 +100,53 @@ function Business_numberPage() {
             개업일자<span className="required">*</span>
           </label>
           <div className="data-group">
-            <select value={year} onChange={(e) => setYear(e.target.value)} className="date-select">
+            <select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className="date-select"
+            >
               <option value="">선택</option>
               {[...Array(76)].map((_, i) => {
                 const y = 1950 + i;
-                return <option key={y} value={y}>{y}</option>;
+                return (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                );
               })}
             </select>
             <span>년</span>
 
-            <select value={month} onChange={(e) => setMonth(e.target.value)} className="date-select">
+            <select
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="date-select"
+            >
               <option value="">선택</option>
               {[...Array(12)].map((_, i) => {
-                const m = (i + 1).toString().padStart(2, '0');
-                return <option key={m} value={m}>{m}</option>;
+                const m = (i + 1).toString().padStart(2, "0");
+                return (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                );
               })}
             </select>
             <span>월</span>
 
-            <select value={day} onChange={(e) => setDay(e.target.value)} className="date-select">
+            <select
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              className="date-select"
+            >
               <option value="">선택</option>
               {[...Array(31)].map((_, i) => {
-                const d = (i + 1).toString().padStart(2, '0');
-                return <option key={d} value={d}>{d}</option>;
+                const d = (i + 1).toString().padStart(2, "0");
+                return (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                );
               })}
             </select>
             <span>일</span>

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+
+import api, { API_BASE_URL } from "../api/config.js";
 
 function MainLastSP() {
-
   const [products, setProducts] = useState([]);
   const [visibleCount] = useState(4);
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function MainLastSP() {
   useEffect(() => {
     const fetchExpiringProducts = async () => {
       try {
-        const res = await axios.get("http://3.39.239.179/api/products/search", {
+        const res = await api.get("/api/products/search", {
           params: {
             keyword: "",
             filterType: "EXPIRING_SOON",
@@ -31,12 +31,11 @@ function MainLastSP() {
     fetchExpiringProducts();
   }, []);
 
-
   const getThumbnailUrl = (product) => {
     const url = product.thumbnailUrl;
-  
+
     if (!url) return "/image/product1.jpg";
-  
+
     return url.startsWith("http")
       ? url
       : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
@@ -45,9 +44,9 @@ function MainLastSP() {
   const ProductCard = ({ product }) => {
     return (
       <Link
-          to={`/sellers/${product.sellerId}/products/${product.id}`}
-          className="product_card"
-          style={{ textDecoration: "none", color: "inherit" }}
+        to={`/sellers/${product.sellerId}/products/${product.id}`}
+        className="product_card"
+        style={{ textDecoration: "none", color: "inherit" }}
       >
         <img
           src={getThumbnailUrl(product)}
@@ -57,9 +56,13 @@ function MainLastSP() {
         <div className="product_text">
           <h3 className="product_name">{product.name}</h3>
           <div className="product_info">
-            <span className="product_price">{product.discountedPrice?.toLocaleString()}원</span>
+            <span className="product_price">
+              {product.discountedPrice?.toLocaleString()}원
+            </span>
             <div className="product_price_container">
-              <span className="product_regularprice">{product.originalPrice?.toLocaleString()}원</span>
+              <span className="product_regularprice">
+                {product.originalPrice?.toLocaleString()}원
+              </span>
               {product.discountRate && (
                 <span className="product_discount">{product.discountRate}%</span>
               )}
@@ -71,7 +74,6 @@ function MainLastSP() {
       </Link>
     );
   };
-  
 
   return (
     <div className="homepageUI">
@@ -82,11 +84,13 @@ function MainLastSP() {
           </h1>
         </span>
         <span className="homepageTitleUI allWatch">
-          <a href="/"
-             onClick={(e) => {
-               e.preventDefault(); // 기본 링크 동작 방지
-               navigate(`/new?filterType=RECENT`);
-             }}>
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault(); // 기본 링크 동작 방지
+              navigate(`/new?filterType=RECENT`);
+            }}
+          >
             전체보기
             <svg
               width="16"

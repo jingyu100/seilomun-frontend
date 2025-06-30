@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../../css/seller/Seller_ProductManagement.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const Seller_ProductManagement = () => {
   const navigate = useNavigate();
@@ -20,19 +20,12 @@ const Seller_ProductManagement = () => {
     try {
       setLoading(true);
       // 판매자 정보 먼저 조회
-      const sellerResponse = await axios.get("http://3.39.239.179/api/sellers", {
-        withCredentials: true,
-      });
+      const sellerResponse = await api.get("/api/sellers", {});
 
       const sellerId = sellerResponse.data.data.seller.sellerId;
 
       // 해당 판매자의 상품 목록 조회
-      const productsResponse = await axios.get(
-        `http://3.39.239.179/api/products/seller/${sellerId}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const productsResponse = await api.get(`/api/products/seller/${sellerId}`);
 
       setProducts(productsResponse.data || []);
     } catch (error) {
@@ -47,9 +40,7 @@ const Seller_ProductManagement = () => {
   const handleDeleteProduct = async (productId) => {
     if (window.confirm("정말로 이 상품을 삭제하시겠습니까?")) {
       try {
-        await axios.delete(`http://3.39.239.179/api/products/${productId}`, {
-          withCredentials: true,
-        });
+        await api.delete(`/api/products/${productId}`, {});
         alert("상품이 삭제되었습니다.");
         fetchProducts(); // 목록 새로고침
       } catch (error) {
@@ -62,11 +53,7 @@ const Seller_ProductManagement = () => {
   // 상품 상태 변경
   const handleStatusChange = async (productId, newStatus) => {
     try {
-      await axios.put(
-        `http://3.39.239.179/api/products/${productId}/status`,
-        { status: newStatus },
-        { withCredentials: true }
-      );
+      await api.put(`/api/products/${productId}/status`, { status: newStatus });
       alert("상품 상태가 변경되었습니다.");
       fetchProducts();
     } catch (error) {

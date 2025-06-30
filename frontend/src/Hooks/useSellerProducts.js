@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import api, { API_BASE_URL } from "../api/config.js";
 
-  const getThumbnailUrl = (url) => {
-    if (!url) return null;
-    return url.startsWith("http")
-      ? url
-      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
-  };
+const getThumbnailUrl = (url) => {
+  if (!url) return null;
+  return url.startsWith("http")
+    ? url
+    : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
+};
 
 export default function useSellerProducts() {
   const { sellerId } = useParams();
@@ -20,9 +20,9 @@ export default function useSellerProducts() {
     const fetchProducts = async () => {
       setError(null);
       try {
-        const res = await axios.get(`http://3.39.239.179/api/products/seller/${sellerId}`);
+        const res = await api.get(`/api/products/seller/${sellerId}`);
 
-        const transformed = res.data.map(product => ({
+        const transformed = res.data.map((product) => ({
           ...product,
           thumbnailUrl: getThumbnailUrl(product.photoUrl?.[0]), // 👈 여기만 바뀜
         }));

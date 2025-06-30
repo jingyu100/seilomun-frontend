@@ -1,7 +1,7 @@
 // RefundForm.jsx - 환불 신청 폼 컴포넌트 (수정됨)
 import { useState } from "react";
-import axios from "axios";
 import "./RefundForm.css";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function RefundForm({ order, onCancel }) {
   const [refundType, setRefundType] = useState("");
@@ -99,8 +99,7 @@ export default function RefundForm({ order, onCancel }) {
       });
 
       // 환불 신청 API 호출
-      await axios.post(`http://3.39.239.179/api/orders/refund/${order.id}`, formData, {
-        withCredentials: true,
+      await api.post(`/api/orders/refund/${order.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

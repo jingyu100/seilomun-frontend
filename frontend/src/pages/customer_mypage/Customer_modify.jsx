@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
 import "../../css/customer_mypage/Customer_modify.css";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import defaultProfile from "../../image/logo/spLogo.png";
+import api, { API_BASE_URL } from "../api/config.js";
 
 function Customer_modify() {
   const [previewImage, setPreviewImage] = useState(defaultProfile);
@@ -27,7 +27,8 @@ function Customer_modify() {
   const [initialInfo, setInitialInfo] = useState({});
 
   useEffect(() => {
-    axios.get("http://3.39.239.179/api/customers", { withCredentials: true })
+    api
+      .get("/api/customers")
       .then((res) => {
         const data = res.data?.data?.customer;
         if (!data) return;
@@ -62,7 +63,7 @@ function Customer_modify() {
           nickname: data.nickname || "",
           phone: data.phone || "",
           gender: data.gender || "",
-          birthDate: data.birthDate || ""
+          birthDate: data.birthDate || "",
         });
       })
       .catch((err) => {
@@ -90,9 +91,7 @@ function Customer_modify() {
     formData.append("profileImage", profileFile);
 
     try {
-      const res = await axios.put("http://3.39.239.179/api/customers/mypage/local/profile", formData, {
-        withCredentials: true,
-      });
+      const res = await api.put("/api/customers/mypage/local/profile", formData);
 
       const newImageUrl = res.data?.data?.profileImageUrl;
       if (newImageUrl) {
@@ -121,7 +120,8 @@ function Customer_modify() {
       currentPhone !== initialInfo.phone ||
       gender !== initialInfo.gender ||
       currentBirth !== initialInfo.birthDate ||
-      newPassword !== "" || confirmPassword !== "";
+      newPassword !== "" ||
+      confirmPassword !== "";
 
     if (!isModified) {
       alert("변경된 정보가 없습니다.");
@@ -136,19 +136,18 @@ function Customer_modify() {
         phone: currentPhone,
         gender: gender || "",
         birthDate: currentBirth,
-        profileImageUrl: ""
+        profileImageUrl: "",
       },
       passwordChangeDto: {
         currentPassword: currentPassword || "",
         newPassword: newPassword || "",
-        confirmPassword: confirmPassword || ""
-      }
+        confirmPassword: confirmPassword || "",
+      },
     };
 
     try {
-      await axios.put("http://3.39.239.179/api/customers/mypage/local", requestData, {
+      await api.put("/api/customers/mypage/local", requestData, {
         headers: { "Content-Type": "application/json" },
-        withCredentials: true,
       });
       alert("회원정보가 성공적으로 수정되었습니다!");
     } catch (err) {
@@ -164,46 +163,50 @@ function Customer_modify() {
         <SideMenuBtn />
         <div className="mypage-container">
           <aside className="mypage-sidebar">
-          <div onClick={() => (window.location.href = "/mypage")} className="title-xl">마이페이지</div>
+            <div onClick={() => (window.location.href = "/mypage")} className="title-xl">
+              마이페이지
+            </div>
 
-          <div className="sidebar-section">
-            <div className="title-lg">쇼핑정보</div>
-            <ul>
-            <li onClick={() => window.location.href = '/OrderList'}>주문목록</li>
-            <li onClick={() => window.location.href = '/Customer_refund'}>환불/입금 내역</li>
-            </ul>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="title-lg">회원정보</div>
-            <ul>
-            <li onClick={() => window.location.href = '/change_datapage'}>
-              회원정보 변경
-            </li>
-
-            <li onClick={() => window.location.href = '/Delivery_destination'}>
-              배송지 관리
-            </li>
-            </ul>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="title-lg">혜택관리</div>
-            <ul>
-            <li onClick={() => window.location.href = '/Customer_point'}>
-                적립내역
-              </li>
-            </ul>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="title-lg">리뷰관리</div>
-            <ul>
-            <li onClick={() => window.location.href = '/Customer_review'}>
-                리뷰관리
+            <div className="sidebar-section">
+              <div className="title-lg">쇼핑정보</div>
+              <ul>
+                <li onClick={() => (window.location.href = "/OrderList")}>주문목록</li>
+                <li onClick={() => (window.location.href = "/Customer_refund")}>
+                  환불/입금 내역
                 </li>
-            </ul>
-          </div>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+              <div className="title-lg">회원정보</div>
+              <ul>
+                <li onClick={() => (window.location.href = "/change_datapage")}>
+                  회원정보 변경
+                </li>
+
+                <li onClick={() => (window.location.href = "/Delivery_destination")}>
+                  배송지 관리
+                </li>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+              <div className="title-lg">혜택관리</div>
+              <ul>
+                <li onClick={() => (window.location.href = "/Customer_point")}>
+                  적립내역
+                </li>
+              </ul>
+            </div>
+
+            <div className="sidebar-section">
+              <div className="title-lg">리뷰관리</div>
+              <ul>
+                <li onClick={() => (window.location.href = "/Customer_review")}>
+                  리뷰관리
+                </li>
+              </ul>
+            </div>
           </aside>
 
           <div className="modify-area">
@@ -217,9 +220,9 @@ function Customer_modify() {
                 onClick={handleImageClick}
               />
               <div className="profile-buttons">
-              <button className="black-btn" type="button" onClick={handleImageUpload}>
-                변경
-              </button>
+                <button className="black-btn" type="button" onClick={handleImageUpload}>
+                  변경
+                </button>
                 <button className="white-btn" type="button">
                   삭제
                 </button>
@@ -239,7 +242,7 @@ function Customer_modify() {
                   <tr>
                     <td>아이디(이메일)</td>
                     <td colSpan="2" className="value">
-                      {email} 
+                      {email}
                     </td>
                   </tr>
                   <tr>
@@ -272,23 +275,29 @@ function Customer_modify() {
                   <tr>
                     <td>비밀번호 변경</td>
 
-                    <td>현재 비밀번호⠀
+                    <td>
+                      현재 비밀번호⠀
                       <input
                         type="password"
                         value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)} />
-                        <br></br><br></br>
-                        새 비밀번호⠀
-                        <input
-                        type="password"                        
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                      />
+                      <br></br>
+                      <br></br>
+                      새 비밀번호⠀
+                      <input
+                        type="password"
                         value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}/>
-                        <br></br><br></br>
-                        비밀번호 확인⠀
-                        <input
-                        type="password"                        
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <br></br>
+                      <br></br>
+                      비밀번호 확인⠀
+                      <input
+                        type="password"
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}/>    
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
                     </td>
                     <td>
                       <button type="button" className="gray-btn">

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "../../App.css";
 import "../../css/customer/frame.css";
 import Footer from "../../components/Footer.jsx";
@@ -7,6 +6,7 @@ import Header from "../../components/Header.jsx";
 import FilterBar from "../../components/OrderList/FilterBar.jsx";
 import OrderCard from "../../components/OrderList/OrderCard.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState([]);
@@ -34,8 +34,7 @@ const OrderListPage = () => {
         params.storeName = searchQuery.trim();
       }
 
-      const response = await axios.get("http://3.39.239.179/api/customers/orders", {
-        withCredentials: true,
+      const response = await api.get("/api/customers/orders", {
         params,
       });
 

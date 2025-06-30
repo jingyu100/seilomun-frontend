@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
 import useLogin from "../Hooks/useLogin.js";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const ChatRoomsContext = createContext();
 
@@ -27,9 +27,7 @@ export function ChatRoomsProvider({ children }) {
 
     const fetchChatRooms = async () => {
       try {
-        const res = await axios.get("http://3.39.239.179/api/chat/rooms", {
-          withCredentials: true,
-        });
+        const res = await api.get("/api/chat/rooms");
 
         const rooms = res.data.data.chatRooms || [];
         const uniqueRooms = removeDuplicateRooms(rooms);

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useLogin from "../../Hooks/useLogin.js";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const NaverLoginCallback = () => {
   const navigate = useNavigate();
@@ -10,9 +10,7 @@ const NaverLoginCallback = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get("http://3.39.239.179/api/customers/me", {
-          withCredentials: true,
-        });
+        const response = await api.get("/api/customers/me");
 
         const nickname = response.data.data.username;
 

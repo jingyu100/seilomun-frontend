@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function useStoreInfo() {
   const { sellerId } = useParams();
@@ -12,7 +12,7 @@ export default function useStoreInfo() {
 
     const storeInfo = async () => {
       try {
-        const response = await axios.get(`http://3.39.239.179/api/sellers/${sellerId}`);
+        const response = await api.get(`/api/sellers/${sellerId}`);
         console.log("API 응답:", response.data);
 
         const sellerInformationDto = response.data.data.seller;
@@ -23,14 +23,18 @@ export default function useStoreInfo() {
         }
 
         //이미지 URL 생성
-        const sellerPhotoUrls = sellerInformationDto.sellerPhotos
-            ?.filter(photo => !photo.photoUrl.endsWith('.txt')) // .txt 파일 제외
-            ?.map(photo => `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`) || [];
+        const sellerPhotoUrls =
+          sellerInformationDto.sellerPhotos
+            ?.filter((photo) => !photo.photoUrl.endsWith(".txt")) // .txt 파일 제외
+            ?.map(
+              (photo) =>
+                `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
+            ) || [];
 
         setStore({
           sellerInformationDto: {
             ...sellerInformationDto,
-            sellerPhotoUrls // URL 배열 추가
+            sellerPhotoUrls, // URL 배열 추가
           },
           sellerPhotoDto: null,
           sellerRegisterDto: null, // 필요한 경우 백에서 받아서 넣기

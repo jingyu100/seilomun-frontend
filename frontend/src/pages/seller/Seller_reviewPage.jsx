@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import "../../css/seller/Seller_reviewPage.css";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const Seller_reviewPage = () => {
   const [reviews, setReviews] = useState([]);
@@ -23,9 +23,8 @@ const Seller_reviewPage = () => {
   // 리뷰 다시 불러오기
   const fetchReviews = async (sellerId) => {
     try {
-      const reviewsRes = await axios.get(`http://3.39.239.179/api/review/${sellerId}`, {
+      const reviewsRes = await api.get(`/api/review/${sellerId}`, {
         params: { page: 0, size: 10 },
-        withCredentials: true,
       });
 
       const reviewsData = reviewsRes.data.data?.["리뷰 조회"]?.reviews || [];
@@ -41,11 +40,9 @@ const Seller_reviewPage = () => {
       const content = commentInputs[reviewId];
       if (!content || content.trim() === "") return;
 
-      const res = await axios.post(
-        `http://3.39.239.179/api/review/comment/${reviewId}`,
-        { reviewComment: content },
-        { withCredentials: true }
-      );
+      const res = await api.post(`/api/review/comment/${reviewId}`, {
+        reviewComment: content,
+      });
 
       console.log("✅ 댓글 등록 성공:", res.data);
       alert("답글이 등록되었습니다.");
@@ -71,9 +68,7 @@ const Seller_reviewPage = () => {
       }
 
       try {
-        const sellerRes = await axios.get(`http://3.39.239.179/api/sellers/${sellerId}`, {
-          withCredentials: true,
-        });
+        const sellerRes = await api.get(`/api/sellers/${sellerId}`);
         setStoreName(sellerRes.data.data?.storeName || "내 가게");
 
         await fetchReviews(sellerId);
@@ -90,8 +85,8 @@ const Seller_reviewPage = () => {
       <Seller_Header />
       <div className="review-content-wrapper">
         <div className="status-review-header">
-        <h1 className="review-title">리뷰 관리</h1>
-        <p className="review-subtitle">소비자의 리뷰를 확인 및 답글을 등록해보세요</p>
+          <h1 className="review-title">리뷰 관리</h1>
+          <p className="review-subtitle">소비자의 리뷰를 확인 및 답글을 등록해보세요</p>
         </div>
 
         {reviews.length === 0 ? (
@@ -103,8 +98,12 @@ const Seller_reviewPage = () => {
             return (
               <div key={idx} className="review-card">
                 <div className="review-header">
-                <img src={getFullUrl(review.customerPhoto)} alt="프로필" className="customer-photo" />
-                <div className="customer-name">{review.customerName}님</div> 
+                  <img
+                    src={getFullUrl(review.customerPhoto)}
+                    alt="프로필"
+                    className="customer-photo"
+                  />
+                  <div className="customer-name">{review.customerName}님</div>
                   <div>
                     <div className="review-date">
                       {new Date(review.createdAt).toLocaleDateString()}
@@ -144,7 +143,9 @@ const Seller_reviewPage = () => {
                       placeholder="답글을 입력하세요"
                       className="comment-input"
                       value={commentInputs[review.reviewId] || ""}
-                      onChange={(e) => handleCommentChange(review.reviewId, e.target.value)}
+                      onChange={(e) =>
+                        handleCommentChange(review.reviewId, e.target.value)
+                      }
                     />
                     <button
                       className="comment-submit-btn"

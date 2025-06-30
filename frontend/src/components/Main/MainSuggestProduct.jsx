@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../../css/customer/Main.css";
-
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function MainSuggestProduct() {
   const [products, setProducts] = useState([]);
@@ -14,11 +13,11 @@ export default function MainSuggestProduct() {
     const shuffled = [...array].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   };
-  
+
   useEffect(() => {
     const fetchExpiringProducts = async () => {
       try {
-        const res = await axios.get("http://3.39.239.179/api/products/search", {
+        const res = await api.get("/api/products/search", {
           params: {
             keyword: "",
             filterType: "EXPIRING_SOON",
@@ -28,17 +27,16 @@ export default function MainSuggestProduct() {
           },
         });
         const productList = res?.data?.content || [];
-  
+
         const randomSubset = shuffleAndPick(productList, 12);
         setProducts(randomSubset);
       } catch (error) {
         console.error("임박 상품 조회 실패", error);
       }
     };
-  
+
     fetchExpiringProducts();
   }, []);
-  
 
   const getThumbnailUrl = (product) => {
     const url = product.thumbnailUrl;
@@ -54,17 +52,17 @@ export default function MainSuggestProduct() {
       className="product_card"
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      <img
-        src={getThumbnailUrl(product)}
-        alt={product.name}
-        className="product_image"
-      />
+      <img src={getThumbnailUrl(product)} alt={product.name} className="product_image" />
       <div className="product_text">
         <h3 className="product_name">{product.name}</h3>
         <div className="product_info">
-          <span className="product_price">{product.discountedPrice?.toLocaleString()}원</span>
+          <span className="product_price">
+            {product.discountedPrice?.toLocaleString()}원
+          </span>
           <div className="product_price_container">
-            <span className="product_regularprice">{product.originalPrice?.toLocaleString()}원</span>
+            <span className="product_regularprice">
+              {product.originalPrice?.toLocaleString()}원
+            </span>
             {product.discountRate && (
               <span className="product_discount">{product.discountRate}%</span>
             )}
@@ -94,32 +92,31 @@ export default function MainSuggestProduct() {
         </span>
       </div>
 
-        <div className="LSP_ProductList">
-            <div className="LSP_Scroll_Area">
-                <button
-                className="LSP_nav_button prev"
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                >
-                ◀
-                </button>
+      <div className="LSP_ProductList">
+        <div className="LSP_Scroll_Area">
+          <button
+            className="LSP_nav_button prev"
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+          >
+            ◀
+          </button>
 
-                <div className="LSP_ProductList_Container">
-                {products.slice(currentIndex, currentIndex + visibleCount).map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-                </div>
+          <div className="LSP_ProductList_Container">
+            {products.slice(currentIndex, currentIndex + visibleCount).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
 
-                <button
-                className="LSP_nav_button next"
-                onClick={handleNext}
-                disabled={currentIndex + visibleCount >= products.length}
-                >
-                ▶
-                </button>
-            </div>
+          <button
+            className="LSP_nav_button next"
+            onClick={handleNext}
+            disabled={currentIndex + visibleCount >= products.length}
+          >
+            ▶
+          </button>
         </div>
-
+      </div>
     </div>
   );
 }

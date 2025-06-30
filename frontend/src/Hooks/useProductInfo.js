@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function useProductInfo() {
   const { id } = useParams();
@@ -12,7 +12,7 @@ export default function useProductInfo() {
 
     const productInfo = async () => {
       try {
-        const response = await axios.get(`http://3.39.239.179/api/products/${id}`);
+        const response = await api.get(`/api/products/${id}`);
         console.log("API 응답:", response.data);
 
         const productDto = response.data.data.Products;

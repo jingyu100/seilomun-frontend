@@ -1,76 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import useLogin from '../../Hooks/useLogin.js';
+import React, { useState, useEffect } from "react";
+import useLogin from "../../Hooks/useLogin.js";
 import AlarmViewModule from "./AlarmViewModule";
-import SideAlarmBtn from './SideAlarmBtn.jsx';
-import SideCartBtn from './SideCartBtn.jsx';
-import SideChatBtn from './SideChatBtn.jsx';
+import SideAlarmBtn from "./SideAlarmBtn.jsx";
+import SideCartBtn from "./SideCartBtn.jsx";
+import SideChatBtn from "./SideChatBtn.jsx";
 import { useNotificationContext } from "../../Context/NotificationContext.jsx";
+import { API_BASE_URL } from "../api/config.js";
 
-function SideMenuBtn () {
-   const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
-   const [isChatModalOpen, setIsModalOpen] = useState(false);
-   const {isLoggedIn, setIsLoggedIn, user, setUser} = useLogin();
+function SideMenuBtn() {
+  const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);
+  const [isChatModalOpen, setIsModalOpen] = useState(false);
+  const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();
 
-   const {notifications, unreadCount, markAsRead, markAllAsRead} = useNotificationContext(
-           "http://3.39.239.179",
-           "customer"
-       );
+  const { notifications, unreadCount, markAsRead, markAllAsRead } =
+    useNotificationContext(API_BASE_URL, "customer");
 
-   const toggleAlarmModal = () => {
-      setIsAlarmModalOpen(isAlarmModalOpen => !isAlarmModalOpen);
-   };
-   const toggleChatModal = () => {
-      setIsModalOpen(isChatModalOpen => !isChatModalOpen);
-   }
-    
-   const [isVisible, setIsVisible] = useState(false);
+  const toggleAlarmModal = () => {
+    setIsAlarmModalOpen((isAlarmModalOpen) => !isAlarmModalOpen);
+  };
+  const toggleChatModal = () => {
+    setIsModalOpen((isChatModalOpen) => !isChatModalOpen);
+  };
 
-   // useEffect(() => {
-   //    const handleScroll = () => {
-   //       setIsVisible(window.scrollY > 130);
-   //    };
+  const [isVisible, setIsVisible] = useState(false);
 
-   //    window.addEventListener('scroll', handleScroll);
-   //    return () => window.removeEventListener('scroll', handleScroll);
-   // }, []);
+  // useEffect(() => {
+  //    const handleScroll = () => {
+  //       setIsVisible(window.scrollY > 130);
+  //    };
 
-   useEffect(() => {
-      const handleScroll = () => {
-        setIsVisible(window.scrollY > 300);
-      };
-  
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  //    window.addEventListener('scroll', handleScroll);
+  //    return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
-   return (
-      // <div className={`sideMenu ${isVisible ? 'visible' : ''}`}>
-      //    <a href="" className="sideMenuBtn up" onClick={(e) => {
-      //       e.preventDefault();
-      //       window.scrollTo({ top: 0, behavior: 'smooth' });
-      //    }}>
-      //       <img src="/image/icon/icon-up-arrow.png" alt="up" className="sideBtnIcon" />
-      //    </a>
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY > 300);
+    };
 
-      //    <SideAlarmBtn />
-      //    <SideCartBtn />
-      //    <SideChatBtn />
-      // </div>
-      <div className="sideMenu">
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    // <div className={`sideMenu ${isVisible ? 'visible' : ''}`}>
+    //    <a href="" className="sideMenuBtn up" onClick={(e) => {
+    //       e.preventDefault();
+    //       window.scrollTo({ top: 0, behavior: 'smooth' });
+    //    }}>
+    //       <img src="/image/icon/icon-up-arrow.png" alt="up" className="sideBtnIcon" />
+    //    </a>
+
+    //    <SideAlarmBtn />
+    //    <SideCartBtn />
+    //    <SideChatBtn />
+    // </div>
+    <div className="sideMenu">
       {isVisible && (
         <a
           href=""
           className="sideMenuBtn up"
           onClick={(e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <img
-            src="/image/icon/icon-up-arrow.png"
-            alt="up"
-            className="sideBtnIcon"
-          />
+          <img src="/image/icon/icon-up-arrow.png" alt="up" className="sideBtnIcon" />
         </a>
       )}
 
@@ -84,7 +79,7 @@ function SideMenuBtn () {
       <SideCartBtn />
       <SideChatBtn />
     </div>
-   );
-};
+  );
+}
 
 export default SideMenuBtn;

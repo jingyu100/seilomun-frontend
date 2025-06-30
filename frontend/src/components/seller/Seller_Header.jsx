@@ -15,13 +15,14 @@ import list from "../../image/icon/seller_icon/seller_list.png";
 import SellerChatBtn from "./SellerChatBtn";
 import useLogin from "../../Hooks/useLogin";
 import useNotifications from "../../Hooks/useNotifications";
-import axios from "axios";
+
+import api, { API_BASE_URL } from "../api/config.js";
 
 // 상태 색상 매핑
 const statusMap = {
-  '0': { text: "영업종료", color: red },
-  '1': { text: "영업중", color: green },
-  '2': { text: "브레이크타임", color: blue },
+  0: { text: "영업종료", color: red },
+  1: { text: "영업중", color: green },
+  2: { text: "브레이크타임", color: blue },
 };
 
 const menuItems = [
@@ -40,20 +41,13 @@ export default function Seller_Header() {
   const [storeName, setStoreName] = useState("");
   const [showStatusOptions, setShowStatusOptions] = useState(false);
 
-  const {
-    notifications,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    connectionStatus,
-  } = useNotifications("http://3.39.239.179", "SELLER");
+  const { notifications, unreadCount, markAsRead, markAllAsRead, connectionStatus } =
+    useNotifications(API_BASE_URL, "SELLER");
 
   useEffect(() => {
     const fetchSellerInfo = async () => {
       try {
-        const response = await axios.get("http://3.39.239.179/api/sellers/me", {
-          withCredentials: true,
-        });
+        const response = await api.get("/api/sellers/me");
         const store = response.data.data?.storeName;
         const sellerInfo = response.data.data?.sellerInformationDto;
         if (store) setStoreName(store);
@@ -68,11 +62,7 @@ export default function Seller_Header() {
 
   const handleChangeStatus = async (newStatus) => {
     try {
-      await axios.put(
-        "http://3.39.239.179/api/sellers/me/status",
-        { isOpen: newStatus },
-        { withCredentials: true }
-      );
+      await api.put("/api/sellers/me/status", { isOpen: newStatus });
       setIsOpen(newStatus);
       setShowStatusOptions(false);
     } catch (err) {
@@ -84,25 +74,17 @@ export default function Seller_Header() {
   const handleLogout = async () => {
     try {
       // 1. 영업 상태를 '0'(영업종료)로 먼저 업데이트
-      await axios.put(
-        "http://3.39.239.179/api/sellers/me/status",
-        { isOpen: "0" },
-        { withCredentials: true }
-      );
-  
+      await api.put("/api/sellers/me/status", { isOpen: "0" });
+
       // 2. 로그아웃 요청
-      await axios.post(
-        "http://3.39.239.179/api/auth/logout",
-        {
-          username: user?.email || localStorage.getItem("username"),
-          userType: "SELLER",
-        },
-        { withCredentials: true }
-      );
+      await api.post("/api/auth/logout", {
+        username: user?.email || localStorage.getItem("username"),
+        userType: "SELLER",
+      });
     } catch (err) {
       console.warn("⚠ 로그아웃 또는 상태 변경 실패:", err);
     }
-  
+
     // 3. 로컬 상태 정리 및 이동
     setUser(null);
     setIsLoggedIn(false);
@@ -112,11 +94,11 @@ export default function Seller_Header() {
 
   const handleNotificationClick = async (notification) => {
     await markAsRead(notification.id);
-    const content = notification.content || '';
-  
+    const content = notification.content || "";
+
     const orderMatch = content.match(/주문번호:\s*([A-Z0-9]+)/);
     const refundMatch = content.match(/환불번호:\s*(\d+)/);
-  
+
     if (refundMatch) {
       const refundId = refundMatch[1];
       navigate(`/seller/refunds/${refundId}`);
@@ -132,7 +114,7 @@ export default function Seller_Header() {
     }
   };
 
-  const { text, color } = statusMap[isOpen] || statusMap['0'];
+  const { text, color } = statusMap[isOpen] || statusMap["0"];
 
   const getNotificationIcon = (content) => {
     if (content.includes("주문")) return "📦";
@@ -237,9 +219,7 @@ export default function Seller_Header() {
               {notifications.length === 0 ? (
                 <div className="seller-notification-empty">
                   <div className="seller-notification-empty-icon">🔔</div>
-                  <p className="seller-notification-empty-text">
-                    알림이 없습니다
-                  </p>
+                  <p className="seller-notification-empty-text">알림이 없습니다</p>
                 </div>
               ) : (
                 notifications.map((noti) => (
@@ -253,17 +233,11 @@ export default function Seller_Header() {
                     <div className="seller-notification-icon">
                       {getNotificationIcon(noti.content)}
                     </div>
-                    <div className="seller-notification-content">
-                      {noti.content}
-                    </div>
+                    <div className="seller-notification-content">{noti.content}</div>
                     <div className="seller-notification-meta">
-                      <span>
-                        {new Date(noti.createdAt).toLocaleString()}
-                      </span>
+                      <span>{new Date(noti.createdAt).toLocaleString()}</span>
                       {noti.isRead !== "Y" && (
-                        <span className="seller-notification-new-badge">
-                          NEW
-                        </span>
+                        <span className="seller-notification-new-badge">NEW</span>
                       )}
                     </div>
                   </div>

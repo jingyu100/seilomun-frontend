@@ -3,7 +3,7 @@ import "../../css/customer_mypage/Customer_review.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function Customer_review() {
   const [reviews, setReviews] = useState([]);
@@ -11,9 +11,8 @@ export default function Customer_review() {
   useEffect(() => {
     const fetchMyReviews = async () => {
       try {
-        const res = await axios.get("http://3.39.239.179/api/review/myReviews", {
+        const res = await api.get("/api/review/myReviews", {
           params: { page: 0, size: 10 },
-          withCredentials: true,
         });
         const data = res.data.data["내가 쓴 리뷰"];
         setReviews(data.myReviews);
@@ -36,31 +35,43 @@ export default function Customer_review() {
 
         <div className="mypage-container">
           <aside className="mypage-sidebar44">
-          <div onClick={() => (window.location.href = "/mypage")} className="title-xl">마이페이지</div>
+            <div onClick={() => (window.location.href = "/mypage")} className="title-xl">
+              마이페이지
+            </div>
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
               <ul>
-                <li onClick={() => window.location.href = '/OrderList'}>주문목록</li>
-                <li onClick={() => window.location.href = '/Customer_refund'}>환불/입금 내역</li>
+                <li onClick={() => (window.location.href = "/OrderList")}>주문목록</li>
+                <li onClick={() => (window.location.href = "/Customer_refund")}>
+                  환불/입금 내역
+                </li>
               </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">회원정보</div>
               <ul>
-                <li onClick={() => window.location.href = '/change_datapage'}>회원정보 변경</li>
-                <li onClick={() => window.location.href = '/Delivery_destination'}>배송지 관리</li>
+                <li onClick={() => (window.location.href = "/change_datapage")}>
+                  회원정보 변경
+                </li>
+                <li onClick={() => (window.location.href = "/Delivery_destination")}>
+                  배송지 관리
+                </li>
               </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">혜택관리</div>
               <ul>
-                <li onClick={() => window.location.href = '/Customer_point'}>적립내역</li>
+                <li onClick={() => (window.location.href = "/Customer_point")}>
+                  적립내역
+                </li>
               </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">리뷰관리</div>
               <ul>
-                <li onClick={() => window.location.href = '/Customer_review'}>리뷰관리</li>
+                <li onClick={() => (window.location.href = "/Customer_review")}>
+                  리뷰관리
+                </li>
               </ul>
             </div>
           </aside>
@@ -76,15 +87,21 @@ export default function Customer_review() {
                     <div className="customer-review-storename">{review.storeName}</div>
                     <div className="customer-review-rating">⭐ {review.rating} / 5</div>
                     {review.orderItems && (
-                      <p><strong>주문상품 : </strong> {review.orderItems.join(", ")}</p>
+                      <p>
+                        <strong>주문상품 : </strong> {review.orderItems.join(", ")}
+                      </p>
                     )}
                     {review.reviewPhotoUrls.length > 0 && (
                       <div className="mypage-review-images">
                         {review.reviewPhotoUrls.map((url, idx) => (
-                          <img key={idx} src={`https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`} alt="리뷰 이미지" />
+                          <img
+                            key={idx}
+                            src={`https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`}
+                            alt="리뷰 이미지"
+                          />
                         ))}
                       </div>
-                    )}                      
+                    )}
                     <div className="customer-review-content">{review.reviewContent}</div>
 
                     {review.comment && (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import "../../css/seller/SeRegister.css";
 import logo from "../../image/logo/spLogo.png";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function SeRegisterPage() {
   const [email, setEmail] = useState("");
@@ -30,11 +30,7 @@ function SeRegisterPage() {
 
   // 팝업 열기 함수
   const openAddressPopup = () => {
-    window.open(
-      "/postcode-popup", 
-      "주소 찾기",
-      "width=600,height=600,scrollbars=yes"
-    );
+    window.open("/postcode-popup", "주소 찾기", "width=600,height=600,scrollbars=yes");
   };
 
   //  주소 선택 결과 받기
@@ -50,59 +46,61 @@ function SeRegisterPage() {
   }, []);
 
   // 남은 시간
-    useEffect(() => {
-      if (authSent && timeLeft > 0) {
-        timerRef.current = setTimeout(() => {
-          setTimeLeft((prev) => prev - 1);
-        }, 1000);
-      } else if (timeLeft === 0) {
-        clearTimeout(timerRef.current);
-      }
-      return () => clearTimeout(timerRef.current);
-    }, [timeLeft, authSent]);
+  useEffect(() => {
+    if (authSent && timeLeft > 0) {
+      timerRef.current = setTimeout(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      clearTimeout(timerRef.current);
+    }
+    return () => clearTimeout(timerRef.current);
+  }, [timeLeft, authSent]);
 
-    const formatTime = (seconds) => {
-      const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-      const s = (seconds % 60).toString().padStart(2, "0");
-      return `${m}:${s}`;
-    };
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
 
-    //이메일 인증
-    const handleSendAuthCode = async () => {
-      if (!email) {
-        alert("이메일을 입력해주세요.");
-        return;
-      }
-      try {
-        await axios.post("http://3.39.239.179/api/auth/email", { email });
-        alert("인증번호가 전송되었습니다.");
-        setAuthSent(true);
-        setIsEmailVerified(false);
-        setTimeLeft(300); // 5분
-      } catch (error) {
-        console.error("인증번호 전송 에러:", error);
-        alert("인증번호 전송에 실패했습니다.");
-      }
-    };  
+  //이메일 인증
+  const handleSendAuthCode = async () => {
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    try {
+      await api.post("/api/auth/email", { email });
+      alert("인증번호가 전송되었습니다.");
+      setAuthSent(true);
+      setIsEmailVerified(false);
+      setTimeLeft(300); // 5분
+    } catch (error) {
+      console.error("인증번호 전송 에러:", error);
+      alert("인증번호 전송에 실패했습니다.");
+    }
+  };
 
-    const handleVerifyAuthCode = async () => {
-      try {
-        const response = await axios.post("http://3.39.239.179/api/auth/verifyEmail", {
-          email,
-          authNumber: authCode,
-        });
-        if (response.status === 200) {
-          alert("이메일 인증이 완료되었습니다.");
-          setIsEmailVerified(true);
-          setTimeLeft(0);
-        } else {
-          alert("인증번호가 올바르지 않습니다.");
-        }
-      } catch (error) {
-        console.error("이메일 인증 실패:", error);
-        alert("이메일 인증 중 오류가 발생했습니다.");
+  const handleVerifyAuthCode = async () => {
+    try {
+      const response = await api.post("/api/auth/verifyEmail", {
+        email,
+        authNumber: authCode,
+      });
+      if (response.status === 200) {
+        alert("이메일 인증이 완료되었습니다.");
+        setIsEmailVerified(true);
+        setTimeLeft(0);
+      } else {
+        alert("인증번호가 올바르지 않습니다.");
       }
-    };
+    } catch (error) {
+      console.error("이메일 인증 실패:", error);
+      alert("이메일 인증 중 오류가 발생했습니다.");
+    }
+  };
 
   const handleRegister = async () => {
     if (!businessNumber) {
@@ -128,7 +126,7 @@ function SeRegisterPage() {
     };
 
     try {
-      const res = await axios.post("http://3.39.239.179/api/sellers", payload);
+      const res = await api.post("/api/sellers", payload);
       const emailFromServer = res?.data?.data?.email;
 
       if (res.status === 200 && emailFromServer) {
@@ -162,28 +160,30 @@ function SeRegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일을 입력해주세요"
           />
-          <button id="id-check-btn2" onClick={handleSendAuthCode}>인증번호 발송</button>
+          <button id="id-check-btn2" onClick={handleSendAuthCode}>
+            인증번호 발송
+          </button>
         </div>
-      
-      {/* 인증번호 확인 */}
-      <label id="id-label">
-        이메일 인증번호<span className="required">*</span>
-      </label>
-      <div className="input-secontainer">
-        <input
-        type="text"
-        id="id-seinput"
-        value={authCode}
-        onChange={(e) => setAuthCode(e.target.value)}
-        placeholder="인증번호를 입력해주세요"
-        />
-        <button id="id-check-sebtn" onClick={handleVerifyAuthCode}>인증번호 확인</button> 
-      </div>
 
-      {/* 인증번호 남은 시간 */}
-        {authSent && (
-          <div className="auth-timer2">남은 시간: {formatTime(timeLeft)}</div>
-        )}
+        {/* 인증번호 확인 */}
+        <label id="id-label">
+          이메일 인증번호<span className="required">*</span>
+        </label>
+        <div className="input-secontainer">
+          <input
+            type="text"
+            id="id-seinput"
+            value={authCode}
+            onChange={(e) => setAuthCode(e.target.value)}
+            placeholder="인증번호를 입력해주세요"
+          />
+          <button id="id-check-sebtn" onClick={handleVerifyAuthCode}>
+            인증번호 확인
+          </button>
+        </div>
+
+        {/* 인증번호 남은 시간 */}
+        {authSent && <div className="auth-timer2">남은 시간: {formatTime(timeLeft)}</div>}
 
         {/* 비밀번호 */}
         <div className="label-group2">
@@ -215,7 +215,6 @@ function SeRegisterPage() {
           *비밀번호는 영문 + 숫자 + 특수문자를 조합하여 8자 이상 입력해주세요
         </p>
 
-
         {/* 매장이름 */}
         <label id="storename-label">
           매장이름<span className="required2">*</span>
@@ -235,11 +234,26 @@ function SeRegisterPage() {
           전화번호<span className="required2">*</span>
         </label>
         <div className="phone-input2">
-          <input type="text" id="phone-input-11" value={phone1} onChange={(e) => setPhone1(e.target.value)} />
+          <input
+            type="text"
+            id="phone-input-11"
+            value={phone1}
+            onChange={(e) => setPhone1(e.target.value)}
+          />
           <span>ㅡ</span>
-          <input type="text" id="phone-input-22" value={phone2} onChange={(e) => setPhone2(e.target.value)} />
+          <input
+            type="text"
+            id="phone-input-22"
+            value={phone2}
+            onChange={(e) => setPhone2(e.target.value)}
+          />
           <span>ㅡ</span>
-          <input type="text" id="phone-input-33" value={phone3} onChange={(e) => setPhone3(e.target.value)} />
+          <input
+            type="text"
+            id="phone-input-33"
+            value={phone3}
+            onChange={(e) => setPhone3(e.target.value)}
+          />
         </div>
 
         {/* 카테고리*/}

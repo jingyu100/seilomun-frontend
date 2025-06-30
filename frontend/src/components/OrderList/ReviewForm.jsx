@@ -1,7 +1,7 @@
 // ReviewForm.jsx - 리뷰 작성 기능 포함 (수정됨)
 import { useState } from "react";
-import axios from "axios";
 import "./ReviewForm.css";
+import api, { API_BASE_URL } from "../api/config.js";
 
 // ✅ onReviewComplete props 추가
 export default function ReviewForm({ order, onCancel, onReviewComplete }) {
@@ -76,8 +76,7 @@ export default function ReviewForm({ order, onCancel, onReviewComplete }) {
         }
       });
 
-      await axios.post(`http://3.39.239.179/api/review/${order.id}`, formData, {
-        withCredentials: true,
+      await api.post(`/api/review/${order.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
