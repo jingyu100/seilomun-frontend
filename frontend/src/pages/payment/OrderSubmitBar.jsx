@@ -1,7 +1,7 @@
 import "./OrderSubmitBar.css";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const OrderSubmitBar = ({
   products = [],

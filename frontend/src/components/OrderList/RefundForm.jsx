@@ -1,7 +1,7 @@
 // RefundForm.jsx - 환불 신청 폼 컴포넌트 (수정됨)
 import { useState } from "react";
 import "./RefundForm.css";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function RefundForm({ order, onCancel }) {
   const [refundType, setRefundType] = useState("");

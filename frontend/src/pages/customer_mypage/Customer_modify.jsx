@@ -4,7 +4,7 @@ import Footer from "../../components/Footer.jsx";
 import "../../css/customer_mypage/Customer_modify.css";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import defaultProfile from "../../image/logo/spLogo.png";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function Customer_modify() {
   const [previewImage, setPreviewImage] = useState(defaultProfile);

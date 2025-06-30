@@ -4,7 +4,7 @@ import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import plusIcon from "../../image/icon/plus.png";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Delivery_destination = () => {
   const [showForm, setShowForm] = useState(false);

@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import AlarmContents from "./AlarmContents.jsx";

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/seller/SeRegister.css";
 import logo from "../../image/logo/spLogo.png";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../../api/config.js";
 
 function SeRegisterPage() {
   const [email, setEmail] = useState("");

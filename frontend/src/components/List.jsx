@@ -1,4 +1,4 @@
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 import { useState, useEffect } from "react";
 
 export const List = () => {

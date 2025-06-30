@@ -3,7 +3,7 @@ import { useState } from "react";
 import "../../css/seller/Selogin.css";
 import logo from "../../image/logo/spLogo.png";
 import useLogin from "../../Hooks/useLogin";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../../api/config.js";
 
 function SeloginPage() {
   const navigate = useNavigate();

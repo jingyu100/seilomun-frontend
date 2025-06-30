@@ -6,7 +6,7 @@ import Header from "../../components/Header.jsx";
 import FilterBar from "../../components/OrderList/FilterBar.jsx";
 import OrderCard from "../../components/OrderList/OrderCard.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const OrderListPage = () => {
   const [orders, setOrders] = useState([]);

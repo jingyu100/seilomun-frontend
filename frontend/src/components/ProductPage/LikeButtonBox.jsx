@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LikeButton from "./LikeButton.jsx";
 import useLogin from "../../Hooks/useLogin.js";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function LikeButtonBox({ productId }) {
   const [isLiked, setIsLiked] = useState(false);

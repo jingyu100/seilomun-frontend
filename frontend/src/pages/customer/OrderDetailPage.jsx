@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const OrderDetailPage = () => {
   const { orderId } = useParams();

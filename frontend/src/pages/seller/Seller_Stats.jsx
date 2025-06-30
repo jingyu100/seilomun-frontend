@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import "../../css/seller/Seller_stats.css";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 // Chart.js 전역 등록
 Chart.register(...registerables);

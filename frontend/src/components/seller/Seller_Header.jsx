@@ -16,7 +16,7 @@ import SellerChatBtn from "./SellerChatBtn";
 import useLogin from "../../Hooks/useLogin";
 import useNotifications from "../../Hooks/useNotifications";
 
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 // 상태 색상 매핑
 const statusMap = {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../../css/seller/Seller_newstoreRegistration.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../../api/config.js";
 
 const Seller_newstoreRegistration = () => {
   // 기본 매장 정보

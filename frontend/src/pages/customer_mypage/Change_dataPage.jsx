@@ -4,7 +4,7 @@ import "../../css/customer_mypage/Change_dataPage.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Change_dataPage = () => {
   const navigate = useNavigate();

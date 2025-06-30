@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import useNotifications from "../Hooks/useNotifications";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const NotificationContext = createContext();
 

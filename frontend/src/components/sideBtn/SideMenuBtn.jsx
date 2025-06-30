@@ -5,7 +5,7 @@ import SideAlarmBtn from "./SideAlarmBtn.jsx";
 import SideCartBtn from "./SideCartBtn.jsx";
 import SideChatBtn from "./SideChatBtn.jsx";
 import { useNotificationContext } from "../../Context/NotificationContext.jsx";
-import { API_BASE_URL } from "../api/config.js";
+import { API_BASE_URL } from "../../api/config.js";
 
 function SideMenuBtn() {
   const [isAlarmModalOpen, setIsAlarmModalOpen] = useState(false);

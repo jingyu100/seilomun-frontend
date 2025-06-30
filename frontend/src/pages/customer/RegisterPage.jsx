@@ -3,7 +3,7 @@ import "../../css/customer/Register.css";
 import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
 import { useNavigate } from "react-router-dom";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");

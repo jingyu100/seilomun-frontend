@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import "../../css/seller/Seller_reviewPage.css";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Seller_reviewPage = () => {
   const [reviews, setReviews] = useState([]);

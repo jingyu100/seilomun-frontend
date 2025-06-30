@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import "../../css/seller/Seller_OrderDetail.css";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Seller_OrderDetail = () => {
   const { orderNumber } = useParams();

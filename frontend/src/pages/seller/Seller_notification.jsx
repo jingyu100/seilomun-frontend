@@ -5,7 +5,7 @@ import AlarmContents from "../../components/AlarmContents.jsx";
 import useLogin from "../../Hooks/useLogin.js";
 import useNotifications from "../../Hooks/useNotifications";
 import "../../css/seller/Seller_notification.css";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../../api/config.js";
 
 const Seller_notification = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useLogin();

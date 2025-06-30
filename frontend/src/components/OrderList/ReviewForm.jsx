@@ -1,7 +1,7 @@
 // ReviewForm.jsx - 리뷰 작성 기능 포함 (수정됨)
 import { useState } from "react";
 import "./ReviewForm.css";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 // ✅ onReviewComplete props 추가
 export default function ReviewForm({ order, onCancel, onReviewComplete }) {

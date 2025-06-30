@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../../css/seller/Seller_ProductRegister.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Seller_ProductUpdate = () => {
   const navigate = useNavigate();

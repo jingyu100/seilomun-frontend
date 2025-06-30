@@ -6,7 +6,7 @@ import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import logo from "../../image/logo/spLogo.png";
 import reading_glasses from "../../image/reading_glasses.png";
 import useLogin from "../../Hooks/useLogin.js";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const MyPage = () => {
   const { user } = useLogin();

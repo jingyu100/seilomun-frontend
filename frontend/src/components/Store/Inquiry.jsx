@@ -1,7 +1,7 @@
 import React from "react";
 import useLogin from "../../Hooks/useLogin.js";
 import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function Inquiry({ sellerId, onOpenChat }) {
   const { user } = useLogin();

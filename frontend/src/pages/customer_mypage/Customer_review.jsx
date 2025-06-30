@@ -3,7 +3,7 @@ import "../../css/customer_mypage/Customer_review.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function Customer_review() {
   const [reviews, setReviews] = useState([]);

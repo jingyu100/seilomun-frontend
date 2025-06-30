@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/seller/Business_number.css";
 import logo from "../../image/logo/spLogo.png";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../../api/config.js";
 
 function Business_numberPage() {
   const navigate = useNavigate();
