@@ -32,12 +32,17 @@ export default function StoreProducts({
       >
         <img 
           className="store-product-image"
-          src={thumbnailUrl || "/image/product1.jpg"} 
+          src={thumbnailUrl} 
           alt={name}
         />
         <h3>{name}</h3>
         <p style={{
               fontSize: "15px",
+              lineHeight: "1.4em",
+              maxHeight: "2.8em",
+              overflow: "hidden",
+              whiteSpace: "normal",
+              display: "block"
             }}>{description}</p>
         <div style={{
           display: "flex",
