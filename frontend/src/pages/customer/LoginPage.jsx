@@ -8,7 +8,7 @@ import googleLogo from "../../image/logo/google.png";
 import naverLogo from "../../image/logo/naver.png";
 import kakaoLogo from "../../image/logo/kakao.png";
 import useLogin from "../../Hooks/useLogin.js";
-import axios from "axios";
+import api, { API_BASE_URL } from "../../api/config.js"; // 👈 변경된 부분
 
 function LoginPage() {
   const [loginId, setLoginId] = useState("");
@@ -22,25 +22,19 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://3.39.239.179/api/auth/login",
-        {
-          email: loginId,
-          password: loginPassword,
-          userType: "CUSTOMER",
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      // 👇 변경된 부분: api 인스턴스 사용
+      await api.post("/api/auth/login", {
+        email: loginId,
+        password: loginPassword,
+        userType: "CUSTOMER",
+      });
 
       try {
-        const response = await axios.get("http://3.39.239.179/api/customers", {
-          withCredentials: true,
-        });
+        // 👇 변경된 부분: api 인스턴스 사용
+        const response = await api.get("/api/customers");
 
         console.log("API 응답 데이터:", response.data);
-        const { id, nickname, email} = response.data.data.customer;
+        const { id, nickname, email } = response.data.data.customer;
         const userType = "CUSTOMER";
         console.log("추출한 값들:", { id, nickname, userType });
 
@@ -125,8 +119,8 @@ function LoginPage() {
                     style={{
                       backgroundImage: `url(${googleLogo})`,
                     }}
-                    onClick={() =>
-                      window.open("http://3.39.239.179/oauth2/authorization/google")
+                    onClick={
+                      () => window.open(`${API_BASE_URL}/oauth2/authorization/google`) // 👈 변경된 부분
                     }
                   ></button>
 
@@ -135,8 +129,8 @@ function LoginPage() {
                     style={{
                       backgroundImage: `url(${naverLogo})`,
                     }}
-                    onClick={() =>
-                      window.open("http://3.39.239.179/oauth2/authorization/naver")
+                    onClick={
+                      () => window.open(`${API_BASE_URL}/oauth2/authorization/naver`) // 👈 변경된 부분
                     }
                   ></button>
 
@@ -145,8 +139,8 @@ function LoginPage() {
                     style={{
                       backgroundImage: `url(${kakaoLogo})`,
                     }}
-                    onClick={() =>
-                      window.open("http://3.39.239.179/oauth2/authorization/kakao")
+                    onClick={
+                      () => window.open(`${API_BASE_URL}/oauth2/authorization/kakao`) // 👈 변경된 부분
                     }
                   ></button>
                 </div>
