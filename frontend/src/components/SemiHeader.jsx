@@ -1,4 +1,4 @@
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../api/config";
 
 export default function SemiHeader() {
   const navigate = useNavigate();

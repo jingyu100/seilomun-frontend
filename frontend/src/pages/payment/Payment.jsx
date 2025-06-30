@@ -7,7 +7,7 @@ import PickupSection from "./PickupSection";
 import OrderItemsSection from "./OrderItemsSection";
 import PaymentInfoSection from "./PaymentInfoSection";
 import OrderSubmitBar from "./OrderSubmitBar";
-import api, { API_BASE_URL } from "../../../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const Payment = () => {
   const location = useLocation();

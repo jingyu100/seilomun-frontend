@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/customer/SideBtnModules.css";
 import { useCart } from "../../Context/CartContext";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../api/config";
 
 function CartViewModule() {
   const { cartItems, setCartItems, removeFromCart } = useCart();

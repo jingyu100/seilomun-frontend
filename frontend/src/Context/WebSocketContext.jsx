@@ -9,7 +9,7 @@ import React, {
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import useLogin from "../Hooks/useLogin.js";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const WebSocketContext = createContext();
 

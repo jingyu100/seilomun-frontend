@@ -8,7 +8,7 @@ import googleLogo from "../../image/logo/google.png";
 import naverLogo from "../../image/logo/naver.png";
 import kakaoLogo from "../../image/logo/kakao.png";
 import useLogin from "../../Hooks/useLogin.js";
-import api, { API_BASE_URL } from "../../../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function LoginPage() {
   const [loginId, setLoginId] = useState("");

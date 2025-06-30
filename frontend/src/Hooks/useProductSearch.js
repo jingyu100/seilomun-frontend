@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../api/config";
 
 const useProductSearch = ({
   keyword = "",

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../css/customer/Store.css";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../api/config";
 
 export default function StoreReview() {
   const { sellerId } = useParams(); // ✅ URL에서 sellerId 받기

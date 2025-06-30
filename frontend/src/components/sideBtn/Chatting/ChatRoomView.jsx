@@ -3,7 +3,7 @@ import useLogin from "../../../Hooks/useLogin.js";
 import { useState, useEffect, useRef } from "react";
 import { useWebSocket } from "../../../Context/WebSocketContext.jsx";
 import { useChatRooms } from "../../../Context/ChatRoomsContext.jsx";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../../api/config.js";
 
 export default function ChatRoomView({ chatRoom, onBack }) {
   const { user } = useLogin();
