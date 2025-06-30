@@ -8,7 +8,7 @@ import EmptyWishList from "../../components/wishList/EmptyWishList.jsx";
 import WishListItem from "../../components/wishList/WishListItem.jsx";
 import EmptyFavoriteList from "../../components/wishList/EmptyFavoriteList.jsx";
 import FavoriteItem from "../../components/wishList/FavoriteItem.jsx";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 const WishListPage = () => {
   const [wishes, setWishes] = useState([]);
