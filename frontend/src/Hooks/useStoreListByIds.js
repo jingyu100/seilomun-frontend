@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../api/config.js";
 
 export default function useStoreListByIds(sellerIds = [], maxCount = 12) {
   const [stores, setStores] = useState([]);
