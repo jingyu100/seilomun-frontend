@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import api, { API_BASE_URL, S3_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../api/config.js";
 import "../css/customer/SellerList.css";
 
 const SellerList = () => {
@@ -44,7 +44,9 @@ const SellerList = () => {
     console.log("seller : ", seller);
     const url = seller.profileImageUrl || seller.thumbnailUrl;
     if (!url) return "/image/default-store.jpg";
-    return url.startsWith("http") ? url : S3_BASE_URL + url;
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
   };
 
   // 영업 상태 처리 함수

@@ -4,7 +4,6 @@ import useSellerProducts from "../../Hooks/useSellerProducts.js";
 import "../../css/customer/Store.css";
 import ProductFilter from "./ProductFilter";
 import StoreProducts from "./StoreProducts";
-import { S3_BASE_URL } from "../../api/config.js";
 
 export default function StoreMenu() {
   const { sellerId } = useParams();
@@ -70,7 +69,7 @@ export default function StoreMenu() {
               thumbnailUrl={
                 prod.productPhotoUrl[0]?.startsWith("http")
                   ? prod.productPhotoUrl[0]
-                  : S3_BASE_URL + prod.productPhotoUrl[0]
+                  : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${prod.productPhotoUrl[0]}`
               }
               name={prod.name}
               date={prod.expiryDate}

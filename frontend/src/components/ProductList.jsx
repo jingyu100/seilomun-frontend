@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import api, { API_BASE_URL, S3_BASE_URL } from "../api/config";
+import api, { API_BASE_URL } from "../api/config";
 import "../css/customer/ProductList.css";
 
 const ProductList = () => {
@@ -89,7 +89,9 @@ const ProductList = () => {
 
     if (!url) return "/image/product1.jpg";
 
-    return url.startsWith("http") ? url : S3_BASE_URL + url;
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
   };
 
   const ProductCard = ({ product }) => {

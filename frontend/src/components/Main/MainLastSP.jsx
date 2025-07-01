@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 function MainLastSP() {
   const [products, setProducts] = useState([]);
@@ -36,7 +36,9 @@ function MainLastSP() {
 
     if (!url) return "/image/product1.jpg";
 
-    return url.startsWith("http") ? url : S3_BASE_URL + url;
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
   };
 
   const ProductCard = ({ product }) => {

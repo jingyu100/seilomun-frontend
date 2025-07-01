@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api, { API_BASE_URL, S3_BASE_URL } from "../api/config";
+import api, { API_BASE_URL } from "../api/config";
 
 export default function useStoreInfo() {
   const { sellerId } = useParams();
@@ -26,7 +26,10 @@ export default function useStoreInfo() {
         const sellerPhotoUrls =
           sellerInformationDto.sellerPhotos
             ?.filter((photo) => !photo.photoUrl.endsWith(".txt")) // .txt 파일 제외
-            ?.map((photo) => S3_BASE_URL + photo.url) || [];
+            ?.map(
+              (photo) =>
+                `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
+            ) || [];
 
         setStore({
           sellerInformationDto: {

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import api, { API_BASE_URL, S3_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL } from "../api/config.js";
 
 const getThumbnailUrl = (url) => {
   if (!url) return null;
-  return url.startsWith("http") ? url : S3_BASE_URL + url;
+  return url.startsWith("http")
+    ? url
+    : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
 };
 
 export default function useSellerProducts() {

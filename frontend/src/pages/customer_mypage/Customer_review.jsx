@@ -3,7 +3,7 @@ import "../../css/customer_mypage/Customer_review.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
-import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function Customer_review() {
   const [reviews, setReviews] = useState([]);
@@ -94,7 +94,11 @@ export default function Customer_review() {
                     {review.reviewPhotoUrls.length > 0 && (
                       <div className="mypage-review-images">
                         {review.reviewPhotoUrls.map((url, idx) => (
-                          <img key={idx} src={S3_BASE_URL + url} alt="리뷰 이미지" />
+                          <img
+                            key={idx}
+                            src={`https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`}
+                            alt="리뷰 이미지"
+                          />
                         ))}
                       </div>
                     )}

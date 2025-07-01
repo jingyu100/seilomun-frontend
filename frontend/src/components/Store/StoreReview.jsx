@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../css/customer/Store.css";
-import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
+import api, { API_BASE_URL } from "../../api/config";
 
 export default function StoreReview() {
   const { sellerId } = useParams(); // ✅ URL에서 sellerId 받기
@@ -10,7 +10,9 @@ export default function StoreReview() {
 
   const getFullUrl = (url) => {
     if (!url) return "";
-    return url.startsWith("http") ? url : S3_BASE_URL + url;
+    return url.startsWith("http")
+      ? url
+      : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
   };
 
   const fetchReviews = async () => {
