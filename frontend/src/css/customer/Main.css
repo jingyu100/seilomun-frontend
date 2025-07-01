@@ -197,6 +197,7 @@
   display: flex;
   align-items: center;
   font-size: 25px;
+  color:#333;
 }
 
 .homepageTitle .allWatch {
@@ -209,6 +210,7 @@
 .homepageTitle .allWatch a {
   display: flex;
   align-items: center;
+  color:#333;
 }
 
 .titleResponsive_arrow {
