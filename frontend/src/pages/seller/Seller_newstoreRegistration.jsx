@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../../css/seller/Seller_newstoreRegistration.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
 
 const Seller_newstoreRegistration = () => {
   // 기본 매장 정보
@@ -40,8 +40,6 @@ const Seller_newstoreRegistration = () => {
 
   // 로딩 및 에러 상태
   const [loading, setLoading] = useState(false);
-
-  const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
 
   // 카테고리 매핑
   const categories = [

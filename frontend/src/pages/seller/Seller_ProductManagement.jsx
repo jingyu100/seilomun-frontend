@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/seller/Seller_ProductManagement.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
 
 const Seller_ProductManagement = () => {
   const navigate = useNavigate();
@@ -168,7 +168,7 @@ const Seller_ProductManagement = () => {
                     <img
                       src={
                         product.photoUrl?.[0]
-                          ? `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${product.photoUrl[0]}`
+                          ? S3_BASE_URL + product.photoUrl?.[0]
                           : "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png"
                       }
                       alt={product.name}
