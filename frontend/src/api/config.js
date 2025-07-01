@@ -1,6 +1,8 @@
 // API 기본 설정
 export const API_BASE_URL = "http://3.39.239.179"; // 여기서만 주소 변경하면 됨!
 
+export const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
+
 // axios 인스턴스 생성
 import axios from "axios";
 

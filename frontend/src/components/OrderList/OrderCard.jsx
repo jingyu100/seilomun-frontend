@@ -76,11 +76,6 @@ export default function OrderCard({ order }) {
     <div className="order-card">
       <div className="order-date">{order.date}</div>
 
-      {/* ✅ 디버깅을 위한 orderId 표시 */}
-      <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-        Order ID: {order.id}
-      </div>
-
       <div className="order-main-content">
         <div className="order-info">
           <div className={`order-status ${statusInfo.className}`}>{statusInfo.text}</div>
