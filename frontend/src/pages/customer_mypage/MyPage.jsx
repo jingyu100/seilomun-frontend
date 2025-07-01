@@ -39,7 +39,7 @@ const MyPage = () => {
       }
     };
 
-    // ✅ 더미 리뷰 데이터 설정
+    // ✅ 더미 리뷰 데이터 설정함
     const dummyReviews = [
       {
         reviewId: 1,
