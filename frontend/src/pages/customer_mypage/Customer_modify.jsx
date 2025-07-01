@@ -4,7 +4,7 @@ import Footer from "../../components/Footer.jsx";
 import "../../css/customer_mypage/Customer_modify.css";
 import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import defaultProfile from "../../image/logo/spLogo.png";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
 
 function Customer_modify() {
   const [previewImage, setPreviewImage] = useState(defaultProfile);
@@ -54,7 +54,7 @@ function Customer_modify() {
         if (profileImageFileName) {
           const fullUrl = profileImageFileName.startsWith("http")
             ? profileImageFileName
-            : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${profileImageFileName}`;
+            : S3_BASE_URL + profileImageFileName;
           setPreviewImage(fullUrl);
         }
 
@@ -97,7 +97,7 @@ function Customer_modify() {
       if (newImageUrl) {
         const fullUrl = newImageUrl.startsWith("http")
           ? newImageUrl
-          : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${newImageUrl}`;
+          : S3_BASE_URL + newImageUrl;
         setPreviewImage(fullUrl);
       }
 

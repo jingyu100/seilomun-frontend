@@ -3,13 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../../css/seller/Seller_ProductRegister.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import seller_camera from "../../image/icon/seller_icon/seller_camera.png";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
 
 const Seller_ProductUpdate = () => {
   const navigate = useNavigate();
   const { productId } = useParams(); // URL에서 productId 가져오기
   const fileInputRef = useRef(null);
-  const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
 
   // 폼 데이터 상태
   const [formData, setFormData] = useState({

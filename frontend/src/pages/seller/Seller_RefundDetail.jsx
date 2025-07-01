@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
 import "../../css/seller/Seller_RefundDetail.css";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
 
 const Seller_RefundDetail = () => {
   const { refundId } = useParams();
@@ -215,14 +215,9 @@ const Seller_RefundDetail = () => {
                   {refundDetail.refundPhotos.map((photo, index) => (
                     <div key={index} className="photo-item">
                       <img
-                        src={`https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo}`}
+                        src={S3_BASE_URL + photo}
                         alt={`환불 첨부 ${index + 1}`}
-                        onClick={() =>
-                          window.open(
-                            `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo}`,
-                            "_blank"
-                          )
-                        }
+                        onClick={() => window.open(S3_BASE_URL + photo, "_blank")}
                       />
                     </div>
                   ))}
@@ -288,7 +283,7 @@ const Seller_RefundDetail = () => {
                     <img
                       src={
                         item.photoUrl
-                          ? `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${item.photoUrl}`
+                          ? S3_BASE_URL + item.photoUrl
                           : "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png"
                       }
                       alt={item.productName}
