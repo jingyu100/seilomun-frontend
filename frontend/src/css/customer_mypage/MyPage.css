@@ -212,8 +212,11 @@
 .mypage-review-rating {
   font-size: 15px;
   color: #ff9900;
-  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  flex: 1;
 }
+
 .mypage-review-storename {
   font-size: 16px;
   font-weight: bold;
@@ -224,8 +227,11 @@
   font-size: 14px;
 }
 
-/* 포인트 */
+.date-number {
+  text-align: right;
+}
 
+/* 포인트 */
 .record-list-mypage li span {
   width: 33%;
   text-align: center;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../../css/customer_mypage/MyPage.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
@@ -6,7 +7,7 @@ import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import logo from "../../image/logo/spLogo.png";
 import reading_glasses from "../../image/reading_glasses.png";
 import useLogin from "../../Hooks/useLogin.js";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
 
 const MyPage = () => {
   const { user } = useLogin();
@@ -19,7 +20,8 @@ const MyPage = () => {
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const res = await api.get("/api/customers");
+        const res = await api.get("api/customers", {
+        });
 
         const customer = res.data?.data?.customer;
         const points = customer?.points ?? 0;
@@ -30,7 +32,7 @@ const MyPage = () => {
         if (profileImageFileName) {
           const fullUrl = profileImageFileName.startsWith("http")
             ? profileImageFileName
-            : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${profileImageFileName}`;
+            : `${S3_BASE_URL}/${profileImageFileName}`;
           setProfileImage(fullUrl);
         }
       } catch (error) {
@@ -38,21 +40,50 @@ const MyPage = () => {
       }
     };
 
-    const fetchRecentReviews = async () => {
-      try {
-        const res = await api.get("/api/review/myReviews", {
-          params: { page: 0, size: 5 },
-        });
-        const data = res.data.data["내가 쓴 리뷰"];
-        setRecentReviews(data.myReviews || []);
-      } catch (err) {
-        console.error("최근 리뷰 불러오기 실패:", err);
-      }
-    };
+    // ✅ 더미 리뷰 데이터 설정
+    const dummyReviews = [
+      {
+        reviewId: 1,
+        storeName: "스타벅스청담점",
+        rating: 5,
+        reviewContent: "커피도 맛있고 분위기도 좋아요!",
+        createdAt: "2025-06-20",
+      },
+      {
+        reviewId: 2,
+        storeName: "이디야강남점",
+        rating: 4,
+        reviewContent: "직원분이 친절했어요.",
+        createdAt: "2025-06-18",
+      },
+      {
+        reviewId: 3,
+        storeName: "투썸플레이스신촌점",
+        rating: 3,
+        reviewContent: "디저트가 좀 아쉬웠어요.",
+        createdAt: "2025-06-17",
+      },
+      {
+        reviewId: 4,
+        storeName: "GS25대구복현점",
+        rating: 4,
+        reviewContent: "배달이 너무 늦어요",
+        createdAt: "2025-06-16",
+      },
+      {
+        reviewId: 5,
+        storeName: "세븐일레븐신촌점",
+        rating: 5,
+        reviewContent: "레전드 인생 맛집",
+        createdAt: "2025-06-14",
+      },
+    ];
+    setRecentReviews(dummyReviews);
 
     const fetchRecentPoints = async () => {
       try {
-        const res = await api.get("/api/customers/points");
+        const res = await api.get("/api/customers/points", {
+        });
         const data = res.data?.data?.pointHistory || [];
         const sorted = [...data].sort(
           (a, b) => new Date(b.createTime) - new Date(a.createTime)
@@ -64,8 +95,7 @@ const MyPage = () => {
     };
 
     fetchCustomer();
-    fetchRecentReviews();
-    fetchRecentPoints(); // ✅ 실행
+    fetchRecentPoints();
   }, []);
 
   return (
@@ -78,43 +108,31 @@ const MyPage = () => {
         <SideMenuBtn />
         <div className="mypage-area">
           <aside className="mypage-sidebar22">
-            <div onClick={() => (window.location.href = "/mypage")} className="title-xl">
-              마이페이지
-            </div>
+            <div onClick={() => (window.location.href = "/mypage")} className="title-xl">마이페이지</div>
             <div className="sidebar-section">
               <div className="title-lg">쇼핑정보</div>
               <ul>
                 <li onClick={() => (window.location.href = "/OrderList")}>주문목록</li>
-                <li onClick={() => (window.location.href = "/Customer_refund")}>
-                  환불/입금 내역
-                </li>
+                <li onClick={() => (window.location.href = "/Customer_refund")}>환불/입금 내역</li>
               </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">회원정보</div>
               <ul>
-                <li onClick={() => (window.location.href = "/change_datapage")}>
-                  회원정보 변경
-                </li>
-                <li onClick={() => (window.location.href = "/Delivery_destination")}>
-                  배송지 관리
-                </li>
+                <li onClick={() => (window.location.href = "/change_datapage")}>회원정보 변경</li>
+                <li onClick={() => (window.location.href = "/Delivery_destination")}>배송지 관리</li>
               </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">혜택관리</div>
               <ul>
-                <li onClick={() => (window.location.href = "/Customer_point")}>
-                  적립내역
-                </li>
+                <li onClick={() => (window.location.href = "/Customer_point")}>적립내역</li>
               </ul>
             </div>
             <div className="sidebar-section">
               <div className="title-lg">리뷰관리</div>
               <ul>
-                <li onClick={() => (window.location.href = "/Customer_review")}>
-                  리뷰관리
-                </li>
+                <li onClick={() => (window.location.href = "/Customer_review")}>리뷰관리</li>
               </ul>
             </div>
           </aside>
@@ -163,15 +181,7 @@ const MyPage = () => {
                     </div>
                   ) : (
                     recentPoints.map((item) => (
-                      <li
-                        key={item.pointId}
-                        style={{
-                          marginTop: "3px",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          fontSize: "14px",
-                        }}
-                      >
+                      <li key={item.pointId} style={{ marginTop: "3px", display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
                         <span>
                           {new Date(item.createTime).toLocaleDateString("ko-KR", {
                             year: "2-digit",
@@ -179,24 +189,17 @@ const MyPage = () => {
                             day: "2-digit",
                           })}
                         </span>
-                        <span
-                          style={{
-                            color:
-                              item.pointType === "C" || item.pointType === "U"
-                                ? "red"
-                                : "black",
-                          }}
-                        >
+                        <span style={{ color: item.pointType === 'C' || item.pointType === 'U' ? 'red' : 'black' }}>
                           {item.pointAmount.toLocaleString()}P
                         </span>
                         <span>
-                          {item.pointType === "A"
-                            ? "적립"
-                            : item.pointType === "U"
-                            ? "사용"
-                            : item.pointType === "C"
-                            ? "취소 환수"
-                            : "기타"}
+                          {item.pointType === 'A'
+                            ? '적립'
+                            : item.pointType === 'U'
+                            ? '사용'
+                            : item.pointType === 'C'
+                            ? '취소 환수'
+                            : '기타'}
                         </span>
                       </li>
                     ))
@@ -204,7 +207,7 @@ const MyPage = () => {
                 </ul>
               </div>
 
-              {/* ✅ 상품 리뷰 내역 */}
+              {/* 상품 리뷰 내역 */}
               <div className="list-section-mypage">
                 <div className="section-header-mypage">
                   <div>상품 리뷰 내역</div>
@@ -220,28 +223,20 @@ const MyPage = () => {
                     recentReviews.map((review) => (
                       <li key={review.reviewId}>
                         <div>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              marginBottom: "5px",
-                            }}
-                          >
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
                             <div className="mypage-review-storename">
-                              {review.storeName}
-                            </div>
-                            <div className="mypage-review-rating">
-                              ⭐ {review.rating} / 5
-                            </div>
+                            {review.storeName.length > 6
+                              ? review.storeName.slice(0, 6) + "..."
+                              : review.storeName}
+                              </div>
+                              <div className="mypage-review-rating">
+                              ⭐ {review.rating} / 5</div>
                             <div className="date-number">
-                              {new Date(review.createdAt)
-                                .toLocaleDateString("ko-KR", {
-                                  year: "numeric",
-                                  month: "2-digit",
-                                  day: "2-digit",
-                                })
-                                .replace(/\./g, "-")
-                                .replace(/\s/g, "")}
+                              {new Date(review.createdAt).toLocaleDateString("ko-KR", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              }).replace(/\./g, "-").replace(/\s/g, "")}
                             </div>
                           </div>
                           <div className="mypage-review-content">
