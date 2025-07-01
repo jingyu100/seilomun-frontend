@@ -322,9 +322,13 @@
 
 /* ---------- 스토어 제품 카드 부분 ---------- */
 .store-product-image {
-    width: 100%;
-    height: auto;
+    width: 200px;
+    height: 135px;
+    object-fit: cover; /* 넘치는 부분 자르기 */
+    object-position: center; /* 중앙 기준으로 자르기 */
+    aspect-ratio: 5 / 3;
     border-radius: 8px;
+    margin-bottom: 12px;
 }
 
 .productItem {
