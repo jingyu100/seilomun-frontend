@@ -76,10 +76,6 @@
   }
   
   @media (max-width: 768px) {
-    .bannerWrapper {
-      padding: 20px;
-    }
-  
     .bannerSlide {
       width: 90%;
     }
