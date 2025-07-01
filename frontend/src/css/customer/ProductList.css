@@ -100,7 +100,6 @@
 
 /* 상품명 - SellerList와 동일 */
 .product_name {
-  width: 198px;
   font-size: 14px;
   font-weight: bold;
   white-space: nowrap;
@@ -120,7 +119,7 @@
 .product_price {
   font-size: 14px;
   font-weight: bold;
-  color: red;
+  color: #000;
 }
 
 .product_price_container {
@@ -197,7 +196,7 @@
 }
 
 /* 반응형 디자인 - SellerList와 동일 */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .product-header {
     width: 100%;
     flex-direction: column;
@@ -243,7 +242,7 @@
   .product_name {
     width: 200px;
   }
-}
+} */
 
 /* ---------- 가로 제품 필터 ---------- */
 button {

@@ -109,6 +109,7 @@ const ProductList = () => {
           />
           <div className="product_text">
             <h3 className="product_name">{product.name}</h3>
+            <p className="product_date">{product.expiryDate}</p>
             <div className="product_info">
               <span className="product_price">
                 {product.discountedPrice?.toLocaleString()}원
@@ -123,7 +124,6 @@ const ProductList = () => {
               </div>
             </div>
             <p className="product_address">{product.address}</p>
-            <p className="product_date">{product.expiryDate}</p>
           </div>
         </div>
       </Link>

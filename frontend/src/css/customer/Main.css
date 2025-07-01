@@ -266,7 +266,6 @@
 
 .product_name {
   display: flex;
-  width: 190px;
   font-size: 15px;
   font-weight: bold;
   white-space: nowrap;
@@ -367,12 +366,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 7px;
 }
 
 .NM_product_date {
   font-size: 14px;
   color: gray;
   text-align: left;
+  margin-bottom: 7px;
 }
 
 .NM_product_info {

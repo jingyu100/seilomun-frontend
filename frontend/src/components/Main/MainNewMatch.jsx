@@ -55,6 +55,7 @@ function MainNewMatch() {
         />
         <div className="NM_product_text">
           <h3 className="NM_product_name">{product.name}</h3>
+          <p className="NM_product_date">{product.expiryDate}</p>
           <div className="NM_product_info">
             <span className="NM_product_price">
               {product.discountedPrice?.toLocaleString()}원
@@ -69,7 +70,6 @@ function MainNewMatch() {
             </div>
           </div>
           <p className="NM_product_address">{product.address}</p>
-          <p className="NM_product_date">{product.expiryDate}</p>
         </div>
       </Link>
     );
