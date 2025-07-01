@@ -63,6 +63,8 @@ const Seller_ProductUpdate = () => {
 
         const productData = response.data.data.Products;
 
+        console.log("상품 원래 정보", productData);
+
         // 날짜 포맷 변환 (ISO string을 datetime-local 형식으로)
         const formatDateForInput = (dateString) => {
           if (!dateString) return "";
