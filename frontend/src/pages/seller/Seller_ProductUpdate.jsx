@@ -9,6 +9,7 @@ const Seller_ProductUpdate = () => {
   const navigate = useNavigate();
   const { productId } = useParams(); // URL에서 productId 가져오기
   const fileInputRef = useRef(null);
+  const S3_BASE_URL = "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/";
 
   // 폼 데이터 상태
   const [formData, setFormData] = useState({
@@ -55,6 +56,19 @@ const Seller_ProductUpdate = () => {
     { id: 17, name: "빵/베이커리" },
   ];
 
+  // 🔥 이미지 URL 처리 함수 추가
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+
+    // 이미 완전한 URL인 경우 (http 또는 https로 시작)
+    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      return imageUrl;
+    }
+
+    // 상대 경로인 경우 S3 base URL 추가
+    return S3_BASE_URL + imageUrl;
+  };
+
   // 기존 상품 정보 로드
   useEffect(() => {
     const loadProductData = async () => {
@@ -62,6 +76,9 @@ const Seller_ProductUpdate = () => {
         const response = await api.get(`/api/products/${productId}`);
 
         const productData = response.data.data.Products;
+
+        console.log("전체 데이터", response);
+        console.log("상품 원래 정보", productData);
 
         // 날짜 포맷 변환 (ISO string을 datetime-local 형식으로)
         const formatDateForInput = (dateString) => {
@@ -89,11 +106,13 @@ const Seller_ProductUpdate = () => {
 
         // 기존 이미지 설정
         if (productData.productPhotoUrl && productData.productPhotoIds) {
-          const existingImageData = productData.productPhotoUrl.map((url, index) => ({
-            id: productData.productPhotoIds[index],
-            url: url,
-            isExisting: true,
-          }));
+          const existingImageData = productData.productPhotoUrl.map(
+            (fileName, index) => ({
+              id: productData.productPhotoIds[index],
+              url: getImageUrl(fileName),
+              isExisting: true,
+            })
+          );
           setExistingImages(existingImageData);
         }
 
