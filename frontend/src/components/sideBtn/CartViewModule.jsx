@@ -85,7 +85,7 @@ function CartViewModule() {
                   ? product.productPhotoUrl[0]
                   : null,
               productPhotoUrls: product.productPhotoUrl || [],
-              // productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
+              productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
               sellerId:
