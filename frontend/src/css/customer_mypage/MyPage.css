@@ -1,235 +1,213 @@
-   /* 메인 레이아웃 */
-   .mypage-area {
-    display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px;
-    box-sizing: border-box;
-  }
-  
-  /* 사이드바 */
-  .mypage-sidebar22 {
-    width: 200px;
-    font-size: 12px;
-    color: #111;
-  }
-  
-  .title-xl {
-    font-size: 26px;
-    font-weight: 900;
-    margin-bottom: 24px;
-    cursor: pointer;
-  }
-  
-  .title-lg {
-    font-size: 22px;
-    font-weight: 700;
-    margin-top: 24px;
-    margin-bottom: 6px;
-  }
-  
-  .sidebar-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .sidebar-section li {
-    font-size: 15px;
-    color: #777;
-    margin-bottom: 4px;
-    cursor: pointer;
-  }
-  
-  .sidebar-section li:hover {
-    text-decoration: underline;
-  }
-  
-  /* 메인 콘텐츠 */
-  .mypage-center {
-    width: 800px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* 유저 정보 박스 */
-  .user-info-box {
-    background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
-    color: #fff;
-    padding: 16px 28px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    margin-bottom: 0;
-  }
-  
-  .user-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  
-  .user-profile {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .user-right {
-    display: flex;
-    align-items: center;
-  }
-  
-  .info-link {
-    font-size: 18px;
-    color: #fff !important;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  /* 포인트 박스 */
-  .point-box {
-    background-color: #fff;
-    padding: 25px 0;
-    text-align: center;
-    font-size: 18px;
-    line-height: 1.3;
-    border: 2px solid #ccc;
-    border-top: none;
-  }
-  
-  .highlight {
-    color: #ff0000;
-    font-weight: bold;
-  }
-  
-  .edit-button {
-    background: #fff;
-    color: #000;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  /* 리스트 */
-  .mypage-list-box-mypage {
-    margin-top: 30px;
-    display: flex;
-    gap: 60px;
-  }
-  
-  .list-section-mypage {
-    flex: 1;
-  }
-  
-  .section-header-mypage {
-    display: flex;
-    justify-content: space-between;
-    font-size: 21px;
-    font-weight: bold;
-    margin-bottom: 12px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 8px;
-  }
-  
-  .section-header-mypage a {
-    font-size: 16px;
-    color: #777;
-    text-decoration: none;
-  }
-  
-  .record-list-mypage {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .record-list-mypage li {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 18px;
-    color: #333;
-  }
-  
-  .status {
-    width: 100px;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-  
-  .status.blue {
-    color: #0066cc;
-    font-weight: bold;
-  }
-  
-  .status.red {
-    color: #ff4444;
-    font-weight: bold;
-  }
-  
-  .status.gray {
-    color: #999;
-  }
-  
-  .date-number {
-    width: 100px;
-    text-align: right;
-    font-size: 13px;
-    color: #666;
-  }
-  
-  /* 내역이 없습니다 */
-
-  .empty-list-box-mypage {
-    text-align: center;
-    padding: 40px 0;
-    color: #333;
-  }
-  
-  .empty-icon {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 12px;
-  }
-
-  /* 리뷰 내역 */
-.review-summary-section {
-  margin-top: 30px;
-  padding: 20px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  background-color: #fafafa;
+/* 메인 레이아웃 */
+.mypage-area {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  box-sizing: border-box;
 }
 
-.mypage-review-rating {
+/* 사이드바 */
+.mypage-sidebar22 {
+  width: 200px;
+  font-size: 12px;
+  color: #111;
+}
+
+.title-xl {
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.title-lg {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 6px;
+}
+
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-section li {
   font-size: 15px;
-  color: #ff9900;
+  color: #777;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+
+.sidebar-section li:hover {
+  text-decoration: underline;
+}
+
+/* 메인 콘텐츠 */
+.mypage-center {
+  width: 800px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+}
+
+/* 유저 정보 박스 */
+.user-info-box {
+  background: linear-gradient(120deg, #C8E6C9, #81C784, #388E3C);
+  color: #fff;
+  padding: 16px 28px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  margin-bottom: 0;
+}
+
+.user-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-profile {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-right {
+  display: flex;
+  align-items: center;
+}
+
+.info-link {
+  font-size: 18px;
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* 포인트 박스 */
+.point-box {
+  background-color: #fff;
+  padding: 25px 0;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.3;
+  border: 2px solid #ccc;
+  border-top: none;
+}
+
+.highlight {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+/* 버튼 */
+.edit-button {
+  background: #fff;
+  color: #000;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 리스트 레이아웃 */
+.mypage-list-box-mypage {
+  margin-top: 30px;
+  display: flex;
+  gap: 60px;
+}
+
+.list-section-mypage {
   flex: 1;
 }
 
-.mypage-review-storename {
-  font-size: 16px;
+.section-header-mypage {
+  display: flex;
+  justify-content: space-between;
+  font-size: 21px;
   font-weight: bold;
-  overflow: hidden;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+}
+
+.section-header-mypage a {
+  font-size: 16px;
+  color: #777;
+  text-decoration: none;
+}
+
+/* 공통 리스트 */
+.record-list-mypage {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 포인트 내역 li만 flex */
+.record-list-mypage li:not(.mypage-review-li) {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 18px;
+  color: #333;
+}
+
+/* 포인트 span 정렬 */
+.record-list-mypage li span {
+  width: 33%;
+  text-align: center;
+}
+
+/* 상태 텍스트 */
+.status {
+  width: 100px;
+  flex-shrink: 0;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 175px; /* ✅ 고정 폭 */
+}
+.status.blue {
+  color: #0066cc;
+  font-weight: bold;
+}
+.status.red {
+  color: #ff4444;
+  font-weight: bold;
+}
+.status.gray {
+  color: #999;
 }
 
+/* 날짜 텍스트 (포인트/리뷰 공용) */
 .date-number {
+  width: 100px;
   text-align: right;
+  font-size: 13px;
+  color: #666;
 }
 
+/* 비어 있을 때 */
+.empty-list-box-mypage {
+  text-align: center;
+  padding: 40px 0;
+  color: #333;
+}
+
+.empty-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 12px;
+}
+
+/* 리뷰 전용 */
 .mypage-review-li {
   padding: 10px 0;
   border-bottom: 1px solid #f0f0f0;
@@ -240,20 +218,32 @@
   grid-template-columns: 1fr 80px 90px;
   align-items: center;
   margin-bottom: 5px;
+  gap: 8px;
+}
+
+.mypage-review-storename {
+  font-size: 16px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 175px;
+}
+
+.mypage-review-rating {
+  font-size: 15px;
+  color: #ff9900;
+  display: flex;
+  justify-content: center;
+  flex: 1;
 }
 
 .mypage-review-content {
   font-size: 14px;
-  margin-top: 4px; /* ✅ 여백 추가 */
+  margin-top: 4px;
   color: #444;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   width: 100%;
-}
-
-/* 포인트 */
-.record-list-mypage li span {
-  width: 33%;
-  text-align: center;
 }
