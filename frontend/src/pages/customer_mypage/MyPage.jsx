@@ -57,10 +57,9 @@ const MyPage = () => {
     const fetchRecentReviews = async () => {
       try {
         const res = await api.get("/api/review/myReviews");
-        console.log("✅ 리뷰 응답 구조:", res.data); // 구조 확인용
+        console.log("✅ 리뷰 응답 구조:", res.data);
     
-        // 구조 확인 후 아래 줄을 맞게 수정
-        const reviews = res.data?.data?.reviews || [];
+        const reviews = res.data?.data?.myReviews || []; // ✅ 여기 수정됨
     
         const sorted = [...reviews].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
