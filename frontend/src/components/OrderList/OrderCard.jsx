@@ -1,4 +1,4 @@
-// OrderCard.jsx - 디버깅을 위한 코드 추가
+// OrderCard.jsx - 실제 이미지 표시를 위한 수정
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./OrderCard.css";
@@ -15,10 +15,9 @@ export default function OrderCard({ order }) {
 
   // 주문 상세 페이지로 이동하는 함수
   const handleOrderDetailClick = () => {
-    console.log("🔍 주문 상세 클릭 - orderId:", order.id); // ✅ 디버깅용 로그
-    console.log("🔍 전체 order 객체:", order); // ✅ 전체 데이터 확인
+    console.log("🔍 주문 상세 클릭 - orderId:", order.id);
+    console.log("🔍 전체 order 객체:", order);
 
-    // orderId 검증
     if (!order.id) {
       console.error("❌ orderId가 없습니다!");
       alert("주문 ID를 찾을 수 없습니다.");
@@ -80,7 +79,12 @@ export default function OrderCard({ order }) {
         <div className="order-info">
           <div className={`order-status ${statusInfo.className}`}>{statusInfo.text}</div>
           <div className="order-body">
-            <ProductImageBox />
+            {/* ✅ 실제 이미지 URL과 상품명을 props로 전달 */}
+            <ProductImageBox
+              imageUrl={order.photoUrl}
+              altText={order.name}
+              className="item-image"
+            />
             <OrderDetailBox store={order.store} name={order.name} price={order.price} />
           </div>
         </div>
