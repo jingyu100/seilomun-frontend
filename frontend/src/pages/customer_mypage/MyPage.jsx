@@ -54,8 +54,23 @@ const MyPage = () => {
       }
     };
 
+    const fetchRecentReviews = async () => {
+      try {
+        const res = await api.get("/api/review/myReviews");
+        const reviews = res.data?.data || [];
+        const sorted = [...reviews].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setRecentReviews(sorted.slice(0, 3));
+      } catch (err) {
+        console.error("리뷰 내역 조회 실패:", err);
+      }
+    };
+  
+
     fetchCustomer();
     fetchRecentPoints();
+    fetchRecentReviews();
   }, []);
 
   return (
