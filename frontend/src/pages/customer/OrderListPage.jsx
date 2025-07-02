@@ -43,6 +43,17 @@ const OrderListPage = () => {
       console.log("=== API 전체 응답 ===");
       console.log(response.data);
 
+      // 🔍 디버깅: 각 주문의 photoUrl 확인
+      console.log("=== 주문별 photoUrl 확인 ===");
+      data.orders.forEach((order, index) => {
+        console.log(`주문 ${index + 1}:`, {
+          orderId: order.orderId,
+          photoUrl: order.photoUrl,
+          photoUrlType: typeof order.photoUrl,
+          hasPhotoUrl: !!order.photoUrl,
+        });
+      });
+
       if (isNewSearch) {
         setOrders(data.orders);
         setPage(1);
@@ -93,6 +104,7 @@ const OrderListPage = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasNext, isFetching, currentSearchTerm]);
+
   if (error) return <div>{error}</div>;
 
   return (
@@ -122,21 +134,23 @@ const OrderListPage = () => {
           </div>
         )}
 
-        {orders.map((order, idx) => (
-          <OrderCard
-            key={`${order.orderId}-${idx}`}
-            order={{
-              id: order.orderId,
-              date: new Date(order.orderDate).toISOString().slice(0, 10),
-              store: order.sellerName,
-              name: order.orderItems[0],
-              price: order.totalAmount,
-              orderStatus: order.orderStatus,
-              isReview: order.review,
-              photoUrl: order.photoUrl,
-            }}
-          />
-        ))}
+        {orders.map((order, idx) => {
+          // 🔍 디버깅: OrderCard에 전달되는 데이터 확인
+          const orderData = {
+            id: order.orderId,
+            date: new Date(order.orderDate).toISOString().slice(0, 10),
+            store: order.sellerName,
+            name: order.orderItems[0],
+            price: order.totalAmount,
+            orderStatus: order.orderStatus,
+            isReview: order.review,
+            photoUrl: order.photoUrl,
+          };
+
+          console.log(`🔍 OrderCard ${idx + 1}에 전달되는 데이터:`, orderData);
+
+          return <OrderCard key={`${order.orderId}-${idx}`} order={orderData} />;
+        })}
 
         {isFetching && (
           <div style={{ textAlign: "center", padding: "20px" }}>불러오는 중...</div>

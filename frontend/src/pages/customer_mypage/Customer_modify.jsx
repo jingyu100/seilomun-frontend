@@ -46,8 +46,8 @@ function Customer_modify() {
         setGender(data.gender || "");
 
         if (data.birthDate) {
-          setBirthMonth(data.birthDate.slice(0, 2));
-          setBirthDay(data.birthDate.slice(2));
+          setBirthMonth(data.birthDate.slice(0, 2).padStart(2, "0"));
+          setBirthDay(data.birthDate.slice(2).padStart(2, "0"));
         }
 
         const profileImageFileName = data.profileImageUrl;
@@ -366,28 +366,29 @@ function Customer_modify() {
                     <td>생년월일</td>
                     <td colSpan="2">
                       <div className="birthdate-select">
-                        <select
-                          value={birthMonth}
-                          onChange={(e) => setBirthMonth(e.target.value)}
-                        >
-                          <option value="">월</option>
-                          {[...Array(12)].map((_, i) => (
-                            <option key={i} value={(i + 1).toString().padStart(2, "0")}>
-                              {i + 1}
-                            </option>
-                          ))}
-                        </select>
-                        <select
-                          value={birthDay}
-                          onChange={(e) => setBirthDay(e.target.value)}
-                        >
-                          <option value="">일</option>
-                          {[...Array(31)].map((_, i) => (
-                            <option key={i} value={(i + 1).toString().padStart(2, "0")}>
-                              {i + 1}
-                            </option>
-                          ))}
-                        </select>
+                      <select
+                        value={birthMonth}
+                        onChange={(e) => setBirthMonth(e.target.value)}
+                      >
+                        <option value="">월</option>
+                        {[...Array(12)].map((_, i) => (
+                          <option key={i} value={(i + 1).toString().padStart(2, "0")}>
+                            {i + 1}
+                          </option>
+                        ))}
+                      </select>
+
+                      <select
+                        value={birthDay}
+                        onChange={(e) => setBirthDay(e.target.value)}
+                      >
+                        <option value="">일</option>
+                        {[...Array(31)].map((_, i) => (
+                          <option key={i} value={(i + 1).toString().padStart(2, "0")}>
+                            {i + 1}
+                          </option>
+                        ))}
+                      </select>
                       </div>
                     </td>
                   </tr>

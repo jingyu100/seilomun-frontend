@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "../../css/customer_mypage/MyPage.css";
 import Footer from "../../components/Footer.jsx";
 import Header from "../../components/Header.jsx";
@@ -7,7 +6,7 @@ import SideMenuBtn from "../../components/sideBtn/SideMenuBtn.jsx";
 import logo from "../../image/logo/spLogo.png";
 import reading_glasses from "../../image/reading_glasses.png";
 import useLogin from "../../Hooks/useLogin.js";
-import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config.js";
+import api, { S3_BASE_URL } from "../../api/config.js";
 
 const MyPage = () => {
   const { user } = useLogin();
@@ -15,20 +14,17 @@ const MyPage = () => {
   const [point, setPoint] = useState(0);
   const [profileImage, setProfileImage] = useState(null);
   const [recentReviews, setRecentReviews] = useState([]);
-  const [recentPoints, setRecentPoints] = useState([]); // ✅ 포인트 내역
+  const [recentPoints, setRecentPoints] = useState([]);
 
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const res = await api.get("api/customers", {
-        });
-
+        const res = await api.get("api/customers");
         const customer = res.data?.data?.customer;
         const points = customer?.points ?? 0;
         const profileImageFileName = customer?.profileImageUrl;
 
         setPoint(points);
-
         if (profileImageFileName) {
           const fullUrl = profileImageFileName.startsWith("http")
             ? profileImageFileName
@@ -42,8 +38,7 @@ const MyPage = () => {
 
     const fetchRecentPoints = async () => {
       try {
-        const res = await api.get("/api/customers/points", {
-        });
+        const res = await api.get("/api/customers/points");
         const data = res.data?.data?.pointHistory || [];
         const sorted = [...data].sort(
           (a, b) => new Date(b.createTime) - new Date(a.createTime)
@@ -59,16 +54,18 @@ const MyPage = () => {
         const res = await api.get("/api/review/myReviews");
         console.log("✅ 리뷰 응답 구조:", res.data);
     
-        const reviews = res.data?.data?.myReviews || []; // 정확한 경로
+        // ✅ 한글 키에 대응하여 안전하게 접근
+        const reviewBlock = res.data?.data?.["내가 쓴 리뷰"];
+        const reviews = reviewBlock?.myReviews || [];
+    
         const sorted = [...reviews].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setRecentReviews(sorted.slice(0, 5)); // 최근 3개만 표시
+        setRecentReviews(sorted.slice(0, 5));
       } catch (err) {
         console.error("리뷰 내역 조회 실패:", err);
       }
     };
-  
 
     fetchCustomer();
     fetchRecentPoints();
@@ -118,7 +115,7 @@ const MyPage = () => {
             <div className="user-info-box">
               <div className="user-left">
                 <img
-                  src={profileImage ? profileImage : logo}
+                  src={profileImage || logo}
                   alt="프로필"
                   className="user-profile"
                   onError={(e) => {
@@ -152,10 +149,10 @@ const MyPage = () => {
                 </div>
                 <ul className="record-list-mypage">
                   {recentPoints.length === 0 ? (
-                    <div className="empty-list-box-mypage">
+                    <li className="empty-list-box-mypage">
                       <img src={reading_glasses} alt="no data" className="empty-icon" />
                       <p>적립내역이 없습니다.</p>
-                    </div>
+                    </li>
                   ) : (
                     recentPoints.map((item) => (
                       <li key={item.pointId} style={{ marginTop: "3px", display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
@@ -184,7 +181,7 @@ const MyPage = () => {
                 </ul>
               </div>
 
-              {/* 상품 리뷰 내역 */}
+              {/* ✅ 리뷰 내역 */}
               <div className="list-section-mypage">
                 <div className="section-header-mypage">
                   <div>상품 리뷰 내역</div>
@@ -192,41 +189,32 @@ const MyPage = () => {
                 </div>
                 <ul className="record-list-mypage">
                   {recentReviews.length === 0 ? (
-                    <div className="empty-list-box-mypage">
+                    <li className="empty-list-box-mypage">
                       <img src={reading_glasses} alt="no data" className="empty-icon" />
                       <p>리뷰 내역이 없습니다.</p>
-                    </div>
+                    </li>
                   ) : (
                     recentReviews.map((review) => (
-                      <li key={review.reviewId}>
-                        <div>
-                          <div style={{ 
-                            display: "grid", 
-                            gridTemplateColumns: "1fr 80px 90px",
-                            alignItems: "center",
-                            marginBottom: "5px" }}>
-                            <div className="mypage-review-storename">
-                            {review.storeName.length > 6
-                              ? review.storeName.slice(0, 6) + "..."
-                              : review.storeName}
-                              </div>
-                              <div className="mypage-review-rating">
-                              ⭐ {review.rating} / 5</div>
-                            <div className="date-number">
-                              {new Date(review.createdAt).toLocaleDateString("ko-KR", {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                              }).replace(/\./g, "-").replace(/\s/g, "")}
-                            </div>
-                          </div>
-                          <div className="mypage-review-content">
-                            {review.reviewContent.length > 10
-                              ? review.reviewContent.slice(0, 10) + "..."
-                              : review.reviewContent}
-                          </div>
-                        </div>
-                      </li>
+                  <li key={review.reviewId} className="mypage-review-li">
+                    <div className="review-header-row">
+                      <div className="mypage-review-storename">
+                        {review.storeName.length > 6 ? review.storeName.slice(0, 6) + "..." : review.storeName}
+                      </div>
+                      <div className="mypage-review-rating">⭐ {review.rating} / 5</div>
+                      <div className="date-number">
+                        {new Date(review.createdAt).toLocaleDateString("ko-KR", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        }).replace(/\./g, "-").replace(/\s/g, "")}
+                      </div>
+                    </div>
+                    <div className="mypage-review-content">
+                      {review.reviewContent.length > 10
+                        ? review.reviewContent.slice(0, 10) + "..."
+                        : review.reviewContent}
+                    </div>
+                  </li>
                     ))
                   )}
                 </ul>
