@@ -3,6 +3,7 @@ import useLogin from "../../../Hooks/useLogin.js";
 import { useChatRooms } from "../../../Context/ChatRoomsContext.jsx";
 import { useState } from "react";
 import ChatRoomView from "./ChatRoomView.jsx";
+import { S3_BASE_URL } from "../../../api/config.js";
 
 export default function ChatViewModule() {
   const { user } = useLogin();
@@ -35,6 +36,41 @@ export default function ChatViewModule() {
     }
   };
 
+  // 프로필 이미지 URL 처리 함수
+  const getProfileImageUrl = (room) => {
+    let imageUrl = null;
+
+    if (user.userType === "SELLER") {
+      // 판매자일 때는 고객 프로필 이미지
+      imageUrl = room.customerPhotoUrl;
+    } else {
+      // 고객일 때는 매장 프로필 이미지
+      imageUrl = room.sellerPhotoUrl;
+    }
+
+    // "default.png"나 빈 값이면 null 반환
+    if (!imageUrl || imageUrl === "default.png" || imageUrl.trim() === "") {
+      return null;
+    }
+
+    // 이미 완전한 URL인지 확인
+    if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+      return imageUrl;
+    }
+
+    // S3 키만 있는 경우 S3_BASE_URL을 앞에 붙임
+    return `${S3_BASE_URL}${imageUrl}`;
+  };
+
+  // 프로필 이니셜 생성 함수
+  const getProfileInitial = (room) => {
+    const name = getRoomTitle(room);
+    if (name === "고객" || name === "매장") {
+      return name[0]; // "고" 또는 "매"
+    }
+    return name.charAt(0).toUpperCase();
+  };
+
   const getLastMessageText = (room) => {
     return room.lastMessage && room.lastMessage.trim() !== ""
       ? room.lastMessage
@@ -56,24 +92,89 @@ export default function ChatViewModule() {
         </div>
       </div>
       <div className="chatModuleBody">
-        {chatRooms.length > 0 &&
-          chatRooms.map((chat) => (
-            <div
-              className="chatRoomItem"
-              key={chat.id}
-              onClick={() => handleChatRoomClick(chat)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="chatRoomProfile"></div>
-              <div className="chatRoomText">
-                <div className="chatRoomName">{getRoomTitle(chat)}</div>
-                <div className="chatRoomLastMessage">{getLastMessageText(chat)}</div>
+        {chatRooms.length > 0 ? (
+          chatRooms.map((chat) => {
+            const profileImageUrl = getProfileImageUrl(chat);
+            const profileInitial = getProfileInitial(chat);
+
+            return (
+              <div
+                className="chatRoomItem"
+                key={chat.id}
+                onClick={() => handleChatRoomClick(chat)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="chatRoomProfile">
+                  {profileImageUrl ? (
+                    <>
+                      <img
+                        src={profileImageUrl}
+                        alt={`${getRoomTitle(chat)} 프로필`}
+                        className="chatProfileImage"
+                        onError={(e) => {
+                          // 이미지 로드 실패시 이니셜로 대체
+                          e.target.style.display = "none";
+                          e.target.nextSibling.style.display = "flex";
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                          display: "block",
+                        }}
+                      />
+                      <div
+                        className="chatProfileInitial"
+                        style={{
+                          display: "none",
+                          width: "100%",
+                          height: "100%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "white",
+                          fontWeight: "600",
+                          fontSize: "18px",
+                        }}
+                      >
+                        {profileInitial}
+                      </div>
+                    </>
+                  ) : (
+                    <div
+                      className="chatProfileInitial"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: "18px",
+                      }}
+                    >
+                      {profileInitial}
+                    </div>
+                  )}
+                </div>
+                <div className="chatRoomText">
+                  <div className="chatRoomName">{getRoomTitle(chat)}</div>
+                  <div className="chatRoomLastMessage">{getLastMessageText(chat)}</div>
+                </div>
+                {chat.unreadCount > 0 && (
+                  <div className="chatRoomUnread">{chat.unreadCount}</div>
+                )}
               </div>
-              {chat.unreadCount > 0 && (
-                <div className="chatRoomUnread">{chat.unreadCount}</div>
-              )}
-            </div>
-          ))}
+            );
+          })
+        ) : (
+          <div className="noChat">
+            <div className="noChatIcon">💬</div>
+            <div className="noChatTitle">아직 채팅방이 없습니다</div>
+            <div className="noChatSubtext">상품 문의나 주문 관련 대화를 시작해보세요</div>
+          </div>
+        )}
       </div>
     </div>
   );
