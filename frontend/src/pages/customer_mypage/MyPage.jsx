@@ -48,6 +48,7 @@ const MyPage = () => {
         console.error("포인트 내역 조회 실패:", err);
       }
     };
+
     const fetchRecentReviews = async () => {
       try {
         const res = await api.get("/api/review/myReviews");
@@ -60,7 +61,7 @@ const MyPage = () => {
         const sorted = [...reviews].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setRecentReviews(sorted.slice(0, 3));
+        setRecentReviews(sorted.slice(0, 5));
       } catch (err) {
         console.error("리뷰 내역 조회 실패:", err);
       }
@@ -194,35 +195,26 @@ const MyPage = () => {
                     </li>
                   ) : (
                     recentReviews.map((review) => (
-                      <li key={review.reviewId}>
-                        <div style={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 80px 90px",
-                          alignItems: "center",
-                          marginBottom: "5px"
-                        }}>
-                          <div className="mypage-review-storename">
-                            {review.storeName.length > 6
-                              ? review.storeName.slice(0, 6) + "..."
-                              : review.storeName}
-                          </div>
-                          <div className="mypage-review-rating">
-                            ⭐ {review.rating} / 5
-                          </div>
-                          <div className="date-number">
-                            {new Date(review.createdAt).toLocaleDateString("ko-KR", {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                            }).replace(/\./g, "-").replace(/\s/g, "")}
-                          </div>
-                        </div>
-                        <div className="mypage-review-content">
-                          {review.reviewContent.length > 10
-                            ? review.reviewContent.slice(0, 10) + "..."
-                            : review.reviewContent}
-                        </div>
-                      </li>
+                  <li key={review.reviewId} className="mypage-review-li">
+                    <div className="review-header-row">
+                      <div className="mypage-review-storename">
+                        {review.storeName.length > 6 ? review.storeName.slice(0, 6) + "..." : review.storeName}
+                      </div>
+                      <div className="mypage-review-rating">⭐ {review.rating} / 5</div>
+                      <div className="date-number">
+                        {new Date(review.createdAt).toLocaleDateString("ko-KR", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        }).replace(/\./g, "-").replace(/\s/g, "")}
+                      </div>
+                    </div>
+                    <div className="mypage-review-content">
+                      {review.reviewContent.length > 10
+                        ? review.reviewContent.slice(0, 10) + "..."
+                        : review.reviewContent}
+                    </div>
+                  </li>
                     ))
                   )}
                 </ul>

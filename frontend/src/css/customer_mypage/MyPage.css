@@ -234,6 +234,27 @@
   text-align: right;
 }
 
+.mypage-review-li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.review-header-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 90px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.mypage-review-content {
+  font-size: 14px;
+  color: #444;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
 /* 포인트 */
 .record-list-mypage li span {
   width: 33%;
