@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { S3_BASE_URL } from "../../api/config.js";
 
 export default function ProductImageBox({
@@ -19,65 +19,55 @@ export default function ProductImageBox({
     return `${S3_BASE_URL}${url}`;
   };
 
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [showImage, setShowImage] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  // 이미지 로드 에러 처리
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoading(false);
+  };
+
+  // 이미지 로드 완료 처리
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  // 기본 이미지나 플레이스홀더 이미지 경로
+  const defaultImage = "/images/default-product.png"; // public/images/ 폴더에 기본 이미지 추가
 
   // 실제 사용할 이미지 URL
   const finalImageUrl = getImageUrl(imageUrl);
 
-  // 이미지 URL이 변경될 때마다 상태 초기화
-  useEffect(() => {
-    if (finalImageUrl) {
-      setImageLoaded(false);
-      setImageError(false);
-      setShowImage(false);
-
-      // 이미지 프리로드
-      const img = new Image();
-      img.onload = () => {
-        setImageLoaded(true);
-        setShowImage(true);
-      };
-      img.onerror = () => {
-        setImageError(true);
-        setShowImage(true);
-      };
-      img.src = finalImageUrl;
-    } else {
-      // 이미지 URL이 없으면 즉시 플레이스홀더 표시
-      setShowImage(true);
-    }
-  }, [finalImageUrl]);
-
-  // 기본 이미지나 플레이스홀더 이미지 경로
-  const defaultImage = "/images/default-product.png";
-
   return (
     <div className={className}>
-      {!showImage ? (
-        // 로딩 중일 때
+      {imageLoading && (
         <div className="image-loading">
           <div className="loading-spinner"></div>
         </div>
-      ) : imageError || !finalImageUrl ? (
-        // 에러 또는 URL이 없을 때
+      )}
+
+      {imageError || !finalImageUrl ? (
         <div className="image-placeholder">
-          <span>🖼️</span>
+          <img
+            src={defaultImage}
+            alt="기본 상품 이미지"
+            onError={() => {
+              // 기본 이미지도 로드 실패시 텍스트 표시
+            }}
+          />
         </div>
       ) : (
-        // 정상 이미지
         <img
           src={finalImageUrl}
           alt={altText}
+          onError={handleImageError}
+          onLoad={handleImageLoad}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            display: "block",
-          }}
-          onError={() => {
-            setImageError(true);
+            display: imageLoading ? "none" : "block",
           }}
         />
       )}
