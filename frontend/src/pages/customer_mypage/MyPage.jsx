@@ -48,13 +48,15 @@ const MyPage = () => {
         console.error("포인트 내역 조회 실패:", err);
       }
     };
-
     const fetchRecentReviews = async () => {
       try {
         const res = await api.get("/api/review/myReviews");
         console.log("✅ 리뷰 응답 구조:", res.data);
-
-        const reviews = res.data?.data?.myReviews || [];
+    
+        // ✅ 한글 키에 대응하여 안전하게 접근
+        const reviewBlock = res.data?.data?.["내가 쓴 리뷰"];
+        const reviews = reviewBlock?.myReviews || [];
+    
         const sorted = [...reviews].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
