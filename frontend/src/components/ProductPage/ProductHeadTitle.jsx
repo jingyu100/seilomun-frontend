@@ -43,9 +43,7 @@ export default function ProductHeadTitle({
   // 구매 버튼 클릭 - 결제페이지로 이동
   const handleBuyNow = (e) => {
     e.preventDefault();
-
-    console.log("✅ 전달하려는 productPhotoUrl:", productPhotoUrl);
-
+    
     // 결제페이지로 상품 데이터와 판매자 ID 전달
     navigate("/payment", {
       state: {

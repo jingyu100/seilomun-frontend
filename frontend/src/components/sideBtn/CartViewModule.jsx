@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/customer/SideBtnModules.css";
 import { useCart } from "../../Context/CartContext";
-import api, { API_BASE_URL } from "../../api/config";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
 
 function CartViewModule() {
   const { cartItems, setCartItems, removeFromCart } = useCart();
@@ -80,12 +80,12 @@ function CartViewModule() {
               quantity: quantity,
               stockQuantity: product.stockQuantity || 0,
               expiryDate: product.expiryDate || "",
-              thumbnailUrl:
-                product.photoUrl && product.photoUrl.length > 0
-                  ? product.photoUrl[0]
+              productPhotoUrl:
+                product.productPhotoUrl && product.productPhotoUrl.length > 0
+                  ? product.productPhotoUrl[0]
                   : null,
-              photoUrls: product.photoUrl || [],
-              photoUrl: product.photoUrl || [], // OrderItemsSection에서 사용
+              productPhotoUrls: product.productPhotoUrl || [],
+              // productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
               sellerId:
@@ -101,6 +101,19 @@ function CartViewModule() {
           }
         }
       );
+
+      const productImageUrl = (item) => {
+        const url =
+          Array.isArray(item.productPhotoUrl) && item.productPhotoUrl[0]
+            ? item.productPhotoUrl[0]
+            : Array.isArray(item.photoUrl) && item.photoUrl[0]
+            ? item.photoUrl[0]
+            : null;
+      
+        if (!url) return "/images/default.jpg";
+        return url.startsWith("http") ? url : `${S3_BASE_URL}${url}`;
+      };
+      
 
       const productDetails = await Promise.all(productPromises);
 
@@ -335,9 +348,9 @@ function CartViewModule() {
               cartItems.map((item) => (
                 <div className="cartProduct displayFlex" key={item.productId}>
                   <div className="productUrl displayFlex">
-                    {item.thumbnailUrl && (
+                    {item.productPhotoUrl && (
                       <img
-                        src={item.thumbnailUrl}
+                        src={productImageUrl(item)}
                         alt={item.name}
                         style={{
                           width: "60px",
