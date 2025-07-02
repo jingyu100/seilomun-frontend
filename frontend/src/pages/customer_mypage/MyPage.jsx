@@ -40,46 +40,6 @@ const MyPage = () => {
       }
     };
 
-    // ✅ 더미 리뷰 데이터 설정
-    const dummyReviews = [
-      {
-        reviewId: 1,
-        storeName: "스타벅스청담점",
-        rating: 5,
-        reviewContent: "커피도 맛있고 분위기도 좋아요!",
-        createdAt: "2025-06-20",
-      },
-      {
-        reviewId: 2,
-        storeName: "이디야강남점",
-        rating: 4,
-        reviewContent: "직원분이 친절했어요.",
-        createdAt: "2025-06-18",
-      },
-      {
-        reviewId: 3,
-        storeName: "투썸플레이스신촌점",
-        rating: 3,
-        reviewContent: "디저트가 좀 아쉬웠어요.",
-        createdAt: "2025-06-17",
-      },
-      {
-        reviewId: 4,
-        storeName: "GS25대구복현점",
-        rating: 4,
-        reviewContent: "배달이 너무 늦어요",
-        createdAt: "2025-06-16",
-      },
-      {
-        reviewId: 5,
-        storeName: "세븐일레븐신촌점",
-        rating: 5,
-        reviewContent: "레전드 인생 맛집",
-        createdAt: "2025-06-14",
-      },
-    ];
-    setRecentReviews(dummyReviews);
-
     const fetchRecentPoints = async () => {
       try {
         const res = await api.get("/api/customers/points", {
@@ -223,7 +183,11 @@ const MyPage = () => {
                     recentReviews.map((review) => (
                       <li key={review.reviewId}>
                         <div>
-                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+                          <div style={{ 
+                            display: "grid", 
+                            gridTemplateColumns: "1fr 80px 90px",
+                            alignItems: "center",
+                            marginBottom: "5px" }}>
                             <div className="mypage-review-storename">
                             {review.storeName.length > 6
                               ? review.storeName.slice(0, 6) + "..."
