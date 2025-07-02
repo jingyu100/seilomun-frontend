@@ -17,27 +17,37 @@ export default function ProductImageBox({
     return `${S3_BASE_URL}${url}`;
   };
 
-  // 단순화된 상태 관리
+  // 단순화된 상태 관리 - 하나의 상태로 모든 것을 제어
   const [imageStatus, setImageStatus] = useState("loading"); // 'loading', 'loaded', 'error'
 
   const finalImageUrl = getImageUrl(imageUrl);
 
   useEffect(() => {
+    console.log("🔄 ProductImageBox useEffect 실행:", {
+      imageUrl,
+      finalImageUrl,
+      hasUrl: !!finalImageUrl,
+    });
+
     if (!finalImageUrl) {
+      console.log("❌ URL 없음 - 에러 상태로 설정");
       setImageStatus("error");
       return;
     }
 
     setImageStatus("loading");
+    console.log("⏳ 이미지 로딩 시작:", finalImageUrl);
 
     // 이미지 프리로드
     const img = new Image();
 
     img.onload = () => {
+      console.log("✅ 이미지 로드 성공:", finalImageUrl);
       setImageStatus("loaded");
     };
 
     img.onerror = () => {
+      console.log("❌ 이미지 로드 실패:", finalImageUrl);
       setImageStatus("error");
     };
 
@@ -50,8 +60,14 @@ export default function ProductImageBox({
     };
   }, [finalImageUrl]);
 
-  // 조건부 렌더링 최적화
+  console.log("📊 현재 렌더링 상태:", {
+    imageStatus,
+    finalImageUrl: !!finalImageUrl,
+  });
+
+  // 조건부 렌더링 - 명확한 분기
   if (imageStatus === "loading") {
+    console.log("🔄 로딩 상태 렌더링");
     return (
       <div className={className}>
         <div className="image-loading">
@@ -62,6 +78,7 @@ export default function ProductImageBox({
   }
 
   if (imageStatus === "error" || !finalImageUrl) {
+    console.log("❌ 에러 상태 렌더링");
     return (
       <div className={className}>
         <div className="image-placeholder">
@@ -72,6 +89,7 @@ export default function ProductImageBox({
   }
 
   // imageStatus === 'loaded'
+  console.log("✅ 이미지 렌더링:", finalImageUrl);
   return (
     <div className={className}>
       <img
@@ -83,7 +101,10 @@ export default function ProductImageBox({
           objectFit: "cover",
           display: "block",
         }}
-        onError={() => setImageStatus("error")}
+        onError={() => {
+          console.log("❌ img 태그에서 에러 발생:", finalImageUrl);
+          setImageStatus("error");
+        }}
       />
     </div>
   );
