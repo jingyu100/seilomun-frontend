@@ -46,8 +46,8 @@ function Customer_modify() {
         setGender(data.gender || "");
 
         if (data.birthDate) {
-          setBirthMonth(data.birthDate.slice(0, 2));
-          setBirthDay(data.birthDate.slice(2));
+          setBirthMonth(data.birthDate.slice(0, 2).padStart(2, "0"));
+          setBirthDay(data.birthDate.slice(2).padStart(2, "0"));
         }
 
         const profileImageFileName = data.profileImageUrl;
