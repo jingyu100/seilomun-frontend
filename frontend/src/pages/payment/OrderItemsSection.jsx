@@ -1,5 +1,6 @@
 import React from "react";
 import "./OrderItemsSection.css";
+import api, { S3_BASE_URL } from "../../api/config.js";
 
 const OrderItemsSection = ({ products = [], deliveryFee = 0 }) => {
   return (
@@ -11,7 +12,11 @@ const OrderItemsSection = ({ products = [], deliveryFee = 0 }) => {
         products.map((item) => (
           <div className="order-item" key={item.id}>
             <img
-              src={item.photoUrl?.[0] || "/images/default.jpg"}
+              src={item.productPhotoUrl?.[0]
+                ? `${S3_BASE_URL}${item.productPhotoUrl[0]}`
+                : item.photoUrl?.[0]
+                ? `${S3_BASE_URL}${item.photoUrl[0]}` 
+                : "/images/default.jpg"}
               alt={item.name}
               className="product-img"
             />

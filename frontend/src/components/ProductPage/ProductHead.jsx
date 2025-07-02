@@ -166,7 +166,7 @@ export default function ProductHead() {
                     <ProductHeadTitle
                         sellerId={sellerId}
                         productId={product.id}
-                        thumbnailUrl={product.thumbnailUrl || "사진 없음"}
+                        productPhotoUrl={product.productPhotoUrl?.[0] || "사진 없음"}
                         name={product.name || "제품명 없음"}
                         expiryDate={product.expiryDate || "유통기한 없음"}
                         description={product.description || "제품 설명 없음"}

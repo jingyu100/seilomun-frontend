@@ -7,7 +7,7 @@ import LikeButtonBox from "./LikeButtonBox";
 export default function ProductHeadTitle({
   sellerId,
   productId,
-  thumbnailUrl,
+  productPhotoUrl,
   name,
   expiryDate,
   description,
@@ -44,6 +44,8 @@ export default function ProductHeadTitle({
   const handleBuyNow = (e) => {
     e.preventDefault();
 
+    console.log("✅ 전달하려는 productPhotoUrl:", productPhotoUrl);
+
     // 결제페이지로 상품 데이터와 판매자 ID 전달
     navigate("/payment", {
       state: {
@@ -51,7 +53,7 @@ export default function ProductHeadTitle({
           id: productId,
           sellerId: sellerId,
           name: name,
-          photoUrl: [thumbnailUrl],
+          productPhotoUrl: productPhotoUrl ? [productPhotoUrl] : [],
           expiryDate: expiryDate,
           originalPrice: parsedOriginalPrice,
           discountPrice: parsedDisPrice,
@@ -71,7 +73,7 @@ export default function ProductHeadTitle({
         productId,
         quantity,
         name,
-        thumbnailUrl,
+        productPhotoUrl,
         expiryDate,
         originalPrice,
         discountPrice,
@@ -84,7 +86,7 @@ export default function ProductHeadTitle({
         productId,
         quantity,
         name,
-        thumbnailUrl,
+        productPhotoUrl,
         expiryDate,
         originalPrice,
         discountPrice,
