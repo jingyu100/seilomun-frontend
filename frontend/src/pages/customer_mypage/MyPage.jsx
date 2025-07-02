@@ -59,12 +59,11 @@ const MyPage = () => {
         const res = await api.get("/api/review/myReviews");
         console.log("✅ 리뷰 응답 구조:", res.data);
     
-        const reviews = res.data?.data?.myReviews || []; // ✅ 여기 수정됨
-    
+        const reviews = res.data?.data?.myReviews || []; // 정확한 경로
         const sorted = [...reviews].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setRecentReviews(sorted.slice(0, 3));
+        setRecentReviews(sorted.slice(0, 5)); // 최근 3개만 표시
       } catch (err) {
         console.error("리뷰 내역 조회 실패:", err);
       }
