@@ -29,7 +29,17 @@ export function ChatRoomsProvider({ children }) {
       try {
         const res = await api.get("/api/chat/rooms");
 
+        console.log("🔍 채팅방 API 전체 응답:", res.data);
+
         const rooms = res.data.data.chatRooms || [];
+        console.log("🔍 채팅방 목록:", rooms);
+
+        // 각 채팅방의 구조 확인
+        if (rooms.length > 0) {
+          console.log("🔍 첫 번째 채팅방 구조:", rooms[0]);
+          console.log("🔍 사용 가능한 필드들:", Object.keys(rooms[0]));
+        }
+
         const uniqueRooms = removeDuplicateRooms(rooms);
         setChatRooms(uniqueRooms);
       } catch (error) {
