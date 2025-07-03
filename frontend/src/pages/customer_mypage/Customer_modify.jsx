@@ -261,11 +261,6 @@ function Customer_modify() {
                     <td>
                       <input value={name} onChange={(e) => setName(e.target.value)} />
                     </td>
-                    <td>
-                      <button type="button" className="gray-btn">
-                        이름변경
-                      </button>
-                    </td>
                   </tr>
 
                   <tr>
@@ -275,11 +270,6 @@ function Customer_modify() {
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
                       />
-                    </td>
-                    <td>
-                      <button type="button" className="gray-btn">
-                        닉네임 변경
-                      </button>
                     </td>
                   </tr>
 
@@ -310,11 +300,6 @@ function Customer_modify() {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
                     </td>
-                    <td>
-                      <button type="button" className="gray-btn">
-                        비밀번호 변경
-                      </button>
-                    </td>
                   </tr>
 
                   <tr>
@@ -339,11 +324,6 @@ function Customer_modify() {
                           maxLength={4}
                         />
                       </div>
-                    </td>
-                    <td>
-                      <button type="button" className="gray-btn">
-                        휴대폰 번호 변경
-                      </button>
                     </td>
                   </tr>
                   <tr>
