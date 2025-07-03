@@ -102,7 +102,12 @@ const PaymentInfoSection = ({
 
       <div className="payment-row point-row">
         <div className="point-label-box">
-          <div>포인트사용</div>
+          <div>
+            포인트사용
+            <span style={{ fontSize: "12px", color: "#888", marginLeft: "6px" }}>
+              (보유: {currentPoints.toLocaleString()}원)
+            </span>
+          </div>
           <button className="use-all-btn" onClick={handleUseAllPoints}>
             전액사용
           </button>
