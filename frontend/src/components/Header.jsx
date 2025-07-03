@@ -1166,7 +1166,7 @@ const Header = () => {
                                 ))}
                                 <div className="headCart-footer">
                                   <button
-                                    onClick={() => navigate("/cart")}
+                                    onClick={() => navigate("/payment")}
                                     className="headCart-footer-btn"
                                   >
                                     장바구니 상세보기
