@@ -113,7 +113,12 @@ const PaymentInfoSection = ({
           <input
             type="number"
             value={pointsToUse}
-            onChange={(e) => setPointsToUse(Math.max(0, parseInt(e.target.value) || 0))}
+            onChange={(e) => {
+              const value = Math.max(0, parseInt(e.target.value) || 0);
+              const maxValue = Math.min(currentPoints, totalProductPrice);
+              setPointsToUse(Math.min(value, maxValue));
+            }}
+            max={Math.min(currentPoints, totalProductPrice)}
           />
           <span className="unit">원</span>
         </div>
