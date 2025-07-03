@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./PaymentInfoSection.css";
+import api from "../../api/config.js";
 
 const PaymentInfoSection = ({
   totalProductPrice,
@@ -10,6 +11,23 @@ const PaymentInfoSection = ({
   setPointsToUse,
   finalAmount,
 }) => {
+  const [currentPoints, setCurrentPoints] = useState(0);
+
+  useEffect(() => {
+    const fetchCurrentPoints = async () => {
+      try {
+        const response = await api.get("/api/points?page=0&size=1");
+        console.log("전체응답:", response);
+        console.log("response.data:", response.data);
+        setCurrentPoints(response.data.data.currentPoints);
+      } catch (error) {
+        console.error("현재 포인트 조회 실패:", error);
+      }
+    };
+
+    fetchCurrentPoints();
+  }, []);
+
   // 배송비 상태 메시지 생성
   const getDeliveryStatus = () => {
     if (!seller) return "";
@@ -58,8 +76,7 @@ const PaymentInfoSection = ({
 
   // 전액사용 버튼 클릭
   const handleUseAllPoints = () => {
-    const availablePoints = 5000;
-    const maxUsablePoints = Math.min(availablePoints, totalProductPrice);
+    const maxUsablePoints = Math.min(currentPoints, totalProductPrice);
     setPointsToUse(maxUsablePoints);
   };
 
