@@ -95,6 +95,7 @@ const Header = () => {
                   ? product.productPhotoUrl[0]
                   : null,
               productPhotoUrls: product.productPhotoUrl || [],
+              productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
               categoryId: product.categoryId || 0,
               status: product.status || "1",
