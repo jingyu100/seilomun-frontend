@@ -118,17 +118,15 @@ const Header = () => {
   };
 
   // 🛒 장바구니에 담긴 상품 이미지 부분
-    const productImageUrl = (item) => {
-      const url =
-        Array.isArray(item.productPhotoUrl) && item.productPhotoUrl[0]
-          ? item.productPhotoUrl[0]
-          : Array.isArray(item.photoUrl) && item.photoUrl[0]
-          ? item.photoUrl[0]
-          : null;
-    
-      if (!url) return "/images/default.jpg";
-      return url.startsWith("http") ? url : `${S3_BASE_URL}${url}`;
-    };
+  const productImageUrl = (item) => {
+    const url =
+      Array.isArray(item.productPhotoUrls) && item.productPhotoUrls[0]
+        ? item.productPhotoUrls[0]
+        : null;
+  
+    if (!url) return "/images/default.jpg";
+    return url.startsWith("http") ? url : `${S3_BASE_URL}${url}`;
+  };
 
   // 🛒 컴포넌트 마운트 시와 로그인 상태 변경 시 장바구니 데이터 로딩
   useEffect(() => {
