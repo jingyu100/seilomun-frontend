@@ -117,7 +117,7 @@ const Header = () => {
     }
   };
 
-  // 🛒 장바구니에 담긴 상품 이미지 부분
+  // 🛒 장바구니에 담긴 상품 이미지 보여주는 부분
   const productImageUrl = (item) => {
     const url =
       Array.isArray(item.productPhotoUrls) && item.productPhotoUrls[0]
@@ -158,6 +158,82 @@ const Header = () => {
 
       // 사용자에게 알림
       alert("상품 삭제에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // 🆕 장바구니에서 상세보기 버튼 클릭
+  const handleBuyFromCart = async () => {
+    if (cartItems.length === 0) {
+      alert("장바구니에 상품이 없습니다.");
+      return;
+    }
+
+    try {
+      console.log("장바구니 구매 요청 시작");
+
+      // 백엔드 API에 맞는 형태로 데이터 변환
+      const cartItemsForAPI = cartItems.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      }));
+
+      console.log("API 요청 데이터:", cartItemsForAPI);
+
+      // 백엔드에서 주문 정보 가져오기
+      const response = await api.post("/api/orders/cart/buy", cartItemsForAPI, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("백엔드 응답:", response.data);
+
+      // 🆕 응답에서 주문 상품 정보와 판매자 ID 추출
+      const responseData = response.data?.data;
+      const orderProducts =
+        responseData?.orderProducts || responseData?.["주문페이지로 갑니다"] || [];
+      const sellerId = responseData?.sellerId;
+
+      console.log("주문 상품들:", orderProducts);
+      console.log("판매자 ID:", sellerId);
+
+      // 프론트엔드용 상품 정보와 백엔드 주문 정보 매핑
+      const productsWithDetails = cartItems.map((cartItem) => {
+        // 백엔드에서 받은 주문 정보 찾기
+        const orderProduct = orderProducts.find(
+          (op) => op.productId === cartItem.productId
+        );
+
+        return {
+          ...cartItem,
+          // 백엔드에서 계산된 할인가격으로 업데이트
+          discountPrice: orderProduct?.price || cartItem.discountPrice,
+          currentDiscountRate:
+            orderProduct?.currentDiscountRate || cartItem.currentDiscountRate,
+          // Payment 컴포넌트에서 필요한 추가 필드들
+          totalPrice: (orderProduct?.price || cartItem.discountPrice) * cartItem.quantity,
+          // 🆕 판매자 ID 추가
+          sellerId: sellerId || cartItem.sellerId,
+        };
+      });
+
+      console.log("결제 페이지로 전달할 상품들:", productsWithDetails);
+
+      // 장바구니에서 온 것임을 표시하고 결제 페이지로 이동
+      navigate("/payment", {
+        state: {
+          products: productsWithDetails, // 복수형으로 변경
+          fromCart: true, // 장바구니에서 왔음을 표시
+          sellerId: sellerId, // 🆕 판매자 ID 직접 전달
+        },
+      });
+    } catch (error) {
+      console.error("장바구니 구매 처리 실패:", error);
+      if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("구매 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     }
   };
 
@@ -1166,7 +1242,7 @@ const Header = () => {
                                 ))}
                                 <div className="headCart-footer">
                                   <button
-                                    onClick={() => navigate("/payment")}
+                                    onClick={handleBuyFromCart}
                                     className="headCart-footer-btn"
                                   >
                                     장바구니 상세보기
