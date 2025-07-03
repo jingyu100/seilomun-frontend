@@ -14,6 +14,7 @@ const PaymentInfoSection = ({
   const [currentPoints, setCurrentPoints] = useState(0);
 
   useEffect(() => {
+    console.log("useEffect 실행됨!");
     const fetchCurrentPoints = async () => {
       try {
         const response = await api.get("/api/points?page=0&size=1");
