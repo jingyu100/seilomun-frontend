@@ -45,9 +45,15 @@ function Customer_modify() {
 
         setGender(data.gender || "");
 
-        if (data.birthDate && data.birthDate.length === 4) {
-          setBirthMonth(data.birthDate.slice(0, 2));
-          setBirthDay(data.birthDate.slice(2, 4));
+        if (data.birthDate) {
+          if (data.birthDate.length === 4) {
+            setBirthMonth(data.birthDate.slice(0, 2));
+            setBirthDay(data.birthDate.slice(2));
+          } else if (data.birthDate.length === 2) {
+            // DB에 34 → 일만 저장된 경우로 간주
+            setBirthMonth(""); // 또는 기본값
+            setBirthDay(data.birthDate);
+          }
         }
 
         const profileImageFileName = data.profileImageUrl;
