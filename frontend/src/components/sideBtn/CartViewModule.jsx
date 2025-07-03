@@ -10,6 +10,18 @@ function CartViewModule() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [seller, setSeller] = useState(null);
+  
+  const productImageUrl = (item) => {
+    const url =
+      Array.isArray(item.productPhotoUrl) && item.productPhotoUrl[0]
+        ? item.productPhotoUrl[0]
+        : Array.isArray(item.photoUrl) && item.photoUrl[0]
+        ? item.photoUrl[0]
+        : null;
+  
+    if (!url) return "/images/default.jpg";
+    return url.startsWith("http") ? url : `${S3_BASE_URL}${url}`;
+  };
 
   // 판매자 정보 불러오기 (첫 상품 기준)
   useEffect(() => {
@@ -100,20 +112,7 @@ function CartViewModule() {
             return null;
           }
         }
-      );
-
-      const productImageUrl = (item) => {
-        const url =
-          Array.isArray(item.productPhotoUrl) && item.productPhotoUrl[0]
-            ? item.productPhotoUrl[0]
-            : Array.isArray(item.photoUrl) && item.photoUrl[0]
-            ? item.photoUrl[0]
-            : null;
-      
-        if (!url) return "/images/default.jpg";
-        return url.startsWith("http") ? url : `${S3_BASE_URL}${url}`;
-      };
-      
+      );      
 
       const productDetails = await Promise.all(productPromises);
 
