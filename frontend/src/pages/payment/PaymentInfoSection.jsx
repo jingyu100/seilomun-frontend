@@ -17,7 +17,7 @@ const PaymentInfoSection = ({
     console.log("useEffect 실행됨!");
     const fetchCurrentPoints = async () => {
       try {
-        const response = await api.get("/api/points?page=0&size=1");
+        const response = await api.get("/api/customers/points?page=0&size=1");
         console.log("전체응답:", response);
         console.log("response.data:", response.data);
         setCurrentPoints(response.data.data.currentPoints);
