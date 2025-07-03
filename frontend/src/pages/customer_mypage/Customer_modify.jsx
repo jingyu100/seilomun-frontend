@@ -79,6 +79,11 @@ function Customer_modify() {
 
   const handleImageClick = () => fileInputRef.current.click();
 
+  const handleImageRemove = () => {
+    setPreviewImage(defaultProfile); // 기본 이미지로 설정
+    setProfileFile(null); // 선택된 파일 초기화
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -229,7 +234,7 @@ function Customer_modify() {
                 <button className="black-btn" type="button" onClick={handleImageUpload}>
                   변경
                 </button>
-                <button className="white-btn" type="button">
+                <button className="white-btn" type="button" onClick={handleImageRemove}>
                   삭제
                 </button>
               </div>

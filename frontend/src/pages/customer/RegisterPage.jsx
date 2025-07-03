@@ -492,7 +492,7 @@ function RegisterPage() {
               >
                 <option>선택</option>
                 {[...Array(12)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
+                  <option key={i + 1} value={(i + 1).toString().padStart(2, "0")}>
                     {i + 1}
                   </option>
                 ))}
