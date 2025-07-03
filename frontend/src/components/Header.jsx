@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import api, { API_BASE_URL } from "../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../api/config.js";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import AlarmContents from "./AlarmContents.jsx";
@@ -90,11 +90,11 @@ const Header = () => {
               quantity: quantity,
               stockQuantity: product.stockQuantity || 0,
               expiryDate: product.expiryDate || "",
-              thumbnailUrl:
-                product.photoUrl && product.photoUrl.length > 0
-                  ? product.photoUrl[0]
+              productPhotoUrl:
+                product.productPhotoUrl && product.productPhotoUrl.length > 0
+                  ? product.productPhotoUrl[0]
                   : null,
-              photoUrls: product.photoUrl || [],
+              productPhotoUrls: product.productPhotoUrl || [],
               seller: product.seller || {},
               categoryId: product.categoryId || 0,
               status: product.status || "1",
@@ -116,6 +116,19 @@ const Header = () => {
       setCartLoading(false);
     }
   };
+
+  // 🛒 장바구니에 담긴 상품 이미지 부분
+    const productImageUrl = (item) => {
+      const url =
+        Array.isArray(item.productPhotoUrl) && item.productPhotoUrl[0]
+          ? item.productPhotoUrl[0]
+          : Array.isArray(item.photoUrl) && item.photoUrl[0]
+          ? item.photoUrl[0]
+          : null;
+    
+      if (!url) return "/images/default.jpg";
+      return url.startsWith("http") ? url : `${S3_BASE_URL}${url}`;
+    };
 
   // 🛒 컴포넌트 마운트 시와 로그인 상태 변경 시 장바구니 데이터 로딩
   useEffect(() => {
@@ -1106,8 +1119,8 @@ const Header = () => {
                               <>
                                 {cartItems.map((item) => (
                                   <div key={item.productId} className="headCart-item">
-                                    {item.thumbnailUrl && (
-                                      <img src={item.thumbnailUrl} alt={item.name} />
+                                    {productImageUrl(item) && (
+                                      <img src={productImageUrl(item)} alt={item.name} />
                                     )}
                                     <div className="headCart-item-info">
                                       <p className="headCart-item-info-name">

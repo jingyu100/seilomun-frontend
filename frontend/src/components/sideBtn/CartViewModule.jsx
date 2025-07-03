@@ -10,7 +10,8 @@ function CartViewModule() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [seller, setSeller] = useState(null);
-  
+
+  // 장바구니에 담긴 상품 이미지 부분
   const productImageUrl = (item) => {
     const url =
       Array.isArray(item.productPhotoUrl) && item.productPhotoUrl[0]
