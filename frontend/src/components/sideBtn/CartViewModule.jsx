@@ -324,7 +324,7 @@ function CartViewModule() {
     );
   }
 
-  console.log("🛒 item 확인:", item);
+  console.log("item에 sellersId 확인", item);
 
   return (
     <div className="sideCartModule viewModule moduleFrame1">
@@ -350,7 +350,7 @@ function CartViewModule() {
               </div>
             ) : (
               cartItems.map((item) => (
-                <Link to={`/sellers/${sellerId}/products/${item.productId}`} >
+                <Link to={`/sellers/${item.sellerId}/products/${item.productId}`} >
                   <div className="cartProduct displayFlex" key={item.productId}>
                     <div className="productUrl displayFlex">
                       {item.productPhotoUrl && (
