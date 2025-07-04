@@ -9,7 +9,31 @@
   /* 🔥 헤더와의 겹침 방지를 위한 여백 추가 */
   margin-left: 280px; /* 사이드바 너비만큼 여백 */
   padding-top: 100px; /* 상단 헤더 높이만큼 여백 */
-  width: calc(100% - 280px); /* 사이드바 제외한 너비 */
+  width: calc(100% - 230px); /* 사이드바 제외한 너비 */
+}
+
+/* 메인 제목 부분 */
+
+.status-store-header {
+  color: balck;
+  padding: 30px;
+  border-bottom: 2px solid #000000;
+  margin-bottom: 40px;
+  font-family: 'paybooc-Bold', sans-serif;
+}
+
+.store-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  font-family: 'paybooc-Bold', sans-serif;
+  text-align: center;
+  background-color: #fcfcfc;
+}
+
+.store-subtitle {
+  font-size: 1rem;
+  text-align: center;
 }
 
 .seller-store-registration *,
@@ -19,7 +43,7 @@
 }
 
 .seller-store-container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
 }

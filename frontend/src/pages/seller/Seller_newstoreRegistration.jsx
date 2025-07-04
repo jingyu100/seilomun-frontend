@@ -695,6 +695,13 @@ const Seller_newstoreRegistration = () => {
           <div className="seller-form-container">
             {/* 기본 정보 */}
             <section className="seller-info-card">
+
+             {/* 상단 제목 */}
+            <div className="status-store-header">
+              <h1 className="store-title">판매자 매장 정보 등록 및 수정</h1>
+              <p className="store-subtitle">가게의 매장 정보를 등록 및 수정을 해보세요</p>
+            </div>
+
               <div className="seller-card-header">
                 <div className="seller-card-title">
                   <span className="seller-icon">🏪</span>
