@@ -104,7 +104,7 @@ function CartViewModule() {
               productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
-              sellerId: product.seller?.sellerId || product.seller?.id || "NO_SELLER_ID",
+              sellerId: product.seller?.sellerId || product.seller?.id || product.seller?.firstSellerId || "NO_SELLER_ID",
               categoryId: product.categoryId || 0,
               status: product.status || "1",
               totalPrice:
