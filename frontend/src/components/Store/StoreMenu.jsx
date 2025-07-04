@@ -64,7 +64,7 @@ export default function StoreMenu() {
               id={prod.id}
               index={index}
               productId={prod.id}
-              sellerId={sellerId}
+              sellerId={prod.sellerId}
               thumbnailUrl={
                 prod.productPhotoUrl[0]?.startsWith("http")
                   ? prod.productPhotoUrl[0]
