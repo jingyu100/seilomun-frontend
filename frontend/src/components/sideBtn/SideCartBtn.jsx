@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import CartViewModule from "./CartViewModule";
 import { useCart } from "../../Context/CartContext";
 import useSellerProducts from "../../Hooks/useSellerProducts.js";
