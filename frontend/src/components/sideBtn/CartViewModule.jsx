@@ -1,11 +1,10 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import useSellerProducts from "../../Hooks/useSellerProducts.js";
 import "../../css/customer/SideBtnModules.css";
 import { useCart } from "../../Context/CartContext";
 import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
 
-function CartViewModule({ cartSellerId }) {
+function CartViewModule() {
   const { cartItems, setCartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -77,6 +76,9 @@ function CartViewModule({ cartSellerId }) {
 
             const product = productResponse.data?.data?.Products;
 
+            console.log("상품 상세 응답 확인:", product);
+            console.log("🔎 seller 정보:", product.seller);
+
             if (!product) {
               console.error(`상품 ${productId}의 데이터가 없습니다.`);
               return null;
@@ -102,8 +104,7 @@ function CartViewModule({ cartSellerId }) {
               productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
-              sellerId:
-                product.sellerId || product.seller?.id || product.seller?.sellerId,
+              sellerId: product.seller?.sellerId || product.seller?.id || "NO_SELLER_ID",
               categoryId: product.categoryId || 0,
               status: product.status || "1",
               totalPrice:
@@ -350,7 +351,7 @@ function CartViewModule({ cartSellerId }) {
               cartItems.map((item) => (
                 <Link 
                   key={item.productId}
-                  to={`/sellers/${cartSellerId}/products/${item.productId}`}
+                  to={`/sellers/${item.sellerId}/products/${item.productId}`} 
                 >
                   <div className="cartProduct displayFlex" key={item.productId}>
                     <div className="productUrl displayFlex">
