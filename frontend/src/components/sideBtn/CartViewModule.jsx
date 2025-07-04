@@ -1,10 +1,13 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import useSellerProducts from "../../Hooks/useSellerProducts.js";
 import "../../css/customer/SideBtnModules.css";
 import { useCart } from "../../Context/CartContext";
 import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
 
 function CartViewModule() {
+  const { sellerId } = useParams();
+  const { products } = useSellerProducts(sellerId);
   const { cartItems, setCartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
