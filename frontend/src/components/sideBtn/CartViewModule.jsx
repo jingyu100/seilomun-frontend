@@ -324,6 +324,8 @@ function CartViewModule() {
     );
   }
 
+  console.log("🛒 item 확인:", item);
+
   return (
     <div className="sideCartModule viewModule moduleFrame1">
       <div className="moduleFrame2">
