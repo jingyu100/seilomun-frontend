@@ -7,6 +7,7 @@ import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
 
 function CartViewModule() {
   const { sellerId } = useParams();
+  const { products } = useSellerProducts(sellerId);
   const { cartItems, setCartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
