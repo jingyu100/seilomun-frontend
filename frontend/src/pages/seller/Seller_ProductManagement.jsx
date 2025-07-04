@@ -40,15 +40,6 @@ const Seller_ProductManagement = () => {
     }
   };
 
-  const getProductImageUrl = (product) => {
-    const url = Array.isArray(product.productPhotoUrl) && product.productPhotoUrl[0]
-      ? product.productPhotoUrl[0]
-      : "default.png";
-  
-    return url.startsWith("http") ? url : S3_BASE_URL + url;
-  };
-  
-
   // 상품 삭제
   const handleDeleteProduct = async (productId) => {
     if (window.confirm("정말로 이 상품을 삭제하시겠습니까?")) {
@@ -177,16 +168,20 @@ const Seller_ProductManagement = () => {
 
               {products.map((product) => (
                 <div key={product.id} className="table-row">
-              <div className="col-image">
-                <img
-                  src={getProductImageUrl(product)}
-                  alt={product.name}
-                  className="product-image"
-                  onError={(e) => {
-                    e.target.src = S3_BASE_URL + "default.png";
-                  }}
-                />
-              </div>
+                  <div className="col-image">
+                    <img
+                      src={
+                        product.productPhotoUrl?.[0]
+                          ? S3_BASE_URL + product.productPhotoUrl[0]
+                          : S3_BASE_URL + "default.png"
+                      }
+                      alt={product.name}
+                      className="product-image"
+                      onError={(e) => {
+                        e.target.src = S3_BASE_URL + "default.png";
+                      }}
+                    />
+                  </div>
                   <div className="col-name">
                     <div className="product-name">{product.name}</div>
                     <div className="product-desc">{product.description}</div>
