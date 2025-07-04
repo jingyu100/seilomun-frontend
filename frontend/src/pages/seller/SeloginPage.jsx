@@ -44,7 +44,7 @@ function SeloginPage() {
       setIsLoggedIn(true);
 
       // TODO: 로그인 후 이동할 페이지 설정
-      navigate("/stats");
+      navigate("/Seller_Main");
     } catch (err) {
       console.error("로그인 실패:", err.response?.data || err.message);
       alert("아이디 또는 비밀번호가 올바르지 않습니다.");
