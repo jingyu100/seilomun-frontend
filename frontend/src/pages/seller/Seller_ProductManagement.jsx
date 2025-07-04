@@ -171,15 +171,14 @@ const Seller_ProductManagement = () => {
                   <div className="col-image">
                     <img
                       src={
-                        product.photoUrl?.[0]
-                          ? `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${product.photoUrl[0]}`
-                          : "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png"
+                        product.productPhotoUrl?.[0]
+                          ? S3_BASE_URL + product.productPhotoUrl[0]
+                          : S3_BASE_URL + "default.png"
                       }
                       alt={product.name}
                       className="product-image"
                       onError={(e) => {
-                        e.target.src =
-                          "https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/default.png";
+                        e.target.src = S3_BASE_URL + "default.png";
                       }}
                     />
                   </div>
