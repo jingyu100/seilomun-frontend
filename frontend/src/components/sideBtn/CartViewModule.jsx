@@ -7,7 +7,6 @@ import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
 
 function CartViewModule() {
   const { sellerId } = useParams();
-  const { products } = useSellerProducts(sellerId);
   const { cartItems, setCartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -349,7 +348,7 @@ function CartViewModule() {
               </div>
             ) : (
               cartItems.map((item) => (
-                <Link to={`/sellers/${sellerId}/products/${id}`} >
+                <Link to={`/sellers/${item.sellerId}/products/${item.productId}`} >
                   <div className="cartProduct displayFlex" key={item.productId}>
                     <div className="productUrl displayFlex">
                       {item.productPhotoUrl && (
@@ -413,7 +412,11 @@ function CartViewModule() {
                         </p>
                       </div>
                       <button
-                        onClick={() => handleRemoveFromCart(item.productId)}
+                        onClick={(e) => {
+                          e.preventDefault(); // Link 이동 방지
+                          e.stopPropagation(); // 부모 클릭 이벤트 차단
+                          handleRemoveFromCart(item.productId);
+                        }}
                         style={{
                           marginLeft: "auto",
                           border: "none",
