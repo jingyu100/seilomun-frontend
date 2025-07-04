@@ -7,12 +7,13 @@ import "../css/customer/SellerList.css";
 const SellerList = () => {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword") || "";
+  const categoryEnum = searchParams.get("category") || "";
   const [sellers, setSellers] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSellers = async () => {
-      if (!keyword) {
+      if (!keyword && !categoryEnum) {
         setSellers([]);
         return;
       }
@@ -22,6 +23,7 @@ const SellerList = () => {
         const res = await api.get("/api/sellers/search", {
           params: {
             keyword: keyword,
+            category: categoryEnum,
             page: 0,
             size: 50,
           },
@@ -38,7 +40,7 @@ const SellerList = () => {
     };
 
     fetchSellers();
-  }, [keyword]);
+  }, [keyword, categoryEnum]);
 
   const getSellerImageUrl = (seller) => {
     console.log("seller : ", seller);
@@ -101,7 +103,11 @@ const SellerList = () => {
     return (
       <div className="seller-list-section">
         <div className="section-header">
-          <h2 className="section-title">매장 검색 결과</h2>
+        <h2 className="section-title">
+          {keyword && `'${keyword}' `}
+          {categoryEnum && `카테고리: ${categoryEnum} `}
+          매장 검색 결과 ({sellers.length}개)
+        </h2>
         </div>
         <div className="loading-container-mini">
           <div className="loading-spinner-mini"></div>

@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../css/customer/SideBtnModules.css";
 import { useCart } from "../../Context/CartContext";
 import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
@@ -346,85 +346,87 @@ function CartViewModule() {
               </div>
             ) : (
               cartItems.map((item) => (
-                <div className="cartProduct displayFlex" key={item.productId}>
-                  <div className="productUrl displayFlex">
-                    {item.productPhotoUrl && (
-                      <img
-                        src={productImageUrl(item)}
-                        alt={item.name}
-                        style={{
-                          width: "60px",
-                          height: "60px",
-                          objectFit: "cover",
-                          marginRight: "10px",
-                          borderRadius: "4px",
-                        }}
-                      />
-                    )}
-                    <div className="productInfo" style={{ flex: 1 }}>
-                      <h3 style={{ fontSize: "15.5px", margin: "0 0 4px 0" }}>
-                        {item.name}
-                      </h3>
-                      {item.expiryDate && (
-                        <p
-                          style={{ fontSize: "13px", color: "#666", margin: "0 0 4px 0" }}
-                        >
-                          유효기간: {formatExpiryDate(item.expiryDate)}
-                        </p>
+                <Link to={`/sellers/${sellerId}/products/${id}`} >
+                  <div className="cartProduct displayFlex" key={item.productId}>
+                    <div className="productUrl displayFlex">
+                      {item.productPhotoUrl && (
+                        <img
+                          src={productImageUrl(item)}
+                          alt={item.name}
+                          style={{
+                            width: "60px",
+                            height: "60px",
+                            objectFit: "cover",
+                            marginRight: "10px",
+                            borderRadius: "4px",
+                          }}
+                        />
                       )}
-                      <div
-                        className="displayFlex"
-                        style={{ alignItems: "center", gap: "8px", margin: "4px 0" }}
-                      >
-                        <p style={{ fontWeight: "600", margin: 0, color: "#e74c3c" }}>
-                          {item.discountPrice?.toLocaleString()}원
-                        </p>
-                        {item.originalPrice !== item.discountPrice && (
-                          <>
-                            <p
-                              style={{
-                                textDecoration: "line-through",
-                                color: "#999",
-                                fontSize: "14px",
-                                margin: 0,
-                              }}
-                            >
-                              {item.originalPrice?.toLocaleString()}원
-                            </p>
-                            <p
-                              style={{
-                                fontSize: "13px",
-                                color: "#e74c3c",
-                                fontWeight: "600",
-                                margin: 0,
-                              }}
-                            >
-                              {item.currentDiscountRate}% 할인
-                            </p>
-                          </>
+                      <div className="productInfo" style={{ flex: 1 }}>
+                        <h3 style={{ fontSize: "15.5px", margin: "0 0 4px 0" }}>
+                          {item.name}
+                        </h3>
+                        {item.expiryDate && (
+                          <p
+                            style={{ fontSize: "13px", color: "#666", margin: "0 0 4px 0" }}
+                          >
+                            유효기간: {formatExpiryDate(item.expiryDate)}
+                          </p>
                         )}
+                        <div
+                          className="displayFlex"
+                          style={{ alignItems: "center", gap: "8px", margin: "4px 0" }}
+                        >
+                          <p style={{ fontWeight: "600", margin: 0, color: "#e74c3c" }}>
+                            {item.discountPrice?.toLocaleString()}원
+                          </p>
+                          {item.originalPrice !== item.discountPrice && (
+                            <>
+                              <p
+                                style={{
+                                  textDecoration: "line-through",
+                                  color: "#999",
+                                  fontSize: "14px",
+                                  margin: 0,
+                                }}
+                              >
+                                {item.originalPrice?.toLocaleString()}원
+                              </p>
+                              <p
+                                style={{
+                                  fontSize: "13px",
+                                  color: "#e74c3c",
+                                  fontWeight: "600",
+                                  margin: 0,
+                                }}
+                              >
+                                {item.currentDiscountRate}% 할인
+                              </p>
+                            </>
+                          )}
+                        </div>
+                        <p style={{ fontSize: "13px", color: "#666", margin: 0 }}>
+                          수량: {item.quantity}개
+                        </p>
                       </div>
-                      <p style={{ fontSize: "13px", color: "#666", margin: 0 }}>
-                        수량: {item.quantity}개
-                      </p>
+                      <button
+                        onClick={() => handleRemoveFromCart(item.productId)}
+                        style={{
+                          marginLeft: "auto",
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          padding: "4px",
+                          alignSelf: "flex-start",
+                          marginRight: "8px",
+                        }}
+                        title="상품 삭제"
+                      >
+                        <img src="../../../image/icon/close_X.svg" alt="삭제" />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleRemoveFromCart(item.productId)}
-                      style={{
-                        marginLeft: "auto",
-                        border: "none",
-                        background: "transparent",
-                        cursor: "pointer",
-                        padding: "4px",
-                        alignSelf: "flex-start",
-                        marginRight: "8px",
-                      }}
-                      title="상품 삭제"
-                    >
-                      <img src="../../../image/icon/close_X.svg" alt="삭제" />
-                    </button>
                   </div>
-                </div>
+                </Link>
               ))
             )}
           </div>
