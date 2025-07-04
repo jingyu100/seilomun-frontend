@@ -348,7 +348,7 @@ function CartViewModule() {
               </div>
             ) : (
               cartItems.map((item) => (
-                <Link to={`/sellers/${item.sellerId}/products/${item.productId}`} >
+                <Link to={`/sellers/${sellerId}/products/${item.productId}`} >
                   <div className="cartProduct displayFlex" key={item.productId}>
                     <div className="productUrl displayFlex">
                       {item.productPhotoUrl && (
