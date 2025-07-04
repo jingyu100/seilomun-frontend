@@ -76,9 +76,6 @@ function CartViewModule() {
 
             const product = productResponse.data?.data?.Products;
 
-            console.log("상품 상세 응답 확인:", product);
-            console.log("🔎 seller 정보:", product.seller);
-
             if (!product) {
               console.error(`상품 ${productId}의 데이터가 없습니다.`);
               return null;
@@ -104,7 +101,8 @@ function CartViewModule() {
               productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
-              sellerId: product.seller?.sellerId || product.seller?.id || product.seller?.firstSellerId || "NO_SELLER_ID",
+              sellerId:
+                product.sellerId,
               categoryId: product.categoryId || 0,
               status: product.status || "1",
               totalPrice:

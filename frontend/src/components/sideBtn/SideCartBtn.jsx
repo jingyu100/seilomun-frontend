@@ -1,12 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import CartViewModule from "./CartViewModule";
 import { useCart } from "../../Context/CartContext";
-import useSellerProducts from "../../Hooks/useSellerProducts.js";
 
 const SideCartBtn = () => {
-    const { sellerId } = useParams();
-    const { products } = useSellerProducts(sellerId);
     const [isCartModal, setisCartModal] = useState(false);
     const modalRef = useRef(null);
     const buttonRef = useRef(null);
@@ -57,9 +53,7 @@ const SideCartBtn = () => {
             </a>
             {isCartModal && (
                 <div ref={modalRef}>
-                    <CartViewModule
-                        cartSellerId={sellerId}
-                    />
+                    <CartViewModule />
                 </div>
             )}
         </div>
