@@ -102,7 +102,7 @@ function CartViewModule() {
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
               sellerId:
-                product.sellerId,
+                product.sellerId || product.seller?.id || product.seller?.sellerId,
               categoryId: product.categoryId || 0,
               status: product.status || "1",
               totalPrice:
