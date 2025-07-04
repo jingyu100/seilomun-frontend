@@ -17,6 +17,7 @@ import NewPage from "./pages/customer/NewPage.jsx";
 import RegisterPage from "./pages/customer/RegisterPage.jsx";
 import SailPage from "./pages/customer/SailPage.jsx";
 import WishListPage from "./pages/customer/WishListPage.jsx";
+import StoreListPage from "./pages/customer/StoreListPage.jsx";
 import StorePage from "./pages/customer/StorePage.jsx";
 import ProductPage from "./pages/customer/ProductPage.jsx";
 import PaymentPage from "./pages/customer/PaymentPage.jsx";
@@ -94,6 +95,7 @@ function App() {
               <Route path="/wish" element={<WishListPage />} />
               <Route path="/Business_numberPage" element={<Business_numberPage />} />
               <Route path="/SeRegister" element={<SeRegisterPage />} />
+              <Route path="/sellers" element={<StoreListPage />} />
               <Route path="/sellers/:sellerId" element={<StorePage />} />
               <Route path="/postcode-popup" element={<PostcodePopup />} />
               <Route

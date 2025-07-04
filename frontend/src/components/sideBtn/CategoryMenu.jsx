@@ -72,6 +72,7 @@ const CategoryMenu = ({ isOpen, onClose, onCategorySelect, buttonRef }) => {
         if (mainCat === '매장') {
             // 매장 카테고리 선택 시 - 판매자 검색 페이지로 이동
             navigate(`/sellers?category=${item.enum}`);
+            console.log("가게 : ", item.enum);
         } else {
             // 식품 카테고리 선택 시 - 상품 검색 페이지로 이동
             navigate(`/new?categoryId=${item.id}&filterType=ALL`);

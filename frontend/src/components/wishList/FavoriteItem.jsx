@@ -31,6 +31,10 @@ const FavoriteItem = ({ store, onRemove }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <div>
+        <img src="" alt="" />
+      </div>
+
       <div style={{ flex: 1 }}>
         <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
           <div
