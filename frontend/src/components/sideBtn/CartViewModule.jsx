@@ -5,9 +5,7 @@ import "../../css/customer/SideBtnModules.css";
 import { useCart } from "../../Context/CartContext";
 import api, { API_BASE_URL, S3_BASE_URL } from "../../api/config";
 
-function CartViewModule() {
-  const { sellerId } = useParams();
-  const { products } = useSellerProducts(sellerId);
+function CartViewModule({ cartSellerId }) {
   const { cartItems, setCartItems, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -105,10 +103,7 @@ function CartViewModule() {
               seller: product.seller || {},
               // 🔧 sellerId 제대로 설정 - 여러 가능성 체크
               sellerId:
-                product.seller?.id ??
-                product.sellerId ??
-                seller?.sellerId ??
-                null,
+                product.sellerId || product.seller?.id || product.seller?.sellerId,
               categoryId: product.categoryId || 0,
               status: product.status || "1",
               totalPrice:
@@ -120,8 +115,6 @@ function CartViewModule() {
           }
         }
       );      
-      
-      console.log("✅ 최종 sellerId:", product.seller?.id, product.sellerId);
 
       const productDetails = await Promise.all(productPromises);
 
@@ -357,10 +350,9 @@ function CartViewModule() {
               cartItems.map((item) => (
                 <Link 
                   key={item.productId}
-                  to={`/sellers/${item.sellerId}/products/${item.productId}`} 
+                  to={`/sellers/${cartSellerId}/products/${item.productId}`}
                 >
                   <div className="cartProduct displayFlex" key={item.productId}>
-                  {console.log("item에 sellersId 확인", item)}
                     <div className="productUrl displayFlex">
                       {item.productPhotoUrl && (
                         <img
