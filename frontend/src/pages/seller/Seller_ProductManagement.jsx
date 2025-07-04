@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/seller/Seller_ProductManagement.css";
 import Seller_Header from "../../components/seller/Seller_Header.jsx";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api, { S3_BASE_URL } from "../../api/config.js";
 
 const Seller_ProductManagement = () => {
   const navigate = useNavigate();
@@ -24,8 +24,12 @@ const Seller_ProductManagement = () => {
 
       const sellerId = sellerResponse.data.data.seller.sellerId;
 
+      console.log("sellerId", sellerId);
+
       // 해당 판매자의 상품 목록 조회
       const productsResponse = await api.get(`/api/products/seller/${sellerId}`);
+
+      console.log("productsResponse", productsResponse);
 
       setProducts(productsResponse.data || []);
     } catch (error) {
