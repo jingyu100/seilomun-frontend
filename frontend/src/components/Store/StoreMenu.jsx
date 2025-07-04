@@ -6,8 +6,7 @@ import ProductFilter from "./ProductFilter";
 import StoreProducts from "./StoreProducts";
 
 export default function StoreMenu() {
-  const { sellerId } = useParams();
-  const { products } = useSellerProducts(sellerId);
+  const { products } = useSellerProducts();
   const [sortType, setSortType] = useState("BASIC");
 
   const productList = useMemo(() => {
