@@ -15,6 +15,7 @@ const MyPage = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [recentReviews, setRecentReviews] = useState([]);
   const [recentPoints, setRecentPoints] = useState([]);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -114,15 +115,18 @@ const MyPage = () => {
           <div className="mypage-center">
             <div className="user-info-box">
               <div className="user-left">
+              {!imageError && profileImage ? (
                 <img
-                  src={profileImage || logo}
+                  src={profileImage}
                   alt="프로필"
                   className="user-profile"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = logo;
-                  }}
+                  onError={() => setImageError(true)}
                 />
+              ) : (
+                <div className="user-profile">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+              )}
                 <h3>{userName} 고객님 반갑습니다.</h3>
               </div>
               <div className="user-right">
