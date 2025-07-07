@@ -75,7 +75,7 @@ function MainNewMatch() {
     );
   };
 
-  return (
+  return products.length === 0 ? null : (
     <div className="homepageUI">
       <div className="homepageTitle">
         <span className="homepageTitleUI">
