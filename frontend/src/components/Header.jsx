@@ -97,6 +97,7 @@ const Header = () => {
               productPhotoUrls: product.productPhotoUrl || [],
               productPhotoUrl: product.productPhotoUrl || [], // OrderItemsSection에서 사용
               seller: product.seller || {},
+              sellerId: product.sellerId || product.seller?.id || product.seller?.sellerId,
               categoryId: product.categoryId || 0,
               status: product.status || "1",
             };
@@ -1193,53 +1194,58 @@ const Header = () => {
                             ) : (
                               <>
                                 {cartItems.map((item) => (
-                                  <div key={item.productId} className="headCart-item">
-                                    {productImageUrl(item) && (
-                                      <img src={productImageUrl(item)} alt={item.name} />
-                                    )}
-                                    <div className="headCart-item-info">
-                                      <p className="headCart-item-info-name">
-                                        {item.name}
-                                      </p>
-                                      <div className="headCart-item-price">
-                                        <span className="headCart-discount">
-                                          {item.discountPrice?.toLocaleString()}원
-                                        </span>
-                                        {item.originalPrice !== item.discountPrice && (
-                                          <span className="headCart-original">
-                                            {item.originalPrice?.toLocaleString()}원
+                                  <Link
+                                    key= {item.productId}
+                                    to= {`sellers/${item.sellerId}/products/${item.productId}`}                                     
+                                  >
+                                    <div key={item.productId} className="headCart-item">
+                                      {productImageUrl(item) && (
+                                        <img src={productImageUrl(item)} alt={item.name} />
+                                      )}
+                                      <div className="headCart-item-info">
+                                        <p className="headCart-item-info-name">
+                                          {item.name}
+                                        </p>
+                                        <div className="headCart-item-price">
+                                          <span className="headCart-discount">
+                                            {item.discountPrice?.toLocaleString()}원
                                           </span>
+                                          {item.originalPrice !== item.discountPrice && (
+                                            <span className="headCart-original">
+                                              {item.originalPrice?.toLocaleString()}원
+                                            </span>
+                                          )}
+                                        </div>
+                                        <p className="headCart-quantity">
+                                          수량: {item.quantity}개
+                                        </p>
+                                        {item.expiryDate && (
+                                          <p className="headCart-expiry">
+                                            {formatExpiryDate(item.expiryDate)}
+                                          </p>
                                         )}
                                       </div>
-                                      <p className="headCart-quantity">
-                                        수량: {item.quantity}개
-                                      </p>
-                                      {item.expiryDate && (
-                                        <p className="headCart-expiry">
-                                          {formatExpiryDate(item.expiryDate)}
-                                        </p>
-                                      )}
-                                    </div>
-                                    <button
-                                      className="headCart-remove-btn"
-                                      onClick={() => handleRemoveFromCart(item.productId)}
-                                      title="상품 삭제"
-                                    >
-                                      <svg
-                                        width="14"
-                                        height="14"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
+                                      <button
+                                        className="headCart-remove-btn"
+                                        onClick={() => handleRemoveFromCart(item.productId)}
+                                        title="상품 삭제"
                                       >
-                                        <path
-                                          d="M18 6L6 18M6 6l12 12"
-                                          stroke="currentColor"
-                                          strokeWidth="2"
-                                          strokeLinecap="round"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </div>
+                                        <svg
+                                          width="14"
+                                          height="14"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                        >
+                                          <path
+                                            d="M18 6L6 18M6 6l12 12"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                          />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                  </Link>
                                 ))}
                                 <div className="headCart-footer">
                                   <button
