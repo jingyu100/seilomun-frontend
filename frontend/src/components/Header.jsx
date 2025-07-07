@@ -1196,7 +1196,7 @@ const Header = () => {
                                 {cartItems.map((item) => (
                                   <Link
                                     key= {item.productId}
-                                    to= {`sellers/${item.sellerId}/products/${item.productId}`}                                     
+                                    to= {`/sellers/${item.sellerId}/products/${item.productId}`}                                     
                                   >
                                     <div key={item.productId} className="headCart-item">
                                       {productImageUrl(item) && (
