@@ -273,7 +273,7 @@ const Seller_ProductUpdate = () => {
       });
 
       // API 호출
-      const response = await api.put(`/api/products/${productId}`, submitData, {
+      await api.put(`/api/products/${productId}`, submitData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
