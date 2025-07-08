@@ -95,7 +95,7 @@ const SellerList = () => {
   };
 
   // 키워드가 없으면 판매자 섹션을 렌더링하지 않음
-  if (!keyword) {
+  if (!keyword && !categoryEnum) {
     return null;
   }
 
@@ -103,11 +103,11 @@ const SellerList = () => {
     return (
       <div className="seller-list-section">
         <div className="section-header">
-        <h2 className="section-title">
-          {keyword && `'${keyword}' `}
-          {categoryEnum && `카테고리: ${categoryEnum} `}
-          매장 검색 결과 ({sellers.length}개)
-        </h2>
+          <h2 className="section-title">
+            {keyword && `'${keyword}' `}
+            {categoryEnum && `카테고리: ${categoryEnum} `}
+            매장 검색 결과 ({sellers.length}개)
+          </h2>
         </div>
         <div className="loading-container-mini">
           <div className="loading-spinner-mini"></div>
