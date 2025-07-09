@@ -9,26 +9,26 @@ export default function WishListItem({ item, favorites, onRemove, onAddToCart })
   const [isRemoveHovered, setIsRemoveHovered] = useState(false);
   const navigate = useNavigate();
 
+  // 이미지 URL 처리
+  const getImageUrl = (photoUrl) => {
+    if (!photoUrl) {
+      return "/image/product1.jpg"; // 기본 이미지
+    }
 
-    // 이미지 URL 처리
-    const getImageUrl = (photoUrl) => {
-        if (!photoUrl) {
-            return "/image/product1.jpg"; // 기본 이미지
-        }
+    if (photoUrl.startsWith("http")) {
+      return photoUrl;
+    }
 
-        if (photoUrl.startsWith("http")) {
-            return photoUrl;
-        }
+    return `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photoUrl}`;
+  };
 
-        return `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photoUrl}`;
-    };
-
-
-    const handleCardClick = () => {
+  const handleCardClick = () => {
     // 즐겨찾기 목록에서 같은 주소를 가진 매장 찾기
     const matchedSeller = favorites?.find(
       (fav) => fav.addressDetail === item.storeAddress
     );
+
+    console.log(matchedSeller);
 
     if (matchedSeller) {
       // sellerId를 찾았으면 올바른 경로로 이동
