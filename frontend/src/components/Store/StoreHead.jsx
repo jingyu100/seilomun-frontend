@@ -23,6 +23,7 @@ export default function StoreHead({ store, sellerId, onOpenChat }) {
                 <div className="storeHead-half storeHead-left">
                     <Rating />
                     <StoreMiniInfo
+                      rating= {sellerInformationDto?.rating || "0.0"}
                       address={sellerInformationDto?.postCode || "가게 주소 없음"}
                       addressDetail={sellerInformationDto?.address || "가게 상세 주소 없음"}
                       phone={sellerInformationDto?.phone || "전화번호 없음"}

@@ -25,7 +25,7 @@ export default function StoreMainInfo({
                         <p className="storeInfoTable-title">가게 설명</p>
                     </div>
                     <div className= "storeInfoTable-left">
-                        <p className="storeInfoTable-pv">{address} ({addressDetail})</p>
+                        <p className="storeInfoTable-pv">{address}, {addressDetail}</p>
                         <p className="storeInfoTable-pv">{phone}</p>
                         <p className="storeInfoTable-pv">{operatingHours}</p>
                         <p className="storeInfoTable-pv">{storeDescription}</p>
