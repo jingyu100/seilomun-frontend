@@ -25,7 +25,10 @@ export default function StorePage() {
     // 데이터 추출
     const sellerPhotoDto = store?.sellerPhotoDto;
     const sellerInformationDto = store?.sellerInformationDto;
-    const imageList = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
+    const imageList = (sellerInformationDto?.sellerPhotoUrls?.length > 0) 
+                        ? sellerInformationDto.sellerPhotoUrls 
+                        : ["/image/product1.jpg"];
+
 
     // 이미지가 변경될 때 인덱스 초기화
     useEffect(() => {

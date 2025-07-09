@@ -12,7 +12,7 @@ export default function MainSuggestStore() {
 
   // ✅ useCallback으로 최적화하여 불필요한 재실행 방지
   const getImageUrl = useCallback((imageName) => {
-    if (!imageName) return "/image/default-store.jpg";
+    if (!imageName) return "/image/product1.jpg";
     return imageName.startsWith("http")
         ? imageName
         : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${imageName}`;
