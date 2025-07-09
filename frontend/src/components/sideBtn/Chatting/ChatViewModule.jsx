@@ -49,7 +49,7 @@ export default function ChatViewModule() {
     }
 
     // "default.png"나 빈 값이면 null 반환
-    if (!imageUrl || imageUrl === "default.png" || imageUrl.trim() === "") {
+    if (!imageUrl || imageUrl === "/image/product1.jpg" || imageUrl.trim() === "") {
       return null;
     }
 
