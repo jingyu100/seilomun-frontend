@@ -42,10 +42,10 @@ export default function ChatViewModule() {
 
     if (user.userType === "SELLER") {
       // 판매자일 때는 고객 프로필 이미지
-      imageUrl = room.customerPhotoUrl;
+      imageUrl = room.customerPhotoUrl || "/image/product1.jpg";
     } else {
       // 고객일 때는 매장 프로필 이미지
-      imageUrl = room.sellerPhotoUrl;
+      imageUrl = room.sellerPhotoUrl || "/image/product1.jpg";
     }
 
     // "default.png"나 빈 값이면 null 반환
