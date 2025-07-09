@@ -21,14 +21,14 @@ export default function StoreMiniInfo({ rating, address, addressDetail, phone, m
         }}
       >
         <span style={{
-          fontSize: "16px", 
+          fontSize: "17px", 
           marginRight: "4px"
           }}
         >⭐</span>
         <span style={{
           color: "#000", 
           fontWeight: "600", 
-          fontSize: "14px",
+          fontSize: "16px",
           }}
         >{rating}</span>
       </div>
