@@ -39,28 +39,27 @@ export default function ChatViewModule() {
   // 프로필 이미지 URL 처리 함수
   const getProfileImageUrl = (room) => {
     let imageUrl = null;
-
+  
     if (user.userType === "SELLER") {
-      // 판매자일 때는 고객 프로필 이미지
-      imageUrl = room.customerPhotoUrl || "/image/product1.jpg";
+      imageUrl = room.customerPhotoUrl;
     } else {
-      // 고객일 때는 매장 프로필 이미지
-      imageUrl = room.sellerPhotoUrl || "/image/product1.jpg";
+      imageUrl = room.sellerPhotoUrl;
     }
-
-    // "default.png"나 빈 값이면 null 반환
-    if (!imageUrl || imageUrl === "/image/product1.jpg" || imageUrl.trim() === "") {
-      return null;
+  
+    // null, 빈 문자열 등 처리
+    if (!imageUrl || imageUrl.trim() === "") {
+      return "/image/product1.jpg"; // ✅ 기본 이미지로 fallback
     }
-
-    // 이미 완전한 URL인지 확인
+  
+    // 절대 URL이면 그대로 사용
     if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
       return imageUrl;
     }
-
-    // S3 키만 있는 경우 S3_BASE_URL을 앞에 붙임
+  
+    // S3 URL 조합
     return `${S3_BASE_URL}${imageUrl}`;
   };
+
 
   // 프로필 이니셜 생성 함수
   const getProfileInitial = (room) => {
@@ -94,7 +93,7 @@ export default function ChatViewModule() {
       <div className="chatModuleBody">
         {chatRooms.length > 0 ? (
           chatRooms.map((chat) => {
-            const profileImageUrl = getProfileImageUrl(chat);
+            const profileImageUrl = getProfileImageUrl(chat) ;
             const profileInitial = getProfileInitial(chat);
 
             return (
