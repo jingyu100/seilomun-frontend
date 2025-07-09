@@ -28,7 +28,9 @@ export default function WishListItem({ item, favorites, onRemove, onAddToCart })
       (fav) => fav.addressDetail === item.storeAddress
     );
 
+    console.log(matchedSeller.id);
     console.log(matchedSeller);
+    console.log(matchedSeller?.id);
 
     if (matchedSeller) {
       // sellerId를 찾았으면 올바른 경로로 이동
