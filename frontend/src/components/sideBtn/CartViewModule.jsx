@@ -347,72 +347,73 @@ function CartViewModule() {
               </div>
             ) : (
               cartItems.map((item) => (
-                <Link 
-                  key={item.productId}
-                  to={`/sellers/${item.sellerId}/products/${item.productId}`} 
-                >
                   <div className="cartProduct displayFlex" key={item.productId}>
                     <div className="productUrl displayFlex">
-                      {item.productPhotoUrl && (
-                        <img
-                          src={productImageUrl(item)}
-                          alt={item.name}
-                          style={{
-                            width: "60px",
-                            height: "60px",
-                            objectFit: "cover",
-                            marginRight: "10px",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      )}
-                      <div className="productInfo" style={{ flex: 1 }}>
-                        <h3 style={{ fontSize: "15.5px", margin: "0 0 4px 0" }}>
-                          {item.name}
-                        </h3>
-                        {item.expiryDate && (
-                          <p
-                            style={{ fontSize: "13px", color: "#666", margin: "0 0 4px 0" }}
-                          >
-                            유효기간: {formatExpiryDate(item.expiryDate)}
-                          </p>
+                      <Link 
+                        key={item.productId}
+                        to={`/sellers/${item.sellerId}/products/${item.productId}`} 
+                      >
+                        {item.productPhotoUrl && (
+                          <img
+                            src={productImageUrl(item)}
+                            alt={item.name}
+                            style={{
+                              width: "60px",
+                              height: "60px",
+                              objectFit: "cover",
+                              marginRight: "10px",
+                              borderRadius: "4px",
+                            }}
+                          />
                         )}
-                        <div
-                          className="displayFlex"
-                          style={{ alignItems: "center", gap: "8px", margin: "4px 0" }}
-                        >
-                          <p style={{ fontWeight: "600", margin: 0, color: "#e74c3c" }}>
-                            {item.discountPrice?.toLocaleString()}원
-                          </p>
-                          {item.originalPrice !== item.discountPrice && (
-                            <>
-                              <p
-                                style={{
-                                  textDecoration: "line-through",
-                                  color: "#999",
-                                  fontSize: "14px",
-                                  margin: 0,
-                                }}
-                              >
-                                {item.originalPrice?.toLocaleString()}원
-                              </p>
-                              <p
-                                style={{
-                                  fontSize: "13px",
-                                  color: "#e74c3c",
-                                  fontWeight: "600",
-                                  margin: 0,
-                                }}
-                              >
-                                {item.currentDiscountRate}% 할인
-                              </p>
-                            </>
+                        <div className="productInfo" style={{ flex: 1 }}>
+                          <h3 style={{ fontSize: "15.5px", margin: "0 0 4px 0" }}>
+                            {item.name}
+                          </h3>
+                          {item.expiryDate && (
+                            <p
+                              style={{ fontSize: "13px", color: "#666", margin: "0 0 4px 0" }}
+                            >
+                              유효기간: {formatExpiryDate(item.expiryDate)}
+                            </p>
                           )}
+                          <div
+                            className="displayFlex"
+                            style={{ alignItems: "center", gap: "8px", margin: "4px 0" }}
+                          >
+                            <p style={{ fontWeight: "600", margin: 0, color: "#e74c3c" }}>
+                              {item.discountPrice?.toLocaleString()}원
+                            </p>
+                            {item.originalPrice !== item.discountPrice && (
+                              <>
+                                <p
+                                  style={{
+                                    textDecoration: "line-through",
+                                    color: "#999",
+                                    fontSize: "14px",
+                                    margin: 0,
+                                  }}
+                                >
+                                  {item.originalPrice?.toLocaleString()}원
+                                </p>
+                                <p
+                                  style={{
+                                    fontSize: "13px",
+                                    color: "#e74c3c",
+                                    fontWeight: "600",
+                                    margin: 0,
+                                  }}
+                                >
+                                  {item.currentDiscountRate}% 할인
+                                </p>
+                              </>
+                            )}
+                          </div>
+                          <p style={{ fontSize: "13px", color: "#666", margin: 0 }}>
+                            수량: {item.quantity}개
+                          </p>
                         </div>
-                        <p style={{ fontSize: "13px", color: "#666", margin: 0 }}>
-                          수량: {item.quantity}개
-                        </p>
-                      </div>
+                      </Link>
                       <button
                         onClick={(e) => {
                           e.preventDefault(); // Link 이동 방지
@@ -434,7 +435,6 @@ function CartViewModule() {
                       </button>
                     </div>
                   </div>
-                </Link>
               ))
             )}
           </div>
