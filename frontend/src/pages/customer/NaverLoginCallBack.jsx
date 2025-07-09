@@ -13,10 +13,15 @@ const NaverLoginCallback = () => {
         const response = await api.get("/api/customers/me");
 
         const nickname = response.data.data.username;
+        const id = response.data.data.id;
+        const email = response.data.data.email;
+        const userType = response.data.data.userType;
 
-        setUser({ nickname });
+        const userInfo = { nickname, id, email, userType };
+
+        setUser(userInfo);
         setIsLoggedIn(true);
-        localStorage.setItem("user", JSON.stringify({ nickname }));
+        localStorage.setItem("user", JSON.stringify({userInfo}));
         localStorage.setItem("isLoggedIn", "true");
 
         navigate("/");

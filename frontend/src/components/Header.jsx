@@ -1194,14 +1194,14 @@ const Header = () => {
                             ) : (
                               <>
                                 {cartItems.map((item) => (
-                                  <Link
-                                    key= {item.productId}
-                                    to= {`/sellers/${item.sellerId}/products/${item.productId}`}                                     
-                                  >
                                     <div key={item.productId} className="headCart-item">
                                       {productImageUrl(item) && (
                                         <img src={productImageUrl(item)} alt={item.name} />
                                       )}
+                                      <Link
+                                        key= {item.productId}
+                                        to= {`/sellers/${item.sellerId}/products/${item.productId}`}                                     
+                                      >
                                       <div className="headCart-item-info">
                                         <p className="headCart-item-info-name">
                                           {item.name}
@@ -1225,6 +1225,7 @@ const Header = () => {
                                           </p>
                                         )}
                                       </div>
+                                      </Link>
                                       <button
                                         className="headCart-remove-btn"
                                         onClick={() => handleRemoveFromCart(item.productId)}
@@ -1245,7 +1246,6 @@ const Header = () => {
                                         </svg>
                                       </button>
                                     </div>
-                                  </Link>
                                 ))}
                                 <div className="headCart-footer">
                                   <button
