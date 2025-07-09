@@ -17,11 +17,9 @@ const NaverLoginCallback = () => {
         const email = response.data.data.email;
         const userType = response.data.data.userType;
 
-        const userInfo = { nickname, id, email, userType };
-
-        setUser(userInfo);
+        setUser(nickname, id, email, userType);
         setIsLoggedIn(true);
-        localStorage.setItem("user", JSON.stringify({userInfo}));
+        localStorage.setItem("user", JSON.stringify({ setIsLoggedIn }));
         localStorage.setItem("isLoggedIn", "true");
 
         navigate("/");
