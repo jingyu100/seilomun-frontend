@@ -16,11 +16,6 @@ const WishListPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("wishes"); // "wishes" 또는 "favorites"
 
-  console.log(wishes);
-  console.log(favorites);
-  console.log(activeTab);
-  console.log(loading);
-
   // 1) 좋아요 조회
   const fetchWishes = async () => {
     try {
@@ -112,6 +107,11 @@ const WishListPage = () => {
       }
     }
   };
+
+  console.log("wishes", wishes);
+  console.log("favorites", favorites);
+  console.log("activeTab", activeTab);
+  console.log("loading", loading);
 
   return (
     <div>
