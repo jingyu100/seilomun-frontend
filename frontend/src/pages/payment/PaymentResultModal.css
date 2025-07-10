@@ -48,7 +48,7 @@
 }
 
 /* 로딩 섹션 */
-.loading-section {
+.loading-sectionbox {
     text-align: center;
     padding: 40px 20px;
 }
@@ -64,7 +64,7 @@
     display: block;
 }
 
-@keyframes spin {
+@keyframes spinner-spin {
     0% {
         transform: rotate(0deg);
     }

@@ -92,7 +92,7 @@ const PaymentResultModal = ({ result, onClose }) => {
         <div className="modal-overlay">
             <div className="modal-content">
                 {loading ? (
-                    <div className="loading-section">
+                    <div className="loading-sectionbox">
                         <div className="spinner"></div>
                         <p>결제 결과를 확인하고 있습니다...</p>
                     </div>
