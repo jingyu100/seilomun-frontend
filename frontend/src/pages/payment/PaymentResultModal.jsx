@@ -6,7 +6,6 @@ import "./PaymentResultModal.css";
 const PaymentResultModal = ({ result, onClose }) => {
     const navigate = useNavigate();
     const [paymentData, setPaymentData] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -66,8 +65,6 @@ const PaymentResultModal = ({ result, onClose }) => {
             } catch (error) {
                 console.error("결제 결과 조회 실패:", error);
                 setError(error.response?.data?.data?.error || error.message || "결과 조회에 실패했습니다.");
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -91,12 +88,7 @@ const PaymentResultModal = ({ result, onClose }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                {loading ? (
-                    <div className="loading-section">
-                        <div className="spinner"></div>
-                        <p>결제 결과를 확인하고 있습니다...</p>
-                    </div>
-                ) : error ? (
+                {error ? (
                     <div className="error-section">
                         <div className="error-icon">❌</div>
                         <h2>오류가 발생했습니다</h2>
@@ -170,7 +162,7 @@ const PaymentResultModal = ({ result, onClose }) => {
                             </button>
                         </div>
                     </div>
-                ) : (
+                ) : paymentData?.type === "fail" ? (
                     <div className="fail-section">
                         <div className="fail-icon">❌</div>
                         <h2>결제에 실패했습니다</h2>
@@ -202,7 +194,7 @@ const PaymentResultModal = ({ result, onClose }) => {
                             </button>
                         </div>
                     </div>
-                )}
+                ) : null}
             </div>
         </div>
     );
