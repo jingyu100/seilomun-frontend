@@ -46,7 +46,7 @@ export default function Inquiry({ sellerId, onOpenChat }) {
         onOpenChat(newChatRoom);
       }
     } catch (error) {
-      console.error("채팅방 생성 실패:", error);
+      console.error("채팅방 생성 실패:", error?.response?.data || error);
       alert("채팅방 생성에 실패했습니다.");
     }
   };

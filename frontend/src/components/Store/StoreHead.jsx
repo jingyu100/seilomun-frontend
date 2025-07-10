@@ -21,7 +21,7 @@ export default function StoreHead({ store, sellerId, onOpenChat }) {
             </div>
             <div className="storeHead-inner">
                 <div className="storeHead-half storeHead-left">
-                    <Rating />
+                    {/* <Rating /> */}
                     <StoreMiniInfo
                       rating= {sellerInformationDto?.rating || "0.0"}
                       address={sellerInformationDto?.postCode || "가게 주소 없음"}
