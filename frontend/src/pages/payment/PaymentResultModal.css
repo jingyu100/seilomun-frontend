@@ -56,6 +56,7 @@
     height: 100%;               /* 또는 고정 height: 200px 등 */
     padding: 40px 20px;
     text-align: center;
+    row-gap: 30px;
 }
 
 .spinner {
