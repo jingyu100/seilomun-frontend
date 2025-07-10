@@ -1,22 +1,15 @@
 import React from "react";
 import useLogin from "../../Hooks/useLogin.js";
 import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
-import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function Inquiry({ sellerId, onOpenChat }) {
   const { user } = useLogin();
-  const { store } = useStoreInfo();
   const { addChatRoom } = useChatRooms();
 
   const handleNewChatRoom = async () => {
     if (!user) {
       alert("로그인이 필요합니다.");
-      return;
-    }
-
-    if (!store?.sellerPhotos || store.sellerPhotos.length === 0) {
-      alert("현재 판매자 정보가 등록되지 않아 채팅을 시작할 수 없습니다.");
       return;
     }
 
