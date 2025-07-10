@@ -25,8 +25,6 @@ import NaverLoginCallback from "./pages/customer/NaverLoginCallBack.jsx";
 import OrderListPage from "./pages/customer/OrderListPage.jsx";
 import PostcodePopup from "./components/PostcodePopup";
 import OrderDetailPage from "./pages/customer/OrderDetailPage.jsx";
-import PaymentSuccess from "./pages/payment/PaymentSuccess.jsx";
-import PaymentFail from "./pages/payment/PaymentFail.jsx";
 
 /* 소비자 마이페이지 */
 import MyPage from "./pages/customer_mypage/MyPage.jsx";
@@ -110,8 +108,6 @@ function App() {
               <Route path="/Customer_refund" element={<Customer_refund />} />
               <Route path="/Customer_review" element={<Customer_review />} />
               <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/payment/success" element={<PaymentSuccess />} />
-              <Route path="/payment/fail" element={<PaymentFail />} />
               <Route path="/OrderList" element={<OrderListPage />} />
               {/* ✅ 기존 라우트와 새로운 파라미터 라우트 모두 유지 */}
               <Route path="/OrderDetail" element={<OrderDetailPage />} />

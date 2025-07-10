@@ -1,72 +1,34 @@
 import "./OrderSubmitBar.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api, { API_BASE_URL } from "../../api/config.js";
-import PaymentResultModal from "./PaymentResultModal";
 
 const OrderSubmitBar = ({
-                          products = [],
-                          deliveryFee,
-                          totalProductPrice,
-                          isPickup = false,
-                          finalAmount, // 부모에서 계산된 최종 금액
-                          deliveryInfo, // ✨ 새로 추가: 배송 정보
-                          pickupInfo, // ✨ 새로 추가: 픽업 정보
-                          pointsToUse = 0, // ✨ 새로 추가: 사용할 포인트
-                        }) => {
+  products = [],
+  deliveryFee,
+  totalProductPrice,
+  isPickup = false,
+  finalAmount, // 부모에서 계산된 최종 금액
+  deliveryInfo, // ✨ 새로 추가: 배송 정보
+  pickupInfo, // ✨ 새로 추가: 픽업 정보
+  pointsToUse = 0, // ✨ 새로 추가: 사용할 포인트
+}) => {
   const tossPaymentsRef = useRef(null);
   const currentOrderIdRef = useRef(null); // 현재 주문 ID를 저장할 ref
   const navigate = useNavigate();
 
-  // ✨ 모달 상태 관리
-  const [showModal, setShowModal] = useState(false);
-  const [paymentResult, setPaymentResult] = useState(null);
-
   // 최종 결제 금액 계산 (부모에서 전달받은 값 우선 사용)
   const calculatedFinalAmount =
-      finalAmount || totalProductPrice + (isPickup ? 0 : deliveryFee);
+    finalAmount || totalProductPrice + (isPickup ? 0 : deliveryFee);
 
   useEffect(() => {
     if (window.TossPayments) {
       tossPaymentsRef.current = window.TossPayments(
-          "test_ck_d46qopOB896A1WOwGApY3ZmM75y0"
+        "test_ck_d46qopOB896A1WOwGApY3ZmM75y0"
       );
     } else {
       console.error("TossPayments SDK가 로드되지 않았습니다.");
     }
-
-    // ✨ postMessage 이벤트 리스너 등록
-    const handlePaymentMessage = (event) => {
-      // 보안을 위해 origin 체크 (필요시)
-      // if (event.origin !== "http://3.39.239.179:5173") return;
-
-      const { type, data } = event.data;
-
-      switch (type) {
-        case 'PAYMENT_SUCCESS':
-          console.log('✅ 결제 성공 메시지 받음:', data);
-          setPaymentResult(data);
-          setShowModal(true);
-          break;
-
-        case 'PAYMENT_FAIL':
-        case 'PAYMENT_ERROR':
-          console.log('❌ 결제 실패 메시지 받음:', data);
-          setPaymentResult(data);
-          setShowModal(true);
-          break;
-
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener('message', handlePaymentMessage);
-
-    // 클린업
-    return () => {
-      window.removeEventListener('message', handlePaymentMessage);
-    };
   }, []);
 
   // SDK 창 닫기 처리 함수
@@ -75,11 +37,11 @@ const OrderSubmitBar = ({
       console.log("🔄 결제창 닫기 처리 시작:", orderId);
 
       const response = await api.post(
-          `/api/orders/close-payment/${orderId}`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-          }
+        `/api/orders/close-payment/${orderId}`,
+        {},
+        {
+          headers: { "Content-Type": "application/json" },
+        }
       );
 
       console.log("✅ 결제창 닫기 처리 완료:", response.data);
@@ -109,9 +71,9 @@ const OrderSubmitBar = ({
         return false;
       }
       if (
-          !deliveryInfo.phoneFirst ||
-          !deliveryInfo.phoneMiddle ||
-          !deliveryInfo.phoneLast
+        !deliveryInfo.phoneFirst ||
+        !deliveryInfo.phoneMiddle ||
+        !deliveryInfo.phoneLast
       ) {
         alert("휴대전화 번호를 모두 입력해주세요.");
         return false;
@@ -141,9 +103,9 @@ const OrderSubmitBar = ({
       // 🆕 여러 상품 처리를 위한 주문명 생성
       const firstProduct = products[0];
       const orderName =
-          products.length === 1
-              ? `${firstProduct.name} ${firstProduct.quantity || 1}개`
-              : `${firstProduct.name} 외 ${products.length - 1}건`;
+        products.length === 1
+          ? `${firstProduct.name} ${firstProduct.quantity || 1}개`
+          : `${firstProduct.name} 외 ${products.length - 1}건`;
 
       console.log("생성된 주문명:", orderName);
 
@@ -151,12 +113,12 @@ const OrderSubmitBar = ({
       const orderData = {
         usedPoints: pointsToUse || 0, // 기본값 보장
         memo: isPickup
-            ? pickupInfo.pickupRequest || "픽업 주문"
-            : deliveryInfo.deliveryRequest || "배송 주문",
+          ? pickupInfo.pickupRequest || "픽업 주문"
+          : deliveryInfo.deliveryRequest || "배송 주문",
         isDelivery: isPickup ? "N" : "Y", // ✅ Character로 수정
         deliveryAddress: isPickup
-            ? "매장 픽업"
-            : `${deliveryInfo.mainAddress} ${deliveryInfo.detailAddress}`.trim(),
+          ? "매장 픽업"
+          : `${deliveryInfo.mainAddress} ${deliveryInfo.detailAddress}`.trim(),
         // 🆕 모든 상품을 orderProducts 배열에 포함
         orderProducts: products.map((product) => ({
           productId: product.id || product.productId,
@@ -166,9 +128,8 @@ const OrderSubmitBar = ({
         })),
         payType: "CARD",
         orderName: orderName, // 🆕 동적 주문명 사용
-        // ✅ 프론트엔드 페이지로 설정 (모달 트리거용)
-        yourSuccessUrl: "http://3.39.239.179:5173/payment/success",
-        yourFailUrl: "http://3.39.239.179:5173/payment/fail",
+        yourSuccessUrl: `${API_BASE_URL}/api/orders/toss/success`,
+        yourFailUrl: `${API_BASE_URL}/api/orders/toss/fail`,
       };
 
       console.log("📦 최종 주문 데이터:", orderData);
@@ -236,32 +197,22 @@ const OrderSubmitBar = ({
   };
 
   return (
-      <div className="order-submit-bar">
-        <div className="payment-summary">
-          <span>최종 결제 금액</span>
-          <span className="final-amount">
+    <div className="order-submit-bar">
+      <div className="payment-summary">
+        <span>최종 결제 금액</span>
+        <span className="final-amount">
           {finalAmount ? `${finalAmount.toLocaleString()}원` : "계산 중..."}
         </span>
-        </div>
-        <div className="button-group">
-          <button onClick={handleCancel} className="cancel-button">
-            취소하기
-          </button>
-          <button onClick={handlePaymentClick} className="submit-button">
-            결제하기
-          </button>
-        </div>
-
-        {/* ✨ 결제 결과 모달 */}
-        <PaymentResultModal
-            isOpen={showModal}
-            result={paymentResult}
-            onClose={() => {
-              setShowModal(false);
-              setPaymentResult(null);
-            }}
-        />
       </div>
+      <div className="button-group">
+        <button onClick={handleCancel} className="cancel-button">
+          취소하기
+        </button>
+        <button onClick={handlePaymentClick} className="submit-button">
+          결제하기
+        </button>
+      </div>
+    </div>
   );
 };
 
