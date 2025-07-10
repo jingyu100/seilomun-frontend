@@ -128,7 +128,7 @@ const OrderSubmitBar = ({
         })),
         payType: "CARD",
         orderName: orderName, // 🆕 동적 주문명 사용
-        yourSuccessUrl: `${API_BASE_URL}`,
+        yourSuccessUrl: `${API_BASE_URL}/api/orders/toss/success`,
         yourFailUrl: `${API_BASE_URL}/api/orders/toss/fail`,
       };
 
