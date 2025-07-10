@@ -1,10 +1,12 @@
 import React from "react";
 import useLogin from "../../Hooks/useLogin.js";
 import { useChatRooms } from "../../Context/ChatRoomsContext.jsx";
+import useStoreInfo from "../../Hooks/useStoreInfo.js";
 import api, { API_BASE_URL } from "../../api/config.js";
 
 export default function Inquiry({ sellerId, onOpenChat }) {
   const { user } = useLogin();
+  const { store } = useStoreInfo();
   const { addChatRoom } = useChatRooms();
 
   const handleNewChatRoom = async () => {
