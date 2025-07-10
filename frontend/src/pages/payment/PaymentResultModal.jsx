@@ -67,7 +67,7 @@ const PaymentResultModal = ({ result, onClose }) => {
                 console.error("결제 결과 조회 실패:", error);
                 setError(error.response?.data?.data?.error || error.message || "결과 조회에 실패했습니다.");
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
