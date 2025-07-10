@@ -128,8 +128,8 @@ const OrderSubmitBar = ({
         })),
         payType: "CARD",
         orderName: orderName, // 🆕 동적 주문명 사용
-        yourSuccessUrl: `${API_BASE_URL}/api/orders/toss/success`,
-        yourFailUrl: `${API_BASE_URL}/api/orders/toss/fail`,
+        yourSuccessUrl: `${window.location.origin}/payment?result=success`,
+        yourFailUrl: `${window.location.origin}/payment?result=fail`,
       };
 
       console.log("📦 최종 주문 데이터:", orderData);

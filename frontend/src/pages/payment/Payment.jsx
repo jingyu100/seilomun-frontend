@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import {useLocation, useSearchParams} from "react-router-dom";
 import StepTabs from "./StepTabs";
 import "./Payment.css"; // 클래식 CSS 연결
 import DeliverySection from "./DeliverySection";
@@ -8,12 +8,47 @@ import OrderItemsSection from "./OrderItemsSection";
 import PaymentInfoSection from "./PaymentInfoSection";
 import OrderSubmitBar from "./OrderSubmitBar";
 import api, { API_BASE_URL } from "../../api/config.js";
+import PaymentResultModal from "./PaymentResultModal";
 
 const Payment = () => {
   const location = useLocation();
+  const [searchParams] = useSearchParams()
   const [seller, setSeller] = useState(null); // 통합된 판매자 정보
   const [activeTab, setActiveTab] = useState("delivery");
-  const [pointsToUse, setPointsToUse] = useState(0); // 포인트 상태
+  const [pointsToUse, setPointsToUse] = useState(0)
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [paymentResult, setPaymentResult] = useState(null);
+
+  useEffect(() => {
+    const result = searchParams.get("result");
+    const paymentKey = searchParams.get("paymentKey");
+    const orderId = searchParams.get("orderId");
+    const amount = searchParams.get("amount");
+    const code = searchParams.get("code");
+    const message = searchParams.get("message");
+
+    console.log("URL 파라미터 확인:", {
+      result, paymentKey, orderId, amount, code, message
+    });
+
+    if (result === "success" && paymentKey && orderId && amount) {
+      setPaymentResult({
+        type: "success",
+        paymentKey,
+        orderId,
+        amount: parseInt(amount)
+      });
+      setShowResultModal(true);
+    } else if (result === "fail" && code && message && orderId) {
+      setPaymentResult({
+        type: "fail",
+        code,
+        message,
+        orderId
+      });
+      setShowResultModal(true);
+    }
+  }, [searchParams]);
 
   // ✨ 새로 추가: 배송 정보 state
   const [deliveryInfo, setDeliveryInfo] = useState({
@@ -260,6 +295,16 @@ const Payment = () => {
           pointsToUse={pointsToUse}
         />
       </div>
+      {/* ✨ 결제 결과 모달 */}
+      {showResultModal && paymentResult && (
+          <PaymentResultModal
+              result={paymentResult}
+              onClose={() => {
+                setShowResultModal(false);
+                setPaymentResult(null);
+              }}
+          />
+      )}
     </div>
   );
 };
