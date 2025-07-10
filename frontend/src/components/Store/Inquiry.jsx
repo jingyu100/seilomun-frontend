@@ -13,6 +13,11 @@ export default function Inquiry({ sellerId, onOpenChat }) {
       return;
     }
 
+    if (!store?.sellerPhotos || store.sellerPhotos.length === 0) {
+      alert("현재 판매자 정보가 등록되지 않아 채팅을 시작할 수 없습니다.");
+      return;
+    }
+
     // 고객이 판매자에게 문의하는 경우만 처리
     const postData = { sellerId };
 
