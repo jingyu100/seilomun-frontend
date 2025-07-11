@@ -3,7 +3,7 @@ import useLogin from "../../../Hooks/useLogin.js";
 import { useChatRooms } from "../../../Context/ChatRoomsContext.jsx";
 import { useState } from "react";
 import ChatRoomView from "./ChatRoomView.jsx";
-import { S3_BASE_URL } from "../../../api/config.js";
+import api, { API_BASE_URL, S3_BASE_URL } from "../../../api/config.js";
 
 export default function ChatViewModule() {
   const { user } = useLogin();
