@@ -1,6 +1,8 @@
+// useStoreInfo.js
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api, { API_BASE_URL } from "../api/config";
+import api from "../api/config";
 
 export default function useStoreInfo() {
   const { sellerId } = useParams();
@@ -10,61 +12,59 @@ export default function useStoreInfo() {
   useEffect(() => {
     if (!sellerId) return;
 
-    const storeInfo = async () => {
+    const fetchStoreInfo = async () => {
       try {
         const response = await api.get(`/api/sellers/${sellerId}`);
         console.log("API 응답:", response.data);
 
         const sellerInformationDto = response.data.data.seller;
-        console.log(sellerInformationDto);
+
         if (!sellerInformationDto) {
           navigate("/404", { replace: true });
           return;
         }
 
-        //이미지 URL 생성
-        // useStoreInfo.js 내부
+        // 안전하게 sellerPhotoUrls 생성
+        let sellerPhotoUrls = [];
 
-        const sellerPhotoUrls = (() => {
-          if (
-            Array.isArray(sellerInformationDto.sellerPhotos) &&
-            sellerInformationDto.sellerPhotos.length > 0
-          ) {
-            const filtered = sellerInformationDto.sellerPhotos.filter(
-              (photo) => !photo.photoUrl.endsWith(".txt")
+        if (
+          Array.isArray(sellerInformationDto.sellerPhotos) &&
+          sellerInformationDto.sellerPhotos.length > 0
+        ) {
+          const filteredPhotos = sellerInformationDto.sellerPhotos.filter(
+            (photo) => photo.photoUrl && !photo.photoUrl.endsWith(".txt")
+          );
+
+          if (filteredPhotos.length > 0) {
+            sellerPhotoUrls = filteredPhotos.map(
+              (photo) =>
+                `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
             );
-
-            if (filtered.length > 0) {
-              return filtered.map(
-                (photo) =>
-                  `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
-              );
-            }
           }
+        }
 
-          // 기본 이미지 fallback
-          return ["/image/product1.jpg"];
-        })();
+        // sellerPhotoUrls가 여전히 비어 있으면 기본 이미지 적용
+        if (sellerPhotoUrls.length === 0) {
+          sellerPhotoUrls = ["/image/product1.jpg"];
+        }
 
+        // 최종 setStore
         setStore({
           sellerInformationDto: {
             ...sellerInformationDto,
-            sellerPhotoUrls, // 무조건 하나 이상 들어가 있음
+            sellerPhotoUrls,
           },
           sellerPhotoDto: null,
           sellerRegisterDto: null,
         });
       } catch (error) {
         console.error("API 요청 실패:", error);
-        // setStore(null);
         navigate("/404", { replace: true });
       }
     };
 
-    storeInfo();
+    fetchStoreInfo();
   }, [sellerId, navigate]);
 
   return { store, sellerId };
-
-  // const { sellerRegisterDto, sellerInformationDto, sellerPhotoDto } = store;
 }
