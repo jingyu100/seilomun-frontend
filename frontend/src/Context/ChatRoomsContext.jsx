@@ -56,14 +56,12 @@ export function ChatRoomsProvider({ children }) {
     console.log("기존 chatRooms:", chatRooms);
 
     setChatRooms((prev) => {
-      const exists = prev.find((room) => room.id === newRoom.id);
-      console.log("중복 체크 결과:", exists);
+      const isDuplicate = prev.some((room) => room.id === newRoom.id);
+      console.log("중복 체크 결과:", isDuplicate);
 
-      if (exists) {
+      if (isDuplicate) {
         console.log("중복된 채팅방이므로 추가하지 않음");
-        return prev.map((room) =>
-          room.id === newRoom.id ? { ...room, ...newRoom } : room
-        );
+        return prev;
       }
 
       console.log("새 채팅방 추가");
