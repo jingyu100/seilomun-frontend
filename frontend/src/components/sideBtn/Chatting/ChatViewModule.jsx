@@ -7,7 +7,7 @@ import api, { API_BASE_URL, S3_BASE_URL } from "../../../api/config.js";
 
 export default function ChatViewModule() {
   const { user } = useLogin();
-  const { chatRooms } = useChatRooms();
+  const { setChatRooms, addChatRoom, fetchChatRooms } = useChatRooms();
   const [currentView, setCurrentView] = useState("list"); // 'list' or 'chat'
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
 
@@ -22,9 +22,10 @@ export default function ChatViewModule() {
   };
 
   // 뒤로가기 핸들러
-  const handleBackToList = () => {
-    setCurrentView("list");
+  const handleBackToList = async () => {
+    await fetchChatRooms();
     setSelectedChatRoom(null);
+    setCurrentView("list");
   };
 
   // 상대방(채팅방 타이틀)에 표시할 이름 결정 함수
