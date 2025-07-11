@@ -23,29 +23,33 @@ export default function useStoreInfo() {
         }
 
         //이미지 URL 생성
-        let sellerPhotoUrls = [];
+        // useStoreInfo.js 내부
 
-        if (
-          Array.isArray(sellerInformationDto.sellerPhotos) &&
-          sellerInformationDto.sellerPhotos.length > 0
-        ) {
-          sellerPhotoUrls = sellerInformationDto.sellerPhotos
-            .filter((photo) => !photo.photoUrl.endsWith(".txt"))
-            .map(
-              (photo) =>
-                `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
+        const sellerPhotoUrls = (() => {
+          if (
+            Array.isArray(sellerInformationDto.sellerPhotos) &&
+            sellerInformationDto.sellerPhotos.length > 0
+          ) {
+            const filtered = sellerInformationDto.sellerPhotos.filter(
+              (photo) => !photo.photoUrl.endsWith(".txt")
             );
-        }
 
-        // 이미지가 하나도 없다면 기본 이미지 추가
-        if (sellerPhotoUrls.length === 0) {
-          sellerPhotoUrls = ["/image/product1.jpg"];
-        }
+            if (filtered.length > 0) {
+              return filtered.map(
+                (photo) =>
+                  `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
+              );
+            }
+          }
+
+          // 기본 이미지 fallback
+          return ["/image/product1.jpg"];
+        })();
 
         setStore({
           sellerInformationDto: {
             ...sellerInformationDto,
-            sellerPhotoUrls, // 안전하게 URL 배열 추가
+            sellerPhotoUrls, // 무조건 하나 이상 들어가 있음
           },
           sellerPhotoDto: null,
           sellerRegisterDto: null,
