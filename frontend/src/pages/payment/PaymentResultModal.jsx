@@ -79,7 +79,7 @@ const PaymentResultModal = ({ result, onClose }) => {
     };
 
     const handleViewOrders = () => {
-        navigate("/orders"); // 주문 내역 페이지
+        navigate("/orderList"); // 주문 내역 페이지
     };
 
     const handleClose = () => {
