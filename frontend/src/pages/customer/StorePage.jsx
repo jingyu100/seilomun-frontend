@@ -23,7 +23,6 @@ export default function StorePage() {
     const [isAutoPlay, setIsAutoPlay] = useState(true);
 
     // 데이터 추출
-    const sellerPhotoDto = store?.sellerPhotoDto;
     const sellerInformationDto = store?.sellerInformationDto;
     const imageList = (sellerInformationDto?.sellerPhotoUrls?.length > 0) 
                         ? sellerInformationDto.sellerPhotoUrls 

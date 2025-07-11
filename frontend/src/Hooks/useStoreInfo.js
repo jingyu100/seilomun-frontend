@@ -23,21 +23,32 @@ export default function useStoreInfo() {
         }
 
         //이미지 URL 생성
-        const sellerPhotoUrls =
-          sellerInformationDto.sellerPhotos
-            ?.filter((photo) => !photo.photoUrl.endsWith(".txt")) // .txt 파일 제외
-            ?.map(
+        let sellerPhotoUrls = [];
+
+        if (
+          sellerInformationDto.sellerPhotos &&
+          sellerInformationDto.sellerPhotos.length > 0
+        ) {
+          sellerPhotoUrls = sellerInformationDto.sellerPhotos
+            .filter((photo) => !photo.photoUrl.endsWith(".txt")) // .txt 제외
+            .map(
               (photo) =>
                 `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
-            ) || [];
+            );
+        }
+
+        // 이미지가 하나도 없다면 기본 이미지 추가
+        if (sellerPhotoUrls.length === 0) {
+          sellerPhotoUrls = ["/image/product1.jpg"];
+        }
 
         setStore({
           sellerInformationDto: {
             ...sellerInformationDto,
-            sellerPhotoUrls, // URL 배열 추가
+            sellerPhotoUrls, // 안전하게 URL 배열 추가
           },
           sellerPhotoDto: null,
-          sellerRegisterDto: null, // 필요한 경우 백에서 받아서 넣기
+          sellerRegisterDto: null,
         });
       } catch (error) {
         console.error("API 요청 실패:", error);
