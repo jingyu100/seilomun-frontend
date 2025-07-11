@@ -46,10 +46,14 @@ const SellerList = () => {
     console.log("seller : ", seller);
     const url =
       seller.profileImageUrl ||
-      seller.thumbnailUrl ||
-      (Array.isArray(seller.sellerPhotoUrls) ? seller.sellerPhotoUrls[0] : seller.sellerPhotoUrls);
+      seller.thumbnailUrl;
+
+    if (!url && Array.isArray(seller.sellerPhotoUrls) && seller.sellerPhotoUrls.length > 0) {
+      url = seller.sellerPhotoUrls[0];
+    }
 
     if (!url) return "/image/product1.jpg";
+    
     return url.startsWith("http")
       ? url
       : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
