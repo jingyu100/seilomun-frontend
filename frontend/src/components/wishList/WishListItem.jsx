@@ -3,17 +3,41 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function WishListItem({ item,onRemove, onAddToCart }) {
+export default function WishListItem({ item, favorites, onRemove, onAddToCart }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isCartHovered, setIsCartHovered] = useState(false);
   const [isRemoveHovered, setIsRemoveHovered] = useState(false);
   const navigate = useNavigate();
 
   // 이미지 URL 처리
-    const handleCardClick = () => {
-        // item.sellerId를 바로 사용 (API 응답에 포함되어 있음)
-        navigate(`/sellers/${item.sellerId}/products/${item.productId}`);
-    };
+  const getImageUrl = (photoUrl) => {
+    if (!photoUrl) {
+      return "/image/product1.jpg"; // 기본 이미지
+    }
+
+    if (photoUrl.startsWith("http")) {
+      return photoUrl;
+    }
+
+    return `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photoUrl}`;
+  };
+
+  const handleCardClick = () => {
+    // 즐겨찾기 목록에서 같은 주소를 가진 매장 찾기
+    const matchedSeller = favorites?.find(
+      (fav) => fav.addressDetail === item.storeAddress
+    );
+
+    console.log(favorites);
+
+    if (matchedSeller) {
+      // sellerId를 찾았으면 올바른 경로로 이동
+      navigate(`/sellers/${matchedSeller.id}/products/${item.productId}`);
+    } else {
+      // fallback: productId만으로 이동
+      navigate(`/products/${item.productId}`);
+    }
+  };
 
   return (
     <div
