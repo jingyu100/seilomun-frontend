@@ -9,6 +9,8 @@ export default function WishListItem({ item, favorites, onRemove, onAddToCart })
   const [isRemoveHovered, setIsRemoveHovered] = useState(false);
   const navigate = useNavigate();
 
+  console.log("item:", item);
+
   // 이미지 URL 처리
   const getImageUrl = (photoUrl) => {
     if (!photoUrl) {
