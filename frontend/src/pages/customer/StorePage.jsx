@@ -24,9 +24,18 @@ export default function StorePage() {
 
     // 데이터 추출
     const sellerInformationDto = store?.sellerInformationDto;
-    const imageList = (sellerInformationDto?.sellerPhotoUrls?.length > 0) 
-                        ? sellerInformationDto.sellerPhotoUrls 
-                        : ["/image/product1.jpg"];
+    
+    let imageList = [];
+
+    if (
+    sellerInformationDto?.sellerPhotoUrls &&
+    Array.isArray(sellerInformationDto.sellerPhotoUrls) &&
+    sellerInformationDto.sellerPhotoUrls.length > 0
+    ) {
+    imageList = sellerInformationDto.sellerPhotoUrls;
+    } else {
+    imageList = ["/image/product1.jpg"];
+    }
 
 
     // 이미지가 변경될 때 인덱스 초기화
