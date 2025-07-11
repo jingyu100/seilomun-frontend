@@ -102,7 +102,6 @@ function App() {
                 path="/sellers/:sellerId/products/:productId"
                 element={<ProductPage />}
               />
-              <Route path="/products/:productId" element={<ProductPage />} />
               <Route path="/oauth-success" element={<NaverLoginCallback />} />
               <Route path="/Customer_modify" element={<Customer_modify />} />
               <Route path="/Customer_point" element={<Customer_point />} />
