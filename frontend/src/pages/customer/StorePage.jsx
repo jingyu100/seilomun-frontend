@@ -24,9 +24,7 @@ export default function StorePage() {
 
     // 데이터 추출
     const sellerInformationDto = store?.sellerInformationDto;
-    const imageList = sellerInformationDto?.sellerPhotoUrls || [
-        "https://via.placeholder.com/300x200?text=기본+이미지",
-      ];
+    const imageList = sellerInformationDto?.sellerPhotoUrls || ["/image/product1.jpg"];
 
 
     // 이미지가 변경될 때 인덱스 초기화
