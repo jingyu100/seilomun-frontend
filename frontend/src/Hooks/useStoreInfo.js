@@ -1,8 +1,6 @@
-// useStoreInfo.js
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/config";
+import api, { API_BASE_URL } from "../api/config";
 
 export default function useStoreInfo() {
   const { sellerId } = useParams();
@@ -12,19 +10,19 @@ export default function useStoreInfo() {
   useEffect(() => {
     if (!sellerId) return;
 
-    const fetchStoreInfo = async () => {
+    const storeInfo = async () => {
       try {
         const response = await api.get(`/api/sellers/${sellerId}`);
         console.log("API 응답:", response.data);
 
         const sellerInformationDto = response.data.data.seller;
-
+        console.log(sellerInformationDto);
         if (!sellerInformationDto) {
           navigate("/404", { replace: true });
           return;
         }
 
-        // 안전하게 sellerPhotoUrls 생성
+        //이미지 URL 생성
         let sellerPhotoUrls = [];
 
         if (
@@ -63,8 +61,10 @@ export default function useStoreInfo() {
       }
     };
 
-    fetchStoreInfo();
+    storeInfo();
   }, [sellerId, navigate]);
 
   return { store, sellerId };
+
+  // const { sellerRegisterDto, sellerInformationDto, sellerPhotoDto } = store;
 }
