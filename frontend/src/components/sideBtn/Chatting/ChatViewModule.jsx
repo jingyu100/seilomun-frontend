@@ -7,7 +7,7 @@ import api, { API_BASE_URL, S3_BASE_URL } from "../../../api/config.js";
 
 export default function ChatViewModule() {
   const { user } = useLogin();
-  const { setChatRooms, addChatRoom, fetchChatRooms } = useChatRooms();
+  const { chatRooms, setChatRooms, addChatRoom, fetchChatRooms } = useChatRooms();
   const [currentView, setCurrentView] = useState("list"); // 'list' or 'chat'
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
 
