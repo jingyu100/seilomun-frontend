@@ -44,16 +44,31 @@ const SellerList = () => {
 
   const getSellerImageUrl = (seller) => {
     console.log("seller : ", seller);
-    const url =
-      seller.profileImageUrl ||
-      seller.thumbnailUrl;
+    let url;
+      // 1. profileImageUrl이 문자열이면 사용, 배열이면 첫 번째 사용
+      if (seller.profileImageUrl) {
+        if (typeof seller.profileImageUrl === "string") {
+          url = seller.profileImageUrl;
+        } else if (Array.isArray(seller.profileImageUrl) && seller.profileImageUrl.length > 0) {
+          url = seller.profileImageUrl[0];
+        }
+      }
 
-    if (!url && Array.isArray(seller.sellerPhotoUrls) && seller.sellerPhotoUrls.length > 0) {
-      url = seller.sellerPhotoUrls[0];
-    }
+      // 2. thumbnailUrl이 문자열이면 사용, 배열이면 첫 번째 사용 (1번이 없을 때만)
+      if (!url && seller.thumbnailUrl) {
+        if (typeof seller.thumbnailUrl === "string") {
+          url = seller.thumbnailUrl;
+        } else if (Array.isArray(seller.thumbnailUrl) && seller.thumbnailUrl.length > 0) {
+          url = seller.thumbnailUrl[0];
+        }
+      }
+
+      // 3. sellerPhotoUrls가 배열이면 첫 번째 사용
+      if (!url && Array.isArray(seller.sellerPhotoUrls) && seller.sellerPhotoUrls.length > 0) {
+        url = seller.sellerPhotoUrls[0];
+      }
 
     if (!url) return "/image/product1.jpg";
-    
     return url.startsWith("http")
       ? url
       : `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${url}`;
