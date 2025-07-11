@@ -13,37 +13,31 @@ export default function Inquiry({ sellerId, onOpenChat }) {
       return;
     }
 
-    // 고객이 판매자에게 문의하는 경우만 처리
-    const postData = { sellerId };
-
     try {
-      const response = await api.post(`/api/chat/rooms`, postData);
-
+      // 1. 채팅방 생성 요청
+      const response = await api.post(`/api/chat/rooms`, { sellerId });
       const roomId = response?.data?.data?.chatRoomId;
+
       if (!roomId) {
         throw new Error("chatRoomId 가 응답에 존재하지 않습니다.");
       }
+
       console.log("채팅방 생성/조회 성공, roomId:", roomId);
 
-      // Context 업데이트: 응답 데이터를 그대로 사용해 새 채팅방 추가
-      const roomData = response.data.data;
-      const newChatRoom = {
-        id: roomData.chatRoomId,
-        customerId: roomData.customerId,
-        customerNickname: roomData.customerNickname,
-        sellerId: roomData.sellerId,
-        sellerStoreName: roomData.sellerStoreName,
-        createdAt: roomData.createdAt,
-        lastMessage: roomData.lastMessage,
-        lastMessageTime: roomData.lastMessageTime,
-        unreadCount: 0,
-      };
+      // ✅ 2. 생성된 채팅방의 전체 정보 재조회 (프로필 이미지 포함)
+      const fullRoomRes = await api.get(`/api/chat/rooms/${roomId}`);
+      const fullRoomData = fullRoomRes?.data?.data;
 
-      addChatRoom(newChatRoom);
+      if (!fullRoomData) {
+        throw new Error("채팅방 상세정보 조회 실패");
+      }
 
-      // 채팅방 생성 후 사이드 채팅 모듈 열기
+      // ✅ 3. Context에 반영 (프로필 포함된 채팅방)
+      addChatRoom(fullRoomData);
+
+      // ✅ 4. 사이드 채팅 패널 열기 (ChatViewModule에서 View 전환)
       if (onOpenChat) {
-        onOpenChat(newChatRoom);
+        onOpenChat(fullRoomData);
       }
     } catch (error) {
       console.error("채팅방 생성 실패:", error?.response?.data || error);
