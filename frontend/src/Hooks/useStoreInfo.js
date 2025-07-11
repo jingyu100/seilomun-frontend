@@ -26,11 +26,11 @@ export default function useStoreInfo() {
         let sellerPhotoUrls = [];
 
         if (
-          sellerInformationDto.sellerPhotos &&
+          Array.isArray(sellerInformationDto.sellerPhotos) &&
           sellerInformationDto.sellerPhotos.length > 0
         ) {
           sellerPhotoUrls = sellerInformationDto.sellerPhotos
-            .filter((photo) => !photo.photoUrl.endsWith(".txt")) // .txt 제외
+            .filter((photo) => !photo.photoUrl.endsWith(".txt"))
             .map(
               (photo) =>
                 `https://seilomun-bucket.s3.ap-northeast-2.amazonaws.com/${photo.photoUrl}`
