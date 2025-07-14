@@ -27,6 +27,8 @@ export function WebSocketProvider({ children }) {
   const clientRef = useRef(null);
   const subscriptionsRef = useRef(new Map()); // chatRoomId -> subscription
 
+
+  // 구독(채팅방), 클라이언트(웹소켓) (해제)
   const disconnectWebSocket = useCallback((reason = "수동 해제") => {
     console.log("WebSocket 연결 해제:", reason);
     setLastDisconnectReason(reason);
@@ -55,66 +57,68 @@ export function WebSocketProvider({ children }) {
     setConnectionStatus("disconnected");
   }, []);
 
-  const connectWebSocket = useCallback(() => {
-    if (!user || connected || clientRef.current) return;
+    // 구독(채팅방), 클라이언트(웹소켓) (연결)
+    const connectWebSocket = useCallback(() => {
+      if (!user || connected || clientRef.current) return;
 
-    console.log("WebSocket 연결 시도...", user);
-    setConnectionStatus("connecting");
+      console.log("WebSocket 연결 시도...", user);
+      setConnectionStatus("connecting");
 
-    try {
-      const socket = new SockJS(`${API_BASE_URL}/ws`);
-      const client = new Client({
-        webSocketFactory: () => socket,
-        reconnectDelay: 5000,
-        onConnect: (frame) => {
-          console.log("WebSocket 연결 성공:", frame);
-          setConnected(true);
-          setStompClient(client);
-          setConnectionStatus("connected");
-          setLastDisconnectReason(null);
-        },
-        onStompError: (frame) => {
-          console.error("STOMP 오류:", frame);
-          setConnected(false);
-          setConnectionStatus("error");
-          setLastDisconnectReason("STOMP 오류");
-        },
-        onDisconnect: (frame) => {
-          console.log("WebSocket 연결 해제됨", frame);
-          setConnected(false);
-          setStompClient(null);
-          setConnectionStatus("disconnected");
+      try {
+        const socket = new SockJS(`${API_BASE_URL}/ws`);
+        const client = new Client({
+          webSocketFactory: () => socket,
+          reconnectDelay: 5000,
+          onConnect: (frame) => {
+            console.log("WebSocket 연결 성공:", frame);
+            setConnected(true);
+            setStompClient(client);
+            setConnectionStatus("connected");
+            setLastDisconnectReason(null);
+          },
+          onStompError: (frame) => {
+            console.error("STOMP 오류:", frame);
+            setConnected(false);
+            setConnectionStatus("error");
+            setLastDisconnectReason("STOMP 오류");
+          },
+          onDisconnect: (frame) => {
+            console.log("WebSocket 연결 해제됨", frame);
+            setConnected(false);
+            setStompClient(null);
+            setConnectionStatus("disconnected");
 
-          // 연결 해제 이유 판단
-          if (!user) {
-            setLastDisconnectReason("로그아웃");
-          } else if (frame && frame.reason) {
-            setLastDisconnectReason(frame.reason);
-          } else {
-            setLastDisconnectReason("알 수 없는 이유");
-          }
-        },
-        onWebSocketError: (error) => {
-          console.error("WebSocket 오류:", error);
-          setConnectionStatus("error");
-          setLastDisconnectReason("네트워크 오류");
-        },
-        connectHeaders: {
-          userId: user.id.toString(),
-          userType: user.userType === "CUSTOMER" ? "C" : "S",
-          userName: user.nickname || "익명사용자",
-        },
-      });
+            // 연결 해제 이유 판단
+            if (!user) {
+              setLastDisconnectReason("로그아웃");
+            } else if (frame && frame.reason) {
+              setLastDisconnectReason(frame.reason);
+            } else {
+              setLastDisconnectReason("알 수 없는 이유");
+            }
+          },
+          onWebSocketError: (error) => {
+            console.error("WebSocket 오류:", error);
+            setConnectionStatus("error");
+            setLastDisconnectReason("네트워크 오류");
+          },
+          connectHeaders: {
+            userId: user.id.toString(),
+            userType: user.userType === "CUSTOMER" ? "C" : "S",
+            userName: user.nickname || "익명사용자",
+          },
+        });
 
-      client.activate();
-      clientRef.current = client;
-    } catch (error) {
-      console.error("WebSocket 연결 실패:", error);
-      setConnectionStatus("error");
-      setLastDisconnectReason("연결 실패");
-    }
-  }, [user, connected]);
-
+        client.activate();
+        clientRef.current = client;
+      } catch (error) {
+        console.error("WebSocket 연결 실패:", error);
+        setConnectionStatus("error");
+        setLastDisconnectReason("연결 실패");
+      }
+    }, [user, connected]);
+    
+  // 채팅방 구독 담당 함수
   const subscribeToRoom = useCallback(
     (chatRoomId) => {
       if (!stompClient || !connected || activeSubscriptions.has(chatRoomId)) return;
