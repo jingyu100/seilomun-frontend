@@ -7,68 +7,70 @@ import api, { API_BASE_URL, S3_BASE_URL } from "../../../api/config.js";
 
 export default function ChatViewModule() {
   const { user } = useLogin();
-  const { chatRooms, setChatRooms, addChatRoom, fetchChatRooms } = useChatRooms();
-  const [currentView, setCurrentView] = useState("list"); // 'list' or 'chat'
+  const { chatRooms, fetchChatRooms } = useChatRooms();
+  const [currentView, setCurrentView] = useState("list");
   const [selectedChatRoom, setSelectedChatRoom] = useState(null);
 
   if (!user) {
-    return null; // 로그인 안 되어있으면 아무것도 렌더링하지 않음
+    return null;
   }
 
-  // 채팅방 클릭 핸들러
+  // ✅ 새 채팅방 생성 핸들러 (예시용 sellerId / customerId 대체 필요)
+  const handleNewChatRoom = async () => {
+    try {
+      const response = await api.post(`${API_BASE_URL}/chat-rooms`, {
+        sellerId: "seller-id-here",      // 필요 시 동적 값으로 대체
+        customerId: "customer-id-here",  // 필요 시 동적 값으로 대체
+      });
+
+      await fetchChatRooms();
+
+      const createdRoom = response.data;
+      setSelectedChatRoom(createdRoom);
+      setCurrentView("chat");
+    } catch (err) {
+      console.error("채팅방 생성 실패", err);
+    }
+  };
+
   const handleChatRoomClick = (chatRoom) => {
     setSelectedChatRoom(chatRoom);
     setCurrentView("chat");
   };
 
-  // 뒤로가기 핸들러
   const handleBackToList = async () => {
     await fetchChatRooms();
     setSelectedChatRoom(null);
     setCurrentView("list");
   };
 
-  // 상대방(채팅방 타이틀)에 표시할 이름 결정 함수
   const getRoomTitle = (room) => {
-    if (user.userType === "SELLER") {
-      return room.customerNickname || "고객";
-    } else {
-      return room.sellerStoreName || "매장";
-    }
+    return user.userType === "SELLER"
+      ? room.customerNickname || "고객"
+      : room.sellerStoreName || "매장";
   };
 
-  // 프로필 이미지 URL 처리 함수
   const getProfileImageUrl = (room) => {
-    let imageUrl = null;
-  
-    if (user.userType === "SELLER") {
-      imageUrl = room.customerPhotoUrl;
-    } else {
-      imageUrl = room.sellerPhotoUrl;
-    }
-  
-    // null, 빈 문자열 등 처리
+    const imageUrl = user.userType === "SELLER"
+      ? room.customerPhotoUrl
+      : room.sellerPhotoUrl;
+
     if (!imageUrl || imageUrl.trim() === "") {
-      return "/image/product1.jpg"; // ✅ 기본 이미지로 fallback
+      return "/image/product1.jpg";
     }
-  
-    // 절대 URL이면 그대로 사용
+
     if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
       return imageUrl;
     }
-  
-    // S3 URL 조합
+
     return `${S3_BASE_URL}${imageUrl}`;
   };
 
-
-  // 프로필 이니셜 생성 함수
   const getProfileInitial = (room) => {
     const name = getRoomTitle(room);
-    if (name === "고객" || name === "매장") {
-      return name[0]; // "고" 또는 "매"
-    }
-    return name.charAt(0).toUpperCase();
+    return name === "고객" || name === "매장"
+      ? name[0]
+      : name.charAt(0).toUpperCase();
   };
 
   const getLastMessageText = (room) => {
@@ -77,12 +79,10 @@ export default function ChatViewModule() {
       : "새 대화를 시작해보세요";
   };
 
-  // 채팅창 뷰
   if (currentView === "chat" && selectedChatRoom) {
     return <ChatRoomView chatRoom={selectedChatRoom} onBack={handleBackToList} />;
   }
 
-  // 채팅방 목록 뷰
   return (
     <div className="sideChattModule viewModule">
       <div className="chatModuleHead">
@@ -90,11 +90,16 @@ export default function ChatViewModule() {
           <h3>{user.nickname}님의 채팅방</h3>
           <h3>({chatRooms.length})</h3>
         </div>
+        {/* ✅ 예시용 버튼: 필요 시 삭제/이동 */}
+        <button onClick={handleNewChatRoom} style={{ marginLeft: "auto" }}>
+          새 채팅 시작
+        </button>
       </div>
+
       <div className="chatModuleBody">
         {chatRooms.length > 0 ? (
           chatRooms.map((chat) => {
-            const profileImageUrl = getProfileImageUrl(chat) ;
+            const profileImageUrl = getProfileImageUrl(chat);
             const profileInitial = getProfileInitial(chat);
 
             return (
@@ -112,9 +117,10 @@ export default function ChatViewModule() {
                         alt={`${getRoomTitle(chat)} 프로필`}
                         className="chatProfileImage"
                         onError={(e) => {
-                          // 이미지 로드 실패시 이니셜로 대체
-                          e.target.style.display = "none";
-                          e.target.nextSibling.style.display = "flex";
+                          setTimeout(() => {
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }, 300);
                         }}
                         style={{
                           width: "100%",
