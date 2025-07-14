@@ -23,11 +23,7 @@ export default function ChatViewModule() {
         customerId: "customer-id-here",  // 필요 시 동적 값으로 대체
       });
 
-      await fetchChatRooms();
-
-      const createdRoom = response.data;
-      setSelectedChatRoom(createdRoom);
-      setCurrentView("chat");
+      await fetchChatRooms(); // 🔁 이미지 포함된 정보로 갱신
     } catch (err) {
       console.error("채팅방 생성 실패", err);
     }
