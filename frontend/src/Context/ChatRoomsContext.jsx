@@ -39,6 +39,9 @@ export function ChatRoomsProvider({ children }) {
   /* ---------- ✅ ③ 새 채팅방 추가(또는 갱신) ---------- */
   const addChatRoom = (newRoomRaw) => {
     // 👉 프로필 이미지 URL 자동 추출해서 newRoom 보강
+
+    console.log("👀 newRoomRaw:", newRoomRaw);
+    
     const newRoom = {
       ...newRoomRaw,
       customerPhotoUrl: newRoomRaw.customerPhotoUrl || newRoomRaw.customer?.photoUrl || "",
