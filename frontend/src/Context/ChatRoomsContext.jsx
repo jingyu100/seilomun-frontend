@@ -16,7 +16,7 @@ export function ChatRoomsProvider({ children }) {
 
   /* ---------- ① 목록 가져오기 함수 ---------- */
   const fetchChatRooms = async () => {
-    if (!user) return;
+    if (!user) return;                // 로그인 안 했으면 호출 X
     try {
       const res = await api.get("/api/chat/rooms");
       const rooms = res.data.data.chatRooms || [];
@@ -33,25 +33,15 @@ export function ChatRoomsProvider({ children }) {
       setChatRooms([]);
       return;
     }
-    fetchChatRooms();
+    fetchChatRooms();                 // ← 함수 “호출”만
   }, [user]);
 
-  /* ---------- ✅ ③ 새 채팅방 추가(또는 갱신) ---------- */
-  const addChatRoom = (newRoomRaw) => {
-    // 👉 프로필 이미지 URL 자동 추출해서 newRoom 보강
-
-    console.log("👀 newRoomRaw:", newRoomRaw);
-    
-    const newRoom = {
-      ...newRoomRaw,
-      customerPhotoUrl: newRoomRaw.customerPhotoUrl || newRoomRaw.customer?.photoUrl || "",
-      sellerPhotoUrl: newRoomRaw.sellerPhotoUrl || newRoomRaw.seller?.photoUrl || "",
-    };
-
+  /* ---------- ③ 새 채팅방 추가(또는 갱신) ---------- */
+  const addChatRoom = (newRoom) => {
     setChatRooms((prev) => {
       const exists = prev.find((r) => r.id === newRoom.id);
       return exists
-        ? prev.map((r) => (r.id === newRoom.id ? { ...r, ...newRoom } : r))
+        ? prev.map((r) => (r.id === newRoom.id ? { ...r, ...newRoom } : r)) // 최신 정보로 갱신
         : [...prev, newRoom];
     });
   };
@@ -61,7 +51,7 @@ export function ChatRoomsProvider({ children }) {
     chatRooms,
     setChatRooms,
     addChatRoom,
-    fetchChatRooms,
+    fetchChatRooms,   // ★ ChatViewModule 등에서 사용할 수 있게 노출
   };
 
   return (

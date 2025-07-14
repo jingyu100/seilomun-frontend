@@ -37,9 +37,11 @@ export default function Inquiry({ sellerId, onOpenChat }) {
         lastMessage: roomData.lastMessage,
         lastMessageTime: roomData.lastMessageTime,
         unreadCount: 0,
-        customerPhotoUrl: roomData.customerPhotoUrl || roomData.customer?.photoUrl || "",
-        sellerPhotoUrl: roomData.sellerPhotoUrl || roomData.seller?.photoUrl || "",
+        customerPhotoUrl: roomData.customerPhotoUrl || roomData.customer?.photoUrl,
+        sellerPhotoUrl: roomData.sellerPhotoUrl || roomData.seller?.photoUrl,
       };
+
+      console.log("newChatRoom", newChatRoom);
 
       addChatRoom(newChatRoom);
 
