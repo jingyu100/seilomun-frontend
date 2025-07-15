@@ -19,8 +19,8 @@ export default function ChatViewModule() {
   const handleNewChatRoom = async () => {
     try {
       const response = await api.post(`${API_BASE_URL}/chat-rooms`, {
-        sellerId: "seller-id-here",      // 필요 시 동적 값으로 대체
-        customerId: "customer-id-here",  // 필요 시 동적 값으로 대체
+        sellerId: "seller-id-here", // 필요 시 동적 값으로 대체
+        customerId: "customer-id-here", // 필요 시 동적 값으로 대체
       });
 
       await fetchChatRooms(); // 🔁 이미지 포함된 정보로 갱신
@@ -47,9 +47,8 @@ export default function ChatViewModule() {
   };
 
   const getProfileImageUrl = (room) => {
-    const imageUrl = user.userType === "SELLER"
-      ? room.customerPhotoUrl
-      : room.sellerPhotoUrl;
+    const imageUrl =
+      user.userType === "SELLER" ? room.customerPhotoUrl : room.sellerPhotoUrl;
 
     if (!imageUrl || imageUrl.trim() === "") {
       return "/image/product1.jpg";
@@ -64,9 +63,7 @@ export default function ChatViewModule() {
 
   const getProfileInitial = (room) => {
     const name = getRoomTitle(room);
-    return name === "고객" || name === "매장"
-      ? name[0]
-      : name.charAt(0).toUpperCase();
+    return name === "고객" || name === "매장" ? name[0] : name.charAt(0).toUpperCase();
   };
 
   const getLastMessageText = (room) => {
@@ -86,10 +83,6 @@ export default function ChatViewModule() {
           <h3>{user.nickname}님의 채팅방</h3>
           <h3>({chatRooms.length})</h3>
         </div>
-        {/* ✅ 예시용 버튼: 필요 시 삭제/이동 */}
-        <button onClick={handleNewChatRoom} style={{ marginLeft: "auto" }}>
-          새 채팅 시작
-        </button>
       </div>
 
       <div className="chatModuleBody">
