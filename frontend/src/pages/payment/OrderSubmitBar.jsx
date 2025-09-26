@@ -1,17 +1,17 @@
 import "./OrderSubmitBar.css";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import api, { API_BASE_URL } from "../../api/config.js";
+import api from "../../api/config.js";
 
 const OrderSubmitBar = ({
   products = [],
-  deliveryFee,
-  totalProductPrice,
+  deliveryFee = 0,
+  totalProductPrice = 0,
   isPickup = false,
   finalAmount, // 부모에서 계산된 최종 금액
-  deliveryInfo, // ✨ 새로 추가: 배송 정보
-  pickupInfo, // ✨ 새로 추가: 픽업 정보
-  pointsToUse = 0, // ✨ 새로 추가: 사용할 포인트
+  deliveryInfo = {},
+  pickupInfo = {},
+  pointsToUse = 0,
 }) => {
   const tossPaymentsRef = useRef(null);
   const currentOrderIdRef = useRef(null); // 현재 주문 ID를 저장할 ref
@@ -19,7 +19,8 @@ const OrderSubmitBar = ({
 
   // 최종 결제 금액 계산 (부모에서 전달받은 값 우선 사용)
   const calculatedFinalAmount =
-    finalAmount || totalProductPrice + (isPickup ? 0 : deliveryFee);
+    finalAmount ??
+    ((totalProductPrice || 0) + (isPickup ? 0 : (deliveryFee || 0)));
 
   useEffect(() => {
     if (window.TossPayments) {
@@ -33,40 +34,29 @@ const OrderSubmitBar = ({
 
   // SDK 창 닫기 처리 함수
   const handlePaymentClose = async (orderId) => {
+    if (!orderId) return;
     try {
-      console.log("🔄 결제창 닫기 처리 시작:", orderId);
-
       const response = await api.post(
         `/api/orders/close-payment/${orderId}`,
         {},
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
-
       console.log("✅ 결제창 닫기 처리 완료:", response.data);
-
-      // 성공 메시지 표시 (선택사항)
-      if (response.data?.data?.message) {
-        console.log("서버 메시지:", response.data.data.message);
-      }
     } catch (error) {
       console.error("❌ 결제창 닫기 처리 실패:", error);
-
-      if (error.response?.data?.error) {
-        console.error("서버 에러:", error.response.data.error);
-      }
-
-      // 에러가 발생해도 사용자에게는 알리지 않음 (백그라운드 처리)
-      // 필요시 에러 로깅 서비스에 전송
     }
   };
 
-  // ✨ 유효성 검사 함수
+  // 유효성 검사 함수
   const validateOrderData = () => {
+    if (!products || !products.length) {
+      alert("주문할 상품이 없습니다.");
+      return false;
+    }
+
     if (!isPickup) {
-      // 배송인 경우 주소 확인
-      if (!deliveryInfo.mainAddress.trim()) {
+      // 배송인 경우 주소 및 전화번호 확인
+      if (!deliveryInfo || !deliveryInfo.mainAddress?.trim()) {
         alert("배송 주소를 입력해주세요.");
         return false;
       }
@@ -84,81 +74,64 @@ const OrderSubmitBar = ({
 
   const handlePaymentClick = async () => {
     try {
-      // ✨ 유효성 검사
-      if (!validateOrderData()) {
+      if (!validateOrderData()) return;
+
+      if (!tossPaymentsRef.current) {
+        alert("결제 SDK가 로드되지 않았습니다. 잠시 후 다시 시도해주세요.");
         return;
       }
 
-      // 디버깅: products 배열 확인
-      console.log("🛒 결제 데이터 디버깅 시작");
-      console.log("전체 products 배열:", products);
-      console.log("products 길이:", products?.length);
-
-      if (!products || products.length === 0) {
-        console.error("❌ 주문할 상품이 없습니다!");
+      // null 제거
+      const validProducts = products.filter((p) => p && (p.id || p.productId));
+      if (!validProducts.length) {
         alert("주문할 상품이 없습니다.");
         return;
       }
 
-      // 🆕 여러 상품 처리를 위한 주문명 생성
-      const firstProduct = products[0];
+      const firstProduct = validProducts[0];
       const orderName =
-        products.length === 1
-          ? `${firstProduct.name} ${firstProduct.quantity || 1}개`
-          : `${firstProduct.name} 외 ${products.length - 1}건`;
+        validProducts.length === 1
+          ? `${firstProduct.name || "상품"} ${firstProduct.quantity || 1}개`
+          : `${firstProduct.name || "상품"} 외 ${validProducts.length - 1}건`;
 
-      console.log("생성된 주문명:", orderName);
-
-      // ✨ 여러 상품을 모두 포함하는 주문 데이터 구성
       const orderData = {
-        usedPoints: pointsToUse || 0, // 기본값 보장
+        usedPoints: pointsToUse || 0,
         memo: isPickup
           ? pickupInfo.pickupRequest || "픽업 주문"
           : deliveryInfo.deliveryRequest || "배송 주문",
-        isDelivery: isPickup ? "N" : "Y", // ✅ Character로 수정
+        isDelivery: isPickup ? "N" : "Y",
         deliveryAddress: isPickup
           ? "매장 픽업"
-          : `${deliveryInfo.mainAddress} ${deliveryInfo.detailAddress}`.trim(),
-        // 🆕 모든 상품을 orderProducts 배열에 포함
-        orderProducts: products.map((product) => ({
+          : `${deliveryInfo.mainAddress || ""} ${deliveryInfo.detailAddress || ""}`.trim(),
+        orderProducts: validProducts.map((product) => ({
           productId: product.id || product.productId,
-          quantity: product.quantity || 1,
-          price: product.discountPrice || product.originalPrice,
-          currentDiscountRate: product.currentDiscountRate || 0,
+          quantity: product.quantity ?? 1,
+          price: product.discountPrice ?? product.originalPrice ?? 0,
+          currentDiscountRate: product.currentDiscountRate ?? 0,
         })),
         payType: "CARD",
-        orderName: orderName, // 🆕 동적 주문명 사용
+        orderName,
         yourSuccessUrl: `${window.location.origin}/payment?result=success`,
         yourFailUrl: `${window.location.origin}/payment?result=fail`,
       };
 
       console.log("📦 최종 주문 데이터:", orderData);
-      console.log("📦 주문 상품들:", orderData.orderProducts);
-      console.log("📦 배송 정보:", deliveryInfo);
-      console.log("📦 픽업 정보:", pickupInfo);
-      console.log("📦 사용 포인트:", pointsToUse);
 
       const response = await api.post("/api/orders/buy", orderData, {
         headers: { "Content-Type": "application/json" },
       });
 
       const paymentData = response.data?.data?.Update;
-      if (!paymentData) {
-        throw new Error("서버에서 결제 정보를 받지 못했습니다.");
-      }
+      if (!paymentData) throw new Error("서버에서 결제 정보를 받지 못했습니다.");
 
-      // 주문 ID를 ref에 저장 (Order 엔티티의 실제 ID)
-      const realOrderId = paymentData.orderId; // Order 엔티티의 실제 ID
-      const transactionId = paymentData.transactionId; // 결제 고유 식별자
+      const realOrderId = paymentData.orderId;
+      const transactionId = paymentData.transactionId;
 
       currentOrderIdRef.current = realOrderId;
-      console.log("💾 저장된 Order ID:", realOrderId);
-      console.log("💳 결제 Transaction ID:", transactionId);
 
-      // TossPayments 결제 요청
       await tossPaymentsRef.current.requestPayment("CARD", {
-        amount: calculatedFinalAmount, // 계산된 최종 금액 사용
-        orderId: transactionId, // 결제 고유 식별자 (TossPayments용)
+        amount: calculatedFinalAmount,
+        orderId: transactionId,
         orderName: paymentData.orderName,
         customerName: paymentData.customerName || "테스트 고객",
         customerEmail: paymentData.customerEmail || "test@example.com",
@@ -166,26 +139,20 @@ const OrderSubmitBar = ({
         failUrl: paymentData.failUrl,
       });
     } catch (error) {
-      console.log("🔍 에러 타입 확인:", error?.code, error?.message);
+      console.error("🔴 결제 에러:", error);
 
       if (error?.code === "USER_CANCEL") {
-        console.log("🚫 사용자가 결제를 취소했습니다.");
         alert("결제가 취소되었습니다.");
-
-        // 사용자가 결제창을 닫았을 때 close-payment API 호출
         if (currentOrderIdRef.current) {
           await handlePaymentClose(currentOrderIdRef.current);
-          currentOrderIdRef.current = null; // 처리 후 초기화
+          currentOrderIdRef.current = null;
         }
       } else if (error?.code === "INVALID_PARAMETER") {
-        console.error("❌ 결제 파라미터 오류:", error);
         alert("결제 정보에 오류가 있습니다. 다시 시도해주세요.");
       } else if (error?.response) {
-        console.error("❌ 서버 오류:", error.response.data);
         alert("서버 오류: " + (error.response.data.message || "에러 발생"));
       } else {
-        console.error("❌ 기타 오류:", error);
-        alert("오류 발생: " + error.message);
+        alert("오류 발생: " + (error.message || "알 수 없는 오류"));
       }
     }
   };
@@ -201,7 +168,9 @@ const OrderSubmitBar = ({
       <div className="payment-summary">
         <span>최종 결제 금액</span>
         <span className="final-amount">
-          {finalAmount ? `${finalAmount.toLocaleString()}원` : "계산 중..."}
+          {calculatedFinalAmount
+            ? `${calculatedFinalAmount.toLocaleString()}원`
+            : "계산 중..."}
         </span>
       </div>
       <div className="button-group">
